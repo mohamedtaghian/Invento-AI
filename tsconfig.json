@@ -1,5 +1,3 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -13,7 +11,42 @@
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "ES2022",
-    "module": "preserve"
+    "module": "preserve",
+    "paths": {
+      "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
+      "@spartan/helm/card": ["./libs/ui/card/src/index.ts"],
+      "@spartan/helm/carousel": ["./libs/ui/carousel/src/index.ts"],
+      "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
+      "@spartan/helm/field": ["./libs/ui/field/src/index.ts"],
+      "@spartan/helm/input": ["./libs/ui/input/src/index.ts"],
+      "@spartan/helm/input-group": ["./libs/ui/input-group/src/index.ts"],
+      "@spartan/helm/input-otp": ["./libs/ui/input-otp/src/index.ts"],
+      "@spartan/helm/menubar": ["./libs/ui/menubar/src/index.ts"],
+      "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
+      "@spartan/helm/skeleton": ["./libs/ui/skeleton/src/index.ts"],
+      "@spartan/helm/slider": ["./libs/ui/slider/src/index.ts"],
+      "@spartan/helm/switch": ["./libs/ui/switch/src/index.ts"],
+      "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"],
+      "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
+      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"],
+      "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"],
+      "@spartan/helm/dropdown-menu": ["./libs/ui/dropdown-menu/src/index.ts"],
+      "@spartan/helm/autocomplete": ["./libs/ui/autocomplete/src/index.ts"],
+      "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
+      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"],
+      "@spartan/helm/button-group": ["./libs/ui/button-group/src/index.ts"],
+      "@spartan/helm/checkbox": ["./libs/ui/checkbox/src/index.ts"],
+      "@spartan/helm/context-menu": ["./libs/ui/context-menu/src/index.ts"],
+      "@spartan/helm/empty": ["./libs/ui/empty/src/index.ts"],
+      "@spartan/helm/hover-card": ["./libs/ui/hover-card/src/index.ts"],
+      "@spartan/helm/popover": ["./libs/ui/popover/src/index.ts"],
+      "@spartan/helm/progress": ["./libs/ui/progress/src/index.ts"],
+      "@spartan/helm/select": ["./libs/ui/select/src/index.ts"],
+      "@spartan/helm/sonner": ["./libs/ui/sonner/src/index.ts"],
+      "@spartan/helm/spinner": ["./libs/ui/spinner/src/index.ts"],
+      "@spartan/helm/tooltip": ["./libs/ui/tooltip/src/index.ts"],
+      "@spartan/helm/typography": ["./libs/ui/typography/src/index.ts"]
+    }
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

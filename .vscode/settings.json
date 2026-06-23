@@ -1,0 +1,14 @@
+{
+  // This setting tells the Tailwind IntelliSense extension: wherever you see these function names being called in the code, treat the string arguments inside them as Tailwind class strings
+  // As, spartan/ui's helm components are almost entirely built using cva and hlm.
+  "tailwindCSS.classFunctions": ["hlm", "cva", "classes"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "eslint.validate": ["javascript", "typescript", "html"],
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}
