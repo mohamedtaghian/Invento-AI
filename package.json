@@ -35,6 +35,7 @@
     "@ng-icons/core": "^33.3.0",
     "@ng-icons/heroicons": "^33.3.0",
     "@ng-icons/lucide": "^33.3.0",
+    "@ngxpert/hot-toast": "^6.3.0",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
