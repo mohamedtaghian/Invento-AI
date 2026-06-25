@@ -1,0 +1,106 @@
+<div class="w-full border-b border-border bg-card py-4 shadow-sm">
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-6">
+    <ol
+      class="flex w-full flex-wrap items-center justify-center gap-2 sm:gap-4 md:gap-6 text-sm font-medium"
+    >
+      <!-- Step 1: Brainstorm -->
+      <li class="flex items-center gap-2 md:gap-3">
+        <a
+          routerLink="/brain"
+          routerLinkActive="bg-primary/10 border-primary text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaBrain="routerLinkActive"
+          class="flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [ngClass]="!rlaBrain.isActive ? 'text-muted-foreground hover:text-foreground' : ''"
+        >
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-colors"
+            [ngClass]="
+              rlaBrain.isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground'
+            "
+          >
+            1
+          </span>
+          <span class="whitespace-nowrap">Brainstorm</span>
+        </a>
+        <span class="text-muted-foreground/40 font-normal">❯</span>
+      </li>
+
+      <!-- Step 2: AI Interview -->
+      <li class="flex items-center gap-2 md:gap-3">
+        <a
+          routerLink="/ai-builder"
+          routerLinkActive="bg-primary/10 border-primary text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaInterview="routerLinkActive"
+          class="flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [ngClass]="!rlaInterview.isActive ? 'text-muted-foreground hover:text-foreground' : ''"
+        >
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-colors"
+            [ngClass]="
+              rlaInterview.isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground'
+            "
+          >
+            2
+          </span>
+          <span class="whitespace-nowrap">AI Interview</span>
+        </a>
+        <span class="text-muted-foreground/40 font-normal">❯</span>
+      </li>
+
+      <!-- Step 3: Validation -->
+      <li class="flex items-center gap-2 md:gap-3">
+        <a
+          routerLink="/validation"
+          routerLinkActive="bg-primary/10 border-primary text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaValidation="routerLinkActive"
+          class="flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [ngClass]="!rlaValidation.isActive ? 'text-muted-foreground hover:text-foreground' : ''"
+        >
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-colors"
+            [ngClass]="
+              rlaValidation.isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground'
+            "
+          >
+            3
+          </span>
+          <span class="whitespace-nowrap">Validation</span>
+        </a>
+        <span class="text-muted-foreground/40 font-normal">❯</span>
+      </li>
+
+      <!-- Step 4: Preview -->
+      <li class="flex items-center gap-2 md:gap-3">
+        <a
+          routerLink="/preview"
+          routerLinkActive="bg-primary/10 border-primary text-primary"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaPreview="routerLinkActive"
+          class="flex items-center gap-2 rounded-lg border border-transparent px-3 py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          [ngClass]="!rlaPreview.isActive ? 'text-muted-foreground hover:text-foreground' : ''"
+        >
+          <span
+            class="flex h-5 w-5 items-center justify-center rounded-full text-xs font-bold transition-colors"
+            [ngClass]="
+              rlaPreview.isActive
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-muted text-muted-foreground'
+            "
+          >
+            4
+          </span>
+          <span class="whitespace-nowrap">Preview</span>
+        </a>
+      </li>
+    </ol>
+  </div>
+</div>
