@@ -1,0 +1,59 @@
+<div class="flex justify-center items-center gap-2.5 mt-12">
+  <nav hlmNavigationMenu>
+    <ul hlmNavigationMenuList class="flex flex-wrap gap-2.5">
+      <li hlmNavigationMenuItem>
+        <button hlmNavigationMenuTrigger align="start">Start</button>
+        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
+          <ul class="w-48">
+            <li>
+              <a hlmNavigationMenuLink href="/">
+                <div class="flex flex-col gap-1 text-sm">
+                  <div class="font-medium leading-none">Aligned Start</div>
+                  <div class="text-muted-foreground line-clamp-2">
+                    Content aligns to the start of the trigger.
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </hlm-navigation-menu-content>
+      </li>
+
+      <li hlmNavigationMenuItem>
+        <button hlmNavigationMenuTrigger align="center">Center</button>
+        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
+          <ul class="w-48">
+            <li>
+              <a hlmNavigationMenuLink href="/">
+                <div class="flex flex-col gap-1 text-sm">
+                  <div class="font-medium leading-none">Aligned Center</div>
+                  <div class="text-muted-foreground line-clamp-2">
+                    Content aligns to the center of the trigger.
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </hlm-navigation-menu-content>
+      </li>
+
+      <li hlmNavigationMenuItem>
+        <button hlmNavigationMenuTrigger align="end">End</button>
+        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
+          <ul class="w-48">
+            <li>
+              <a hlmNavigationMenuLink href="/">
+                <div class="flex flex-col gap-1 text-sm">
+                  <div class="font-medium leading-none">Aligned End</div>
+                  <div class="text-muted-foreground line-clamp-2">
+                    Content aligns to the end of the trigger.
+                  </div>
+                </div>
+              </a>
+            </li>
+          </ul>
+        </hlm-navigation-menu-content>
+      </li>
+    </ul>
+  </nav>
+</div>
