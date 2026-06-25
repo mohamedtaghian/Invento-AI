@@ -1,59 +1,47 @@
-<div class="flex justify-center items-center gap-2.5 mt-12">
-  <nav hlmNavigationMenu>
-    <ul hlmNavigationMenuList class="flex flex-wrap gap-2.5">
-      <li hlmNavigationMenuItem>
-        <button hlmNavigationMenuTrigger align="start">Start</button>
-        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
-          <ul class="w-48">
-            <li>
-              <a hlmNavigationMenuLink href="/">
-                <div class="flex flex-col gap-1 text-sm">
-                  <div class="font-medium leading-none">Aligned Start</div>
-                  <div class="text-muted-foreground line-clamp-2">
-                    Content aligns to the start of the trigger.
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </hlm-navigation-menu-content>
-      </li>
+<nav class="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a
+      routerLink="/"
+      hlmBtn
+      variant="ghost"
+      class="group h-auto p-2 flex items-center gap-2"
+      aria-label="INVENTO Home Page"
+    >
+      <svg
+        class="h-9 w-auto text-foreground"
+        viewBox="0 0 340 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M40 20 H90 V80 H20 V40"
+          stroke="currentColor"
+          stroke-width="8"
+          stroke-linecap="square"
+          fill="none"
+        />
+        <path
+          d="M40 40 V70 M40 40 L70 70 V40"
+          stroke="currentColor"
+          stroke-width="8"
+          stroke-linecap="square"
+          fill="none"
+        />
+        <circle cx="20" cy="20" r="10" fill="oklch(58.758% 0.15328 252.79)" />
+        <text
+          x="110"
+          y="68"
+          font-family="sans-serif"
+          font-weight="500"
+          font-size="52"
+          fill="oklch(58.758% 0.15328 252.79)"
+          letter-spacing="1"
+        >
+          VENTO
+        </text>
+      </svg>
+    </a>
 
-      <li hlmNavigationMenuItem>
-        <button hlmNavigationMenuTrigger align="center">Center</button>
-        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
-          <ul class="w-48">
-            <li>
-              <a hlmNavigationMenuLink href="/">
-                <div class="flex flex-col gap-1 text-sm">
-                  <div class="font-medium leading-none">Aligned Center</div>
-                  <div class="text-muted-foreground line-clamp-2">
-                    Content aligns to the center of the trigger.
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </hlm-navigation-menu-content>
-      </li>
-
-      <li hlmNavigationMenuItem>
-        <button hlmNavigationMenuTrigger align="end">End</button>
-        <hlm-navigation-menu-content *hlmNavigationMenuPortal>
-          <ul class="w-48">
-            <li>
-              <a hlmNavigationMenuLink href="/">
-                <div class="flex flex-col gap-1 text-sm">
-                  <div class="font-medium leading-none">Aligned End</div>
-                  <div class="text-muted-foreground line-clamp-2">
-                    Content aligns to the end of the trigger.
-                  </div>
-                </div>
-              </a>
-            </li>
-          </ul>
-        </hlm-navigation-menu-content>
-      </li>
-    </ul>
-  </nav>
-</div>
+    <div class="flex items-center gap-4"></div>
+  </div>
+</nav>
