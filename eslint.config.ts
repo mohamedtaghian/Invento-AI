@@ -6,6 +6,9 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   {
+    ignores: ['libs/ui/**'],
+  },
+  {
     files: ['**/*.ts'],
     ignores: ['libs/ui/**'],
     extends: [
