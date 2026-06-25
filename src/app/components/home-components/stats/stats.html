@@ -1,0 +1,14 @@
+<section class="px-8 md:px-16 lg:px-24 py-8">
+  <div class="w-full h-px bg-border"></div>
+
+  <div class="flex flex-wrap gap-12 py-10">
+    @for (stat of stats(); track stat.label) {
+      <div class="flex flex-col gap-1">
+        <span class="text-primary font-bold font-mono text-3xl">{{ stat.value }}</span>
+        <span class="text-muted-foreground text-sm">{{ stat.label }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="w-full h-px bg-border"></div>
+</section>
