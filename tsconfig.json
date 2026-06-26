@@ -16,7 +16,11 @@
       "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
       "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
       "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
-      "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"]
+      "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
+      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"],
+      "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"],
+      "@spartan/helm/item": ["./libs/ui/item/src/index.ts"],
+      "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
