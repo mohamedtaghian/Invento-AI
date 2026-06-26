@@ -1,1 +1,120 @@
-<p>ai-interview works!</p>
+<section>
+  <!-- progress bar  -->
+  <div class="mb-8">
+    <div
+      class="flex justify-between items-center mb-2 text-muted-foreground text-xs uppercase tracking-wider"
+    >
+      Question {{ currentStep() + 1 }} of {{ questions.length }}
+    </div>
+    <div class="bg-secondary rounded-full w-full h-1 overflow-hidden">
+      <div
+        class="bg-primary h-full transition-all duration-300 ease-in-out"
+        [style.width]="progressWidth()"
+      ></div>
+    </div>
+  </div>
+
+  <div class="flex flex-col gap-3">
+    <div class="flex items-center gap-3 uppercase">
+      <span hlmBadge variant="default">Step 02</span>
+      <span class="text-muted-foreground text-xs">ai_interview_sequence</span>
+    </div>
+    <h1 class="font-bold text-black dark:text-primary text-3xl md:text-4xl tracking-tight">
+      AI <span class="text-primary">Interview</span>
+    </h1>
+    <p class="text-muted-foreground text-sm md:text-base">
+      Answer each prompt to build your business schema. AI-generated suggestions are pre-loaded from
+      your input.
+    </p>
+  </div>
+
+  <div class="mt-8 min-h-85">
+    @for (question of questions; track question.id) {
+      @if (currentStep() === $index) {
+        <div
+          animate.enter="animate-step-enter"
+          animate.leave="animate-step-leave"
+          class="bg-secondary p-6 border-2 rounded-xl transition-all duration-200"
+        >
+          <div hlmBadge variant="default" class="flex items-center gap-1 mb-4 w-fit">
+            <ng-icon name="lucideMessageSquare"></ng-icon>
+            <span class="uppercase">{{ question.label }}</span>
+          </div>
+
+          <p class="mb-6 font-medium text-black dark:text-white text-lg">{{ question.prompt }}</p>
+
+          <div class="flex flex-col gap-2.5">
+            @if (question.type === 'select') {
+              @for (option of question.options; track $index) {
+                <label class="cursor-pointer">
+                  <input type="radio" [name]="question.id" class="sr-only peer" />
+                  <div
+                    class="bg-white hover:bg-primary dark:hover:bg-black dark:peer-checked:bg-black peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl dark:hover:text-white dark:peer-checked:text-white dark:text-black peer-checked:text-white transition-all duration-200"
+                  >
+                    <p class="font-medium text-sm md:text-base">{{ option }}</p>
+                  </div>
+                </label>
+              }
+            }
+
+            @if (question.type === 'text') {
+              <label class="block w-full">
+                <input
+                  placeholder="Type your answer..."
+                  class="bg-white px-5 py-4 border-2 border-primary/25 focus:border-primary dark:focus:border-black rounded-xl outline-none w-full font-medium dark:text-black transition-all duration-200 focus:caret-primary"
+                  type="text"
+                  [name]="question.id"
+                  (keyup.enter)="nextStep()"
+                />
+              </label>
+            }
+
+            @if (question.type === 'multiselect') {
+              @for (option of question.options; track $index) {
+                <label class="cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" />
+                  <div
+                    class="bg-white hover:bg-primary dark:hover:bg-black dark:peer-checked:bg-black peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl dark:hover:text-white dark:peer-checked:text-white dark:text-black peer-checked:text-white transition-all duration-200"
+                  >
+                    <p class="font-medium text-sm md:text-base">{{ option }}</p>
+                  </div>
+                </label>
+              }
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="flex justify-between items-center mt-8 pt-4 border-secondary border-t">
+    <button
+      hlmBtn
+      variant="outline"
+      size="lg"
+      [disabled]="currentStep() === 0"
+      (click)="prevStep()"
+      class="flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
+    >
+      <ng-icon name="lucideChevronLeft" class="text-sm"></ng-icon>
+      Back
+    </button>
+
+    @if (currentStep() < questions.length - 1) {
+      <button
+        hlmBtn
+        variant="default"
+        size="lg"
+        (click)="nextStep()"
+        class="flex items-center gap-1 cursor-pointer"
+      >
+        Next
+        <ng-icon name="lucideChevronRight" class="text-sm"></ng-icon>
+      </button>
+    } @else {
+      <button hlmBtn size="lg" routerLink="/validation" class="font-bold uppercase cursor-pointer">
+        validate brand name
+      </button>
+    }
+  </div>
+</section>
