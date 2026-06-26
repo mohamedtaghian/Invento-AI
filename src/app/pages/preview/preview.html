@@ -1,14 +1,14 @@
 <div class="flex flex-col gap-12 preview">
-  <div class="flex justify-between items-center preview-header">
+  <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
     <app-page-header />
 
     <div class="flex items-center gap-2.5 header-action-btns">
-      <div class="flex md:flex-row flex-wrap items-center gap-2 deploy-btn">
+      <div class="flex items-center gap-2 w-full sm:w-auto deploy-btn">
         <button
           hlmBtn
           routerLink="/validation"
           variant="outline"
-          class="uppercase main-btn rounded-(--btn-radius)"
+          class="uppercase main-btn rounded-(--btn-radius) flex-1 sm:flex-none justify-center"
         >
           Deploy Site
           <ng-icon name="lucideExternalLink" />
@@ -17,7 +17,7 @@
         <button
           hlmBtn
           variant="ghost"
-          class="uppercase rounded-(--btn-radius) border-foreground/20"
+          class="uppercase rounded-(--btn-radius) border-foreground/20 flex-1 sm:flex-none justify-center"
         >
           Export
           <ng-icon name="lucideDownload" />
@@ -32,22 +32,34 @@
         <div class="preview-body-theme">
           <p class="preview-tag">ACTIVE_THEME</p>
           <div class="space-y-2">
-            @for (theme of themeSuggestions(); track theme.id) {
-              <button
-                hlmBtn
-                class="justify-start! w-full theme-color-btn"
-                [class.ring-2]="selectedTheme().id === theme.id"
-                [class.ring-primary]="selectedTheme().id === theme.id"
-                (click)="selectedTheme.set(theme)"
-              >
-                <div class="flex gap-1 shrink-0 theme-color">
-                  <span class="color-dot" [style.background]="theme.colors.background"></span>
-                  <span class="color-dot" [style.background]="theme.colors.primary"></span>
+            @if (isLoading()) {
+              @for (skelton of skeletonThemes; track $index) {
+                <div class="flex items-center gap-3 animate-pulse theme-color-btn">
+                  <div class="flex gap-1 shrink-0">
+                    <span class="bg-foreground/10 color-dot"></span>
+                    <span class="bg-foreground/10 color-dot"></span>
+                  </div>
+                  <span class="block bg-foreground/10 rounded w-24 h-3"></span>
                 </div>
-                <span class="font-BlackOpsOne text-foreground text-xs">
-                  {{ theme.name }}
-                </span>
-              </button>
+              }
+            } @else {
+              @for (theme of themeSuggestions(); track theme.id) {
+                <button
+                  hlmBtn
+                  class="justify-start! w-full theme-color-btn"
+                  [class.ring-2]="selectedTheme().id === theme.id"
+                  [class.ring-primary]="selectedTheme().id === theme.id"
+                  (click)="selectedTheme.set(theme)"
+                >
+                  <div class="flex gap-1 shrink-0 theme-color">
+                    <span class="color-dot" [style.background]="theme.colors.background"></span>
+                    <span class="color-dot" [style.background]="theme.colors.primary"></span>
+                  </div>
+                  <span class="font-BlackOpsOne text-foreground text-xs">
+                    {{ theme.name }}
+                  </span>
+                </button>
+              }
             }
           </div>
         </div>
@@ -82,21 +94,22 @@
               class="flex flex-1 items-center gap-2 bg-primary/20 px-3 py-1 border-primary/80 rounded url-tab"
             >
               <span class="bg-primary rounded-full w-2 h-2"></span>
-              <span class="font-jetbrains text-primary text-xs">https://site.build.example</span>
+              <span class="font-BlackOpsOne text-primary text-xs">https://site.build.example</span>
             </div>
 
             <button
               hlmBtn
-              class="flex items-center gap-1 bg-transparent font-jetbrains text-primary text-xs"
+              class="flex items-center gap-1 bg-transparent font-BlackOpsOne text-primary text-xs"
             >
               <ng-icon name="lucideRefreshCw" size="14" />
             </button>
           </div>
 
-          <div class="bg-background p-4 min-h-130 overflow-auto">
+          <div class="bg-background p-4 min-h-130 overflow-x-auto overflow-y-auto">
             <div
-              class="mx-auto overflow-hidden transition-[width] duration-300 ease-in-out"
+              class="mx-auto min-w-0t overflow-hidden transition-[width] duration-300 ease-in-out"
               [style.width]="previewWidth()"
+              [style.max-width]="'100%'"
             >
               <div
                 class="bg-background/80 border border-foreground/20 w-full min-h-120 overflow-hidden font-BlackOpsOne"
@@ -157,29 +170,47 @@
                   class="gap-3 grid bg-background/50 p-4 transition-all duration-300 preview-visual-cards"
                   [style.grid-template-columns]="previewCardCols()"
                 >
-                  @for (product of products(); track product.name) {
-                    <div class="overflow-hidden" style="border-radius: var(--radius, 0px)">
+                  @if (isLoading()) {
+                    @for (s of skeletonProducts; track $index) {
                       <div
-                        class="flex justify-center items-center bg-linear-120 from-gray-500/10 to-gray-600/20 h-24"
+                        class="overflow-hidden animate-pulse"
+                        style="border-radius: var(--radius, 0px)"
                       >
-                        <span class="opacity-40 text-primary text-2xl">◼</span>
-                      </div>
-
-                      <div class="p-3 preview-card">
-                        <div class="flex justify-between items-start mb-1">
-                          <span class="font-semibold text-foreground/80 text-xs">
-                            {{ product.name }}
-                          </span>
-                          <span
-                            class="bg-primary px-1.5 py-0.5 font-bold text-[9px] text-background uppercase"
-                            style="border-radius: var(--radius-sm, 0px)"
-                          >
-                            {{ product.badge }}
-                          </span>
+                        <div class="bg-foreground/10 h-24"></div>
+                        <div class="space-y-2 p-3 preview-card">
+                          <div class="flex justify-between items-start">
+                            <span class="block bg-foreground/10 rounded w-20 h-2.5"></span>
+                            <span class="block bg-foreground/10 rounded w-10 h-3.5"></span>
+                          </div>
+                          <span class="block bg-foreground/10 rounded w-10 h-2.5"></span>
                         </div>
-                        <span class="font-bold text-primary text-xs">${{ product.price }}</span>
                       </div>
-                    </div>
+                    }
+                  } @else {
+                    @for (product of products(); track product.name) {
+                      <div class="overflow-hidden" style="border-radius: var(--radius, 0px)">
+                        <div
+                          class="flex justify-center items-center bg-linear-120 from-gray-500/10 to-gray-600/20 h-24"
+                        >
+                          <span class="opacity-40 text-primary text-2xl">◼</span>
+                        </div>
+
+                        <div class="p-3 preview-card">
+                          <div class="flex justify-between items-start mb-1">
+                            <span class="font-semibold text-foreground/80 text-xs">
+                              {{ product.name }}
+                            </span>
+                            <span
+                              class="bg-primary px-1.5 py-0.5 font-bold text-[9px] text-background uppercase"
+                              style="border-radius: var(--radius-sm, 0px)"
+                            >
+                              {{ product.badge }}
+                            </span>
+                          </div>
+                          <span class="font-bold text-primary text-xs">${{ product.price }}</span>
+                        </div>
+                      </div>
+                    }
                   }
                 </div>
 
@@ -219,17 +250,26 @@
         </div>
 
         <div
-          class="mt-2 p-6 border border-foreground/10 rounded"
+          class="mt-2 p-4 md:p-6 border border-foreground/10 rounded"
           style="background: color-mix(in srgb, var(--color-primary) 4%, transparent)"
         >
-          <p class="mb-4 font-jetbrains text-primary/40 text-xs">// BUILD_SUMMARY</p>
+          <p class="mb-4 font-BlackOpsOne text-primary/40 text-xs">// BUILD_SUMMARY</p>
 
-          <div class="gap-4 grid grid-cols-2 md:grid-cols-5">
-            @for (stat of buildSummary(); track stat.label) {
-              <div>
-                <p class="mb-1 font-jetbrains text-foreground/25 text-xs">{{ stat.label }}</p>
-                <p class="font-semibold text-foreground/80 text-sm">{{ stat.value }}</p>
-              </div>
+          <div class="gap-3 md:gap-4 grid grid-cols-3 md:grid-cols-5">
+            @if (isLoading()) {
+              @for (s of buildSummary(); track $index) {
+                <div class="space-y-1.5 animate-pulse">
+                  <span class="block bg-foreground/10 rounded w-12 h-2"></span>
+                  <span class="block bg-foreground/15 rounded w-16 h-3.5"></span>
+                </div>
+              }
+            } @else {
+              @for (stat of buildSummary(); track stat.label) {
+                <div>
+                  <p class="mb-1 font-BlackOpsOne text-foreground/25 text-xs">{{ stat.label }}</p>
+                  <p class="font-semibold text-foreground/80 text-sm">{{ stat.value }}</p>
+                </div>
+              }
             }
           </div>
         </div>

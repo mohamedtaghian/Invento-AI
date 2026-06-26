@@ -13,10 +13,12 @@ export class PreviewDataClient {
   private readonly _themeSuggestions = signal<ThemeSuggestion[]>(MOCK_THEMES);
   private readonly _products = signal<PreviewProduct[]>(MOCK_PREVIEW_PRODUCTS);
   private readonly _navTabs = signal<string[]>(MOCK_PREVIEW_TABS);
+  private readonly _isLoading = signal<boolean>(false);
 
   readonly themeSuggestions = this._themeSuggestions.asReadonly();
   readonly products = this._products.asReadonly();
   readonly navTabs = this._navTabs.asReadonly();
+  readonly isLoading = this._isLoading.asReadonly();
 
   loadThemes(): void {
     // inject(HttpClient).get<ThemeSuggestion[]>('/api/themes').subscribe(themes => this._themeSuggestions.set(themes));

@@ -39,6 +39,10 @@ export class Preview {
   readonly products = this.previewDataClientService.products;
   readonly navTabs = this.previewDataClientService.navTabs;
 
+  readonly isLoading = this.previewDataClientService.isLoading;
+  readonly skeletonThemes = Array(4);
+  readonly skeletonProducts = Array(3);
+
   readonly selectedTheme = signal<ThemeSuggestion>(this.themeSuggestions()[0]);
   readonly selectedViewport = signal<PreviewViewport>('desktop');
   readonly selectedSize = signal<PreviewSize>('M');
