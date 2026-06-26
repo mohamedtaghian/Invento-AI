@@ -1,6 +1,6 @@
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ElementRef, viewChildren } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgStyle } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideDownload,
@@ -15,10 +15,12 @@ import { ThemeSuggestion } from '@/app/shared/interfaces/preview/themeSuggestion
 import { PreviewSize, PreviewViewport, Viewport } from '@/app/shared/interfaces/preview/ViewPort';
 import { PreviewDataClient } from '@/app/core/service/preview-data-client';
 import { PageHeader } from '@/app/components/page-header/page-header';
+import { HlmDialogImports } from '@spartan/helm/dialog';
+import { HlmLabelImports } from '@spartan/helm/label';
 
 @Component({
   selector: 'app-preview',
-  imports: [PageHeader, HlmButtonImports, NgIcon, RouterLink, NgStyle],
+  imports: [PageHeader, HlmButtonImports, HlmDialogImports, HlmLabelImports, NgIcon, NgStyle],
   providers: [
     provideIcons({
       lucideExternalLink,
@@ -34,6 +36,7 @@ import { PageHeader } from '@/app/components/page-header/page-header';
 })
 export class Preview {
   private readonly previewDataClientService = inject(PreviewDataClient);
+  private readonly router = inject(Router);
 
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
   readonly products = this.previewDataClientService.products;
@@ -46,6 +49,8 @@ export class Preview {
   readonly selectedTheme = signal<ThemeSuggestion>(this.themeSuggestions()[0]);
   readonly selectedViewport = signal<PreviewViewport>('desktop');
   readonly selectedSize = signal<PreviewSize>('M');
+  readonly themeButtons = viewChildren<ElementRef<HTMLButtonElement>>('themeButton');
+  readonly deployDialogState = signal<'closed' | 'open'>('closed');
 
   readonly sizes: readonly PreviewSize[] = ['S', 'M', 'L', 'XL'] as const;
   readonly viewports: readonly Viewport[] = [
@@ -101,4 +106,22 @@ export class Preview {
     { label: 'PAGES', value: '8 routes' },
     { label: 'STATUS', value: this.selectedViewport().toUpperCase() },
   ]);
+
+  confirmDeployment(ctx: { close: (result?: unknown) => void }) {
+    ctx.close();
+
+    queueMicrotask(() => {
+      this.router.navigate(['/validation']);
+    });
+  }
+
+  cancelDeployment(ctx: { close: (result?: unknown) => void }) {
+    ctx.close();
+
+    queueMicrotask(() => {
+      const index = this.themeSuggestions().findIndex((t) => t.id === this.selectedTheme().id);
+
+      this.themeButtons()[index]?.nativeElement.focus();
+    });
+  }
 }

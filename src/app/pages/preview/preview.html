@@ -1,29 +1,6 @@
 <div class="flex flex-col gap-12 preview">
   <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
     <app-page-header />
-
-    <div class="flex items-center gap-2.5 header-action-btns">
-      <div class="flex items-center gap-2 w-full sm:w-auto deploy-btn">
-        <button
-          hlmBtn
-          routerLink="/validation"
-          variant="outline"
-          class="uppercase main-btn rounded-(--btn-radius) flex-1 sm:flex-none justify-center"
-        >
-          Deploy Site
-          <ng-icon name="lucideExternalLink" />
-        </button>
-
-        <button
-          hlmBtn
-          variant="ghost"
-          class="uppercase rounded-(--btn-radius) border-foreground/20 flex-1 sm:flex-none justify-center"
-        >
-          Export
-          <ng-icon name="lucideDownload" />
-        </button>
-      </div>
-    </div>
   </div>
 
   <div class="preview-body">
@@ -45,6 +22,7 @@
             } @else {
               @for (theme of themeSuggestions(); track theme.id) {
                 <button
+                  #themeButton
                   hlmBtn
                   class="justify-start! w-full theme-color-btn"
                   [class.ring-2]="selectedTheme().id === theme.id"
@@ -80,6 +58,30 @@
               </button>
             }
           </div>
+        </div>
+
+        <div
+          class="flex xl:flex-row flex-col xl:justify-center items-stretch xl:items-center gap-2 w-full xl:w-auto"
+        >
+          <button
+            hlmBtn
+            variant="outline"
+            class="main-btn uppercase rounded-(--btn-radius) w-full xl:w-auto justify-center"
+            id="edit-profile"
+            (click)="deployDialogState.set('open')"
+          >
+            Deploy Site
+            <ng-icon name="lucideExternalLink" />
+          </button>
+
+          <button
+            hlmBtn
+            variant="ghost"
+            class="uppercase rounded-(--btn-radius) border-foreground/20 w-full xl:w-auto justify-center"
+          >
+            Export
+            <ng-icon name="lucideDownload" />
+          </button>
         </div>
       </div>
 
@@ -277,3 +279,50 @@
     </div>
   </div>
 </div>
+
+<hlm-dialog [state]="deployDialogState()" (closed)="deployDialogState.set('closed')" class="">
+  <hlm-dialog-content class="sm:max-w-lg" *hlmDialogPortal="let ctx">
+    <hlm-dialog-header>
+      <h3 hlmDialogTitle>Confirm Theme Selection</h3>
+
+      <p hlmDialogDescription>
+        You're about to continue with the
+        <strong>{{ selectedTheme().name }}</strong>
+        theme.
+      </p>
+    </hlm-dialog-header>
+
+    <div class="space-y-5 py-4">
+      <div class="p-4 border border-border rounded-lg">
+        <div class="flex items-start gap-3">
+          <div class="flex gap-1 shrink-0">
+            <span class="color-dot" [style.background]="selectedTheme().colors.background"></span>
+
+            <span class="color-dot" [style.background]="selectedTheme().colors.primary"></span>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="font-semibold">
+              {{ selectedTheme().name }}
+            </h4>
+
+            <p class="text-muted-foreground text-sm">
+              {{ selectedTheme().description }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        This theme will become the foundation of your generated website. If it isn't the look you're
+        aiming for, you can go back and choose another theme before continuing.
+      </p>
+    </div>
+
+    <hlm-dialog-footer>
+      <button hlmBtn variant="ghost" (click)="cancelDeployment(ctx)">Choose Another Theme</button>
+
+      <button hlmBtn (click)="confirmDeployment(ctx)">Continue to Validation</button>
+    </hlm-dialog-footer>
+  </hlm-dialog-content>
+</hlm-dialog>
