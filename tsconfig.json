@@ -12,14 +12,15 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
-    // "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
       "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
       "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
       "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
-      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"]
+      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"],
+      "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
+      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

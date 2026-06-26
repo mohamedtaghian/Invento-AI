@@ -251,6 +251,6 @@
     shadow-primary/30! px-5! py-2.5! font-bold! text-foreground! text-sm! transition-all!  rounded-(--btn-radius)! hover:cursor-pointer;
   }
   .theme-color-btn {
-    @apply flex! items-center! gap-3! bg-foreground/5! p-5! border-foreground/20! rounded-(--btn-radius)! w-full! text-left! transition-all!;
+    @apply flex! items-center! gap-3! bg-foreground/20! p-5! border-foreground/20! rounded-(--btn-radius)! w-full! text-left! transition-all!;
   }
 }
