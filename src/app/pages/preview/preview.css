@@ -1,0 +1,40 @@
+.color-dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgb(255 255 255 / 0.08);
+}
+
+.preview-tag {
+  margin-bottom: 0.75rem;
+  font-family: BlackOpsOne;
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+}
+
+.window-controls {
+  width: 2.8rem;
+  height: 0.75rem;
+
+  background:
+    radial-gradient(circle, #ff5f57 60%, transparent 61%) left center/14px 14px no-repeat,
+    radial-gradient(circle, #ffbd2e 60%, transparent 61%) center center/14px 14px no-repeat,
+    radial-gradient(circle, #28ca41 60%, transparent 61%) right center/14px 14px no-repeat;
+}
+
+.preview-frame {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.preview-card {
+  background: var(--secondary);
+  border: 1px solid var(--border);
+}
+
+.preview-button {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
