@@ -93,6 +93,7 @@
       variant="outline"
       size="lg"
       [disabled]="currentStep() === 0"
+      [class.hidden]="currentStep() === 0"
       (click)="prevStep()"
       class="flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
     >
@@ -106,7 +107,7 @@
         variant="default"
         size="lg"
         (click)="nextStep()"
-        class="flex items-center gap-1 cursor-pointer"
+        class="flex items-center gap-1 ml-auto cursor-pointer"
       >
         Next
         <ng-icon name="lucideChevronRight" class="text-sm"></ng-icon>
