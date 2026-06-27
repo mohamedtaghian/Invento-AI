@@ -1,21 +1,25 @@
-<section class="px-8 md:px-16 lg:px-24 py-16 flex flex-col gap-8">
+<section class="flex flex-col gap-8 px-8 md:px-16 lg:px-24 py-16">
   <!-- Badge -->
-  <div class="border border-primary/40 rounded px-3 py-1 w-fit">
-    <span class="text-primary text-xs font-mono tracking-widest">BUILD_PIPELINE</span>
-  </div>
+  <span hlmBadge variant="outline" class="px-3 py-1 w-fit font-mono text-xs tracking-widest">
+    BUILD_PIPELINE
+  </span>
 
-  <!-- Grid -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+  <!-- Grid - 4 cards responsive -->
+  <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
     @for (step of steps(); track step.number) {
-      <div
-        class="border border-border rounded-lg p-6 flex flex-col gap-3 bg-card hover:border-primary/40 transition-colors duration-200"
+      <a
+        hlmCard
+        [routerLink]="step.route"
+        class="flex flex-col gap-3 p-6 hover:ring-primary/30 no-underline transition-all duration-200 cursor-pointer"
       >
-        <span class="text-muted-foreground/40 font-mono text-3xl font-bold">
+        <span class="font-mono font-bold text-muted-foreground/40 text-3xl">
           {{ step.number }}
         </span>
-        <h3 class="text-foreground font-semibold text-lg">{{ step.title }}</h3>
-        <p class="text-muted-foreground text-sm font-mono">{{ step.subtitle }}</p>
-      </div>
+        <div hlmCardHeader class="gap-1 p-0">
+          <h3 hlmCardTitle class="font-semibold text-base">{{ step.title }}</h3>
+          <p hlmCardDescription class="font-mono text-xs">{{ step.subtitle }}</p>
+        </div>
+      </a>
     }
   </div>
 </section>

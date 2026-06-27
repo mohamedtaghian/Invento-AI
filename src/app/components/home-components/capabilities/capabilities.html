@@ -1,25 +1,23 @@
 <section class="px-8 md:px-16 lg:px-24 py-16">
-  <div class="border border-border rounded-lg p-8 flex flex-col gap-8">
+  <div hlmCard class="gap-8 p-8">
     <!-- Label -->
-    <p class="text-muted-foreground text-sm font-mono">// SYSTEM_CAPABILITIES</p>
+    <p class="font-mono text-muted-foreground text-sm">// SYSTEM_CAPABILITIES</p>
 
-    <!-- Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <!-- Grid - responsive 1col mobile / 2col desktop -->
+    <div hlmCardContent class="gap-4 grid grid-cols-1 sm:grid-cols-2 p-0">
       @for (cap of capabilities(); track cap.title) {
-        <div
-          class="flex gap-4 p-4 border border-border rounded-lg hover:border-primary/40 transition-colors duration-200"
-        >
-          <!-- Icon -->
+        <div hlmCard class="flex-row items-start gap-4 p-4">
+          <!-- Icon Box -->
           <div
-            class="w-10 h-10 flex items-center justify-center border border-primary/40 rounded text-primary font-mono text-sm shrink-0"
+            class="flex justify-center items-center border border-primary/40 rounded-md w-10 h-10 text-primary shrink-0"
           >
-            {{ cap.icon }}
+            <ng-icon [name]="cap.icon" class="text-base" />
           </div>
 
           <!-- Content -->
-          <div class="flex flex-col gap-1">
-            <h3 class="text-foreground font-semibold text-sm">{{ cap.title }}</h3>
-            <p class="text-muted-foreground text-sm leading-relaxed">{{ cap.description }}</p>
+          <div hlmCardContent class="flex flex-col gap-1 p-0">
+            <h3 hlmCardTitle class="font-semibold text-sm">{{ cap.title }}</h3>
+            <p hlmCardDescription class="text-sm leading-relaxed">{{ cap.description }}</p>
           </div>
         </div>
       }
