@@ -1,10 +1,10 @@
-<section class="flex items-center px-8 md:px-16 lg:px-24 py-10">
+<section class="flex items-center px-8 md:px-16 lg:px-24 py-6">
   <div class="flex flex-col gap-6 max-w-2xl">
     <!-- Badge -->
-    <div class="flex items-center gap-2 px-3 py-1.5 border border-primary/30 rounded w-fit">
+    <span hlmBadge variant="outline" class="gap-2 px-3 py-1.5 w-fit font-mono text-xs">
       <span class="bg-primary rounded-full w-2 h-2"></span>
-      <span class="font-mono text-primary text-sm">SYSTEM_ONLINE — v0.1.0-beta</span>
-    </div>
+      SYSTEM_ONLINE — v0.1.0-beta
+    </span>
 
     <!-- Title -->
     <h1 class="leading-tight">
@@ -24,18 +24,14 @@
 
     <!-- Actions -->
     <div class="flex flex-wrap gap-4 mt-2">
-      <a
-        routerLink="/brain"
-        class="flex items-center gap-2 bg-primary hover:opacity-90 px-6 py-3 font-mono font-semibold text-primary-foreground text-sm transition-opacity duration-200 cursor-pointer"
-      >
-        <span>⚡</span>
+      <a hlmBtn routerLink="/brain" class="gap-2 font-mono text-sm">
+        <ng-icon name="lucideBolt" />
         BEGIN CONSTRUCTION →
       </a>
 
-      <button
-        class="flex items-center gap-2 bg-transparent px-6 py-3 border border-border hover:border-primary font-mono font-semibold text-foreground hover:text-primary text-sm transition-colors duration-200 cursor-pointer"
-      >
-        &lt;/&gt; VIEW_ARCHITECTURE
+      <button hlmBtn variant="outline" class="gap-2 font-mono text-sm">
+        <ng-icon name="lucideCode" />
+        VIEW_ARCHITECTURE
       </button>
     </div>
   </div>
