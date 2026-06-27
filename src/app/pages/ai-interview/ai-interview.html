@@ -28,13 +28,13 @@
     </p>
   </div>
 
-  <div class="mt-8 min-h-85">
+  <div #questionContainer class="mt-8 min-h-85">
     @for (question of questions; track question.id) {
       @if (currentStep() === $index) {
         <div
           animate.enter="animate-step-enter"
           animate.leave="animate-step-leave"
-          class="bg-secondary p-6 border-2 rounded-xl transition-all duration-200"
+          class="flex flex-col bg-secondary p-6 border-2 rounded-xl min-h-85 transition-all duration-200"
         >
           <div hlmBadge variant="default" class="flex items-center gap-1 mb-4 w-fit">
             <ng-icon name="lucideMessageSquare"></ng-icon>
@@ -43,7 +43,7 @@
 
           <p class="mb-6 font-medium text-black dark:text-white text-lg">{{ question.prompt }}</p>
 
-          <div class="flex flex-col gap-2.5">
+          <div class="flex flex-col flex-1 gap-2.5">
             @if (question.type === 'select') {
               @for (option of question.options; track $index) {
                 <label class="cursor-pointer">
@@ -51,21 +51,20 @@
                   <div
                     class="bg-white hover:bg-primary dark:hover:bg-black dark:peer-checked:bg-black peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl dark:hover:text-white dark:peer-checked:text-white dark:text-black peer-checked:text-white transition-all duration-200"
                   >
-                    <p class="font-medium text-sm md:text-base">{{ option }}</p>
+                    <p class="text-sm md:text-base">{{ option }}</p>
                   </div>
                 </label>
               }
             }
 
             @if (question.type === 'text') {
-              <label class="block w-full">
-                <input
+              <label class="flex flex-col flex-1 w-full">
+                <textarea
                   placeholder="Type your answer..."
-                  class="bg-white px-5 py-4 border-2 border-primary/25 focus:border-primary dark:focus:border-black rounded-xl outline-none w-full font-medium dark:text-black transition-all duration-200 focus:caret-primary"
-                  type="text"
+                  class="flex-1 bg-white px-5 py-4 border-2 border-primary/25 focus:border-primary dark:focus:border-black rounded-xl outline-none w-full dark:text-black transition-all duration-200 focus:caret-primary resize-none"
                   [name]="question.id"
                   (keyup.enter)="nextStep()"
-                />
+                ></textarea>
               </label>
             }
 
@@ -76,7 +75,7 @@
                   <div
                     class="bg-white hover:bg-primary dark:hover:bg-black dark:peer-checked:bg-black peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl dark:hover:text-white dark:peer-checked:text-white dark:text-black peer-checked:text-white transition-all duration-200"
                   >
-                    <p class="font-medium text-sm md:text-base">{{ option }}</p>
+                    <p class="text-sm md:text-base">{{ option }}</p>
                   </div>
                 </label>
               }
