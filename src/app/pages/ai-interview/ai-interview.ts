@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { HlmBadge } from '../../../../libs/ui/badge/src';
 import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-icons/lucide';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
@@ -13,6 +20,7 @@ import { HlmButton } from '@spartan/helm/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiInterview {
+  @ViewChild('questionContainer') questionContainer!: ElementRef<HTMLDivElement>;
   currentStep = signal<number>(0);
 
   questions = [
@@ -93,12 +101,23 @@ export class AiInterview {
   nextStep() {
     if (this.currentStep() < this.questions.length - 1) {
       this.currentStep.update((prev) => prev + 1);
+      this.scrollToQuestionTop();
     }
   }
 
   prevStep() {
     if (this.currentStep() > 0) {
       this.currentStep.update((prev) => prev - 1);
+      this.scrollToQuestionTop();
+    }
+  }
+
+  private scrollToQuestionTop() {
+    if (this.questionContainer) {
+      this.questionContainer.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
   }
 }
