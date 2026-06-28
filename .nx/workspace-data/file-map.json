@@ -1,0 +1,398 @@
+{
+  "version": "6.0",
+  "nxVersion": "23.0.1",
+  "pathMappings": {
+    "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
+    "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
+    "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
+    "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
+    "@spartan/helm/label": ["./libs/ui/label/src/index.ts"]
+  },
+  "nxJsonPlugins": [],
+  "fileMap": {
+    "projectFileMap": {},
+    "nonProjectFiles": [
+      {
+        "file": ".editorconfig",
+        "hash": "8037249353422744134"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "5024476166486271931"
+      },
+      {
+        "file": ".husky/pre-commit",
+        "hash": "16897372753072675009"
+      },
+      {
+        "file": ".postcssrc.json",
+        "hash": "12098411909725170385"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "9282341498941776540"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "14574854320466421715"
+      },
+      {
+        "file": ".vscode/extensions.json",
+        "hash": "11934160580685414355"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "17406702432687230417"
+      },
+      {
+        "file": ".vscode/mcp.json",
+        "hash": "11492871017727097845"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "7569002283527361615"
+      },
+      {
+        "file": ".vscode/tasks.json",
+        "hash": "11080398893561185157"
+      },
+      {
+        "file": "LICENSE",
+        "hash": "15934020223350165518"
+      },
+      {
+        "file": "README.md",
+        "hash": "14982904719331858438"
+      },
+      {
+        "file": "angular.json",
+        "hash": "5945993535073963895"
+      },
+      {
+        "file": "components.json",
+        "hash": "3894654076513822499"
+      },
+      {
+        "file": "eslint.config.ts",
+        "hash": "10119495748656935963"
+      },
+      {
+        "file": "libs/ui/avatar/src/index.ts",
+        "hash": "15952825557954501318"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar-badge.ts",
+        "hash": "9708939151587629239"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar-fallback.ts",
+        "hash": "15694317889886478136"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar-group-count.ts",
+        "hash": "11516496651547629195"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar-group.ts",
+        "hash": "10696322671018603500"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar-image.ts",
+        "hash": "6185343068481213047"
+      },
+      {
+        "file": "libs/ui/avatar/src/lib/hlm-avatar.ts",
+        "hash": "849713997017592120"
+      },
+      {
+        "file": "libs/ui/button/src/index.ts",
+        "hash": "9293745238080450"
+      },
+      {
+        "file": "libs/ui/button/src/lib/hlm-button.token.ts",
+        "hash": "14529693338837362383"
+      },
+      {
+        "file": "libs/ui/button/src/lib/hlm-button.ts",
+        "hash": "12509782360745669738"
+      },
+      {
+        "file": "libs/ui/label/src/index.ts",
+        "hash": "15789376508885056890"
+      },
+      {
+        "file": "libs/ui/label/src/lib/hlm-label.ts",
+        "hash": "14038969719845722111"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/index.ts",
+        "hash": "3263209682330576177"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-content.ts",
+        "hash": "4020685351307062655"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-item.ts",
+        "hash": "13519789039507122839"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-link.ts",
+        "hash": "18255323503568664581"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-list.ts",
+        "hash": "7024580522237876519"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-portal.ts",
+        "hash": "16208832412246483099"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu-trigger.ts",
+        "hash": "13216548674345630958"
+      },
+      {
+        "file": "libs/ui/navigation-menu/src/lib/hlm-navigation-menu.ts",
+        "hash": "10990516911084260081"
+      },
+      {
+        "file": "libs/ui/utils/src/index.ts",
+        "hash": "2217347070988207218"
+      },
+      {
+        "file": "libs/ui/utils/src/lib/hlm.ts",
+        "hash": "10247581618877736551"
+      },
+      {
+        "file": "libs/ui/utils/src/lib/provide-spartan-hlm.ts",
+        "hash": "3515187127606097368"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "9430425877100742220"
+      },
+      {
+        "file": "package.json",
+        "hash": "11702904174993870709"
+      },
+      {
+        "file": "public/favicon.ico",
+        "hash": "3988961587069885523"
+      },
+      {
+        "file": "src/app/app.config.server.ts",
+        "hash": "8877246535068392678"
+      },
+      {
+        "file": "src/app/app.config.ts",
+        "hash": "13412067194138827307"
+      },
+      {
+        "file": "src/app/app.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/app.html",
+        "hash": "10057601924331715000"
+      },
+      {
+        "file": "src/app/app.routes.server.ts",
+        "hash": "17500618356136685777"
+      },
+      {
+        "file": "src/app/app.routes.ts",
+        "hash": "5807251357041019837"
+      },
+      {
+        "file": "src/app/app.ts",
+        "hash": "11944692885050759419"
+      },
+      {
+        "file": "src/app/components/navbar/navbar.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/components/navbar/navbar.html",
+        "hash": "8550042044469753131"
+      },
+      {
+        "file": "src/app/components/navbar/navbar.ts",
+        "hash": "9842877497316097932"
+      },
+      {
+        "file": "src/app/components/steps-bar/steps-bar.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/components/steps-bar/steps-bar.html",
+        "hash": "6085204021122060152"
+      },
+      {
+        "file": "src/app/components/steps-bar/steps-bar.ts",
+        "hash": "11162351076013412914"
+      },
+      {
+        "file": "src/app/core/guards/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/core/interceptors/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/core/interface/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/core/service/invento-engine.service.ts",
+        "hash": "13902657386254294743"
+      },
+      {
+        "file": "src/app/layouts/auth-layout/auth-layout.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/layouts/auth-layout/auth-layout.html",
+        "hash": "18398617562096490294"
+      },
+      {
+        "file": "src/app/layouts/auth-layout/auth-layout.ts",
+        "hash": "15445081219135945642"
+      },
+      {
+        "file": "src/app/layouts/builder-layout/builder-layout.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/layouts/builder-layout/builder-layout.html",
+        "hash": "5142097795934456960"
+      },
+      {
+        "file": "src/app/layouts/builder-layout/builder-layout.ts",
+        "hash": "15240205143480907123"
+      },
+      {
+        "file": "src/app/layouts/main-layout/main-layout.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/layouts/main-layout/main-layout.html",
+        "hash": "8160835033519968657"
+      },
+      {
+        "file": "src/app/layouts/main-layout/main-layout.ts",
+        "hash": "18201141747176213988"
+      },
+      {
+        "file": "src/app/pages/ai-interview/ai-interview.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/ai-interview/ai-interview.html",
+        "hash": "8456102132475773631"
+      },
+      {
+        "file": "src/app/pages/ai-interview/ai-interview.ts",
+        "hash": "13223367861902630612"
+      },
+      {
+        "file": "src/app/pages/brainstorm/brainstorm.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/brainstorm/brainstorm.html",
+        "hash": "2874795701350611345"
+      },
+      {
+        "file": "src/app/pages/brainstorm/brainstorm.ts",
+        "hash": "12789247444107369682"
+      },
+      {
+        "file": "src/app/pages/home/home.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/home/home.html",
+        "hash": "14684294031245505795"
+      },
+      {
+        "file": "src/app/pages/home/home.ts",
+        "hash": "4900477522870880459"
+      },
+      {
+        "file": "src/app/pages/preview/preview.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/preview/preview.html",
+        "hash": "16253156989848762396"
+      },
+      {
+        "file": "src/app/pages/preview/preview.ts",
+        "hash": "9892326492785269723"
+      },
+      {
+        "file": "src/app/pages/validation/validation.css",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/pages/validation/validation.html",
+        "hash": "7651596897001975595"
+      },
+      {
+        "file": "src/app/pages/validation/validation.ts",
+        "hash": "51289573050627121"
+      },
+      {
+        "file": "src/app/shared/directives/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/shared/environment/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/shared/pipes/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/app/shared/template/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "src/index.html",
+        "hash": "2936138323842190173"
+      },
+      {
+        "file": "src/main.server.ts",
+        "hash": "15449197192418375374"
+      },
+      {
+        "file": "src/main.ts",
+        "hash": "10405740721546735325"
+      },
+      {
+        "file": "src/server.ts",
+        "hash": "16636138296247357433"
+      },
+      {
+        "file": "src/styles.css",
+        "hash": "16480894426902497134"
+      },
+      {
+        "file": "tsconfig.app.json",
+        "hash": "3527360969609559910"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "6680367911298298421"
+      },
+      {
+        "file": "tsconfig.spec.json",
+        "hash": "189877243707603707"
+      }
+    ]
+  },
+  "externalNodesHash": "354491630303370005"
+}
