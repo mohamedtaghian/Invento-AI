@@ -1,1 +1,189 @@
-<p>validation works!</p>
+<div class="max-w-6xl mx-auto p-6 space-y-8">
+  <!-- Header Section -->
+  <div class="space-y-2">
+    <div
+      class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
+    >
+      <span class="px-2 py-0.5 rounded bg-secondary text-secondary-foreground font-mono"
+        >Step 04</span
+      >
+      <span>Validation Engine</span>
+    </div>
+    <h1 class="text-3xl font-bold tracking-tight text-foreground">
+      Brand <span class="text-primary">Validation</span>
+    </h1>
+    <p class="text-sm text-muted-foreground max-w-xl">
+      Real-time availability checks across trademark, domain, and social namespaces.
+    </p>
+  </div>
+
+  <!-- Split Grid Workspace -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Left Panel: Brand Input Fields -->
+    <div class="lg:col-span-2 space-y-6">
+      <div class="rounded-xl border border-border bg-card p-6 space-y-5 shadow-sm">
+        <!-- Brand Name Input Component -->
+        <div class="space-y-2">
+          <label
+            hlmLabel
+            for="brandName"
+            class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
+          >
+            // BRAND_NAME *
+          </label>
+          <div class="relative">
+            <span
+              class="absolute left-4 top-1/2 -translate-y-1/2 font-mono text-muted-foreground text-sm"
+              >//</span
+            >
+            <input
+              id="brandName"
+              type="text"
+              [(ngModel)]="brandName"
+              (input)="updateChecks()"
+              maxLength="24"
+              placeholder="your-brand-name"
+              class="w-full pl-10 pr-16 py-3 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all font-mono"
+            />
+            <span
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-muted-foreground"
+            >
+              {{ brandName.length }}/24
+            </span>
+          </div>
+        </div>
+
+        <!-- Display Name Input Component -->
+        <div class="space-y-2">
+          <label
+            hlmLabel
+            for="displayName"
+            class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
+          >
+            // DISPLAY_NAME
+          </label>
+          <input
+            id="displayName"
+            type="text"
+            [(ngModel)]="brandName"
+            placeholder="How it appears to customers (e.g. KŌRĒ)"
+            class="w-full px-4 py-3 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+          />
+        </div>
+
+        <!-- Brand Tagline Input Component -->
+        <div class="space-y-2">
+          <label
+            hlmLabel
+            for="tagline"
+            class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
+          >
+            // BRAND_TAGLINE
+          </label>
+          <div class="relative">
+            <input
+              id="tagline"
+              type="text"
+              [(ngModel)]="tagline"
+              maxLength="120"
+              placeholder="One-line positioning statement"
+              class="w-full px-4 py-3 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+            />
+            <p class="text-[10px] font-mono text-muted-foreground mt-1 text-right">
+              {{ tagline.length }}/120 chars
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Engine Evaluation Checklist -->
+      <div class="rounded-xl border border-border bg-card p-6 space-y-4">
+        <span class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
+          >// VALIDATION_CHECKS</span
+        >
+
+        <div class="space-y-2">
+          @for (check of validationChecks; track check.id) {
+            <div
+              class="flex items-center gap-3 p-3.5 rounded-lg border border-border/50 bg-background/50 transition-colors"
+            >
+              <div
+                class="h-2 w-2 rounded-full transition-all duration-300"
+                [class.bg-muted]="!brandName"
+                [class.bg-destructive]="brandName && !check.passed"
+                [class.bg-primary]="brandName && check.passed"
+              ></div>
+
+              <div class="flex-1 text-sm font-medium" [class.text-muted-foreground]="!brandName">
+                {{ check.label }}
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Status Dashboard -->
+    <div class="space-y-6">
+      <!-- Live Engine Dynamic Ring Status Box -->
+      <div
+        class="rounded-xl border border-border bg-card p-6 flex flex-col items-center justify-center text-center min-h-[220px] relative"
+      >
+        <div class="space-y-4">
+          <div
+            class="h-16 w-16 mx-auto rounded-full border border-border flex items-center justify-center bg-background shadow-inner"
+          >
+            @if (brandName) {
+              <ng-icon name="lucideLoader2" class="text-xl text-primary animate-spin" />
+            } @else {
+              <ng-icon name="lucideSearch" class="text-xl text-muted-foreground" />
+            }
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
+              Status
+            </p>
+            <h3 class="text-base font-semibold tracking-tight text-foreground">
+              {{ brandName ? 'Analyzing Blueprint...' : 'Awaiting Input' }}
+            </h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Namespace Bundle Context Card -->
+      <div class="rounded-xl border border-border bg-card p-6 space-y-4">
+        <div class="text-xs font-mono uppercase tracking-wider text-primary">
+          // NAMESPACE_BUNDLE
+        </div>
+
+        <div class="space-y-3 font-mono text-xs">
+          <div class="flex items-center gap-2.5 text-muted-foreground">
+            <ng-icon name="lucideGlobe" class="text-sm text-foreground/70" />
+            <span>.com TLD</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-muted-foreground">
+            <ng-icon name="lucideGlobe" class="text-sm text-foreground/70" />
+            <span>.io TLD</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-muted-foreground">
+            <ng-icon name="lucideAlertTriangle" class="text-sm text-amber-500/80" />
+            <span>US Trademark</span>
+          </div>
+          <div class="flex items-center gap-2.5 text-muted-foreground">
+            <ng-icon name="lucideAlertTriangle" class="text-sm text-amber-500/80" />
+            <span>EU Trademark</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Button utilizing Tailwind v4 design features -->
+      <button
+        [disabled]="!brandName"
+        class="w-full py-3 px-4 font-medium text-sm rounded-lg bg-primary text-primary-foreground hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md"
+      >
+        Deploy Invento Instance
+      </button>
+    </div>
+  </div>
+</div>
