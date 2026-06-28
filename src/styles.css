@@ -9,12 +9,21 @@
 /* Native Brwosers control: inputs, date pickers, scrollbars, autofill -> and use color schema as hint  */
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'BlackOpsOne';
+  src: url('/assets/fonts/BlackOpsOne-Regular.ttf') format('ttf');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   color-scheme: light;
   --font-size: 16px;
   --font-sans:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
     sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --btn-radius: 0.2rem;
 
   --background: oklch(97.437% 0.01088 256.847);
   --foreground: oklch(23.328% 0.05073 255.488);
@@ -67,8 +76,8 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: oklch(68% 0.14 252.79);
+  --primary-foreground: oklch(0.145 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -159,6 +168,10 @@
     font-size: var(--font-size);
   }
 
+  button:hover {
+    cursor: pointer;
+  }
+
   /* Commented section below untill review desicion */
   /* h1 {
     font-size: var(--text-2xl);
@@ -231,5 +244,13 @@
   }
   .text-button {
     font-size: var(--text-base);
+  }
+
+  .main-btn {
+    @apply flex! items-center! gap-2! bg-primary! shadow-[0_0_20px]! 
+    shadow-primary/30! px-5! py-2.5! font-bold! text-foreground! text-sm! transition-all!  rounded-(--btn-radius)! hover:cursor-pointer;
+  }
+  .theme-color-btn {
+    @apply flex! items-center! gap-3! bg-foreground/20! p-5! border-foreground/20! rounded-(--btn-radius)! w-full! text-left! transition-all!;
   }
 }
