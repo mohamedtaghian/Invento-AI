@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, signal } from '@angular/core';
 import { HlmBadgeImports } from '../../../../libs/ui/badge/src';
 import { HlmTextareaImports } from '../../../../libs/ui/textarea/src';
 import { HlmItemImports } from '../../../../libs/ui/item/src';
@@ -13,6 +13,7 @@ import {
 } from '@ng-icons/heroicons/outline';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { lucideDot } from '@ng-icons/lucide';
+import { RouterLink } from '@angular/router';
 
 interface ContextChecklist {
   id: number;
@@ -28,6 +29,7 @@ interface ContextChecklist {
     NgIcon,
     HlmItemImports,
     ReactiveFormsModule,
+    RouterLink,
   ],
   templateUrl: './brainstorm.html',
   styleUrl: './brainstorm.css',
@@ -65,4 +67,11 @@ export class Brainstorm {
   ];
 
   descriptionControl: FormControl = new FormControl('');
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    if (this.isFocused()) {
+      this.isFocused.set(false);
+    }
+  }
 }
