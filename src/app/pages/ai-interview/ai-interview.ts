@@ -11,9 +11,10 @@ import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { RouterLink } from '@angular/router';
 import { HlmButton } from '@spartan/helm/button';
+import { HlmTextarea } from '@spartan/helm/textarea';
 @Component({
   selector: 'app-ai-interview',
-  imports: [HlmBadge, NgIconComponent, RouterLink, HlmButton],
+  imports: [HlmBadge, NgIconComponent, RouterLink, HlmButton, HlmTextarea],
   providers: [provideIcons({ lucideMessageSquare, lucideChevronLeft, lucideChevronRight })],
   templateUrl: './ai-interview.html',
   styleUrl: './ai-interview.css',
