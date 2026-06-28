@@ -21,7 +21,9 @@
       "@spartan/helm/card": ["./libs/ui/card/src/index.ts"],
       "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"],
       "@spartan/helm/item": ["./libs/ui/item/src/index.ts"],
-      "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"]
+      "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"],
+      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"],
+      "@spartan/helm/input": ["./libs/ui/input/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
