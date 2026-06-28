@@ -100,7 +100,7 @@
       [disabled]="currentStep() === 0"
       [class.hidden]="currentStep() === 0"
       (click)="prevStep()"
-      class="flex justify-center items-center gap-1 cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
+      class="flex justify-center items-center gap-1 dark:text-white cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
     >
       <ng-icon name="lucideChevronLeft"></ng-icon>
       <span>Back</span>
@@ -112,7 +112,7 @@
         variant="default"
         size="lg"
         (click)="nextStep()"
-        class="flex justify-center items-center gap-1 md:ml-auto cursor-pointer"
+        class="flex justify-center items-center gap-1 md:ml-auto dark:text-white cursor-pointer"
       >
         <span>Next</span>
         <ng-icon name="lucideChevronRight"></ng-icon>
@@ -123,7 +123,7 @@
         variant="default"
         size="lg"
         routerLink="/validation"
-        class="font-bold uppercase cursor-pointer"
+        class="font-bold dark:text-white uppercase cursor-pointer"
       >
         validate brand name
       </button>
