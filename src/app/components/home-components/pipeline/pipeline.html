@@ -1,0 +1,25 @@
+<section class="flex flex-col gap-8 px-8 md:px-16 lg:px-24 py-16">
+  <!-- Badge -->
+  <span hlmBadge variant="outline" class="px-3 py-1 w-fit font-mono text-xs tracking-widest">
+    BUILD_PIPELINE
+  </span>
+
+  <!-- Grid - 4 cards responsive -->
+  <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
+    @for (step of steps(); track step.number) {
+      <a
+        hlmCard
+        routerLink="/brain"
+        class="flex flex-col gap-3 hover:shadow-md p-6 hover:ring-primary/40 no-underline transition-all duration-200 cursor-pointer"
+      >
+        <span class="font-mono font-bold text-muted-foreground/40 text-3xl">
+          {{ step.number }}
+        </span>
+        <div hlmCardHeader class="gap-1 p-0">
+          <h3 hlmCardTitle class="font-semibold text-base">{{ step.title }}</h3>
+          <p hlmCardDescription class="font-mono text-xs">{{ step.subtitle }}</p>
+        </div>
+      </a>
+    }
+  </div>
+</section>
