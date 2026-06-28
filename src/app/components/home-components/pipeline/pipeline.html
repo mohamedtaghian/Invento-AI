@@ -9,8 +9,8 @@
     @for (step of steps(); track step.number) {
       <a
         hlmCard
-        [routerLink]="step.route"
-        class="flex flex-col gap-3 p-6 hover:ring-primary/30 no-underline transition-all duration-200 cursor-pointer"
+        routerLink="/brain"
+        class="flex flex-col gap-3 hover:shadow-md p-6 hover:ring-primary/40 no-underline transition-all duration-200 cursor-pointer"
       >
         <span class="font-mono font-bold text-muted-foreground/40 text-3xl">
           {{ step.number }}
