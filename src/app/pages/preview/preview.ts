@@ -1,4 +1,14 @@
-import { Component, computed, inject, signal, ElementRef, viewChildren } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  afterNextRender,
+  computed,
+  inject,
+  signal,
+  ElementRef,
+  viewChild,
+  viewChildren,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { NgStyle } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -34,25 +44,30 @@ import { HlmLabelImports } from '@spartan/helm/label';
   templateUrl: './preview.html',
   styleUrl: './preview.css',
 })
-export class Preview {
+export class Preview implements OnDestroy {
   private readonly previewDataClientService = inject(PreviewDataClient);
   private readonly router = inject(Router);
 
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
   readonly products = this.previewDataClientService.products;
   readonly navTabs = this.previewDataClientService.navTabs;
-
   readonly isLoading = this.previewDataClientService.isLoading;
+
   readonly skeletonThemes = Array(4);
   readonly skeletonProducts = Array(3);
 
   readonly selectedTheme = signal<ThemeSuggestion>(this.themeSuggestions()[0]);
   readonly selectedViewport = signal<PreviewViewport>('desktop');
   readonly selectedSize = signal<PreviewSize>('M');
-  readonly themeButtons = viewChildren<ElementRef<HTMLButtonElement>>('themeButton');
   readonly deployDialogState = signal<'closed' | 'open'>('closed');
+  readonly themeButtons = viewChildren<ElementRef<HTMLButtonElement>>('themeButton');
+
+  private readonly _containerWidth = signal<number>(0);
+  private _resizeObserver?: ResizeObserver;
+  readonly previewContainerEl = viewChild<ElementRef<HTMLDivElement>>('previewContainer');
 
   readonly sizes: readonly PreviewSize[] = ['S', 'M', 'L', 'XL'] as const;
+
   readonly viewports: readonly Viewport[] = [
     { id: 'desktop', icon: 'lucideTvMinimal', label: 'Desktop', width: '100%' },
     { id: 'tablet', icon: 'lucideTablet', label: 'Tablet', width: '768px' },
@@ -79,9 +94,31 @@ export class Preview {
     };
   });
 
-  readonly previewWidth = computed<string>(
-    () => this.viewports.find((v) => v.id === this.selectedViewport())?.width ?? '100%',
-  );
+  readonly simulatedPxWidth = computed<number>(() => {
+    const cw = this._containerWidth();
+    switch (this.selectedViewport()) {
+      case 'mobile':
+        return 390;
+      case 'tablet':
+        return 768;
+      case 'desktop':
+        return Math.max(cw || 1200, 1200);
+      default:
+        return cw || 1200;
+    }
+  });
+
+  readonly previewScale = computed<number>(() => {
+    const cw = this._containerWidth();
+    if (cw === 0) return 1;
+    return Math.min(1, cw / this.simulatedPxWidth());
+  });
+
+  readonly previewFrameStyles = computed<Record<string, string>>(() => ({
+    width: `${this.simulatedPxWidth()}px`,
+    zoom: String(this.previewScale()),
+    transition: 'zoom 300ms ease-in-out, width 300ms ease-in-out',
+  }));
 
   readonly previewCardCols = computed<string>(() => {
     switch (this.selectedViewport()) {
@@ -95,6 +132,7 @@ export class Preview {
   });
 
   readonly showNavTabs = computed<boolean>(() => this.selectedViewport() !== 'mobile');
+
   readonly heroTextPadding = computed<Record<string, string>>(() =>
     this.selectedViewport() === 'mobile' ? { padding: '1rem' } : { padding: '1.5rem' },
   );
@@ -107,21 +145,31 @@ export class Preview {
     { label: 'STATUS', value: this.selectedViewport().toUpperCase() },
   ]);
 
-  confirmDeployment(ctx: { close: (result?: unknown) => void }) {
-    ctx.close();
-
-    queueMicrotask(() => {
-      this.router.navigate(['/validation']);
+  constructor() {
+    afterNextRender(() => {
+      const el = this.previewContainerEl()?.nativeElement;
+      if (!el) return;
+      this._resizeObserver = new ResizeObserver(([entry]) => {
+        this._containerWidth.set(Math.floor(entry.contentRect.width));
+      });
+      this._resizeObserver.observe(el);
     });
   }
 
-  cancelDeployment(ctx: { close: (result?: unknown) => void }) {
+  confirmDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
+    queueMicrotask(() => this.router.navigate(['/validation']));
+  }
 
+  cancelDeployment(ctx: { close: (result?: unknown) => void }): void {
+    ctx.close();
     queueMicrotask(() => {
       const index = this.themeSuggestions().findIndex((t) => t.id === this.selectedTheme().id);
-
       this.themeButtons()[index]?.nativeElement.focus();
     });
+  }
+
+  ngOnDestroy(): void {
+    this._resizeObserver?.disconnect();
   }
 }

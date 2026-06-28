@@ -33,7 +33,7 @@
                     <span class="color-dot" [style.background]="theme.colors.background"></span>
                     <span class="color-dot" [style.background]="theme.colors.primary"></span>
                   </div>
-                  <span class="font-BlackOpsOne text-foreground text-xs">
+                  <span class="text-foreground text-xs">
                     {{ theme.name }}
                   </span>
                 </button>
@@ -85,7 +85,7 @@
         </div>
       </div>
 
-      <div class="space-y-4 xl:col-span-3 preview-body-visuals">
+      <div class="space-y-4 xl:col-span-3 min-w-0 preview-body-visuals">
         <div class="border border-foreground/20 rounded overflow-hidden">
           <div
             class="flex items-center gap-3 bg-background/20 px-4 py-2.5 border-b border-b-foreground/20 preview-body-address-bar"
@@ -96,35 +96,26 @@
               class="flex flex-1 items-center gap-2 bg-primary/20 px-3 py-1 border-primary/80 rounded url-tab"
             >
               <span class="bg-primary rounded-full w-2 h-2"></span>
-              <span class="font-BlackOpsOne text-primary text-xs">https://site.build.example</span>
+              <span class="text-primary text-xs">https://site.build.example</span>
             </div>
 
-            <button
-              hlmBtn
-              class="flex items-center gap-1 bg-transparent font-BlackOpsOne text-primary text-xs"
-            >
+            <button hlmBtn class="flex items-center gap-1 bg-transparent text-primary text-xs">
               <ng-icon name="lucideRefreshCw" size="14" />
             </button>
           </div>
 
-          <div class="bg-background p-4 min-h-130 overflow-x-auto overflow-y-auto">
-            <div
-              class="mx-auto min-w-0t overflow-hidden transition-[width] duration-300 ease-in-out"
-              [style.width]="previewWidth()"
-              [style.max-width]="'100%'"
-            >
+          <div #previewContainer class="flex justify-center bg-background p-2">
+            <div [ngStyle]="previewFrameStyles()">
               <div
-                class="bg-background/80 border border-foreground/20 w-full min-h-120 overflow-hidden font-BlackOpsOne"
+                class="bg-background/80 border border-foreground/20 w-full min-h-0 overflow-hidden"
                 style="border-radius: var(--radius-lg, 2px)"
                 [ngStyle]="previewCssVars()"
               >
                 <div
                   class="flex justify-between items-center bg-background/40 px-5 py-3 border-b border-b-foreground/20 preview-body-tabs"
                 >
-                  <span
-                    class="font-BlackOpsOne font-bold text-foreground/90 text-sm tracking-widest"
-                  >
-                    KŌRĒ
+                  <span class="font-bold text-foreground/90 text-sm tracking-widest">
+                    InventoAI
                   </span>
 
                   @if (showNavTabs()) {
@@ -156,9 +147,7 @@
                     <p class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest">
                       AW24 Collection
                     </p>
-                    <h2 class="mb-3 font-BlackOpsOne font-bold text-foreground/90 text-2xl">
-                      Structured Overcoat
-                    </h2>
+                    <h2 class="mb-3 font-bold text-foreground/90 text-2xl">Structured Overcoat</h2>
                     <button
                       class="bg-primary px-5 py-2 w-fit font-bold text-background text-xs uppercase"
                       style="border-radius: var(--radius, 0px)"
@@ -255,7 +244,7 @@
           class="mt-2 p-4 md:p-6 border border-foreground/10 rounded"
           style="background: color-mix(in srgb, var(--color-primary) 4%, transparent)"
         >
-          <p class="mb-4 font-BlackOpsOne text-primary/40 text-xs">// BUILD_SUMMARY</p>
+          <p class="mb-4 text-primary/40 text-xs">// BUILD_SUMMARY</p>
 
           <div class="gap-3 md:gap-4 grid grid-cols-3 md:grid-cols-5">
             @if (isLoading()) {
@@ -268,7 +257,7 @@
             } @else {
               @for (stat of buildSummary(); track stat.label) {
                 <div>
-                  <p class="mb-1 font-BlackOpsOne text-foreground/25 text-xs">{{ stat.label }}</p>
+                  <p class="mb-1 text-foreground/25 text-xs">{{ stat.label }}</p>
                   <p class="font-semibold text-foreground/80 text-sm">{{ stat.value }}</p>
                 </div>
               }
