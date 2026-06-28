@@ -5,7 +5,8 @@
     "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
     "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
     "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
-    "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"]
+    "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
+    "@spartan/helm/label": ["./libs/ui/label/src/index.ts"]
   },
   "nxJsonPlugins": [],
   "fileMap": {
@@ -114,6 +115,14 @@
       {
         "file": "libs/ui/button/src/lib/hlm-button.ts",
         "hash": "12509782360745669738"
+      },
+      {
+        "file": "libs/ui/label/src/index.ts",
+        "hash": "15789376508885056890"
+      },
+      {
+        "file": "libs/ui/label/src/lib/hlm-label.ts",
+        "hash": "14038969719845722111"
       },
       {
         "file": "libs/ui/navigation-menu/src/index.ts",
@@ -236,8 +245,8 @@
         "hash": "3244421341483603138"
       },
       {
-        "file": "src/app/core/service/.gitkeep",
-        "hash": "3244421341483603138"
+        "file": "src/app/core/service/invento-engine.service.ts",
+        "hash": "13902657386254294743"
       },
       {
         "file": "src/app/layouts/auth-layout/auth-layout.css",
@@ -329,11 +338,11 @@
       },
       {
         "file": "src/app/pages/validation/validation.html",
-        "hash": "16245834787860097714"
+        "hash": "7651596897001975595"
       },
       {
         "file": "src/app/pages/validation/validation.ts",
-        "hash": "13814234008572482666"
+        "hash": "51289573050627121"
       },
       {
         "file": "src/app/shared/directives/.gitkeep",
@@ -377,7 +386,7 @@
       },
       {
         "file": "tsconfig.json",
-        "hash": "8743684140897307800"
+        "hash": "6680367911298298421"
       },
       {
         "file": "tsconfig.spec.json",

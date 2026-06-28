@@ -17,7 +17,10 @@
       "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
       "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
       "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
-      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"]
+      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"],
+      "@spartan/helm/input": ["./libs/ui/input/src/index.ts"],
+      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"],
+      "@spartan/helm/card": ["./libs/ui/card/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
