@@ -17,7 +17,8 @@
       "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
       "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
       "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
-      "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"]
+      "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"],
+      "@spartan/helm/card": ["./libs/ui/card/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
