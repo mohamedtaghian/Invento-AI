@@ -60,8 +60,8 @@
             @if (question.type === 'text') {
               <label class="flex flex-col flex-1 w-full">
                 <textarea
+                  hlmTextarea
                   placeholder="Type your answer..."
-                  class="flex-1 px-5 py-4 border-2 border-primary/25 focus:border-primary rounded-xl outline-none w-full transition-all duration-200 focus:caret-primary resize-none"
                   [name]="question.id"
                   (keyup.enter)="nextStep()"
                 ></textarea>
