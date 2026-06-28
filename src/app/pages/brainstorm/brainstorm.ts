@@ -1,11 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { HlmBadgeImports } from '../../../../libs/ui/badge/src';
 import { HlmTextareaImports } from '../../../../libs/ui/textarea/src';
 import { HlmItemImports } from '../../../../libs/ui/item/src';
 import { HlmButtonImports } from '../../../../libs/ui/button/src';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { heroBolt, heroArrowRight } from '@ng-icons/heroicons/outline';
+import {
+  heroBolt,
+  heroArrowRight,
+  heroXMark,
+  heroArrowsPointingOut,
+  heroCheck,
+} from '@ng-icons/heroicons/outline';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { lucideDot } from '@ng-icons/lucide';
 
 interface ContextChecklist {
   id: number;
@@ -25,9 +32,19 @@ interface ContextChecklist {
   templateUrl: './brainstorm.html',
   styleUrl: './brainstorm.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ heroBolt, heroArrowRight })],
+  viewProviders: [
+    provideIcons({
+      heroBolt,
+      heroArrowRight,
+      heroXMark,
+      heroArrowsPointingOut,
+      lucideDot,
+      heroCheck,
+    }),
+  ],
 })
 export class Brainstorm {
+  isFocused = signal<boolean>(false);
   contextChecklist: ContextChecklist[] = [
     {
       id: 1,
