@@ -4,20 +4,42 @@ import {
   computed,
   ElementRef,
   signal,
-  ViewChild,
+  viewChild,
+  viewChildren,
+  effect,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { gsap } from 'gsap';
+
 import { HlmBadge } from '../../../../libs/ui/badge/src';
 import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-icons/lucide';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
-import { RouterLink } from '@angular/router';
-import { HlmButton } from '@spartan/helm/button';
+import { HlmButton, HlmButtonImports } from '@spartan/helm/button';
 import { HlmTextarea } from '@spartan/helm/textarea';
-import { HlmButtonImports } from '@spartan/helm/button';
 import { HlmCardImports } from '@spartan/helm/card';
 import { HlmInputImports } from '@spartan/helm/input';
 import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmSeparator } from '@spartan/helm/separator';
 import { PageHeader } from '@/app/components/page-header/page-header';
+
+// Discriminated union types to safely separate questions with options from text entries
+export interface BaseQuestion {
+  id: string;
+  label: string;
+  prompt: string;
+  aiPrefill?: string;
+}
+
+export interface ChoiceQuestion extends BaseQuestion {
+  type: 'select' | 'multiselect';
+  options: string[];
+}
+
+export interface TextQuestion extends BaseQuestion {
+  type: 'text';
+}
+
+export type InterviewQuestion = ChoiceQuestion | TextQuestion;
 
 @Component({
   selector: 'app-ai-interview',
@@ -40,10 +62,14 @@ import { PageHeader } from '@/app/components/page-header/page-header';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiInterview {
-  @ViewChild('questionContainer') questionContainer!: ElementRef<HTMLDivElement>;
-  currentStep = signal<number>(0);
+  // Angular Signals Queries
+  questionContainer = viewChild<ElementRef<HTMLDivElement>>('questionContainer');
+  cards = viewChildren<ElementRef<HTMLDivElement>>('cardElement');
 
-  questions = [
+  currentStep = signal<number>(0);
+  private prevStepIndex = 0;
+
+  questions: InterviewQuestion[] = [
     {
       id: 'business_type',
       label: 'ENTITY_TYPE',
@@ -118,6 +144,68 @@ export class AiInterview {
     return `${((this.currentStep() + 1) / this.questions.length) * 100}%`;
   });
 
+  constructor() {
+    // GSAP Step Animation Orchestrator
+    effect(() => {
+      const step = this.currentStep();
+      const allCards = this.cards();
+
+      if (allCards.length === 0) return;
+
+      const oldCard = allCards[this.prevStepIndex]?.nativeElement;
+      const newCard = allCards[step]?.nativeElement;
+
+      if (oldCard && newCard && step !== this.prevStepIndex) {
+        const goingForward = step > this.prevStepIndex;
+
+        // 1. Position both elements absolutely over each other during transition to avoid structural jumps
+        gsap.set(newCard, {
+          display: 'flex',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          x: goingForward ? '100%' : '-100%',
+          opacity: 0,
+        });
+
+        gsap.set(oldCard, {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+        });
+
+        // 2. Run the timeline sync
+        const tl = gsap.timeline({
+          onComplete: () => {
+            // Restore natural layout flow once the animation concludes
+            gsap.set(newCard, { position: 'relative', clearProps: 'transform' });
+            gsap.set(oldCard, { display: 'none', position: 'relative' });
+          },
+        });
+
+        tl.to(oldCard, {
+          x: goingForward ? '-100%' : '100%',
+          opacity: 0,
+          duration: 0.4,
+          ease: 'power2.inOut',
+        }).to(
+          newCard,
+          {
+            x: '0%',
+            opacity: 1,
+            duration: 0.4,
+            ease: 'power2.inOut',
+          },
+          '<',
+        ); // '<' forces both tweens to run perfectly together
+      }
+
+      this.prevStepIndex = step;
+    });
+  }
+
   nextStep() {
     if (this.currentStep() < this.questions.length - 1) {
       this.currentStep.update((prev) => prev + 1);
@@ -133,8 +221,9 @@ export class AiInterview {
   }
 
   private scrollToQuestionTop() {
-    if (this.questionContainer) {
-      this.questionContainer.nativeElement.scrollIntoView({
+    const container = this.questionContainer();
+    if (container) {
+      container.nativeElement.scrollIntoView({
         behavior: 'smooth',
         block: 'start',
       });
