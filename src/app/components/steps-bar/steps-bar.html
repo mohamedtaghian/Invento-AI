@@ -81,43 +81,6 @@
 
       <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/validation"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          #rlaValidation="routerLinkActive"
-          class="z-10 flex md:flex-row flex-col items-center gap-1.5 md:gap-2 bg-card md:bg-transparent md:px-3 md:py-1.5 border rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
-          [ngClass]="
-            rlaValidation.isActive
-              ? 'border-transparent md:border-primary/50 md:bg-primary/10'
-              : 'border-transparent md:hover:bg-muted/50'
-          "
-        >
-          <span
-            class="flex justify-center items-center rounded-full ring-8 ring-card md:ring-0 w-8 md:w-5 h-8 md:h-5 font-bold text-xs transition-all duration-300 shrink-0"
-            [ngClass]="
-              rlaValidation.isActive
-                ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
-                : 'bg-muted text-muted-foreground border border-border md:border-none md:bg-muted'
-            "
-          >
-            3
-          </span>
-          <span
-            class="text-[10px] sm:text-xs md:text-sm text-center whitespace-nowrap transition-colors"
-            [ngClass]="
-              rlaValidation.isActive
-                ? 'text-foreground md:text-primary'
-                : 'text-muted-foreground md:hover:text-foreground'
-            "
-          >
-            Validation
-          </span>
-        </a>
-        <span class="hidden md:block ml-1 lg:ml-3 font-normal text-muted">❯</span>
-      </li>
-
-      <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
-        <a
           routerLink="/preview"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -150,6 +113,7 @@
             Preview
           </span>
         </a>
+        <span class="font-normal text-muted-foreground/40">❯</span>
       </li>
 
       <!-- Step 4: Validation -->
@@ -174,7 +138,6 @@
           </span>
           <span class="whitespace-nowrap">Validation</span>
         </a>
-        <span class="font-normal text-muted-foreground/40">❯</span>
       </li>
     </ol>
   </div>
