@@ -31,25 +31,27 @@
   <div #questionContainer class="mt-8 min-h-85">
     @for (question of questions; track question.id) {
       @if (currentStep() === $index) {
-        <div
+        <hlm-card
           animate.enter="animate-step-enter"
           animate.leave="animate-step-leave"
-          class="flex flex-col bg-secondary p-6 border-2 rounded-xl min-h-85 transition-all duration-200"
+          class="flex flex-col bg-secondary border-2 rounded-xl min-h-85 transition-all duration-200"
         >
-          <div hlmBadge variant="default" class="flex items-center gap-1 mb-4 w-fit">
-            <ng-icon name="lucideMessageSquare"></ng-icon>
-            <span class="uppercase">{{ question.label }}</span>
-          </div>
+          <hlm-card-header class="flex flex-col gap-2.5">
+            <div hlmBadge variant="default" class="flex items-center gap-1 w-fit">
+              <ng-icon name="lucideMessageSquare"></ng-icon>
+              <span class="uppercase">{{ question.label }}</span>
+            </div>
 
-          <p class="mb-6 font-medium text-lg">{{ question.prompt }}</p>
+            <p class="font-medium text-sm md:text-lg">{{ question.prompt }}</p>
+          </hlm-card-header>
 
-          <div class="flex flex-col flex-1 gap-2.5">
+          <div hlmCardContent class="flex flex-col flex-1 gap-2.5">
             @if (question.type === 'select') {
               @for (option of question.options; track $index) {
-                <label class="cursor-pointer">
-                  <input type="radio" [name]="question.id" class="sr-only peer" />
+                <label hlmLabel class="block cursor-pointer">
+                  <input hlmInput type="radio" [name]="question.id" class="sr-only peer w-fit" />
                   <div
-                    class="hover:bg-primary peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl transition-all duration-200"
+                    class="hover:bg-primary peer-checked:bg-primary px-2.5 md:px-5 py-2 md:py-4 border-2 border-primary/25 rounded-xl peer-checked:text-white transition-all duration-200"
                   >
                     <p class="text-sm md:text-base">{{ option }}</p>
                   </div>
@@ -58,10 +60,11 @@
             }
 
             @if (question.type === 'text') {
-              <label class="flex flex-col flex-1 w-full">
+              <label hlmLabel class="flex flex-col flex-1 w-full">
                 <textarea
+                  class="flex-1 dark:border-primary/25 resize-none"
+                  hlmTextarea
                   placeholder="Type your answer..."
-                  class="flex-1 px-5 py-4 border-2 border-primary/25 focus:border-primary rounded-xl outline-none w-full transition-all duration-200 focus:caret-primary resize-none"
                   [name]="question.id"
                   (keyup.enter)="nextStep()"
                 ></textarea>
@@ -70,10 +73,10 @@
 
             @if (question.type === 'multiselect') {
               @for (option of question.options; track $index) {
-                <label class="cursor-pointer">
-                  <input type="checkbox" class="sr-only peer" />
+                <label hlmLabel class="block cursor-pointer">
+                  <input hlmInput type="checkbox" class="sr-only peer w-fit" />
                   <div
-                    class="hover:bg-primary peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl transition-all duration-200"
+                    class="hover:bg-primary peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl peer-checked:text-white transition-all duration-200"
                   >
                     <p class="text-sm md:text-base">{{ option }}</p>
                   </div>
@@ -81,23 +84,26 @@
               }
             }
           </div>
-        </div>
+        </hlm-card>
       }
     }
   </div>
 
-  <div class="flex justify-between items-center mt-8 pt-4 border-secondary border-t">
+  <hlm-separator class="mt-8 mb-4 bg" />
+
+  <!-- Buttons -->
+  <div class="flex md:flex-row flex-col md:justify-between md:items-center gap-2.5">
     <button
       hlmBtn
-      variant="outline"
+      variant="default"
       size="lg"
       [disabled]="currentStep() === 0"
       [class.hidden]="currentStep() === 0"
       (click)="prevStep()"
-      class="flex items-center gap-1 cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
+      class="flex justify-center items-center gap-1 dark:text-white cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
     >
-      <ng-icon name="lucideChevronLeft" class="text-sm"></ng-icon>
-      Back
+      <ng-icon name="lucideChevronLeft"></ng-icon>
+      <span>Back</span>
     </button>
 
     @if (currentStep() < questions.length - 1) {
@@ -106,13 +112,19 @@
         variant="default"
         size="lg"
         (click)="nextStep()"
-        class="flex items-center gap-1 ml-auto cursor-pointer"
+        class="flex justify-center items-center gap-1 md:ml-auto dark:text-white cursor-pointer"
       >
-        Next
-        <ng-icon name="lucideChevronRight" class="text-sm"></ng-icon>
+        <span>Next</span>
+        <ng-icon name="lucideChevronRight"></ng-icon>
       </button>
     } @else {
-      <button hlmBtn size="lg" routerLink="/validation" class="font-bold uppercase cursor-pointer">
+      <button
+        hlmBtn
+        variant="default"
+        size="lg"
+        routerLink="/validation"
+        class="font-bold dark:text-white uppercase cursor-pointer"
+      >
         validate brand name
       </button>
     }

@@ -25,7 +25,9 @@
       "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"],
       "@spartan/helm/label": ["./libs/ui/label/src/index.ts"],
       "@spartan/helm/input": ["./libs/ui/input/src/index.ts"],
-      "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"]
+      "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
+      "@spartan/helm/progress": ["./libs/ui/progress/src/index.ts"],
+      "@spartan/helm/radio-group": ["./libs/ui/radio-group/src/index.ts"]
     }
   },
   "angularCompilerOptions": {
