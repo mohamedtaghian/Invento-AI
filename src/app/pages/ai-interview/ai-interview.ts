@@ -17,6 +17,7 @@ import { HlmCardImports } from '@spartan/helm/card';
 import { HlmInputImports } from '@spartan/helm/input';
 import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmSeparator } from '@spartan/helm/separator';
+import { PageHeader } from '@/app/components/page-header/page-header';
 
 @Component({
   selector: 'app-ai-interview',
@@ -31,6 +32,7 @@ import { HlmSeparator } from '@spartan/helm/separator';
     HlmInputImports,
     HlmButtonImports,
     HlmSeparator,
+    PageHeader,
   ],
   providers: [provideIcons({ lucideMessageSquare, lucideChevronLeft, lucideChevronRight })],
   templateUrl: './ai-interview.html',

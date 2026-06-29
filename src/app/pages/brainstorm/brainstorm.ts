@@ -14,6 +14,7 @@ import {
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { lucideDot } from '@ng-icons/lucide';
 import { RouterLink } from '@angular/router';
+import { PageHeader } from '@/app/components/page-header/page-header';
 
 interface ContextChecklist {
   id: number;
@@ -30,6 +31,7 @@ interface ContextChecklist {
     HlmItemImports,
     ReactiveFormsModule,
     RouterLink,
+    PageHeader,
   ],
   templateUrl: './brainstorm.html',
   styleUrl: './brainstorm.css',

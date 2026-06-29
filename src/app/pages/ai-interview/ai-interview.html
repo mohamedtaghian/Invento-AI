@@ -14,18 +14,15 @@
     </div>
   </div>
 
-  <div class="flex flex-col gap-3">
-    <div class="flex items-center gap-3 uppercase">
-      <span hlmBadge variant="default">Step 02</span>
-      <span class="text-muted-foreground text-xs">ai_interview_sequence</span>
+  <div class="flex flex-col gap-12 preview">
+    <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
+      <app-page-header
+        badgeText="STEP 02"
+        title="AI"
+        accentTitle="Interview"
+        description="Live Spartan component preview with generated CSS variables applied."
+      />
     </div>
-    <h1 class="font-bold text-3xl md:text-4xl tracking-tight">
-      AI <span class="text-primary">Interview</span>
-    </h1>
-    <p class="text-muted-foreground text-sm md:text-base">
-      Answer each prompt to build your business schema. AI-generated suggestions are pre-loaded from
-      your input.
-    </p>
   </div>
 
   <div #questionContainer class="mt-8 min-h-85">

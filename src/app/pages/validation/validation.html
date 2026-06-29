@@ -1,40 +1,13 @@
 <div class="max-w-6xl mx-auto p-6 space-y-8">
-  <div class="flex justify-between items-start border-b border-border pb-6">
-    <div class="space-y-2">
-      <div
-        class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground"
-      >
-        <span class="px-2 py-0.5 rounded bg-secondary text-secondary-foreground font-mono"
-          >Step 04</span
-        >
-        <span>Validation Engine</span>
-        <span class="mx-2 text-border">|</span>
-        <span
-          >State:
-          <span hlmBadge variant="secondary" class="font-mono text-[10px] ml-1">{{
-            currentStep
-          }}</span></span
-        >
-      </div>
-      <h1 class="text-3xl font-bold tracking-tight text-foreground">
-        Brand <span class="text-primary">Validation</span>
-      </h1>
-      <p class="text-sm text-muted-foreground max-w-xl">
-        Real-time availability checks across AI metrics, domain namespaces, and edge deployment.
-      </p>
+  <div class="flex flex-col gap-12 preview">
+    <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
+      <app-page-header
+        badgeText="STEP 04"
+        title="Site"
+        accentTitle="site validation  and  deployment"
+        description="Live Spartan component preview with generated CSS variables applied."
+      />
     </div>
-
-    @if (currentStep !== 'INPUT') {
-      <button
-        hlmBtn
-        variant="outline"
-        size="sm"
-        (click)="resetConsole()"
-        class="text-xs font-mono shadow-sm"
-      >
-        ← Reset Console
-      </button>
-    }
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">

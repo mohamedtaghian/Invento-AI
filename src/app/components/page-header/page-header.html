@@ -1,16 +1,22 @@
 <div class="flex flex-col page-header">
   <div class="flex justify-between items-center gap-2.5 my-2.5">
-    <app-page-badge badgeText="STEP 06" animationSpeed="2s" glowColor="var(--primary)" />
+    <app-page-badge
+      [badgeText]="badgeText()"
+      [animationSpeed]="animationSpeed()"
+      [glowColor]="glowColor()"
+    />
   </div>
 
   <h1
     class="mb-2 font-work font-bold text-3xl md:text-4xl tracking-tight"
     style="color: var(--foreground)"
   >
-    Site <span style="color: var(--primary)">Preview</span>
+    {{ title() }} <span style="color: var(--primary)">{{ accentTitle() }}</span>
   </h1>
 
-  <p style="color: var(--foreground)">
-    Live Spartan component preview with generated CSS variables applied.
-  </p>
+  @if (description()) {
+    <p style="color: var(--foreground)">
+      {{ description() }}
+    </p>
+  }
 </div>
