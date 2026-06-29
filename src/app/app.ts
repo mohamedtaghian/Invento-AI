@@ -1,13 +1,22 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { LoaderComponent } from './components/loader.component/loader.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, LoaderComponent],
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './app.css',
 })
 export class App {
   protected readonly title = signal('invento-AI');
+
+  protected readonly isLoading = signal<boolean>(true);
+
+  constructor() {
+    setTimeout(() => {
+      this.isLoading.set(false);
+    }, 3000);
+  }
 }
