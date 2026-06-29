@@ -15,8 +15,12 @@
     </div>
   </div>
   <div class="flex md:flex-row flex-col-reverse gap-7">
-    <div class="flex flex-col gap-5 md:w-2/3 lg:w-3/4">
+    <div class="flex flex-col gap-5 md:w-3/5 lg:w-3/4">
       <div
+        (click)="isFocused.set(false)"
+        (keydown.escape)="isFocused.set(false)"
+        role="dialog"
+        tabindex="-1"
         [class]="
           isFocused()
             ? 'fixed inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-sm'
@@ -24,14 +28,20 @@
         "
       >
         <div
+          role="document"
+          tabindex="0"
+          (click)="$event.stopPropagation()"
+          (keydown.escape)="$event.stopPropagation()"
           [class]="
             isFocused()
               ? 'w-full max-w-3xl flex flex-col bg-muted border border-border rounded-md overflow-hidden shadow-2xl shadow-black/60'
-              : 'bg-muted border border-border rounded-md flex flex-col overflow-hidden'
+              : 'bg-muted border border-border dark:border-foreground/10 rounded-md flex flex-col overflow-hidden focus-within:border-ring focus-within:ring-ring/50 focus-within:ring-3 transition-all'
           "
         >
           <!-- Header -->
-          <div class="flex justify-between items-center md:px-4 pl-2 border-border border-b">
+          <div
+            class="flex justify-between items-center md:px-4 pl-2 border-border dark:border-foreground/10 border-b"
+          >
             <span class="text-[0.65rem] text-primary md:text-xs tracking-wide">
               <span class="mr-1">>_</span> Explain your Idea
             </span>
@@ -71,13 +81,13 @@
           ></textarea>
 
           <!-- Footer -->
-          <div class="px-4 py-2 border-border border-t">
-            @if (descriptionControl.value.length < 11) {
+          <div class="px-4 py-2 border-border dark:border-foreground/10 border-t">
+            @if (descriptionControl.value.length < 25) {
               <span
                 class="flex items-center gap-1 text-[0.6rem] text-muted-foreground md:text-[0.65rem] tracking-wide"
               >
-                At least 11 characters required <ng-icon name="lucideDot" />
-                {{ descriptionControl.value.length }} / 11
+                At least 25 characters required <ng-icon name="lucideDot" />
+                {{ descriptionControl.value.length }} / 25
               </span>
             } @else {
               <span class="flex items-center gap-1 text-[0.65rem] text-green-500 tracking-wide">
@@ -89,7 +99,8 @@
       </div>
       <button
         hlmBtn
-        [disabled]="descriptionControl.value.length < 11"
+        routerLink="/ai-builder"
+        [disabled]="descriptionControl.value.length < 25"
         class="flex items-center gap-2 disabled:hover:bg-primary md:px-9 py-7 md:w-fit disabled:cursor-not-allowed disabled:pointer-events-auto"
       >
         <ng-icon name="heroBolt" /> <span>INITIATE AI INTERVIEW</span>
