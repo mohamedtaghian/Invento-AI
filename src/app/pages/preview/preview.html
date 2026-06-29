@@ -71,7 +71,7 @@
             (click)="deployDialogState.set('open')"
           >
             Deploy Site
-            <ng-icon name="lucideExternalLink" />
+            <ng-icon name="lucideChevronRight" />
           </button>
 
           <button
@@ -99,8 +99,11 @@
               <span class="text-primary text-xs">https://site.build.example</span>
             </div>
 
-            <button hlmBtn class="flex items-center gap-1 bg-transparent text-primary text-xs">
-              <ng-icon name="lucideRefreshCw" size="14" />
+            <button
+              hlmBtn
+              class="flex items-center gap-1 bg-transparent text-primary hover:text-foreground text-xs"
+            >
+              <ng-icon name="lucideRefreshCw" size="14" class="" />
             </button>
           </div>
 
@@ -240,23 +243,22 @@
           </div>
         </div>
 
-        <div
-          class="mt-2 p-4 md:p-6 border border-foreground/10 rounded"
-          style="background: color-mix(in srgb, var(--color-primary) 4%, transparent)"
-        >
-          <p class="mb-4 text-primary/40 text-xs">// BUILD_SUMMARY</p>
-
-          <div class="gap-3 md:gap-4 grid grid-cols-3 md:grid-cols-5">
+        <div class="mt-2 p-4 border border-foreground/10 rounded build-summary">
+          <p class="mb-4 text-xs preview-tag">BUILD_SUMMARY</p>
+          <div
+            class="gap-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
+            style="background: color-mix(in srgb, var(--color-primary) 4%, transparent)"
+          >
             @if (isLoading()) {
               @for (s of buildSummary(); track $index) {
-                <div class="space-y-1.5 animate-pulse">
-                  <span class="block bg-foreground/10 rounded w-12 h-2"></span>
-                  <span class="block bg-foreground/15 rounded w-16 h-3.5"></span>
+                <div class="space-y-1.5 lg:text-left md:text-center animate-pulse">
+                  <span class="block bg-foreground/10 md:mx-auto lg:mx-0 rounded w-12 h-2"></span>
+                  <span class="block bg-foreground/15 md:mx-auto lg:mx-0 rounded w-16 h-3.5"></span>
                 </div>
               }
             } @else {
               @for (stat of buildSummary(); track stat.label) {
-                <div>
+                <div class="lg:text-left text-center">
                   <p class="mb-1 text-foreground/25 text-xs">{{ stat.label }}</p>
                   <p class="font-semibold text-foreground/80 text-sm">{{ stat.value }}</p>
                 </div>

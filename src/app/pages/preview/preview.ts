@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 import { NgStyle } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideChevronRight,
   lucideDownload,
-  lucideExternalLink,
   lucideRefreshCw,
   lucideSmartphoneCharging,
   lucideTablet,
@@ -33,12 +33,12 @@ import { HlmLabelImports } from '@spartan/helm/label';
   imports: [PageHeader, HlmButtonImports, HlmDialogImports, HlmLabelImports, NgIcon, NgStyle],
   providers: [
     provideIcons({
-      lucideExternalLink,
       lucideDownload,
       lucideTvMinimal,
       lucideTablet,
       lucideSmartphoneCharging,
       lucideRefreshCw,
+      lucideChevronRight,
     }),
   ],
   templateUrl: './preview.html',
