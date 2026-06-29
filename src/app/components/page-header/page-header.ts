@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 import { PageBadge } from '@/app/components/page-badge/page-badge';
 
 @Component({
@@ -7,4 +7,14 @@ import { PageBadge } from '@/app/components/page-badge/page-badge';
   templateUrl: './page-header.html',
   styleUrl: './page-header.css',
 })
-export class PageHeader {}
+export class PageHeader {
+  // Configurable badge options (forwarded down to app-page-badge)
+  badgeText: InputSignal<string> = input<string>('STEP 01');
+  animationSpeed: InputSignal<string> = input<string>('2s');
+  glowColor: InputSignal<string> = input<string>('var(--primary)');
+
+  // Dynamic Text Inputs for Header Body
+  title: InputSignal<string> = input<string>('Site');
+  accentTitle: InputSignal<string> = input<string>('Preview');
+  description: InputSignal<string> = input<string>('');
+}

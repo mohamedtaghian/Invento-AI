@@ -30,6 +30,7 @@ import {
   HlmCardHeader,
   HlmCardTitle,
 } from '@spartan/helm/card';
+import { PageHeader } from '@/app/components/page-header/page-header';
 
 // Spartan Components mapped as clean standalone direct imports
 
@@ -51,6 +52,7 @@ type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUIL
     HlmCardTitle,
     HlmCardDescription,
     HlmCardContent,
+    PageHeader,
   ],
   providers: [
     provideIcons({

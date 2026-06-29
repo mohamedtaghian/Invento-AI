@@ -81,43 +81,6 @@
 
       <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/validation"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          #rlaValidation="routerLinkActive"
-          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
-          [ngClass]="
-            rlaValidation.isActive
-              ? 'border-transparent md:border-primary/50 md:bg-primary/10'
-              : 'border-transparent md:hover:bg-muted/50'
-          "
-        >
-          <span
-            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
-            [ngClass]="
-              rlaValidation.isActive
-                ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
-                : 'bg-muted text-muted-foreground border border-border md:border-none md:bg-muted'
-            "
-          >
-            3
-          </span>
-          <span
-            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
-            [ngClass]="
-              rlaValidation.isActive
-                ? 'text-foreground md:text-primary'
-                : 'text-muted-foreground md:hover:text-foreground'
-            "
-          >
-            Validation
-          </span>
-        </a>
-        <span class="hidden md:block text-muted font-normal ml-1 lg:ml-3">❯</span>
-      </li>
-
-      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
-        <a
           routerLink="/preview"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -137,7 +100,7 @@
                 : 'bg-muted text-muted-foreground border border-border md:border-none md:bg-muted'
             "
           >
-            4
+            3
           </span>
           <span
             class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
@@ -148,6 +111,43 @@
             "
           >
             Preview
+          </span>
+        </a>
+        <span class="hidden md:block text-muted font-normal ml-1 lg:ml-3">❯</span>
+      </li>
+
+      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
+        <a
+          routerLink="/validation"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          #rlaValidation="routerLinkActive"
+          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
+          [ngClass]="
+            rlaValidation.isActive
+              ? 'border-transparent md:border-primary/50 md:bg-primary/10'
+              : 'border-transparent md:hover:bg-muted/50'
+          "
+        >
+          <span
+            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
+            [ngClass]="
+              rlaValidation.isActive
+                ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
+                : 'bg-muted text-muted-foreground border border-border md:border-none md:bg-muted'
+            "
+          >
+            4
+          </span>
+          <span
+            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+            [ngClass]="
+              rlaValidation.isActive
+                ? 'text-foreground md:text-primary'
+                : 'text-muted-foreground md:hover:text-foreground'
+            "
+          >
+            Validation
           </span>
         </a>
       </li>
