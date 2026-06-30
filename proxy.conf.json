@@ -1,0 +1,7 @@
+{
+  "/generate-theme": {
+    "target": "https://test-site-builder.vercel.app",
+    "secure": true,
+    "changeOrigin": true
+  }
+}

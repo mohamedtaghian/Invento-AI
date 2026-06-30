@@ -1,5 +1,5 @@
-import { ThemeSuggestion } from '@/app/shared/interfaces/preview/themeSuggestion';
-import { PreviewProduct } from '@/app/shared/interfaces/preview/PreviewProduct';
+import { PreviewProduct } from '@/app/core/interface/Preview';
+import { ThemeSuggestion } from '@/app/core/interface/Preview';
 
 export const MOCK_PREVIEW_TABS: string[] = ['Shop', 'Lookbook', 'About', 'Contact'];
 
