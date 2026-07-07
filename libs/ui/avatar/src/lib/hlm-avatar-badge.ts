@@ -1,5 +1,6 @@
-import { Directive } from '@angular/core';
+import { Directive, input } from '@angular/core';
 import { classes } from '@spartan/helm/utils';
+import { type HlmStyle, injectResolvedHlmStyle, avatarBadgeClasses } from '@spartan/styles';
 
 @Directive({
   selector: '[hlmAvatarBadge],hlm-avatar-badge',
@@ -8,12 +9,10 @@ import { classes } from '@spartan/helm/utils';
   },
 })
 export class HlmAvatarBadge {
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(this.hlmStyle);
+
   constructor() {
-    classes(() => [
-      'bg-primary text-primary-foreground ring-background absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-blend-color ring-2 select-none',
-      'group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>ng-icon]:hidden',
-      'group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>ng-icon]:text-[length:--spacing(2)]',
-      'group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>ng-icon]:text-[length:--spacing(2)]',
-    ]);
+    classes(() => avatarBadgeClasses[this._resolvedStyle()]);
   }
 }

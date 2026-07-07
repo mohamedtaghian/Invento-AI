@@ -1,6 +1,7 @@
 import { Directive, input } from '@angular/core';
 import { classes } from '@spartan/helm/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
+import { type HlmStyle, injectResolvedHlmStyle } from '@spartan/styles';
 import { injectHlmItemMediaConfig } from './hlm-item-token';
 
 const itemMediaVariants = cva(
@@ -30,7 +31,11 @@ export type ItemMediaVariants = VariantProps<typeof itemMediaVariants>;
 })
 export class HlmItemMedia {
   private readonly _config = injectHlmItemMediaConfig();
-  public readonly variant = input<ItemMediaVariants['variant']>(this._config.variant);
+  public readonly variant = input<ItemMediaVariants['variant']>(
+    this._config.variant as ItemMediaVariants['variant'],
+  );
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(this.hlmStyle);
 
   constructor() {
     classes(() => itemMediaVariants({ variant: this.variant() }));

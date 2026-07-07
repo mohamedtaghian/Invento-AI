@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, computed } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { BrnNavigationMenuTrigger } from '@spartan-ng/brain/navigation-menu';
 import { classes } from '@spartan/helm/utils';
+import { navMenuTriggerClasses } from '@spartan/styles';
+import type { HlmStyle } from '@spartan/styles';
+import { injectResolvedHlmStyle } from '@spartan/styles';
+import { HlmNavigationMenu } from './hlm-navigation-menu';
 
 @Component({
-  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'button[hlmNavigationMenuTrigger]',
   imports: [NgIcon],
   providers: [provideIcons({ lucideChevronDown })],
@@ -21,10 +24,13 @@ import { classes } from '@spartan/helm/utils';
   `,
 })
 export class HlmNavigationMenuTrigger {
+  private readonly _parent = inject(HlmNavigationMenu, { optional: true });
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(
+    computed(() => this.hlmStyle() ?? this._parent?.hlmStyle()),
+  );
+
   constructor() {
-    classes(
-      () =>
-        'bg-background hover:bg-muted focus:bg-muted data-open:hover:bg-muted data-open:focus:bg-muted data-open:bg-muted/50 focus-visible:ring-ring/50 rounded-md px-4 py-2 text-sm font-medium transition-all focus-visible:ring-3 focus-visible:outline-1 disabled:opacity-50 group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center outline-none disabled:pointer-events-none',
-    );
+    classes(() => navMenuTriggerClasses[this._resolvedStyle()]);
   }
 }
