@@ -2,11 +2,10 @@ import { computed, Directive, effect, input, untracked } from '@angular/core';
 import { injectCustomClassSettable } from '@spartan-ng/brain/core';
 import { BrnDialogOverlay } from '@spartan-ng/brain/dialog';
 import { hlm } from '@spartan/helm/utils';
+import { type HlmStyle, injectResolvedHlmStyle, dialogOverlayClasses } from '@spartan/styles';
 import type { ClassValue } from 'clsx';
 
-export const hlmDialogOverlayClass = hlm(
-  'data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs',
-);
+export const hlmDialogOverlayClass = dialogOverlayClasses['vega'];
 
 @Directive({
   selector: '[hlmDialogOverlay],hlm-dialog-overlay',
@@ -15,8 +14,12 @@ export const hlmDialogOverlayClass = hlm(
 export class HlmDialogOverlay {
   private readonly _classSettable = injectCustomClassSettable({ optional: true, host: true });
 
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(this.hlmStyle);
   public readonly userClass = input<ClassValue>('', { alias: 'class' });
-  protected readonly _computedClass = computed(() => hlm(hlmDialogOverlayClass, this.userClass()));
+  protected readonly _computedClass = computed(() =>
+    hlm(dialogOverlayClasses[this._resolvedStyle()], this.userClass()),
+  );
 
   constructor() {
     effect(() => {

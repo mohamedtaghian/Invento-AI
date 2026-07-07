@@ -9,7 +9,7 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
+    // "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
     "paths": {
@@ -27,7 +27,8 @@
       "@spartan/helm/input": ["./libs/ui/input/src/index.ts"],
       "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
       "@spartan/helm/progress": ["./libs/ui/progress/src/index.ts"],
-      "@spartan/helm/radio-group": ["./libs/ui/radio-group/src/index.ts"]
+      "@spartan/helm/radio-group": ["./libs/ui/radio-group/src/index.ts"],
+      "@spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles/index.ts"]
     }
   },
   "angularCompilerOptions": {

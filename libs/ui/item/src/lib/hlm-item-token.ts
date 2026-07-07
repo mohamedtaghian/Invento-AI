@@ -1,10 +1,8 @@
 import { InjectionToken, type ValueProvider, inject } from '@angular/core';
-import type { ItemVariants } from './hlm-item';
-import type { ItemMediaVariants } from './hlm-item-media';
 
 export interface HlmItemConfig {
-  variant: ItemVariants['variant'];
-  size: ItemVariants['size'];
+  variant: string;
+  size: string;
 }
 
 const defaultConfig: HlmItemConfig = {
@@ -23,7 +21,7 @@ export function injectHlmItemConfig(): HlmItemConfig {
 }
 
 export interface HlmItemMediaConfig {
-  variant: ItemMediaVariants['variant'];
+  variant: string;
 }
 
 const defaultMediaConfig: HlmItemMediaConfig = {
