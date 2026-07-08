@@ -1,6 +1,10 @@
-import { Directive } from '@angular/core';
+import { Directive, inject, input, computed } from '@angular/core';
 import { BrnNavigationMenuLink } from '@spartan-ng/brain/navigation-menu';
 import { classes } from '@spartan/helm/utils';
+import { navMenuLinkClasses } from '@spartan/styles';
+import type { HlmStyle } from '@spartan/styles';
+import { injectResolvedHlmStyle } from '@spartan/styles';
+import { HlmNavigationMenu } from './hlm-navigation-menu';
 
 @Directive({
   selector: 'a[hlmNavigationMenuLink]',
@@ -10,10 +14,13 @@ import { classes } from '@spartan/helm/utils';
   },
 })
 export class HlmNavigationMenuLink {
+  private readonly _parent = inject(HlmNavigationMenu, { optional: true });
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(
+    computed(() => this.hlmStyle() ?? this._parent?.hlmStyle()),
+  );
+
   constructor() {
-    classes(
-      () =>
-        "data-[active=true]:focus:bg-muted data-[active=true]:hover:bg-muted data-[active=true]:bg-muted/50 focus-visible:ring-ring/50 hover:bg-muted focus:bg-muted flex items-center gap-1.5 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-3 focus-visible:outline-1 [&_ng-icon:not([class*='text-'])]:text-[length:--spacing(4)]",
-    );
+    classes(() => navMenuLinkClasses[this._resolvedStyle()]);
   }
 }

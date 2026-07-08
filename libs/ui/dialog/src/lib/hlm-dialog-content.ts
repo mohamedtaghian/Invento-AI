@@ -13,8 +13,13 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideX } from '@ng-icons/lucide';
 import { BrnDialogRef, injectBrnDialogContext } from '@spartan-ng/brain/dialog';
 import { HlmButton } from '@spartan/helm/button';
-
 import { classes } from '@spartan/helm/utils';
+import {
+  type HlmStyle,
+  injectResolvedHlmStyle,
+  dialogContentClasses,
+  dialogCloseButtonClasses,
+} from '@spartan/styles';
 import { HlmDialogClose } from './hlm-dialog-close';
 
 type HlmDialogContentContext = {
@@ -59,16 +64,14 @@ export class HlmDialogContent {
       transform: booleanAttribute,
     },
   );
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(this.hlmStyle);
 
   public readonly state = computed(() => this._dialogRef?.state() ?? 'closed');
-
   public readonly component = this._dialogContext?.$component;
   private readonly _dynamicComponentClass = this._dialogContext?.$dynamicComponentClass;
 
   constructor() {
-    classes(() => [
-      'bg-popover text-popover-foreground data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 ring-foreground/10 grid max-w-[calc(100%-2rem)] gap-6 rounded-xl p-6 text-sm ring-1 duration-100 sm:max-w-md relative mx-auto w-full outline-none sm:mx-0',
-      this._dynamicComponentClass,
-    ]);
+    classes(() => [dialogContentClasses[this._resolvedStyle()], this._dynamicComponentClass]);
   }
 }

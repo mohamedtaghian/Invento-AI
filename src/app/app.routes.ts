@@ -11,6 +11,7 @@ import { Brainstorm } from './pages/brainstorm/brainstorm';
 import { AiInterview } from './pages/ai-interview/ai-interview';
 import { Validation } from './pages/validation/validation';
 import { Preview } from './pages/preview/preview';
+import { StyleTest } from './pages/style-test/style-test';
 
 export const routes: Routes = [
   {
@@ -21,7 +22,7 @@ export const routes: Routes = [
 
       // 1. Home Phase: Renders inside MainLayout (Navbar only)
       { path: 'home', component: Home },
-
+      { path: 'style-test', component: StyleTest },
       // 2. Steps Phases: Renders inside BuilderLayout (Navbar + Steps Bar)
       {
         path: '',
