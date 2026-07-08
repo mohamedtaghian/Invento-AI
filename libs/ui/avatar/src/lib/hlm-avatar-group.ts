@@ -1,5 +1,6 @@
-import { Directive } from '@angular/core';
+import { Directive, input } from '@angular/core';
 import { classes } from '@spartan/helm/utils';
+import { type HlmStyle, injectResolvedHlmStyle, avatarGroupClasses } from '@spartan/styles';
 
 @Directive({
   selector: '[hlmAvatarGroup],hlm-avatar-group',
@@ -8,10 +9,10 @@ import { classes } from '@spartan/helm/utils';
   },
 })
 export class HlmAvatarGroup {
+  public readonly hlmStyle = input<HlmStyle>();
+  private readonly _resolvedStyle = injectResolvedHlmStyle(this.hlmStyle);
+
   constructor() {
-    classes(
-      () =>
-        '*:data-[slot=avatar]:ring-background group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2',
-    );
+    classes(() => avatarGroupClasses[this._resolvedStyle()]);
   }
 }
