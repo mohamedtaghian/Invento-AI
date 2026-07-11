@@ -2,9 +2,15 @@
   <div class="bg-border w-full h-px"></div>
 
   <div class="gap-6 grid grid-cols-2 sm:grid-cols-4 py-6">
-    @for (stat of stats(); track stat.label) {
-      <div class="flex flex-col items-center sm:items-start gap-1 sm:text-left text-center">
-        <span class="font-mono font-bold text-primary text-3xl">{{ stat.value }}</span>
+    @for (stat of displayStats(); track stat.label; let i = $index) {
+      <div
+        appScrollAnimate="zoom-in"
+        [animDelay]="i * 100"
+        class="flex flex-col items-center sm:items-start gap-1 sm:text-left text-center"
+      >
+        <span class="font-mono font-bold tabular-nums text-primary text-3xl">
+          {{ stat.display }}
+        </span>
         <span class="text-muted-foreground text-sm">{{ stat.label }}</span>
       </div>
     }

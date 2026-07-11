@@ -1,0 +1,25 @@
+.hero-badge {
+  isolation: isolate;
+}
+
+.hero-badge__shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    color-mix(in oklch, var(--primary) 30%, transparent) 50%,
+    transparent 80%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite linear;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
