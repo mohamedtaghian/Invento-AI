@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { HlmCardImports } from '@spartan/helm/card';
-import { HlmBadgeImports } from '@spartan/helm/badge';
+import { HlmCard, HlmCardHeader, HlmCardTitle, HlmCardDescription } from '@spartan/helm/card';
+import { HlmBadge } from '@spartan/helm/badge';
+import { ScrollAnimateDirective } from '../../../shared/directives/scroll-animate.directive';
 
 interface PipelineStep {
   readonly number: string;
@@ -13,8 +14,17 @@ interface PipelineStep {
 @Component({
   selector: 'app-pipeline',
   templateUrl: './pipeline.html',
+  styleUrl: './pipeline.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ...HlmCardImports, ...HlmBadgeImports],
+  imports: [
+    RouterLink,
+    HlmCard,
+    HlmCardHeader,
+    HlmCardTitle,
+    HlmCardDescription,
+    HlmBadge,
+    ScrollAnimateDirective,
+  ],
 })
 export class Pipeline {
   protected readonly steps = signal<PipelineStep[]>([
@@ -23,4 +33,24 @@ export class Pipeline {
     { number: '03', title: 'Validation', subtitle: 'Name availability', route: '/validation' },
     { number: '04', title: 'Preview', subtitle: 'Deploy site', route: '/preview' },
   ]);
+
+  onMouseMove(event: MouseEvent): void {
+    const card = event.currentTarget as HTMLElement;
+    const glow = card.querySelector('.pipeline-glow') as HTMLElement;
+    if (!glow) return;
+
+    const rect = card.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    glow.style.background = `radial-gradient(300px circle at ${x}px ${y}px, var(--color-primary) 0%, transparent 70%)`;
+    glow.style.opacity = '0.08';
+  }
+
+  onMouseLeave(event: MouseEvent): void {
+    const card = event.currentTarget as HTMLElement;
+    const glow = card.querySelector('.pipeline-glow') as HTMLElement;
+    if (!glow) return;
+    glow.style.opacity = '0';
+  }
 }

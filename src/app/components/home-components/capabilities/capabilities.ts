@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideTerminal, lucideLayers, lucideDatabase, lucideGlobe } from '@ng-icons/lucide';
-import { HlmCardImports } from '@spartan/helm/card';
+import { HlmCard, HlmCardContent, HlmCardTitle, HlmCardDescription } from '@spartan/helm/card';
+import { ScrollAnimateDirective } from '../../../shared/directives/scroll-animate.directive';
 
 interface Capability {
   readonly icon: string;
@@ -13,7 +14,14 @@ interface Capability {
   selector: 'app-capabilities',
   templateUrl: './capabilities.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon, ...HlmCardImports],
+  imports: [
+    NgIcon,
+    HlmCard,
+    HlmCardContent,
+    HlmCardTitle,
+    HlmCardDescription,
+    ScrollAnimateDirective,
+  ],
   providers: [provideIcons({ lucideTerminal, lucideLayers, lucideDatabase, lucideGlobe })],
 })
 export class Capabilities {

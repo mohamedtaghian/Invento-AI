@@ -1,0 +1,9 @@
+<span class="inline">
+  <span class="font-bold text-primary text-5xl md:text-6xl lg:text-7xl">{{ displayText() }}</span
+  ><span
+    class="font-bold text-primary text-5xl md:text-6xl lg:text-7xl transition-opacity duration-100"
+    [class.opacity-0]="!showCursor()"
+    [class.opacity-100]="showCursor()"
+    >|</span
+  >
+</span>
