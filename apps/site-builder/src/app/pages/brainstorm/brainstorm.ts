@@ -4,7 +4,6 @@ import {
   computed,
   HostListener,
   inject,
-  output,
   signal,
 } from '@angular/core';
 import { HlmBadgeImports } from '@spartan/helm/badge';
@@ -23,8 +22,10 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { lucideDot } from '@ng-icons/lucide';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { BrainstormApi } from '@/app/features/builder/services/brainstorm-api';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { Router } from '@angular/router';
 
 interface ContextChecklist {
   id: number;
@@ -61,7 +62,8 @@ export class Brainstorm {
   protected readonly MIN_DESCRIPTION_LENGTH = 25;
 
   private readonly builderState = inject(BuilderState);
-  readonly dataSaved = output<void>();
+  private readonly brainstormApi = inject(BrainstormApi);
+  private readonly router = inject(Router);
 
   protected readonly hlmH2 = hlmH2;
   protected readonly hlmP = hlmP;
@@ -73,6 +75,8 @@ export class Brainstorm {
   );
 
   isFocused = signal<boolean>(false);
+  readonly isSubmitting = signal(false);
+
   contextChecklist: ContextChecklist[] = [
     {
       id: 1,
@@ -105,9 +109,30 @@ export class Brainstorm {
   }
 
   onNext() {
-    if (this.descriptionControl.valid) {
-      this.builderState.brainstorm.set(this.descriptionControl.value);
-      this.dataSaved.emit();
-    }
+    if (this.descriptionControl.invalid || this.isSubmitting()) return;
+
+    this.isSubmitting.set(true);
+    const text = this.descriptionControl.value;
+    this.builderState.brainstorm.set(text);
+
+    this.brainstormApi.analyzePrompt(text).subscribe({
+      next: (response) => {
+        const prefill: Record<string, string | string[]> = {};
+        if (response.business_name) prefill['business_name'] = response.business_name;
+        if (response.business_type) prefill['business_type'] = response.business_type;
+        if (response.industry) prefill['industry'] = response.industry;
+        if (response.target) prefill['target'] = response.target;
+        if (response.pricing) prefill['pricing'] = response.pricing;
+        if (response.channels) prefill['channels'] = response.channels;
+        if (response.differentiator) prefill['differentiator'] = response.differentiator;
+        this.builderState.aiAnswers.set(prefill);
+        this.isSubmitting.set(false);
+        this.router.navigate(['/build/ai-interview']);
+      },
+      error: () => {
+        this.isSubmitting.set(false);
+        this.router.navigate(['/build/ai-interview']);
+      },
+    });
   }
 }

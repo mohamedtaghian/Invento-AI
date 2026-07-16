@@ -1,4 +1,4 @@
-import { Component, inject, output } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
@@ -73,7 +73,6 @@ type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUIL
   styleUrl: './validation.css',
 })
 export class Validation {
-  readonly dataSaved = output<void>();
   private engine = inject(InventoEngineService);
   private readonly builderState = inject(BuilderState);
 
@@ -181,6 +180,5 @@ export class Validation {
     this.builderState.businessName.set(this.businessName);
     this.builderState.businessType.set(this.businessType);
     this.builderState.targetAudience.set(this.targetAudience);
-    this.dataSaved.emit();
   }
 }

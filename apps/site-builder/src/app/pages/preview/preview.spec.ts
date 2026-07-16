@@ -71,14 +71,9 @@ describe('Preview', () => {
     expect(component.deployDialogState()).toBe('open');
   });
 
-  it('emits dataSaved on confirmDeployment', () => {
-    let emitted = false;
-    component.dataSaved.subscribe(() => (emitted = true));
-    const mockCtx = { close: vi.fn() };
-    component.selectedTheme.set(MOCK_THEMES[0]);
-    component.confirmDeployment(mockCtx);
-    expect(emitted).toBe(true);
-    expect(mockCtx.close).toHaveBeenCalled();
+  it('clears isNavigating when loading completes', () => {
+    fixture.detectChanges();
+    expect(builderState.isNavigating()).toBe(false);
   });
 
   it('toggles focus mode', () => {

@@ -1,8 +1,12 @@
-.step-card {
-  display: flex;
-  width: 100%;
-}
+/* ── LEGACY CARD STEPPER STYLES ─────────────────────────────────
+   Restore these if reverting to the GSAP card stepper:
 
-.step-card:not(:first-child) {
-  display: none;
-}
+   .step-card {
+     display: flex;
+     width: 100%;
+   }
+
+   .step-card:not(:first-child) {
+     display: none;
+   }
+   ──────────────────────────────────────────────────────────── */

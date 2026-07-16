@@ -1,5 +1,11 @@
-.ai-loader {
-  animation: spin 3s linear infinite;
+.loader-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  background-color: var(--background);
+  z-index: 9999;
 }
 
 .ai-loader-border {
@@ -32,15 +38,6 @@
   border-radius: 50%;
   z-index: 50;
   animation: tracePath 2.5s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    rotate: 0deg;
-  }
-  100% {
-    rotate: 360deg;
-  }
 }
 
 @keyframes tracePath {
