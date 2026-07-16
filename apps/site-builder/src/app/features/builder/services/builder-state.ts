@@ -2,6 +2,7 @@ import { Injectable, computed, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class BuilderState {
+  readonly isNavigating = signal(false);
   readonly brainstorm = signal<string>('');
   readonly aiAnswers = signal<Record<string, string | string[]>>({});
   readonly selectedTheme = signal<string>('');

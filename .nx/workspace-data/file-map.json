@@ -195,7 +195,7 @@
         },
         {
           "file": "apps/site-builder/src/app/app.routes.ts",
-          "hash": "10528148530215929988",
+          "hash": "17187207511770005243",
           "deps": [
             "npm:@angular/router"
           ]
@@ -210,15 +210,15 @@
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.css",
-          "hash": "17245317603333959639"
+          "hash": "6549833236102847989"
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.html",
-          "hash": "9426952272534690123"
+          "hash": "13058906081408173961"
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.ts",
-          "hash": "6259503611404186314",
+          "hash": "17702843889556177310",
           "deps": [
             "npm:@angular/core"
           ]
@@ -391,7 +391,7 @@
         },
         {
           "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.html",
-          "hash": "8692617413238088144"
+          "hash": "4488175250236947912"
         },
         {
           "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.ts",
@@ -488,7 +488,7 @@
         },
         {
           "file": "apps/site-builder/src/app/features/builder/services/builder-state.ts",
-          "hash": "7437074573151632689",
+          "hash": "9339014137475692314",
           "deps": [
             "npm:@angular/core"
           ]
@@ -515,11 +515,11 @@
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.html",
-          "hash": "5142097795934456960"
+          "hash": "11809332708959831068"
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.ts",
-          "hash": "15240205143480907123",
+          "hash": "17707038555030474946",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -543,23 +543,24 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.css",
-          "hash": "3480461278808736372"
+          "hash": "6081276767931544457"
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.html",
-          "hash": "17234518666506198016"
+          "hash": "5080115178129186678"
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.ts",
-          "hash": "5117575315363446443",
+          "hash": "11430185853099329520",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/forms",
-            "npm:gsap",
-            "spartan-ui",
             "npm:@ng-icons/lucide",
             "npm:@ng-icons/core",
-            "npm:@angular/router"
+            "spartan-ui",
+            "npm:@angular/router",
+            "npm:@angular/cdk",
+            "spartan-stepper"
           ]
         },
         {
@@ -572,7 +573,7 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.ts",
-          "hash": "7112717560617957747",
+          "hash": "9540434341427126978",
           "deps": [
             "npm:@angular/core",
             "spartan-ui",
@@ -612,14 +613,14 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.spec.ts",
-          "hash": "5662253328712871552",
+          "hash": "17969624758127031875",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.ts",
-          "hash": "17270803009700127663",
+          "hash": "4083971231712999293",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -656,7 +657,7 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/validation/validation.ts",
-          "hash": "17493124468378617233",
+          "hash": "3692000101403583868",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
