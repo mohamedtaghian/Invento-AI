@@ -79,215 +79,6 @@
   "fileMap": {
     "nonProjectFiles": [],
     "projectFileMap": {
-      "spartan-stepper": [
-        {
-          "file": "libs/stepper/(stepper).page.ts",
-          "hash": "15989217979855488241",
-          "deps": [
-            "npm:@analogjs/router",
-            "npm:@angular/core",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/index.ts",
-          "hash": "1343641158380986987"
-        },
-        {
-          "file": "libs/stepper/lib/spartan-step-content.ts",
-          "hash": "16088139540170135528",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-step-header.css",
-          "hash": "8324334514201404058"
-        },
-        {
-          "file": "libs/stepper/lib/spartan-step-header.ts",
-          "hash": "2054307955945003329",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-step-label.ts",
-          "hash": "16268482950670258845",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-step.ts",
-          "hash": "1636649023281504919",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-stepper-button-next.ts",
-          "hash": "7521895942438115935",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-stepper-button-previous.ts",
-          "hash": "9963567102295295019",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/spartan-stepper.css",
-          "hash": "11518321027103403065"
-        },
-        {
-          "file": "libs/stepper/lib/spartan-stepper.ts",
-          "hash": "7345273207442878063",
-          "deps": [
-            "npm:@angular/cdk",
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "spartan-ui",
-            "npm:class-variance-authority",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "libs/stepper/lib/stepper.token.ts",
-          "hash": "15585297020641057089",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/stepper/project.json",
-          "hash": "2978688325413422966"
-        }
-      ],
-      "shared": [
-        {
-          "file": "libs/shared/project.json",
-          "hash": "15776868581150229405"
-        },
-        {
-          "file": "libs/shared/src/index.ts",
-          "hash": "2499797848748357820"
-        },
-        {
-          "file": "libs/shared/src/lib/constants/styles.ts",
-          "hash": "13179513504236354816"
-        },
-        {
-          "file": "libs/shared/src/lib/directives/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/src/lib/directives/scroll-animate.directive.ts",
-          "hash": "12411461442359163080",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "libs/shared/src/lib/environment/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/src/lib/mock/mock-preview.ts",
-          "hash": "12839926860245438936"
-        },
-        {
-          "file": "libs/shared/src/lib/pipes/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/src/lib/template/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/tsconfig.json",
-          "hash": "16347174835384209642"
-        },
-        {
-          "file": "libs/shared/tsconfig.lib.json",
-          "hash": "13605602845023906464"
-        }
-      ],
-      "core": [
-        {
-          "file": "libs/core/project.json",
-          "hash": "1640819485616039897"
-        },
-        {
-          "file": "libs/core/src/index.ts",
-          "hash": "281699839300413713"
-        },
-        {
-          "file": "libs/core/src/lib/interceptors/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/core/src/lib/interface/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/core/src/lib/interface/Preview.ts",
-          "hash": "7989325360289277425"
-        },
-        {
-          "file": "libs/core/src/lib/service/invento-engine.service.ts",
-          "hash": "13902657386254294743",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "libs/core/src/lib/service/preview-data-client.spec.ts",
-          "hash": "6398543981386200506",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "libs/core/src/lib/service/preview-data-client.ts",
-          "hash": "2739481873643316137",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/core/src/lib/utils/Preview-css-parser.ts",
-          "hash": "9132649190219536729"
-        },
-        {
-          "file": "libs/core/src/lib/utils/theme-suggestion-converter.ts",
-          "hash": "6301159868700021391"
-        },
-        {
-          "file": "libs/core/tsconfig.json",
-          "hash": "16347174835384209642"
-        },
-        {
-          "file": "libs/core/tsconfig.lib.json",
-          "hash": "13605602845023906464"
-        }
-      ],
       "site-builder": [
         {
           "file": ".editorconfig",
@@ -295,7 +86,7 @@
         },
         {
           "file": ".gitignore",
-          "hash": "18393496008233173661"
+          "hash": "2810570551885204189"
         },
         {
           "file": ".husky/pre-commit",
@@ -303,7 +94,7 @@
         },
         {
           "file": ".postcssrc.json",
-          "hash": "1757434806578486340"
+          "hash": "17460548602263189673"
         },
         {
           "file": ".prettierignore",
@@ -311,27 +102,27 @@
         },
         {
           "file": ".prettierrc",
-          "hash": "9120624874979805020"
+          "hash": "14574854320466421715"
         },
         {
           "file": ".vscode/extensions.json",
-          "hash": "8757467766952221272"
+          "hash": "13088645423479745945"
         },
         {
           "file": ".vscode/launch.json",
-          "hash": "17038929134016848735"
+          "hash": "17406702432687230417"
         },
         {
           "file": ".vscode/mcp.json",
-          "hash": "18312290508764663119"
+          "hash": "11492871017727097845"
         },
         {
           "file": ".vscode/settings.json",
-          "hash": "11977451088175356911"
+          "hash": "7569002283527361615"
         },
         {
           "file": ".vscode/tasks.json",
-          "hash": "1370608409982315224"
+          "hash": "11080398893561185157"
         },
         {
           "file": "LICENSE",
@@ -339,15 +130,15 @@
         },
         {
           "file": "PLAN.md",
-          "hash": "14353219225235088070"
+          "hash": "3984933682321496939"
         },
         {
           "file": "README.md",
-          "hash": "12815083426668359980"
+          "hash": "14982904719331858438"
         },
         {
           "file": "apps/site-builder/proxy.conf.json",
-          "hash": "1753881120193045187"
+          "hash": "8538145112689959144"
         },
         {
           "file": "apps/site-builder/public/favicon.ico",
@@ -367,7 +158,7 @@
         },
         {
           "file": "apps/site-builder/src/app/app.config.server.ts",
-          "hash": "16664769899172877666",
+          "hash": "9821033231171006851",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/ssr"
@@ -375,11 +166,12 @@
         },
         {
           "file": "apps/site-builder/src/app/app.config.ts",
-          "hash": "17677591194982533272",
+          "hash": "4965955649987652399",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
-            "npm:@angular/platform-browser"
+            "npm:@angular/platform-browser",
+            "spartan-ui"
           ]
         },
         {
@@ -388,25 +180,25 @@
         },
         {
           "file": "apps/site-builder/src/app/app.html",
-          "hash": "9112918913598109124"
+          "hash": "372512330712979019"
         },
         {
           "file": "apps/site-builder/src/app/app.routes.server.ts",
-          "hash": "16960858348243221237",
+          "hash": "18157869972107820657",
           "deps": [
             "npm:@angular/ssr"
           ]
         },
         {
           "file": "apps/site-builder/src/app/app.routes.ts",
-          "hash": "10277175522302718383",
+          "hash": "2213627048363410742",
           "deps": [
             "npm:@angular/router"
           ]
         },
         {
           "file": "apps/site-builder/src/app/app.ts",
-          "hash": "3521086725387153075",
+          "hash": "8625255863274326688",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -414,95 +206,99 @@
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.css",
-          "hash": "10409433907884550477"
+          "hash": "17245317603333959639"
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.html",
-          "hash": "17288102533132053133"
+          "hash": "9426952272534690123"
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.ts",
-          "hash": "15975091585909883374",
+          "hash": "6259503611404186314",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/container-width/container-width.ts",
-          "hash": "16534673687677987785",
+          "hash": "3635339702374117237",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.html",
-          "hash": "4030908795202919690"
+          "hash": "572478777544577270"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.ts",
-          "hash": "7278682193943362048",
+          "hash": "15021895784439113143",
           "deps": [
             "npm:@angular/core",
             "npm:@ng-icons/core",
             "npm:@ng-icons/lucide",
+            "spartan-ui",
             "npm:@angular/router"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/cta/cta.html",
-          "hash": "10063144210611534500"
+          "hash": "6761433778823115057"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/cta/cta.ts",
-          "hash": "6444799519902629260",
+          "hash": "956888468634116814",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
             "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/hero/hero.css",
-          "hash": "12078090390679762228"
+          "hash": "1636399489181767268"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/hero/hero.html",
-          "hash": "2124314514434609912"
+          "hash": "12449386405473797959"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/hero/hero.ts",
-          "hash": "2812425465454005896",
+          "hash": "15375326016070775764",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
             "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.css",
-          "hash": "14928824421032081101"
+          "hash": "6315905493616632232"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.html",
-          "hash": "1432752260882009232"
+          "hash": "262370768362279648"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.ts",
-          "hash": "11637839794275578564",
+          "hash": "11514357140241512184",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/router"
+            "npm:@angular/router",
+            "spartan-ui"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/stats/stats.html",
-          "hash": "1648625097222838746"
+          "hash": "4179503386388119125"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/stats/stats.ts",
-          "hash": "12385200791131925498",
+          "hash": "10176273444564743578",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
@@ -512,11 +308,11 @@
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.html",
-          "hash": "13897746081458526675"
+          "hash": "6724322924542925965"
         },
         {
           "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.ts",
-          "hash": "6339676163989067974",
+          "hash": "5006782741363242822",
           "deps": [
             "npm:@angular/common",
             "npm:@angular/core"
@@ -524,15 +320,15 @@
         },
         {
           "file": "apps/site-builder/src/app/components/loader.component/loader.css",
-          "hash": "18070648415136686191"
+          "hash": "2153064435548163180"
         },
         {
           "file": "apps/site-builder/src/app/components/loader.component/loader.html",
-          "hash": "10927884421595664492"
+          "hash": "12998470207267076288"
         },
         {
           "file": "apps/site-builder/src/app/components/loader.component/loader.ts",
-          "hash": "9949074089177708829",
+          "hash": "10894497260095605057",
           "deps": [
             "npm:@angular/core"
           ]
@@ -543,42 +339,44 @@
         },
         {
           "file": "apps/site-builder/src/app/components/navbar/navbar.html",
-          "hash": "10011206735907215578"
+          "hash": "3192943214327352918"
         },
         {
           "file": "apps/site-builder/src/app/components/navbar/navbar.ts",
-          "hash": "15896740672834266111",
+          "hash": "9842877497316097932",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/router"
+            "npm:@angular/router",
+            "spartan-ui"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/page-badge/page-badge.css",
-          "hash": "13395893750456481293"
+          "hash": "10084177926168219123"
         },
         {
           "file": "apps/site-builder/src/app/components/page-badge/page-badge.html",
-          "hash": "788384966807481341"
+          "hash": "11764707191569516048"
         },
         {
           "file": "apps/site-builder/src/app/components/page-badge/page-badge.ts",
-          "hash": "13740699149033389172",
+          "hash": "12738876847338466190",
           "deps": [
-            "npm:@angular/core"
+            "npm:@angular/core",
+            "spartan-ui"
           ]
         },
         {
           "file": "apps/site-builder/src/app/components/page-header/page-header.css",
-          "hash": "8824806454153227100"
+          "hash": "10229690227941033365"
         },
         {
           "file": "apps/site-builder/src/app/components/page-header/page-header.html",
-          "hash": "9582519520335094638"
+          "hash": "16762579157445803333"
         },
         {
           "file": "apps/site-builder/src/app/components/page-header/page-header.ts",
-          "hash": "13529018274359449871",
+          "hash": "14274543365037752428",
           "deps": [
             "npm:@angular/core"
           ]
@@ -589,15 +387,16 @@
         },
         {
           "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.html",
-          "hash": "12227395596874846828"
+          "hash": "17340720534585628830"
         },
         {
           "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.ts",
-          "hash": "4723459996359416337",
+          "hash": "2558267434992402905",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
-            "npm:@angular/common"
+            "npm:@angular/common",
+            "spartan-ui"
           ]
         },
         {
@@ -614,11 +413,11 @@
         },
         {
           "file": "apps/site-builder/src/app/core/interface/Preview.ts",
-          "hash": "7989325360289277425"
+          "hash": "6094444665101812365"
         },
         {
           "file": "apps/site-builder/src/app/core/service/invento-engine.service.ts",
-          "hash": "13902657386254294743",
+          "hash": "6978065200456107734",
           "deps": [
             "npm:@angular/core",
             "npm:rxjs"
@@ -626,7 +425,7 @@
         },
         {
           "file": "apps/site-builder/src/app/core/service/preview-data-client.spec.ts",
-          "hash": "6398543981386200506",
+          "hash": "6804305468423115112",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common"
@@ -634,7 +433,7 @@
         },
         {
           "file": "apps/site-builder/src/app/core/service/preview-data-client.ts",
-          "hash": "2739481873643316137",
+          "hash": "17638424716364427270",
           "deps": [
             "npm:@angular/common",
             "npm:@angular/core"
@@ -642,31 +441,33 @@
         },
         {
           "file": "apps/site-builder/src/app/core/utils/Preview-css-parser.ts",
-          "hash": "9132649190219536729"
+          "hash": "15531998267057461826"
         },
         {
           "file": "apps/site-builder/src/app/core/utils/theme-suggestion-converter.ts",
-          "hash": "6301159868700021391"
+          "hash": "3448929485239927628"
         },
         {
           "file": "apps/site-builder/src/app/features/builder/components/shell/builder.css",
-          "hash": "17594661842398584117"
+          "hash": "5332305543155318434"
         },
         {
           "file": "apps/site-builder/src/app/features/builder/components/shell/builder.html",
-          "hash": "13738385545237373564"
+          "hash": "5810497929953079230"
         },
         {
           "file": "apps/site-builder/src/app/features/builder/components/shell/builder.ts",
-          "hash": "2217417285673264811",
+          "hash": "14524731393855748505",
           "deps": [
             "npm:@angular/core",
+            "spartan-stepper",
+            "spartan-ui",
             "npm:@angular/forms"
           ]
         },
         {
           "file": "apps/site-builder/src/app/features/builder/services/builder-state.ts",
-          "hash": "8551972230451896925",
+          "hash": "7437074573151632689",
           "deps": [
             "npm:@angular/core"
           ]
@@ -677,11 +478,11 @@
         },
         {
           "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.html",
-          "hash": "2681667420250294618"
+          "hash": "18398617562096490294"
         },
         {
           "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.ts",
-          "hash": "14724407830339167641",
+          "hash": "15445081219135945642",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -693,11 +494,11 @@
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.html",
-          "hash": "14951923206508592981"
+          "hash": "5142097795934456960"
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.ts",
-          "hash": "13275745457742120442",
+          "hash": "15240205143480907123",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -709,11 +510,11 @@
         },
         {
           "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.html",
-          "hash": "8502590779626764721"
+          "hash": "8745601574870935923"
         },
         {
           "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.ts",
-          "hash": "12657524187270718724",
+          "hash": "18201141747176213988",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -721,19 +522,20 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.css",
-          "hash": "8404842272816835027"
+          "hash": "3480461278808736372"
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.html",
-          "hash": "14371168617396923142"
+          "hash": "17234518666506198016"
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.ts",
-          "hash": "3588844294508774152",
+          "hash": "3357491402774696132",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/forms",
             "npm:gsap",
+            "spartan-ui",
             "npm:@ng-icons/lucide",
             "npm:@ng-icons/core"
           ]
@@ -744,13 +546,14 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.html",
-          "hash": "9026252150149785911"
+          "hash": "3579668250469481299"
         },
         {
           "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.ts",
-          "hash": "16540791786213094747",
+          "hash": "11772844428711032087",
           "deps": [
             "npm:@angular/core",
+            "spartan-ui",
             "npm:@ng-icons/core",
             "npm:@ng-icons/heroicons",
             "npm:@angular/forms",
@@ -763,11 +566,11 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/home/home.html",
-          "hash": "14730513047526654513"
+          "hash": "2594937456420332908"
         },
         {
           "file": "apps/site-builder/src/app/pages/home/home.ts",
-          "hash": "10475353619554596204",
+          "hash": "14076587486944101064",
           "deps": [
             "npm:@angular/core"
           ]
@@ -778,43 +581,45 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.css",
-          "hash": "4999485497974771461"
+          "hash": "18264062724061541935"
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.html",
-          "hash": "3815870814818886334"
+          "hash": "1116242904032060898"
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.spec.ts",
-          "hash": "2954398926338422916",
+          "hash": "5662253328712871552",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.ts",
-          "hash": "793347902613108709",
+          "hash": "11021350730371934255",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
             "npm:@ng-icons/core",
             "npm:@ng-icons/lucide",
+            "spartan-ui",
             "npm:html2canvas"
           ]
         },
         {
           "file": "apps/site-builder/src/app/pages/style-test/style-test.css",
-          "hash": "17268647420453869304"
+          "hash": "11848167426905207949"
         },
         {
           "file": "apps/site-builder/src/app/pages/style-test/style-test.html",
-          "hash": "17624714566559246843"
+          "hash": "7254770374894520480"
         },
         {
           "file": "apps/site-builder/src/app/pages/style-test/style-test.ts",
-          "hash": "3632529468780062164",
+          "hash": "7917439268683157487",
           "deps": [
-            "npm:@angular/core"
+            "npm:@angular/core",
+            "spartan-ui"
           ]
         },
         {
@@ -823,17 +628,18 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/validation/validation.html",
-          "hash": "5476599111351910030"
+          "hash": "7312727294611698907"
         },
         {
           "file": "apps/site-builder/src/app/pages/validation/validation.ts",
-          "hash": "7384273503281489417",
+          "hash": "18430096861827202830",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
             "npm:@angular/forms",
             "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
           ]
         },
         {
@@ -842,11 +648,11 @@
         },
         {
           "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.html",
-          "hash": "14441800778395509290"
+          "hash": "8104521535790502561"
         },
         {
           "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.ts",
-          "hash": "6921361796129205251",
+          "hash": "1765843377592450987",
           "deps": [
             "npm:@angular/core",
             "npm:@ng-icons/core",
@@ -855,7 +661,10 @@
         },
         {
           "file": "apps/site-builder/src/app/shared/constants/styles.ts",
-          "hash": "13179513504236354816"
+          "hash": "1546927596284306177",
+          "deps": [
+            "spartan-ui"
+          ]
         },
         {
           "file": "apps/site-builder/src/app/shared/directives/.gitkeep",
@@ -863,7 +672,7 @@
         },
         {
           "file": "apps/site-builder/src/app/shared/directives/scroll-animate.directive.ts",
-          "hash": "12411461442359163080",
+          "hash": "9868315133561130149",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common"
@@ -875,7 +684,7 @@
         },
         {
           "file": "apps/site-builder/src/app/shared/mock/mock-preview.ts",
-          "hash": "12839926860245438936"
+          "hash": "17524936463934033517"
         },
         {
           "file": "apps/site-builder/src/app/shared/pipes/.gitkeep",
@@ -891,25 +700,25 @@
         },
         {
           "file": "apps/site-builder/src/index.html",
-          "hash": "16400700597466431572"
+          "hash": "14860688536458566365"
         },
         {
           "file": "apps/site-builder/src/main.server.ts",
-          "hash": "9109840317723288427",
+          "hash": "11092207872559804643",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
           "file": "apps/site-builder/src/main.ts",
-          "hash": "3314327030169821486",
+          "hash": "17436527127367840298",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
           "file": "apps/site-builder/src/server.ts",
-          "hash": "9749523158510257112",
+          "hash": "496979342051422929",
           "deps": [
             "npm:@angular/ssr",
             "npm:express"
@@ -917,35 +726,35 @@
         },
         {
           "file": "apps/site-builder/src/styles.css",
-          "hash": "16320665471533236816"
+          "hash": "5850814979560018920"
         },
         {
           "file": "apps/site-builder/tsconfig.app.json",
-          "hash": "1904516484552985523"
+          "hash": "17512141059392134071"
         },
         {
           "file": "apps/site-builder/tsconfig.spec.json",
-          "hash": "56922962883704657"
+          "hash": "3626390550481669686"
         },
         {
           "file": "components.json",
-          "hash": "7382499190432608400"
+          "hash": "3894654076513822499"
         },
         {
           "file": "docs/NX-MONOREPO-GUIDE.md",
-          "hash": "15642068084640085689"
+          "hash": "8895959997503898933"
         },
         {
           "file": "docs/dependency-graph.html",
-          "hash": "10100946993555923014"
+          "hash": "3701399248674527926"
         },
         {
           "file": "docs/multi-style-guide.md",
-          "hash": "7235571348996374059"
+          "hash": "15100037917817484227"
         },
         {
           "file": "docs/static/environment.js",
-          "hash": "12747589086024032165"
+          "hash": "11629772564341206393"
         },
         {
           "file": "docs/static/favicon.ico",
@@ -961,7 +770,7 @@
         },
         {
           "file": "docs/static/styles.css",
-          "hash": "6306444295377383679"
+          "hash": "1074425063844015388"
         },
         {
           "file": "docs/static/styles.js",
@@ -969,11 +778,11 @@
         },
         {
           "file": "docs/style-system.md",
-          "hash": "14459916335966127818"
+          "hash": "11251452300245212553"
         },
         {
           "file": "eslint.config.ts",
-          "hash": "14656241649811258410",
+          "hash": "13283628237184553899",
           "deps": [
             "npm:@eslint/js",
             "npm:angular-eslint",
@@ -984,15 +793,15 @@
         },
         {
           "file": "nx.json",
-          "hash": "12401985396515345729"
+          "hash": "12011752209460714900"
         },
         {
           "file": "package-lock.json",
-          "hash": "15494759949701148352"
+          "hash": "17243989038110644700"
         },
         {
           "file": "package.json",
-          "hash": "7161829994024448046",
+          "hash": "16925696152150187342",
           "deps": [
             "npm:@angular-devkit/core",
             "npm:@angular-devkit/schematics",
@@ -1050,7 +859,7 @@
         },
         {
           "file": "project.json",
-          "hash": "4930868364477262754"
+          "hash": "12336926943311303260"
         },
         {
           "file": "tsconfig.app.json",
@@ -1058,75 +867,21 @@
         },
         {
           "file": "tsconfig.base.json",
-          "hash": "17494866966770986348"
+          "hash": "16477468309261056885"
         },
         {
           "file": "tsconfig.json",
-          "hash": "3740058601604536"
+          "hash": "9833805294362758485"
         },
         {
           "file": "tsconfig.spec.json",
-          "hash": "8409958102343734398"
-        }
-      ],
-      "spartan-stepper-shared": [
-        {
-          "file": "libs/stepper-shared/blocks/block-link.ts",
-          "hash": "6598692070260618049",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/block-preview.ts",
-          "hash": "15645301043282039822",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/block-viewer.ts",
-          "hash": "5633413544210261344",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "npm:@spartan-ng/brain"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/open-in-button.ts",
-          "hash": "16324086082259353394",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/open-in-component-button.ts",
-          "hash": "18378701084719246359",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/meta/meta.util.ts",
-          "hash": "14008985441984984870"
-        },
-        {
-          "file": "libs/stepper-shared/project.json",
-          "hash": "17707128234221975682"
+          "hash": "12303691057116860145"
         }
       ],
       "userSite": [
         {
           "file": "apps/userSite/project.json",
-          "hash": "1775141901100128520"
+          "hash": "16008602655879630173"
         },
         {
           "file": "apps/userSite/public/favicon.ico",
@@ -1134,7 +889,7 @@
         },
         {
           "file": "apps/userSite/src/app/app.config.server.ts",
-          "hash": "16664769899172877666",
+          "hash": "9821033231171006851",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/ssr"
@@ -1142,7 +897,7 @@
         },
         {
           "file": "apps/userSite/src/app/app.config.ts",
-          "hash": "5053404622473242682",
+          "hash": "1923496238492213554",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
@@ -1155,51 +910,141 @@
         },
         {
           "file": "apps/userSite/src/app/app.html",
-          "hash": "17816966185630879015"
+          "hash": "17385897758380840601"
         },
         {
           "file": "apps/userSite/src/app/app.routes.server.ts",
-          "hash": "12347724813785314091",
+          "hash": "1372639138676955940",
           "deps": [
             "npm:@angular/ssr"
           ]
         },
         {
           "file": "apps/userSite/src/app/app.routes.ts",
-          "hash": "6185150965714414910",
+          "hash": "4469732138138410396",
           "deps": [
             "npm:@angular/router"
           ]
         },
         {
           "file": "apps/userSite/src/app/app.ts",
-          "hash": "18050637513199959410",
+          "hash": "4756457516933044000",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
           ]
         },
         {
+          "file": "apps/userSite/src/app/components/products-components/filters-sidebar/filters-sidebar.html",
+          "hash": "6263081684858561759"
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/filters-sidebar/filters-sidebar.ts",
+          "hash": "12403194942709351822",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/pagination/pagination.html",
+          "hash": "6906285495469649178"
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/pagination/pagination.ts",
+          "hash": "494103439066184541",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/product-card/product-card.html",
+          "hash": "15195846005611602571"
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/product-card/product-card.ts",
+          "hash": "316813264461597083",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/products-grid/products-grid.html",
+          "hash": "11194543760078104226"
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/products-grid/products-grid.ts",
+          "hash": "2080985218614132554",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/products-toolbar/products-toolbar.html",
+          "hash": "11715267144113664086"
+        },
+        {
+          "file": "apps/userSite/src/app/components/products-components/products-toolbar/products-toolbar.ts",
+          "hash": "18247454941783902092",
+          "deps": [
+            "npm:@angular/core",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/core/interface/product.interface.ts",
+          "hash": "4900057678545662016"
+        },
+        {
+          "file": "apps/userSite/src/app/core/service/products.service.ts",
+          "hash": "1075066303704418514",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/userSite/src/app/pages/products/products.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/userSite/src/app/pages/products/products.html",
+          "hash": "13696724424964847999"
+        },
+        {
+          "file": "apps/userSite/src/app/pages/products/products.ts",
+          "hash": "16246503180984186713",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
           "file": "apps/userSite/src/index.html",
-          "hash": "3753018269375244725"
+          "hash": "2696262453426334137"
         },
         {
           "file": "apps/userSite/src/main.server.ts",
-          "hash": "9109840317723288427",
+          "hash": "11092207872559804643",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
           "file": "apps/userSite/src/main.ts",
-          "hash": "3314327030169821486",
+          "hash": "17436527127367840298",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
           "file": "apps/userSite/src/server.ts",
-          "hash": "17519504556414207097",
+          "hash": "10309960005974131788",
           "deps": [
             "npm:@angular/ssr",
             "npm:express"
@@ -1207,15 +1052,110 @@
         },
         {
           "file": "apps/userSite/src/styles.css",
-          "hash": "5195668842064076916"
+          "hash": "9311766199374151566"
         },
         {
           "file": "apps/userSite/tsconfig.app.json",
-          "hash": "2438757114263802077"
+          "hash": "17566555731533514162"
         },
         {
           "file": "apps/userSite/tsconfig.json",
-          "hash": "4637516213383210367"
+          "hash": "6589148955464199900"
+        }
+      ],
+      "invento": [
+        {
+          "file": "apps/invento/project.json",
+          "hash": "3983556658277330374"
+        },
+        {
+          "file": "apps/invento/public/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "apps/invento/src/app/app.config.server.ts",
+          "hash": "9821033231171006851",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/ssr"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.config.ts",
+          "hash": "6043619037340151567",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/invento/src/app/app.html",
+          "hash": "17385897758380840601"
+        },
+        {
+          "file": "apps/invento/src/app/app.routes.server.ts",
+          "hash": "1372639138676955940",
+          "deps": [
+            "npm:@angular/ssr"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.routes.ts",
+          "hash": "12790378059371385261",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.ts",
+          "hash": "15396282820103386478",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/invento/src/index.html",
+          "hash": "7872883719689477494"
+        },
+        {
+          "file": "apps/invento/src/main.server.ts",
+          "hash": "11092207872559804643",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/main.ts",
+          "hash": "17436527127367840298",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/server.ts",
+          "hash": "10309960005974131788",
+          "deps": [
+            "npm:@angular/ssr",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "apps/invento/src/styles.css",
+          "hash": "2917954890128038984"
+        },
+        {
+          "file": "apps/invento/tsconfig.app.json",
+          "hash": "17566555731533514162"
+        },
+        {
+          "file": "apps/invento/tsconfig.json",
+          "hash": "6589148955464199900"
         }
       ],
       "spartan-ui": [
@@ -1626,7 +1566,7 @@
         },
         {
           "file": "libs/ui/project.json",
-          "hash": "11302823620930768816"
+          "hash": "10467608957218144985"
         },
         {
           "file": "libs/ui/separator/src/index.ts",
@@ -1654,88 +1594,88 @@
         },
         {
           "file": "libs/ui/typography/src/index.ts",
-          "hash": "6237983002372037310"
+          "hash": "1079956824070233732"
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-blockquote.ts",
-          "hash": "11529686837055832693",
+          "hash": "1247320360013587907",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-code.ts",
-          "hash": "16803695444366957059",
+          "hash": "11061057111039320293",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-h1.ts",
-          "hash": "16860999830840174636",
+          "hash": "5495427109284898684",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-h2.ts",
-          "hash": "18380026130829425068",
+          "hash": "14233460417028385750",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-h3.ts",
-          "hash": "6414818108517746632",
+          "hash": "17934600221375273878",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-h4.ts",
-          "hash": "2193425074478651910",
+          "hash": "17815852846271847879",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-large.ts",
-          "hash": "11808178172139447003",
+          "hash": "6460229939430385065",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-lead.ts",
-          "hash": "10301619440337676546",
+          "hash": "1081162212957939253",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-muted.ts",
-          "hash": "16284686520274926539",
+          "hash": "15876719272345763519",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-p.ts",
-          "hash": "17620184198360530150",
+          "hash": "3238105598926389461",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-small.ts",
-          "hash": "10073742379773223764",
+          "hash": "8988630734084052268",
           "deps": [
             "npm:@angular/core"
           ]
         },
         {
           "file": "libs/ui/typography/src/lib/hlm-ul.ts",
-          "hash": "11047710630388596198",
+          "hash": "10916139670485679344",
           "deps": [
             "npm:@angular/core"
           ]
@@ -1838,102 +1778,490 @@
           "hash": "1587204213034035878"
         }
       ],
-      "invento": [
+      "spartan-stepper-shared": [
         {
-          "file": "apps/invento/project.json",
-          "hash": "2856457703002351060"
-        },
-        {
-          "file": "apps/invento/public/favicon.ico",
-          "hash": "9303420814833116677"
-        },
-        {
-          "file": "apps/invento/src/app/app.config.server.ts",
-          "hash": "16664769899172877666",
+          "file": "libs/stepper-shared/blocks/block-link.ts",
+          "hash": "6598692070260618049",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/ssr"
+            "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/invento/src/app/app.config.ts",
-          "hash": "5053404622473242682",
+          "file": "libs/stepper-shared/blocks/block-preview.ts",
+          "hash": "15645301043282039822",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/router",
             "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/invento/src/app/app.css",
+          "file": "libs/stepper-shared/blocks/block-viewer.ts",
+          "hash": "5633413544210261344",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "npm:@spartan-ng/brain"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/open-in-button.ts",
+          "hash": "16324086082259353394",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/open-in-component-button.ts",
+          "hash": "18378701084719246359",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/meta/meta.util.ts",
+          "hash": "14008985441984984870"
+        },
+        {
+          "file": "libs/stepper-shared/project.json",
+          "hash": "974639916633715102"
+        }
+      ],
+      "shared": [
+        {
+          "file": "libs/shared/project.json",
+          "hash": "12303885693793752125"
+        },
+        {
+          "file": "libs/shared/src/index.ts",
+          "hash": "4567647241425464427"
+        },
+        {
+          "file": "libs/shared/src/lib/components/ai-loader/ai-loader.css",
+          "hash": "17245317603333959639"
+        },
+        {
+          "file": "libs/shared/src/lib/components/ai-loader/ai-loader.html",
+          "hash": "9426952272534690123"
+        },
+        {
+          "file": "libs/shared/src/lib/components/ai-loader/ai-loader.ts",
+          "hash": "6259503611404186314",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/container-width/container-width.ts",
+          "hash": "3635339702374117237",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/double-slash/double-slash.css",
           "hash": "3244421341483603138"
         },
         {
-          "file": "apps/invento/src/app/app.html",
-          "hash": "17816966185630879015"
+          "file": "libs/shared/src/lib/components/double-slash/double-slash.html",
+          "hash": "8104521535790502561"
         },
         {
-          "file": "apps/invento/src/app/app.routes.server.ts",
-          "hash": "12347724813785314091",
-          "deps": [
-            "npm:@angular/ssr"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.routes.ts",
-          "hash": "6185150965714414910",
-          "deps": [
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.ts",
-          "hash": "771475117693350716",
+          "file": "libs/shared/src/lib/components/double-slash/double-slash.ts",
+          "hash": "1765843377592450987",
           "deps": [
             "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/capabilities/capabilities.html",
+          "hash": "572478777544577270"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/capabilities/capabilities.ts",
+          "hash": "15021895784439113143",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui",
             "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/invento/src/index.html",
-          "hash": "9414908501108687942"
+          "file": "libs/shared/src/lib/components/home-components/cta/cta.html",
+          "hash": "6761433778823115057"
         },
         {
-          "file": "apps/invento/src/main.server.ts",
-          "hash": "9109840317723288427",
+          "file": "libs/shared/src/lib/components/home-components/cta/cta.ts",
+          "hash": "956888468634116814",
           "deps": [
-            "npm:@angular/platform-browser"
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
           ]
         },
         {
-          "file": "apps/invento/src/main.ts",
-          "hash": "3314327030169821486",
+          "file": "libs/shared/src/lib/components/home-components/hero/hero.css",
+          "hash": "1636399489181767268"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/hero/hero.html",
+          "hash": "12449386405473797959"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/hero/hero.ts",
+          "hash": "15375326016070775764",
           "deps": [
-            "npm:@angular/platform-browser"
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
           ]
         },
         {
-          "file": "apps/invento/src/server.ts",
-          "hash": "17519504556414207097",
+          "file": "libs/shared/src/lib/components/home-components/pipeline/pipeline.css",
+          "hash": "6315905493616632232"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/pipeline/pipeline.html",
+          "hash": "262370768362279648"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/pipeline/pipeline.ts",
+          "hash": "11514357140241512184",
           "deps": [
-            "npm:@angular/ssr",
-            "npm:express"
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "spartan-ui"
           ]
         },
         {
-          "file": "apps/invento/src/styles.css",
-          "hash": "5195668842064076916"
+          "file": "libs/shared/src/lib/components/home-components/stats/stats.html",
+          "hash": "4179503386388119125"
         },
         {
-          "file": "apps/invento/tsconfig.app.json",
-          "hash": "2438757114263802077"
+          "file": "libs/shared/src/lib/components/home-components/stats/stats.ts",
+          "hash": "10176273444564743578",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
         },
         {
-          "file": "apps/invento/tsconfig.json",
-          "hash": "4637516213383210367"
+          "file": "libs/shared/src/lib/components/home-components/typing-text/typing-text.html",
+          "hash": "6724322924542925965"
+        },
+        {
+          "file": "libs/shared/src/lib/components/home-components/typing-text/typing-text.ts",
+          "hash": "5006782741363242822",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/loader.component/loader.css",
+          "hash": "2153064435548163180"
+        },
+        {
+          "file": "libs/shared/src/lib/components/loader.component/loader.html",
+          "hash": "12998470207267076288"
+        },
+        {
+          "file": "libs/shared/src/lib/components/loader.component/loader.ts",
+          "hash": "10894497260095605057",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/navbar/navbar.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/src/lib/components/navbar/navbar.html",
+          "hash": "3192943214327352918"
+        },
+        {
+          "file": "libs/shared/src/lib/components/navbar/navbar.ts",
+          "hash": "9842877497316097932",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-badge/page-badge.css",
+          "hash": "10084177926168219123"
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-badge/page-badge.html",
+          "hash": "11764707191569516048"
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-badge/page-badge.ts",
+          "hash": "12738876847338466190",
+          "deps": [
+            "npm:@angular/core",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-header/page-header.css",
+          "hash": "10229690227941033365"
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-header/page-header.html",
+          "hash": "16762579157445803333"
+        },
+        {
+          "file": "libs/shared/src/lib/components/page-header/page-header.ts",
+          "hash": "14274543365037752428",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/components/steps-bar/steps-bar.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/src/lib/components/steps-bar/steps-bar.html",
+          "hash": "17340720534585628830"
+        },
+        {
+          "file": "libs/shared/src/lib/components/steps-bar/steps-bar.ts",
+          "hash": "2558267434992402905",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/constants/styles.ts",
+          "hash": "1546927596284306177",
+          "deps": [
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/directives/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/src/lib/directives/scroll-animate.directive.ts",
+          "hash": "9868315133561130149",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shared/src/lib/environment/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/src/lib/mock/mock-preview.ts",
+          "hash": "17524936463934033517"
+        },
+        {
+          "file": "libs/shared/src/lib/pipes/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/src/lib/template/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/tsconfig.json",
+          "hash": "6830990871627616703"
+        },
+        {
+          "file": "libs/shared/tsconfig.lib.json",
+          "hash": "2802887395022160196"
+        }
+      ],
+      "core": [
+        {
+          "file": "libs/core/project.json",
+          "hash": "11444898946063909422"
+        },
+        {
+          "file": "libs/core/src/index.ts",
+          "hash": "13617045878164632155"
+        },
+        {
+          "file": "libs/core/src/lib/guards/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/core/src/lib/interceptors/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/core/src/lib/interface/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/core/src/lib/interface/Preview.ts",
+          "hash": "6094444665101812365"
+        },
+        {
+          "file": "libs/core/src/lib/service/invento-engine.service.ts",
+          "hash": "6978065200456107734",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/service/preview-data-client.spec.ts",
+          "hash": "6804305468423115112",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/service/preview-data-client.ts",
+          "hash": "17638424716364427270",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/core/src/lib/utils/Preview-css-parser.ts",
+          "hash": "15531998267057461826"
+        },
+        {
+          "file": "libs/core/src/lib/utils/theme-suggestion-converter.ts",
+          "hash": "3448929485239927628"
+        },
+        {
+          "file": "libs/core/tsconfig.json",
+          "hash": "6830990871627616703"
+        },
+        {
+          "file": "libs/core/tsconfig.lib.json",
+          "hash": "2802887395022160196"
+        }
+      ],
+      "spartan-stepper": [
+        {
+          "file": "libs/stepper/(stepper).page.ts",
+          "hash": "15989217979855488241",
+          "deps": [
+            "npm:@analogjs/router",
+            "npm:@angular/core",
+            "spartan-stepper-shared",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/index.ts",
+          "hash": "1343641158380986987"
+        },
+        {
+          "file": "libs/stepper/lib/spartan-step-content.ts",
+          "hash": "16088139540170135528",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-step-header.css",
+          "hash": "17778743031180077011"
+        },
+        {
+          "file": "libs/stepper/lib/spartan-step-header.ts",
+          "hash": "2054307955945003329",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-step-label.ts",
+          "hash": "16268482950670258845",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-step.ts",
+          "hash": "1636649023281504919",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-stepper-button-next.ts",
+          "hash": "7521895942438115935",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-stepper-button-previous.ts",
+          "hash": "9963567102295295019",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/spartan-stepper.css",
+          "hash": "11416026098169214685"
+        },
+        {
+          "file": "libs/stepper/lib/spartan-stepper.ts",
+          "hash": "7345273207442878063",
+          "deps": [
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "spartan-ui",
+            "npm:class-variance-authority",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/stepper/lib/stepper.token.ts",
+          "hash": "15585297020641057089",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/stepper/project.json",
+          "hash": "12830172682674190218"
         }
       ]
     }
   },
-  "externalNodesHash": "4210557030835238374"
+  "externalNodesHash": "12795813854949945309"
 }

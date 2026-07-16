@@ -1,0 +1,37 @@
+@if (totalPages() > 1) {
+  <div class="flex items-center justify-center gap-2 py-4">
+    <button
+      type="button"
+      (click)="goTo(currentPage() - 1)"
+      [disabled]="currentPage() === 1"
+      class="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      <ng-icon name="lucideChevronLeft" />
+    </button>
+
+    @for (page of pages(); track page) {
+      <button
+        type="button"
+        (click)="goTo(page)"
+        class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-colors"
+        [class.bg-primary]="page === currentPage()"
+        [class.text-primary-foreground]="page === currentPage()"
+        [class.border]="page !== currentPage()"
+        [class.border-border]="page !== currentPage()"
+        [class.text-muted-foreground]="page !== currentPage()"
+        [class.hover:bg-muted]="page !== currentPage()"
+      >
+        {{ page }}
+      </button>
+    }
+
+    <button
+      type="button"
+      (click)="goTo(currentPage() + 1)"
+      [disabled]="currentPage() === totalPages()"
+      class="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+    >
+      <ng-icon name="lucideChevronRight" />
+    </button>
+  </div>
+}
