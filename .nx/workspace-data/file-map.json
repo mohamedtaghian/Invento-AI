@@ -125,16 +125,8 @@
           "hash": "1370608409982315224"
         },
         {
-          "file": "Future-Structure.md",
-          "hash": "6404787724106955020"
-        },
-        {
           "file": "LICENSE",
           "hash": "15934020223350165518"
-        },
-        {
-          "file": "PLAN.md",
-          "hash": "3984933682321496939"
         },
         {
           "file": "README.md",
@@ -218,7 +210,7 @@
         },
         {
           "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.ts",
-          "hash": "17702843889556177310",
+          "hash": "143750555127372630",
           "deps": [
             "npm:@angular/core"
           ]
@@ -488,7 +480,7 @@
         },
         {
           "file": "apps/site-builder/src/app/features/builder/services/builder-state.ts",
-          "hash": "9339014137475692314",
+          "hash": "7232362406594598007",
           "deps": [
             "npm:@angular/core"
           ]
@@ -515,11 +507,11 @@
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.html",
-          "hash": "11809332708959831068"
+          "hash": "17208081185993860451"
         },
         {
           "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.ts",
-          "hash": "17707038555030474946",
+          "hash": "17403633079100449329",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
@@ -547,7 +539,7 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.html",
-          "hash": "5080115178129186678"
+          "hash": "12559250684722813135"
         },
         {
           "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.ts",
@@ -613,7 +605,7 @@
         },
         {
           "file": "apps/site-builder/src/app/pages/preview/preview.spec.ts",
-          "hash": "17969624758127031875",
+          "hash": "7592804427067719878",
           "deps": [
             "npm:@angular/core"
           ]
