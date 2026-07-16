@@ -79,81 +79,17 @@
   "fileMap": {
     "nonProjectFiles": [],
     "projectFileMap": {
-      "site-builder": [
+      "userSite": [
         {
-          "file": ".editorconfig",
-          "hash": "8037249353422744134"
+          "file": "apps/userSite/project.json",
+          "hash": "16008602655879630173"
         },
         {
-          "file": ".gitignore",
-          "hash": "2810570551885204189"
+          "file": "apps/userSite/public/favicon.ico",
+          "hash": "9303420814833116677"
         },
         {
-          "file": ".husky/pre-commit",
-          "hash": "16897372753072675009"
-        },
-        {
-          "file": ".postcssrc.json",
-          "hash": "1757434806578486340"
-        },
-        {
-          "file": ".prettierignore",
-          "hash": "9775814294815248555"
-        },
-        {
-          "file": ".prettierrc",
-          "hash": "9120624874979805020"
-        },
-        {
-          "file": ".vscode/extensions.json",
-          "hash": "13088645423479745945"
-        },
-        {
-          "file": ".vscode/launch.json",
-          "hash": "17038929134016848735"
-        },
-        {
-          "file": ".vscode/mcp.json",
-          "hash": "18312290508764663119"
-        },
-        {
-          "file": ".vscode/settings.json",
-          "hash": "11977451088175356911"
-        },
-        {
-          "file": ".vscode/tasks.json",
-          "hash": "1370608409982315224"
-        },
-        {
-          "file": "LICENSE",
-          "hash": "15934020223350165518"
-        },
-        {
-          "file": "README.md",
-          "hash": "12815083426668359980"
-        },
-        {
-          "file": "apps/site-builder/proxy.conf.json",
-          "hash": "8538145112689959144"
-        },
-        {
-          "file": "apps/site-builder/public/favicon.ico",
-          "hash": "3988961587069885523"
-        },
-        {
-          "file": "apps/site-builder/public/icon.png",
-          "hash": "10028913123504860315"
-        },
-        {
-          "file": "apps/site-builder/public/light-logo.png",
-          "hash": "18017626493728445147"
-        },
-        {
-          "file": "apps/site-builder/public/logo.png",
-          "hash": "10686560795765135274"
-        },
-        {
-          "file": "apps/site-builder/src/app/app.config.server.ts",
+          "file": "apps/userSite/src/app/app.config.server.ts",
           "hash": "9821033231171006851",
           "deps": [
             "npm:@angular/core",
@@ -161,738 +97,81 @@
           ]
         },
         {
-          "file": "apps/site-builder/src/app/app.config.ts",
-          "hash": "4965955649987652399",
+          "file": "apps/userSite/src/app/app.config.ts",
+          "hash": "6043619037340151567",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
-            "npm:@angular/platform-browser",
-            "spartan-ui"
+            "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/site-builder/src/app/app.css",
+          "file": "apps/userSite/src/app/app.css",
           "hash": "3244421341483603138"
         },
         {
-          "file": "apps/site-builder/src/app/app.html",
-          "hash": "372512330712979019"
+          "file": "apps/userSite/src/app/app.html",
+          "hash": "17385897758380840601"
         },
         {
-          "file": "apps/site-builder/src/app/app.routes.server.ts",
-          "hash": "18157869972107820657",
+          "file": "apps/userSite/src/app/app.routes.server.ts",
+          "hash": "1372639138676955940",
           "deps": [
             "npm:@angular/ssr"
           ]
         },
         {
-          "file": "apps/site-builder/src/app/app.routes.ts",
-          "hash": "17187207511770005243",
+          "file": "apps/userSite/src/app/app.routes.ts",
+          "hash": "12790378059371385261",
           "deps": [
             "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/site-builder/src/app/app.ts",
-          "hash": "8625255863274326688",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.css",
-          "hash": "6549833236102847989"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.html",
-          "hash": "13058906081408173961"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.ts",
-          "hash": "143750555127372630",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/container-width/container-width.ts",
-          "hash": "3635339702374117237",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.html",
-          "hash": "572478777544577270"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.ts",
-          "hash": "15021895784439113143",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/cta/cta.html",
-          "hash": "6761433778823115057"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/cta/cta.ts",
-          "hash": "956888468634116814",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/hero/hero.css",
-          "hash": "1636399489181767268"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/hero/hero.html",
-          "hash": "12449386405473797959"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/hero/hero.ts",
-          "hash": "15375326016070775764",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.css",
-          "hash": "6315905493616632232"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.html",
-          "hash": "262370768362279648"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.ts",
-          "hash": "11514357140241512184",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/stats/stats.html",
-          "hash": "4179503386388119125"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/stats/stats.ts",
-          "hash": "10176273444564743578",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.html",
-          "hash": "6724322924542925965"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.ts",
-          "hash": "5006782741363242822",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/loader.component/loader.css",
-          "hash": "2153064435548163180"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/loader.component/loader.html",
-          "hash": "12998470207267076288"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/loader.component/loader.ts",
-          "hash": "10894497260095605057",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/navbar/navbar.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/navbar/navbar.html",
-          "hash": "3192943214327352918"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/navbar/navbar.ts",
-          "hash": "9842877497316097932",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-badge/page-badge.css",
-          "hash": "10084177926168219123"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-badge/page-badge.html",
-          "hash": "11764707191569516048"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-badge/page-badge.ts",
-          "hash": "12738876847338466190",
-          "deps": [
-            "npm:@angular/core",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-header/page-header.css",
-          "hash": "10229690227941033365"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-header/page-header.html",
-          "hash": "16762579157445803333"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/page-header/page-header.ts",
-          "hash": "14274543365037752428",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.html",
-          "hash": "4488175250236947912"
-        },
-        {
-          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.ts",
-          "hash": "2558267434992402905",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/common",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/guards/ai-interview-guard.ts",
-          "hash": "13580672040232685193",
+          "file": "apps/userSite/src/app/app.ts",
+          "hash": "4756457516933044000",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/site-builder/src/app/core/guards/brainstorm-guard.ts",
-          "hash": "6634503891798814067",
-          "deps": [
-            "npm:@angular/router"
-          ]
+          "file": "apps/userSite/src/index.html",
+          "hash": "2696262453426334137"
         },
         {
-          "file": "apps/site-builder/src/app/core/guards/preview-guard.ts",
-          "hash": "8115474890890685701",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/guards/validation-guard.ts",
-          "hash": "16273430407554105013",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/interceptors/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/core/interface/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/core/interface/Preview.ts",
-          "hash": "6094444665101812365"
-        },
-        {
-          "file": "apps/site-builder/src/app/core/service/invento-engine.service.ts",
-          "hash": "6978065200456107734",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/service/preview-data-client.spec.ts",
-          "hash": "6804305468423115112",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/service/preview-data-client.ts",
-          "hash": "17638424716364427270",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/core/utils/Preview-css-parser.ts",
-          "hash": "15531998267057461826"
-        },
-        {
-          "file": "apps/site-builder/src/app/core/utils/theme-suggestion-converter.ts",
-          "hash": "3448929485239927628"
-        },
-        {
-          "file": "apps/site-builder/src/app/features/builder/services/brainstorm-api.ts",
-          "hash": "5082832204234143381",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/features/builder/services/builder-state.ts",
-          "hash": "7232362406594598007",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.html",
-          "hash": "18398617562096490294"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.ts",
-          "hash": "15445081219135945642",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.html",
-          "hash": "17208081185993860451"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.ts",
-          "hash": "17403633079100449329",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.html",
-          "hash": "8745601574870935923"
-        },
-        {
-          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.ts",
-          "hash": "18201141747176213988",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.css",
-          "hash": "6081276767931544457"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.html",
-          "hash": "12559250684722813135"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.ts",
-          "hash": "11430185853099329520",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/forms",
-            "npm:@ng-icons/lucide",
-            "npm:@ng-icons/core",
-            "spartan-ui",
-            "npm:@angular/router",
-            "npm:@angular/cdk",
-            "spartan-stepper"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.html",
-          "hash": "3579668250469481299"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.ts",
-          "hash": "9540434341427126978",
-          "deps": [
-            "npm:@angular/core",
-            "spartan-ui",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/heroicons",
-            "npm:@angular/forms",
-            "npm:@ng-icons/lucide",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/home/home.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/home/home.html",
-          "hash": "2594937456420332908"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/home/home.ts",
-          "hash": "14076587486944101064",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/invento/styles.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/preview/preview.css",
-          "hash": "18264062724061541935"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/preview/preview.html",
-          "hash": "1116242904032060898"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/preview/preview.spec.ts",
-          "hash": "7592804427067719878",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/preview/preview.ts",
-          "hash": "4083971231712999293",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui",
-            "npm:@angular/router",
-            "npm:html2canvas"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/style-test/style-test.css",
-          "hash": "11848167426905207949"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/style-test/style-test.html",
-          "hash": "7254770374894520480"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/style-test/style-test.ts",
-          "hash": "7917439268683157487",
-          "deps": [
-            "npm:@angular/core",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/validation/validation.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/validation/validation.html",
-          "hash": "7312727294611698907"
-        },
-        {
-          "file": "apps/site-builder/src/app/pages/validation/validation.ts",
-          "hash": "3692000101403583868",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/forms",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.html",
-          "hash": "8104521535790502561"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.ts",
-          "hash": "1765843377592450987",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/constants/styles.ts",
-          "hash": "1546927596284306177",
-          "deps": [
-            "spartan-ui"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/directives/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/directives/scroll-animate.directive.ts",
-          "hash": "9868315133561130149",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/environment/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/mock/mock-preview.ts",
-          "hash": "17524936463934033517"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/pipes/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/app/shared/template/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/site-builder/src/assets/fonts/BlackOpsOne-Regular.ttf",
-          "hash": "16286510666827191728"
-        },
-        {
-          "file": "apps/site-builder/src/index.html",
-          "hash": "14860688536458566365"
-        },
-        {
-          "file": "apps/site-builder/src/main.server.ts",
+          "file": "apps/userSite/src/main.server.ts",
           "hash": "11092207872559804643",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/site-builder/src/main.ts",
+          "file": "apps/userSite/src/main.ts",
           "hash": "17436527127367840298",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/site-builder/src/server.ts",
-          "hash": "496979342051422929",
+          "file": "apps/userSite/src/server.ts",
+          "hash": "10309960005974131788",
           "deps": [
             "npm:@angular/ssr",
             "npm:express"
           ]
         },
         {
-          "file": "apps/site-builder/src/styles.css",
-          "hash": "5850814979560018920"
+          "file": "apps/userSite/src/styles.css",
+          "hash": "2917954890128038984"
         },
         {
-          "file": "apps/site-builder/tsconfig.app.json",
-          "hash": "17512141059392134071"
+          "file": "apps/userSite/tsconfig.app.json",
+          "hash": "17566555731533514162"
         },
         {
-          "file": "apps/site-builder/tsconfig.spec.json",
-          "hash": "3626390550481669686"
-        },
-        {
-          "file": "components.json",
-          "hash": "7382499190432608400"
-        },
-        {
-          "file": "docs/NX-MONOREPO-GUIDE.md",
-          "hash": "8895959997503898933"
-        },
-        {
-          "file": "docs/dependency-graph.html",
-          "hash": "3701399248674527926"
-        },
-        {
-          "file": "docs/multi-style-guide.md",
-          "hash": "7235571348996374059"
-        },
-        {
-          "file": "docs/static/environment.js",
-          "hash": "11629772564341206393"
-        },
-        {
-          "file": "docs/static/favicon.ico",
-          "hash": "9303420814833116677"
-        },
-        {
-          "file": "docs/static/main.js",
-          "hash": "12867701308702028870"
-        },
-        {
-          "file": "docs/static/runtime.js",
-          "hash": "14980783667260047515"
-        },
-        {
-          "file": "docs/static/styles.css",
-          "hash": "1074425063844015388"
-        },
-        {
-          "file": "docs/static/styles.js",
-          "hash": "7917573861220374825"
-        },
-        {
-          "file": "docs/style-system.md",
-          "hash": "14459916335966127818"
-        },
-        {
-          "file": "eslint.config.ts",
-          "hash": "13283628237184553899",
-          "deps": [
-            "npm:@eslint/js",
-            "npm:angular-eslint",
-            "npm:eslint-config-prettier",
-            "npm:eslint",
-            "npm:typescript-eslint"
-          ]
-        },
-        {
-          "file": "nx.json",
-          "hash": "12011752209460714900"
-        },
-        {
-          "file": "package-lock.json",
-          "hash": "17081384334814309525"
-        },
-        {
-          "file": "package.json",
-          "hash": "16925696152150187342",
-          "deps": [
-            "npm:@angular-devkit/core",
-            "npm:@angular-devkit/schematics",
-            "npm:@angular/build",
-            "npm:@angular/cli",
-            "npm:@angular/compiler-cli",
-            "npm:@eslint/js",
-            "npm:@nx/angular",
-            "npm:@nx/workspace",
-            "npm:@schematics/angular",
-            "npm:@spartan-ng/cli",
-            "npm:@tailwindcss/postcss",
-            "npm:@types/express",
-            "npm:@types/node",
-            "npm:angular-eslint",
-            "npm:eslint",
-            "npm:eslint-config-prettier",
-            "npm:husky",
-            "npm:jsdom",
-            "npm:lint-staged",
-            "npm:nx",
-            "npm:postcss",
-            "npm:prettier",
-            "npm:tailwindcss",
-            "npm:tw-animate-css",
-            "npm:typescript",
-            "npm:typescript-eslint",
-            "npm:vitest",
-            "npm:@analogjs/router",
-            "npm:@angular/cdk",
-            "npm:@angular/common",
-            "npm:@angular/compiler",
-            "npm:@angular/core",
-            "npm:@angular/forms",
-            "npm:@angular/platform-browser",
-            "npm:@angular/platform-server",
-            "npm:@angular/router",
-            "npm:@angular/ssr",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/heroicons",
-            "npm:@ng-icons/lucide",
-            "npm:@ngxpert/hot-toast",
-            "npm:@spartan-ng/brain",
-            "npm:class-variance-authority",
-            "npm:clsx",
-            "npm:embla-carousel",
-            "npm:embla-carousel-angular",
-            "npm:express",
-            "npm:gsap",
-            "npm:html2canvas",
-            "npm:rxjs",
-            "npm:tailwind-merge",
-            "npm:tslib"
-          ]
-        },
-        {
-          "file": "project.json",
-          "hash": "12336926943311303260"
-        },
-        {
-          "file": "tsconfig.app.json",
-          "hash": "3527360969609559910"
-        },
-        {
-          "file": "tsconfig.base.json",
-          "hash": "16477468309261056885"
-        },
-        {
-          "file": "tsconfig.json",
-          "hash": "9833805294362758485"
-        },
-        {
-          "file": "tsconfig.spec.json",
-          "hash": "8409958102343734398"
+          "file": "apps/userSite/tsconfig.json",
+          "hash": "6589148955464199900"
         }
       ],
       "core": [
@@ -959,155 +238,6 @@
         {
           "file": "libs/core/tsconfig.lib.json",
           "hash": "2802887395022160196"
-        }
-      ],
-      "spartan-stepper-shared": [
-        {
-          "file": "libs/stepper-shared/blocks/block-link.ts",
-          "hash": "6598692070260618049",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/block-preview.ts",
-          "hash": "15645301043282039822",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/block-viewer.ts",
-          "hash": "5633413544210261344",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide",
-            "npm:@spartan-ng/brain"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/open-in-button.ts",
-          "hash": "16324086082259353394",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/blocks/open-in-component-button.ts",
-          "hash": "18378701084719246359",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@ng-icons/core",
-            "npm:@ng-icons/lucide"
-          ]
-        },
-        {
-          "file": "libs/stepper-shared/meta/meta.util.ts",
-          "hash": "14008985441984984870"
-        },
-        {
-          "file": "libs/stepper-shared/project.json",
-          "hash": "974639916633715102"
-        }
-      ],
-      "invento": [
-        {
-          "file": "apps/invento/project.json",
-          "hash": "3983556658277330374"
-        },
-        {
-          "file": "apps/invento/public/favicon.ico",
-          "hash": "9303420814833116677"
-        },
-        {
-          "file": "apps/invento/src/app/app.config.server.ts",
-          "hash": "9821033231171006851",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/ssr"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.config.ts",
-          "hash": "6043619037340151567",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/invento/src/app/app.html",
-          "hash": "17385897758380840601"
-        },
-        {
-          "file": "apps/invento/src/app/app.routes.server.ts",
-          "hash": "1372639138676955940",
-          "deps": [
-            "npm:@angular/ssr"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.routes.ts",
-          "hash": "12790378059371385261",
-          "deps": [
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/invento/src/app/app.ts",
-          "hash": "15396282820103386478",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "apps/invento/src/index.html",
-          "hash": "7872883719689477494"
-        },
-        {
-          "file": "apps/invento/src/main.server.ts",
-          "hash": "11092207872559804643",
-          "deps": [
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/invento/src/main.ts",
-          "hash": "17436527127367840298",
-          "deps": [
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/invento/src/server.ts",
-          "hash": "10309960005974131788",
-          "deps": [
-            "npm:@angular/ssr",
-            "npm:express"
-          ]
-        },
-        {
-          "file": "apps/invento/src/styles.css",
-          "hash": "2917954890128038984"
-        },
-        {
-          "file": "apps/invento/tsconfig.app.json",
-          "hash": "17566555731533514162"
-        },
-        {
-          "file": "apps/invento/tsconfig.json",
-          "hash": "6589148955464199900"
         }
       ],
       "spartan-ui": [
@@ -1995,17 +1125,81 @@
           "hash": "2802887395022160196"
         }
       ],
-      "userSite": [
+      "site-builder": [
         {
-          "file": "apps/userSite/project.json",
-          "hash": "16008602655879630173"
+          "file": ".editorconfig",
+          "hash": "8037249353422744134"
         },
         {
-          "file": "apps/userSite/public/favicon.ico",
-          "hash": "9303420814833116677"
+          "file": ".gitignore",
+          "hash": "2810570551885204189"
         },
         {
-          "file": "apps/userSite/src/app/app.config.server.ts",
+          "file": ".husky/pre-commit",
+          "hash": "16897372753072675009"
+        },
+        {
+          "file": ".postcssrc.json",
+          "hash": "1757434806578486340"
+        },
+        {
+          "file": ".prettierignore",
+          "hash": "9775814294815248555"
+        },
+        {
+          "file": ".prettierrc",
+          "hash": "9120624874979805020"
+        },
+        {
+          "file": ".vscode/extensions.json",
+          "hash": "13088645423479745945"
+        },
+        {
+          "file": ".vscode/launch.json",
+          "hash": "17038929134016848735"
+        },
+        {
+          "file": ".vscode/mcp.json",
+          "hash": "18312290508764663119"
+        },
+        {
+          "file": ".vscode/settings.json",
+          "hash": "11977451088175356911"
+        },
+        {
+          "file": ".vscode/tasks.json",
+          "hash": "1370608409982315224"
+        },
+        {
+          "file": "LICENSE",
+          "hash": "15934020223350165518"
+        },
+        {
+          "file": "README.md",
+          "hash": "12815083426668359980"
+        },
+        {
+          "file": "apps/site-builder/proxy.conf.json",
+          "hash": "8538145112689959144"
+        },
+        {
+          "file": "apps/site-builder/public/favicon.ico",
+          "hash": "3988961587069885523"
+        },
+        {
+          "file": "apps/site-builder/public/icon.png",
+          "hash": "10028913123504860315"
+        },
+        {
+          "file": "apps/site-builder/public/light-logo.png",
+          "hash": "18017626493728445147"
+        },
+        {
+          "file": "apps/site-builder/public/logo.png",
+          "hash": "10686560795765135274"
+        },
+        {
+          "file": "apps/site-builder/src/app/app.config.server.ts",
           "hash": "9821033231171006851",
           "deps": [
             "npm:@angular/core",
@@ -2013,81 +1207,792 @@
           ]
         },
         {
-          "file": "apps/userSite/src/app/app.config.ts",
-          "hash": "6043619037340151567",
+          "file": "apps/site-builder/src/app/app.config.ts",
+          "hash": "4965955649987652399",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router",
-            "npm:@angular/platform-browser"
+            "npm:@angular/platform-browser",
+            "spartan-ui"
           ]
         },
         {
-          "file": "apps/userSite/src/app/app.css",
+          "file": "apps/site-builder/src/app/app.css",
           "hash": "3244421341483603138"
         },
         {
-          "file": "apps/userSite/src/app/app.html",
-          "hash": "17385897758380840601"
+          "file": "apps/site-builder/src/app/app.html",
+          "hash": "372512330712979019"
         },
         {
-          "file": "apps/userSite/src/app/app.routes.server.ts",
-          "hash": "1372639138676955940",
+          "file": "apps/site-builder/src/app/app.routes.server.ts",
+          "hash": "18157869972107820657",
           "deps": [
             "npm:@angular/ssr"
           ]
         },
         {
-          "file": "apps/userSite/src/app/app.routes.ts",
-          "hash": "12790378059371385261",
+          "file": "apps/site-builder/src/app/app.routes.ts",
+          "hash": "10528148530215929988",
           "deps": [
             "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/userSite/src/app/app.ts",
-          "hash": "4756457516933044000",
+          "file": "apps/site-builder/src/app/app.ts",
+          "hash": "8625255863274326688",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/userSite/src/index.html",
-          "hash": "2696262453426334137"
+          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.css",
+          "hash": "12867289882979037781"
         },
         {
-          "file": "apps/userSite/src/main.server.ts",
+          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.html",
+          "hash": "8169130190247881509"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/ai-loader/ai-loader.ts",
+          "hash": "3653106609418183689",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/container-width/container-width.ts",
+          "hash": "3635339702374117237",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.html",
+          "hash": "572478777544577270"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/capabilities/capabilities.ts",
+          "hash": "15021895784439113143",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/cta/cta.html",
+          "hash": "6761433778823115057"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/cta/cta.ts",
+          "hash": "956888468634116814",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/hero/hero.css",
+          "hash": "1636399489181767268"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/hero/hero.html",
+          "hash": "12449386405473797959"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/hero/hero.ts",
+          "hash": "15375326016070775764",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.css",
+          "hash": "6315905493616632232"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.html",
+          "hash": "262370768362279648"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/pipeline/pipeline.ts",
+          "hash": "11514357140241512184",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/stats/stats.html",
+          "hash": "4179503386388119125"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/stats/stats.ts",
+          "hash": "10176273444564743578",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.html",
+          "hash": "6724322924542925965"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/home-components/typing-text/typing-text.ts",
+          "hash": "5006782741363242822",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/loader.component/loader.css",
+          "hash": "2153064435548163180"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/loader.component/loader.html",
+          "hash": "12998470207267076288"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/loader.component/loader.ts",
+          "hash": "10894497260095605057",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/navbar/navbar.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/navbar/navbar.html",
+          "hash": "3192943214327352918"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/navbar/navbar.ts",
+          "hash": "9842877497316097932",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-badge/page-badge.css",
+          "hash": "10084177926168219123"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-badge/page-badge.html",
+          "hash": "11764707191569516048"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-badge/page-badge.ts",
+          "hash": "12738876847338466190",
+          "deps": [
+            "npm:@angular/core",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-header/page-header.css",
+          "hash": "10229690227941033365"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-header/page-header.html",
+          "hash": "16762579157445803333"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/page-header/page-header.ts",
+          "hash": "14274543365037752428",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.html",
+          "hash": "8692617413238088144"
+        },
+        {
+          "file": "apps/site-builder/src/app/components/steps-bar/steps-bar.ts",
+          "hash": "2558267434992402905",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/common",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/guards/ai-interview-guard.ts",
+          "hash": "10964636170349110068",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/guards/brainstorm-guard.ts",
+          "hash": "15199286232080292747",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/guards/preview-guard.ts",
+          "hash": "5616658134851882027",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/guards/validation-guard.ts",
+          "hash": "3266069905770230872",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/interceptors/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/core/interface/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/core/interface/Preview.ts",
+          "hash": "6094444665101812365"
+        },
+        {
+          "file": "apps/site-builder/src/app/core/service/invento-engine.service.ts",
+          "hash": "6978065200456107734",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/service/preview-data-client.spec.ts",
+          "hash": "6804305468423115112",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/service/preview-data-client.ts",
+          "hash": "17638424716364427270",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/core/utils/Preview-css-parser.ts",
+          "hash": "15531998267057461826"
+        },
+        {
+          "file": "apps/site-builder/src/app/core/utils/theme-suggestion-converter.ts",
+          "hash": "3448929485239927628"
+        },
+        {
+          "file": "apps/site-builder/src/app/features/builder/services/brainstorm-api.ts",
+          "hash": "1825809978363779791",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/features/builder/services/builder-state.ts",
+          "hash": "9339014137475692314",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.html",
+          "hash": "18398617562096490294"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/auth-layout/auth-layout.ts",
+          "hash": "15445081219135945642",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.html",
+          "hash": "11809332708959831068"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/builder-layout/builder-layout.ts",
+          "hash": "17707038555030474946",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.html",
+          "hash": "8745601574870935923"
+        },
+        {
+          "file": "apps/site-builder/src/app/layouts/main-layout/main-layout.ts",
+          "hash": "18201141747176213988",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.css",
+          "hash": "5809999249555677987"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.html",
+          "hash": "2880877814243549622"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/ai-interview/ai-interview.ts",
+          "hash": "17143462400562015512",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@ng-icons/lucide",
+            "npm:@ng-icons/core",
+            "spartan-ui",
+            "npm:@angular/router",
+            "npm:@angular/cdk",
+            "spartan-stepper"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.html",
+          "hash": "3579668250469481299"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/brainstorm/brainstorm.ts",
+          "hash": "7112717560617957747",
+          "deps": [
+            "npm:@angular/core",
+            "spartan-ui",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/heroicons",
+            "npm:@angular/forms",
+            "npm:@ng-icons/lucide",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/home/home.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/home/home.html",
+          "hash": "2594937456420332908"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/home/home.ts",
+          "hash": "14076587486944101064",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/invento/styles.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/preview/preview.css",
+          "hash": "18264062724061541935"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/preview/preview.html",
+          "hash": "1116242904032060898"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/preview/preview.spec.ts",
+          "hash": "17969624758127031875",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/preview/preview.ts",
+          "hash": "3667044734235288684",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui",
+            "npm:@angular/router",
+            "npm:html2canvas"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/style-test/style-test.css",
+          "hash": "11848167426905207949"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/style-test/style-test.html",
+          "hash": "7254770374894520480"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/style-test/style-test.ts",
+          "hash": "7917439268683157487",
+          "deps": [
+            "npm:@angular/core",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/validation/validation.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/validation/validation.html",
+          "hash": "7312727294611698907"
+        },
+        {
+          "file": "apps/site-builder/src/app/pages/validation/validation.ts",
+          "hash": "17493124468378617233",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.html",
+          "hash": "8104521535790502561"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/components/double-slash/double-slash.ts",
+          "hash": "1765843377592450987",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/constants/styles.ts",
+          "hash": "1546927596284306177",
+          "deps": [
+            "spartan-ui"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/directives/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/directives/scroll-animate.directive.ts",
+          "hash": "9868315133561130149",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/environment/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/mock/mock-preview.ts",
+          "hash": "17524936463934033517"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/pipes/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/app/shared/template/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/site-builder/src/assets/fonts/BlackOpsOne-Regular.ttf",
+          "hash": "16286510666827191728"
+        },
+        {
+          "file": "apps/site-builder/src/index.html",
+          "hash": "14860688536458566365"
+        },
+        {
+          "file": "apps/site-builder/src/main.server.ts",
           "hash": "11092207872559804643",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/userSite/src/main.ts",
+          "file": "apps/site-builder/src/main.ts",
           "hash": "17436527127367840298",
           "deps": [
             "npm:@angular/platform-browser"
           ]
         },
         {
-          "file": "apps/userSite/src/server.ts",
-          "hash": "10309960005974131788",
+          "file": "apps/site-builder/src/server.ts",
+          "hash": "496979342051422929",
           "deps": [
             "npm:@angular/ssr",
             "npm:express"
           ]
         },
         {
-          "file": "apps/userSite/src/styles.css",
-          "hash": "2917954890128038984"
+          "file": "apps/site-builder/src/styles.css",
+          "hash": "5850814979560018920"
         },
         {
-          "file": "apps/userSite/tsconfig.app.json",
-          "hash": "17566555731533514162"
+          "file": "apps/site-builder/tsconfig.app.json",
+          "hash": "17512141059392134071"
         },
         {
-          "file": "apps/userSite/tsconfig.json",
-          "hash": "6589148955464199900"
+          "file": "apps/site-builder/tsconfig.spec.json",
+          "hash": "3626390550481669686"
+        },
+        {
+          "file": "components.json",
+          "hash": "7382499190432608400"
+        },
+        {
+          "file": "docs/NX-MONOREPO-GUIDE.md",
+          "hash": "8895959997503898933"
+        },
+        {
+          "file": "docs/dependency-graph.html",
+          "hash": "3701399248674527926"
+        },
+        {
+          "file": "docs/multi-style-guide.md",
+          "hash": "7235571348996374059"
+        },
+        {
+          "file": "docs/static/environment.js",
+          "hash": "11629772564341206393"
+        },
+        {
+          "file": "docs/static/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "docs/static/main.js",
+          "hash": "12867701308702028870"
+        },
+        {
+          "file": "docs/static/runtime.js",
+          "hash": "14980783667260047515"
+        },
+        {
+          "file": "docs/static/styles.css",
+          "hash": "1074425063844015388"
+        },
+        {
+          "file": "docs/static/styles.js",
+          "hash": "7917573861220374825"
+        },
+        {
+          "file": "docs/style-system.md",
+          "hash": "14459916335966127818"
+        },
+        {
+          "file": "eslint.config.ts",
+          "hash": "13283628237184553899",
+          "deps": [
+            "npm:@eslint/js",
+            "npm:angular-eslint",
+            "npm:eslint-config-prettier",
+            "npm:eslint",
+            "npm:typescript-eslint"
+          ]
+        },
+        {
+          "file": "nx.json",
+          "hash": "12011752209460714900"
+        },
+        {
+          "file": "package-lock.json",
+          "hash": "17081384334814309525"
+        },
+        {
+          "file": "package.json",
+          "hash": "16925696152150187342",
+          "deps": [
+            "npm:@angular-devkit/core",
+            "npm:@angular-devkit/schematics",
+            "npm:@angular/build",
+            "npm:@angular/cli",
+            "npm:@angular/compiler-cli",
+            "npm:@eslint/js",
+            "npm:@nx/angular",
+            "npm:@nx/workspace",
+            "npm:@schematics/angular",
+            "npm:@spartan-ng/cli",
+            "npm:@tailwindcss/postcss",
+            "npm:@types/express",
+            "npm:@types/node",
+            "npm:angular-eslint",
+            "npm:eslint",
+            "npm:eslint-config-prettier",
+            "npm:husky",
+            "npm:jsdom",
+            "npm:lint-staged",
+            "npm:nx",
+            "npm:postcss",
+            "npm:prettier",
+            "npm:tailwindcss",
+            "npm:tw-animate-css",
+            "npm:typescript",
+            "npm:typescript-eslint",
+            "npm:vitest",
+            "npm:@analogjs/router",
+            "npm:@angular/cdk",
+            "npm:@angular/common",
+            "npm:@angular/compiler",
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/platform-browser",
+            "npm:@angular/platform-server",
+            "npm:@angular/router",
+            "npm:@angular/ssr",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/heroicons",
+            "npm:@ng-icons/lucide",
+            "npm:@ngxpert/hot-toast",
+            "npm:@spartan-ng/brain",
+            "npm:class-variance-authority",
+            "npm:clsx",
+            "npm:embla-carousel",
+            "npm:embla-carousel-angular",
+            "npm:express",
+            "npm:gsap",
+            "npm:html2canvas",
+            "npm:rxjs",
+            "npm:tailwind-merge",
+            "npm:tslib"
+          ]
+        },
+        {
+          "file": "project.json",
+          "hash": "12336926943311303260"
+        },
+        {
+          "file": "tsconfig.app.json",
+          "hash": "3527360969609559910"
+        },
+        {
+          "file": "tsconfig.base.json",
+          "hash": "16477468309261056885"
+        },
+        {
+          "file": "tsconfig.json",
+          "hash": "9833805294362758485"
+        },
+        {
+          "file": "tsconfig.spec.json",
+          "hash": "8409958102343734398"
+        }
+      ],
+      "spartan-stepper-shared": [
+        {
+          "file": "libs/stepper-shared/blocks/block-link.ts",
+          "hash": "6598692070260618049",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/block-preview.ts",
+          "hash": "15645301043282039822",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/block-viewer.ts",
+          "hash": "5633413544210261344",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide",
+            "npm:@spartan-ng/brain"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/open-in-button.ts",
+          "hash": "16324086082259353394",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/blocks/open-in-component-button.ts",
+          "hash": "18378701084719246359",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@ng-icons/core",
+            "npm:@ng-icons/lucide"
+          ]
+        },
+        {
+          "file": "libs/stepper-shared/meta/meta.util.ts",
+          "hash": "14008985441984984870"
+        },
+        {
+          "file": "libs/stepper-shared/project.json",
+          "hash": "974639916633715102"
         }
       ],
       "spartan-stepper": [
@@ -2185,6 +2090,101 @@
         {
           "file": "libs/stepper/project.json",
           "hash": "12830172682674190218"
+        }
+      ],
+      "invento": [
+        {
+          "file": "apps/invento/project.json",
+          "hash": "3983556658277330374"
+        },
+        {
+          "file": "apps/invento/public/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "apps/invento/src/app/app.config.server.ts",
+          "hash": "9821033231171006851",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/ssr"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.config.ts",
+          "hash": "6043619037340151567",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/invento/src/app/app.html",
+          "hash": "17385897758380840601"
+        },
+        {
+          "file": "apps/invento/src/app/app.routes.server.ts",
+          "hash": "1372639138676955940",
+          "deps": [
+            "npm:@angular/ssr"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.routes.ts",
+          "hash": "12790378059371385261",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/invento/src/app/app.ts",
+          "hash": "15396282820103386478",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "apps/invento/src/index.html",
+          "hash": "7872883719689477494"
+        },
+        {
+          "file": "apps/invento/src/main.server.ts",
+          "hash": "11092207872559804643",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/main.ts",
+          "hash": "17436527127367840298",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/invento/src/server.ts",
+          "hash": "10309960005974131788",
+          "deps": [
+            "npm:@angular/ssr",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "apps/invento/src/styles.css",
+          "hash": "2917954890128038984"
+        },
+        {
+          "file": "apps/invento/tsconfig.app.json",
+          "hash": "17566555731533514162"
+        },
+        {
+          "file": "apps/invento/tsconfig.json",
+          "hash": "6589148955464199900"
         }
       ]
     }
