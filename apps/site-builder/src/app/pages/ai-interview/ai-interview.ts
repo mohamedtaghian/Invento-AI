@@ -1,29 +1,40 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
-  ElementRef,
+  afterNextRender,
   signal,
-  viewChild,
-  viewChildren,
-  effect,
   inject,
+  ViewChild,
 } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { gsap } from 'gsap';
-import { HlmBadge } from '@spartan/helm/badge';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-icons/lucide';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmTextarea } from '@spartan/helm/textarea';
-import { HlmCardImports } from '@spartan/helm/card';
-import { HlmInputImports } from '@spartan/helm/input';
-import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmSeparator } from '@spartan/helm/separator';
 import { Router } from '@angular/router';
+import { CdkStepper } from '@angular/cdk/stepper';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { hlmP } from '@spartan/helm/typography';
+import { HlmLabelImports } from '@spartan/helm/label';
+import { HlmInputImports } from '@spartan/helm/input';
+import { SpartanStepperImports } from '@/spartan/stepper';
+
+/* ── LEGACY IMPORTS ──────────────────────────────────────────────
+   Restore these if reverting to the GSAP card stepper:
+   import { computed, ElementRef, viewChild, viewChildren, effect } from '@angular/core';
+   import { gsap } from 'gsap';
+   import { HlmCardImports } from '@spartan/helm/card';
+   ────────────────────────────────────────────────────────────── */
 
 export interface BaseQuestion {
   id: string;
@@ -47,16 +58,15 @@ const OTHER_MAX_LEN = 25;
 @Component({
   selector: 'app-ai-interview',
   imports: [
-    HlmBadge,
     NgIconComponent,
     HlmButton,
     HlmTextarea,
-    HlmCardImports,
     HlmLabelImports,
     HlmInputImports,
     HlmSeparator,
     ReactiveFormsModule,
     PageHeader,
+    SpartanStepperImports,
   ],
   providers: [provideIcons({ lucideMessageSquare, lucideChevronLeft, lucideChevronRight })],
   templateUrl: './ai-interview.html',
@@ -67,25 +77,51 @@ export class AiInterview {
   private readonly builderState = inject(BuilderState);
   private readonly router = inject(Router);
   protected readonly hlmP = hlmP;
+  protected readonly OTHER_OPTION = OTHER_OPTION;
+  protected readonly OTHER_MIN_LEN = OTHER_MIN_LEN;
+  protected readonly OTHER_MAX_LEN = OTHER_MAX_LEN;
 
-  questionContainer = viewChild<ElementRef<HTMLDivElement>>('questionContainer');
-  cards = viewChildren<ElementRef<HTMLDivElement>>('cardElement');
+  @ViewChild('stepper') stepper?: CdkStepper;
 
   form = new FormGroup({
     business_name: new FormControl('', Validators.required),
-    business_type: new FormControl('', Validators.required),
-    industry: new FormControl('', Validators.required),
-    target: new FormControl('', Validators.required),
-    pricing: new FormControl('', Validators.required),
-    channels: new FormControl<string[]>([], Validators.required),
-    differentiator: new FormControl('', Validators.required),
+    business_type: new FormControl('', [
+      Validators.required,
+      this.otherTextValidator('business_type'),
+    ]),
+    industry: new FormControl('', [Validators.required, this.otherTextValidator('industry')]),
+    target: new FormControl('', [Validators.required, this.otherTextValidator('target')]),
+    pricing: new FormControl('', [Validators.required, this.otherTextValidator('pricing')]),
+    channels: new FormControl<string[]>(
+      [],
+      [Validators.required, this.otherTextValidator('channels')],
+    ),
+    differentiator: new FormControl('', [
+      Validators.required,
+      this.otherTextValidator('differentiator'),
+    ]),
   });
 
   selectedChannels = signal<string[]>([]);
   otherTextInputs = signal<Record<string, string>>({});
 
+  private otherTextValidator(questionId: string): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = control.value;
+      const isOther =
+        value === OTHER_OPTION || (Array.isArray(value) && value.includes(OTHER_OPTION));
+      if (!isOther) return null;
+      const otherText = this.otherTextInputs()[questionId]?.trim() ?? '';
+      if (otherText.length < OTHER_MIN_LEN || otherText.length > OTHER_MAX_LEN) {
+        return { otherTextInvalid: true };
+      }
+      return null;
+    };
+  }
+
   onOtherInput(questionId: string, value: string) {
     this.otherTextInputs.update((current) => ({ ...current, [questionId]: value }));
+    this.form.get(questionId)?.updateValueAndValidity();
   }
 
   toggleChannel(option: string) {
@@ -96,8 +132,13 @@ export class AiInterview {
     this.form.get('channels')?.markAsTouched();
   }
 
-  currentStep = signal<number>(0);
-  private prevStepIndex = 0;
+  /* ── LEGACY FIELDS ─────────────────────────────────────────────
+     Restore these if reverting to the GSAP card stepper:
+     questionContainer = viewChild<ElementRef<HTMLDivElement>>('questionContainer');
+     cards = viewChildren<ElementRef<HTMLDivElement>>('cardElement');
+     currentStep = signal<number>(0);
+     private prevStepIndex = 0;
+     ─────────────────────────────────────────────────────────── */
 
   questions: InterviewQuestion[] = [
     {
@@ -204,131 +245,118 @@ export class AiInterview {
     },
   ];
 
-  progressWidth = computed(() => {
-    return `${((this.currentStep() + 1) / this.questions.length) * 100}%`;
-  });
+  /* ── LEGACY COMPUTED ────────────────────────────────────────────
+     progressWidth = computed(() => {
+       return `${((this.currentStep() + 1) / this.questions.length) * 100}%`;
+     });
+     ──────────────────────────────────────────────────────────── */
 
   constructor() {
-    // GSAP Step Animation Orchestrator
-    effect(() => {
-      const step = this.currentStep();
-      const allCards = this.cards();
-      if (allCards.length === 0) return;
-
-      const oldCard = allCards[this.prevStepIndex]?.nativeElement;
-      const newCard = allCards[step]?.nativeElement;
-
-      if (oldCard && newCard && step !== this.prevStepIndex) {
-        const goingForward = step > this.prevStepIndex;
-
-        gsap.set(newCard, {
-          display: 'flex',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          x: goingForward ? '100%' : '-100%',
-          opacity: 0,
+    afterNextRender({
+      read: () => {
+        requestAnimationFrame(() => {
+          document.querySelector<HTMLTextAreaElement>('app-ai-interview textarea')?.focus();
         });
-        gsap.set(oldCard, {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-        });
-
-        const tl = gsap.timeline({
-          onComplete: () => {
-            gsap.set(newCard, { position: 'relative', clearProps: 'transform' });
-            gsap.set(oldCard, { display: 'none', position: 'relative' });
-          },
-        });
-        tl.to(oldCard, {
-          x: goingForward ? '-100%' : '100%',
-          opacity: 0,
-          duration: 0.4,
-          ease: 'power2.inOut',
-        }).to(
-          newCard,
-          {
-            x: '0%',
-            opacity: 1,
-            duration: 0.4,
-            ease: 'power2.inOut',
-          },
-          '<',
-        );
-      }
-      this.prevStepIndex = step;
+      },
     });
+
+    /* ── LEGACY GSAP STEP ANIMATION ──────────────────────────────
+       Restore this effect() if reverting to the GSAP card stepper:
+       effect(() => {
+         const step = this.currentStep();
+         const allCards = this.cards();
+         if (allCards.length === 0) return;
+
+         const oldCard = allCards[this.prevStepIndex]?.nativeElement;
+         const newCard = allCards[step]?.nativeElement;
+
+         if (oldCard && newCard && step !== this.prevStepIndex) {
+           const goingForward = step > this.prevStepIndex;
+
+           gsap.set(newCard, {
+             display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%',
+             x: goingForward ? '100%' : '-100%', opacity: 0,
+           });
+           gsap.set(oldCard, {
+             position: 'absolute', top: 0, left: 0, width: '100%',
+           });
+
+           const tl = gsap.timeline({
+             onComplete: () => {
+               gsap.set(newCard, { position: 'relative', clearProps: 'transform' });
+               gsap.set(oldCard, { display: 'none', position: 'relative' });
+             },
+           });
+           tl.to(oldCard, {
+             x: goingForward ? '-100%' : '100%', opacity: 0, duration: 0.4, ease: 'power2.inOut',
+           }).to(newCard, {
+             x: '0%', opacity: 1, duration: 0.4, ease: 'power2.inOut',
+           }, '<');
+         }
+         this.prevStepIndex = step;
+       });
+       ──────────────────────────────────────────────────────── */
   }
 
-  private get currentQuestion(): InterviewQuestion {
-    return this.questions[this.currentStep()];
-  }
+  /* ── LEGACY METHODS ────────────────────────────────────────────
+     Restore these if reverting to the GSAP card stepper:
 
-  private isOtherTextValid(questionId: string): boolean {
-    const raw = this.otherTextInputs()[questionId] ?? '';
-    const trimmed = raw.trim();
-    return trimmed.length >= OTHER_MIN_LEN && trimmed.length <= OTHER_MAX_LEN;
-  }
+     private get currentQuestion(): InterviewQuestion {
+       return this.questions[this.currentStep()];
+     }
 
-  private isOtherSelected(value: unknown): boolean {
-    return value === OTHER_OPTION || (Array.isArray(value) && value.includes(OTHER_OPTION));
-  }
+     private isOtherTextValid(questionId: string): boolean {
+       const raw = this.otherTextInputs()[questionId] ?? '';
+       const trimmed = raw.trim();
+       return trimmed.length >= OTHER_MIN_LEN && trimmed.length <= OTHER_MAX_LEN;
+     }
 
-  canProceedCurrentStep(): boolean {
-    const q = this.currentQuestion;
-    const control = this.form.get(q.id);
-    if (!control || control.invalid) return false;
+     private isOtherSelected(value: unknown): boolean {
+       return value === OTHER_OPTION || (Array.isArray(value) && value.includes(OTHER_OPTION));
+     }
 
-    if (this.isOtherSelected(control.value)) {
-      return this.isOtherTextValid(q.id);
-    }
-    return true;
-  }
+     canProceedCurrentStep(): boolean {
+       const q = this.currentQuestion;
+       const control = this.form.get(q.id);
+       if (!control || control.invalid) return false;
+       if (this.isOtherSelected(control.value)) {
+         return this.isOtherTextValid(q.id);
+       }
+       return true;
+     }
+
+     nextStep() {
+       if (!this.canProceedCurrentStep()) {
+         this.form.get(this.currentQuestion.id)?.markAsTouched();
+         return;
+       }
+       if (this.currentStep() < this.questions.length - 1) {
+         this.currentStep.update((prev) => prev + 1);
+         this.scrollToQuestionTop();
+       }
+     }
+
+     prevStep() {
+       if (this.currentStep() > 0) {
+         this.currentStep.update((prev) => prev - 1);
+         this.scrollToQuestionTop();
+       }
+     }
+
+     private scrollToQuestionTop() {
+       const container = this.questionContainer();
+       if (container) {
+         container.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+       }
+     }
+
+     isOtherInputValid(): boolean {
+       return this.canSubmit();
+     }
+     ──────────────────────────────────────────────────────────── */
 
   canSubmit(): boolean {
-    if (this.form.invalid) return false;
-    for (const q of this.questions) {
-      const value = this.form.get(q.id)?.value;
-      if (this.isOtherSelected(value) && !this.isOtherTextValid(q.id)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  nextStep() {
-    if (!this.canProceedCurrentStep()) {
-      this.form.get(this.currentQuestion.id)?.markAsTouched();
-      return;
-    }
-    if (this.currentStep() < this.questions.length - 1) {
-      this.currentStep.update((prev) => prev + 1);
-      this.scrollToQuestionTop();
-    }
-  }
-
-  prevStep() {
-    if (this.currentStep() > 0) {
-      this.currentStep.update((prev) => prev - 1);
-      this.scrollToQuestionTop();
-    }
-  }
-
-  private scrollToQuestionTop() {
-    const container = this.questionContainer();
-    if (container) {
-      container.nativeElement.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-    }
-  }
-
-  isOtherInputValid(): boolean {
-    return this.canSubmit();
+    return this.form.valid;
   }
 
   onNext() {
@@ -351,14 +379,15 @@ export class AiInterview {
 
     this.builderState.aiAnswers.set(raw);
     this.builderState.businessName.set(raw['business_name'] as string);
+    this.builderState.isNavigating.set(true);
     this.router.navigate(['/build/preview']);
   }
 
   onTextareaEnter(event: Event) {
     const keyboardEvent = event as KeyboardEvent;
-    if (keyboardEvent.ctrlKey || keyboardEvent.metaKey) {
+    if (!keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();
-      this.nextStep();
+      this.stepper?.next();
     }
   }
 }

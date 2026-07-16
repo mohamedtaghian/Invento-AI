@@ -11531,7 +11531,12 @@
       },
       {
         "source": "site-builder",
-        "target": "npm:gsap",
+        "target": "npm:@angular/cdk",
+        "type": "static"
+      },
+      {
+        "source": "site-builder",
+        "target": "spartan-stepper",
         "type": "static"
       },
       {
@@ -11691,11 +11696,6 @@
       },
       {
         "source": "site-builder",
-        "target": "npm:@angular/cdk",
-        "type": "static"
-      },
-      {
-        "source": "site-builder",
         "target": "npm:@angular/compiler",
         "type": "static"
       },
@@ -11732,6 +11732,11 @@
       {
         "source": "site-builder",
         "target": "npm:embla-carousel-angular",
+        "type": "static"
+      },
+      {
+        "source": "site-builder",
+        "target": "npm:gsap",
         "type": "static"
       },
       {
@@ -26809,5 +26814,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1784205542477
+  "computedAt": 1784216140460
 }

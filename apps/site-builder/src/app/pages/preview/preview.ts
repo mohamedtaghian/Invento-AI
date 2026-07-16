@@ -174,6 +174,12 @@ export class Preview {
     this.previewDataClientService.loadThemes();
 
     effect(() => {
+      if (!this.previewDataClientService.isLoading()) {
+        this.builderState.isNavigating.set(false);
+      }
+    });
+
+    effect(() => {
       const themes = this.themeSuggestions();
       const firstTheme = themes[0];
       if (firstTheme && !this._userHasManuallySelectedTheme()) {
