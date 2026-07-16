@@ -11365,6 +11365,26 @@
       },
       {
         "source": "shared",
+        "target": "npm:@ng-icons/core",
+        "type": "static"
+      },
+      {
+        "source": "shared",
+        "target": "npm:@ng-icons/lucide",
+        "type": "static"
+      },
+      {
+        "source": "shared",
+        "target": "spartan-ui",
+        "type": "static"
+      },
+      {
+        "source": "shared",
+        "target": "npm:@angular/router",
+        "type": "static"
+      },
+      {
+        "source": "shared",
         "target": "npm:@angular/common",
         "type": "static"
       }
@@ -11477,6 +11497,11 @@
       {
         "source": "site-builder",
         "target": "npm:@angular/platform-browser",
+        "type": "static"
+      },
+      {
+        "source": "site-builder",
+        "target": "spartan-ui",
         "type": "static"
       },
       {
@@ -26784,5 +26809,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1784167267669
+  "computedAt": 1784205542477
 }

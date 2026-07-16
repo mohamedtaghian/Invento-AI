@@ -2,16 +2,22 @@ import { Routes } from '@angular/router';
 
 // Layouts
 import { MainLayout } from './layouts/main-layout/main-layout';
+import { BuilderLayout } from './layouts/builder-layout/builder-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 // Pages
 import { Home } from './pages/home/home';
-// import { BuilderLayout } from './layouts/builder-layout/builder-layout';
-// import { Brainstorm } from './pages/brainstorm/brainstorm';
-// import { AiInterview } from './pages/ai-interview/ai-interview';
-// import { Validation } from './pages/validation/validation';
-// import { Preview } from './pages/preview/preview';
+import { Brainstorm } from './pages/brainstorm/brainstorm';
+import { AiInterview } from './pages/ai-interview/ai-interview';
+import { Preview } from './pages/preview/preview';
+import { Validation } from './pages/validation/validation';
 import { StyleTest } from './pages/style-test/style-test';
+
+// Guards
+import { brainstormGuard } from './core/guards/brainstorm-guard';
+import { aiInterviewGuard } from './core/guards/ai-interview-guard';
+import { previewGuard } from './core/guards/preview-guard';
+import { validationGuard } from './core/guards/validation-guard';
 
 export const routes: Routes = [
   {
@@ -24,22 +30,35 @@ export const routes: Routes = [
       { path: 'home', component: Home },
       { path: 'style-test', component: StyleTest },
 
-      // 2. Steps Phases: Renders inside BuilderLayout (Navbar + Steps Bar)
+      // 2. Builder Phase: Renders inside BuilderLayout (Steps Bar + page content)
       {
         path: 'build',
-        loadComponent: () =>
-          import('@/app/features/builder/components/shell/builder').then((c) => c.BuilderShell),
+        component: BuilderLayout,
+        children: [
+          { path: '', redirectTo: 'brainstorm', pathMatch: 'full' },
+          {
+            path: 'brainstorm',
+            component: Brainstorm,
+            canActivate: [brainstormGuard],
+          },
+          {
+            path: 'ai-interview',
+            component: AiInterview,
+            canActivate: [aiInterviewGuard],
+          },
+          {
+            path: 'preview',
+            component: Preview,
+            canActivate: [previewGuard],
+          },
+          {
+            path: 'validation',
+            component: Validation,
+            canActivate: [validationGuard],
+          },
+          { path: '**', redirectTo: 'brainstorm' },
+        ],
       },
-      // {
-      //   path: '',
-      //   component: BuilderLayout,
-      //   children: [
-      //     { path: 'brain', component: Brainstorm },
-      //     { path: 'ai-builder', component: AiInterview },
-      //     { path: 'validation', component: Validation },
-      //     { path: 'preview', component: Preview },
-      //   ],
-      // },
     ],
   },
   {
