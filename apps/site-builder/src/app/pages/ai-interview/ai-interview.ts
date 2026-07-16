@@ -8,7 +8,6 @@ import {
   viewChildren,
   effect,
   inject,
-  output,
 } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { gsap } from 'gsap';
@@ -21,6 +20,7 @@ import { HlmCardImports } from '@spartan/helm/card';
 import { HlmInputImports } from '@spartan/helm/input';
 import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmSeparator } from '@spartan/helm/separator';
+import { Router } from '@angular/router';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { hlmP } from '@spartan/helm/typography';
@@ -65,7 +65,7 @@ const OTHER_MAX_LEN = 25;
 })
 export class AiInterview {
   private readonly builderState = inject(BuilderState);
-  readonly dataSaved = output<void>();
+  private readonly router = inject(Router);
   protected readonly hlmP = hlmP;
 
   questionContainer = viewChild<ElementRef<HTMLDivElement>>('questionContainer');
@@ -351,7 +351,7 @@ export class AiInterview {
 
     this.builderState.aiAnswers.set(raw);
     this.builderState.businessName.set(raw['business_name'] as string);
-    this.dataSaved.emit();
+    this.router.navigate(['/build/preview']);
   }
 
   onTextareaEnter(event: Event) {
