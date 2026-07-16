@@ -1,19 +1,5 @@
 <form [formGroup]="form">
   <section>
-    <div class="mb-8">
-      <div
-        class="flex justify-between items-center mb-2 text-muted-foreground text-xs uppercase tracking-wider"
-      >
-        Question {{ currentStep() + 1 }} of {{ questions.length }}
-      </div>
-      <div class="bg-secondary rounded-full w-full h-1 overflow-hidden">
-        <div
-          class="bg-primary h-full transition-all duration-300 ease-in-out"
-          [style.width]="progressWidth()"
-        ></div>
-      </div>
-    </div>
-
     <div class="flex flex-col gap-12 preview">
       <div
         class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header"
@@ -27,23 +13,11 @@
       </div>
     </div>
 
-    <div #questionContainer class="relative mt-8 min-h-85 overflow-hidden">
-      @for (question of questions; track question.id) {
-        <div #cardElement class="step-card">
-          <hlm-card class="flex flex-col bg-secondary border-2 rounded-xl w-full min-h-85">
-            <hlm-card-header class="flex flex-col gap-2.5">
-              <div hlmBadge variant="default" class="flex items-center gap-1 w-fit">
-                <ng-icon name="lucideMessageSquare"></ng-icon>
-                <span class="uppercase">{{ question.label }}</span>
-              </div>
-
-              <p class="font-medium text-sm md:text-lg" [class]="hlmP">
-                {{ question.prompt }}
-                <span class="text-destructive">*</span>
-              </p>
-            </hlm-card-header>
-
-            <div hlmCardContent class="flex flex-col flex-1 gap-2.5">
+    <div class="mt-8">
+      <spartan-stepper orientation="vertical" [linear]="true" indicatorMode="number" #stepper>
+        @for (question of questions; track question.id) {
+          <spartan-step [label]="question.prompt" [stepControl]="form.get(question.id)!">
+            <ng-template spartanStepContent>
               @if (question.type === 'select') {
                 <div
                   [class]="
@@ -70,25 +44,25 @@
                     </label>
                   }
                 </div>
-                @if (form.get(question.id)?.value === 'Other (specify)') {
+                @if (form.get(question.id)?.value === OTHER_OPTION) {
                   <input
                     hlmInput
                     type="text"
                     placeholder="Please specify (10–25 characters)..."
                     class="mt-3 w-full"
                     [class.border-destructive]="
-                      otherTextInputs()[question.id]?.length > 0 &&
-                      otherTextInputs()[question.id]?.length < 10
+                      form.get(question.id)?.errors?.['otherTextInvalid'] &&
+                      form.get(question.id)?.touched
                     "
                     [class.border-primary]="
-                      otherTextInputs()[question.id]?.length >= 10 &&
-                      otherTextInputs()[question.id]?.length <= 25
+                      !form.get(question.id)?.errors?.['otherTextInvalid'] &&
+                      form.get(question.id)?.touched
                     "
                     (input)="onOtherInput(question.id, $any($event.target).value)"
                   />
                   @if (
-                    otherTextInputs()[question.id]?.length > 0 &&
-                    otherTextInputs()[question.id]?.length < 10
+                    form.get(question.id)?.errors?.['otherTextInvalid'] &&
+                    form.get(question.id)?.touched
                   ) {
                     <p class="mt-1 text-destructive text-xs" [class]="hlmP">
                       Minimum 10 characters required
@@ -102,7 +76,7 @@
                   <textarea
                     class="flex-1 dark:border-primary/25 resize-none"
                     hlmTextarea
-                    placeholder="Type your answer... (Ctrl+Enter to continue)"
+                    placeholder="Type your answer... (Enter to continue, Shift+Enter for newline)"
                     [name]="question.id"
                     [formControlName]="question.id"
                     (keydown.enter)="onTextareaEnter($event)"
@@ -135,25 +109,25 @@
                     </label>
                   }
                 </div>
-                @if (selectedChannels().includes('Other (specify)')) {
+                @if (selectedChannels().includes(OTHER_OPTION)) {
                   <input
                     hlmInput
                     type="text"
                     placeholder="Please specify (10–25 characters)..."
                     class="mt-3 w-full"
                     [class.border-destructive]="
-                      otherTextInputs()['channels']?.length > 0 &&
-                      otherTextInputs()['channels']?.length < 10
+                      form.get('channels')?.errors?.['otherTextInvalid'] &&
+                      form.get('channels')?.touched
                     "
                     [class.border-primary]="
-                      otherTextInputs()['channels']?.length >= 10 &&
-                      otherTextInputs()['channels']?.length <= 25
+                      !form.get('channels')?.errors?.['otherTextInvalid'] &&
+                      form.get('channels')?.touched
                     "
                     (input)="onOtherInput('channels', $any($event.target).value)"
                   />
                   @if (
-                    otherTextInputs()['channels']?.length > 0 &&
-                    otherTextInputs()['channels']?.length < 10
+                    form.get('channels')?.errors?.['otherTextInvalid'] &&
+                    form.get('channels')?.touched
                   ) {
                     <p class="mt-1 text-destructive text-xs" [class]="hlmP">
                       Minimum 10 characters required
@@ -161,52 +135,51 @@
                   }
                 }
               }
-            </div>
-          </hlm-card>
-        </div>
-      }
+            </ng-template>
+          </spartan-step>
+        }
+      </spartan-stepper>
     </div>
 
-    <hlm-separator class="mt-8 mb-4 bg" />
+    <div class="sticky bottom-0 bg-card pt-4 pb-2 border-t border-border mt-8 -mx-6 px-6 z-10">
+      <hlm-separator class="mb-4 bg" />
 
-    <div class="flex md:flex-row flex-col md:justify-between md:items-center gap-2.5">
-      <button
-        hlmBtn
-        variant="default"
-        size="lg"
-        [disabled]="currentStep() === 0"
-        [class.hidden]="currentStep() === 0"
-        (click)="prevStep()"
-        class="flex justify-center items-center gap-1 dark:text-white cursor-pointer disabled:cursor-not-allowed disabled:pointer-events-auto"
-      >
-        <ng-icon name="lucideChevronLeft"></ng-icon>
-        <span>Back</span>
-      </button>
-
-      @if (currentStep() < questions.length - 1) {
+      <div class="flex md:flex-row flex-col md:justify-between md:items-center gap-2.5">
         <button
           hlmBtn
-          variant="default"
+          variant="outline"
           size="lg"
-          [disabled]="!canProceedCurrentStep()"
-          (click)="nextStep()"
-          class="flex justify-center items-center gap-1 disabled:opacity-50 md:ml-auto dark:text-white cursor-pointer disabled:cursor-not-allowed"
+          (click)="stepper?.previous()"
+          class="flex justify-center items-center gap-1 dark:text-white cursor-pointer"
         >
-          <span>Next</span>
-          <ng-icon name="lucideChevronRight"></ng-icon>
+          <ng-icon name="lucideChevronLeft"></ng-icon>
+          <span>Back</span>
         </button>
-      } @else {
-        <button
-          hlmBtn
-          variant="default"
-          size="lg"
-          [disabled]="!canSubmit()"
-          (click)="onNext()"
-          class="disabled:opacity-50 font-bold dark:text-white uppercase cursor-pointer disabled:cursor-not-allowed"
-        >
-          Preview Site
-        </button>
-      }
+
+        @if ((stepper?.selectedIndex ?? 0) < questions.length - 1) {
+          <button
+            hlmBtn
+            variant="default"
+            size="lg"
+            (click)="stepper?.next()"
+            class="flex justify-center items-center gap-1 md:ml-auto dark:text-white cursor-pointer disabled:cursor-not-allowed"
+          >
+            <span>Next</span>
+            <ng-icon name="lucideChevronRight"></ng-icon>
+          </button>
+        } @else {
+          <button
+            hlmBtn
+            variant="default"
+            size="lg"
+            [disabled]="!canSubmit()"
+            (click)="onNext()"
+            class="disabled:opacity-50 font-bold dark:text-white uppercase cursor-pointer disabled:cursor-not-allowed"
+          >
+            Preview Site
+          </button>
+        }
+      </div>
     </div>
   </section>
 </form>

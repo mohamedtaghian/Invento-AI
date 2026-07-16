@@ -9,7 +9,6 @@ import {
   ElementRef,
   viewChild,
   viewChildren,
-  output,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -32,6 +31,7 @@ import { PageHeader } from '@/app/components/page-header/page-header';
 import { HlmDialogImports } from '@spartan/helm/dialog';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { ContainerWidth } from '@/app/components/container-width/container-width';
+import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { hlmH2, hlmH3, hlmH4, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
@@ -68,8 +68,7 @@ export class Preview {
   protected readonly hlmP = hlmP;
   private readonly builderState = inject(BuilderState);
   private readonly platformId = inject(PLATFORM_ID);
-
-  readonly dataSaved = output<void>();
+  private readonly router = inject(Router);
 
   private readonly previewDataClientService = inject(PreviewDataClient);
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
@@ -175,6 +174,12 @@ export class Preview {
     this.previewDataClientService.loadThemes();
 
     effect(() => {
+      if (!this.previewDataClientService.isLoading()) {
+        this.builderState.isNavigating.set(false);
+      }
+    });
+
+    effect(() => {
       const themes = this.themeSuggestions();
       const firstTheme = themes[0];
       if (firstTheme && !this._userHasManuallySelectedTheme()) {
@@ -274,7 +279,7 @@ export class Preview {
   confirmDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
     this.builderState.selectedTheme.set(this.selectedTheme().id);
-    this.dataSaved.emit();
+    this.router.navigate(['/build/validation']);
   }
   cancelDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();

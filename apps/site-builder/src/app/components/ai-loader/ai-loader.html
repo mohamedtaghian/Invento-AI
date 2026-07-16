@@ -1,6 +1,19 @@
-<div class="ai-loader">
-  <div class="ai-loader-border">
-    <div class="ai-loader-dot"></div>
-    <span class="ai-loader-letter">N</span>
+@if (isNavigating()) {
+  <div class="loader-overlay" aria-label="Loading">
+    <div class="flex flex-col items-center gap-6">
+      <div class="ai-loader-border">
+        <div class="ai-loader-dot"></div>
+        <span class="ai-loader-letter">N</span>
+      </div>
+      <span class="text-lg md:text-xl font-bold text-primary">
+        {{ displayText() }}
+        <span
+          class="inline-block transition-opacity duration-100"
+          [class.opacity-0]="!showCursor()"
+          [class.opacity-100]="showCursor()"
+          >|</span
+        >
+      </span>
+    </div>
   </div>
-</div>
+}
