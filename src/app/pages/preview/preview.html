@@ -1,20 +1,30 @@
 <div class="flex flex-col gap-12 preview">
-  <div class="flex flex-col gap-12 preview">
-    <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
-      <app-page-header
-        badgeText="STEP 03"
-        title="Site"
-        accentTitle="Preview"
-        description="Live Spartan component preview with generated CSS variables applied."
-      />
-    </div>
+  <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
+    <app-page-header
+      badgeText="STEP 03"
+      title="Site"
+      accentTitle="Preview"
+      description="Live Spartan component preview with generated CSS variables applied."
+    />
   </div>
+
+  <!-- Use toaster in the future -->
+  <!-- @if (showError(); as err) {
+    <div
+      class="flex justify-between items-center bg-destructive/10 mb-4 p-3 border border-destructive rounded"
+    >
+      <span class="text-destructive text-sm">{{ err }}</span>
+      <button hlmBtn variant="ghost" size="sm" (click)="dismissError()" class="text-destructive">
+        ×
+      </button>
+    </div>
+  } -->
 
   <div class="preview-body">
     <div class="gap-6 grid grid-cols-1 xl:grid-cols-4">
       <div class="space-y-5 xl:col-span-1">
         <div class="preview-body-theme">
-          <p class="preview-tag">ACTIVE_THEME</p>
+          <p class="uppercase preview-tag" [class]="hlmP"><app-double-slash /> ACTIVE_THEME</p>
           <div class="space-y-2">
             @if (isLoading()) {
               @for (skelton of skeletonThemes; track $index) {
@@ -50,7 +60,7 @@
         </div>
 
         <div class="preview-body-viewport">
-          <p class="preview-tag">VIEWPORT</p>
+          <p class="uppercase preview-tag" [class]="hlmP"><app-double-slash /> VIEWPORT</p>
           <div class="flex gap-2">
             @for (viewport of viewports; track viewport.id) {
               <button
@@ -81,18 +91,25 @@
             <ng-icon name="lucideChevronRight" />
           </button>
 
-          <button
+          <!-- Currently export logic not working fine -->
+          <!-- <button
             hlmBtn
             variant="ghost"
             class="uppercase rounded-(--btn-radius) border-foreground/20 w-full xl:w-auto justify-center"
+            (click)="exportPreview()"
+            [disabled]="isExporting()"
           >
-            Export
-            <ng-icon name="lucideDownload" />
-          </button>
+            @if (isExporting()) {
+              Exporting…
+            } @else {
+              Export
+              <ng-icon name="lucideDownload" />
+            }
+          </button> -->
         </div>
       </div>
 
-      <div class="space-y-4 xl:col-span-3 min-w-0 preview-body-visuals">
+      <div #previewCapture class="space-y-4 xl:col-span-3 min-w-0 preview-body-visuals">
         <div class="border border-foreground/20 rounded overflow-hidden">
           <div
             class="flex items-center gap-3 bg-background/20 px-4 py-2.5 border-b border-b-foreground/20 preview-body-address-bar"
@@ -109,12 +126,18 @@
             <button
               hlmBtn
               class="flex items-center gap-1 bg-transparent text-primary hover:text-foreground text-xs"
+              (click)="toggleFocusMode()"
+              [attr.aria-label]="focusMode() ? 'Exit focus mode' : 'Enter focus mode'"
             >
-              <ng-icon name="lucideRefreshCw" size="14" class="" />
+              <ng-icon [name]="focusMode() ? 'lucideMinimize2' : 'lucideMaximize2'" size="14" />
             </button>
           </div>
 
-          <div #previewContainer class="flex justify-center bg-background p-2">
+          <div
+            (width)="_containerWidth.set($any($event))"
+            appContainerWidth
+            class="flex justify-center bg-background p-2"
+          >
             <div [ngStyle]="previewFrameStyles()">
               <div
                 class="bg-background/80 border border-foreground/20 w-full min-h-0 overflow-hidden"
@@ -125,7 +148,7 @@
                   class="flex justify-between items-center bg-background/40 px-5 py-3 border-b border-b-foreground/20 preview-body-tabs"
                 >
                   <span class="font-bold text-foreground/90 text-sm tracking-widest">
-                    InventoAI
+                    {{ brandName() }}
                   </span>
 
                   @if (showNavTabs()) {
@@ -150,21 +173,28 @@
                   <div
                     class="absolute inset-0 bg-linear-120 from-background/30 to-background/50"
                   ></div>
-                  <div
-                    class="z-10 relative flex flex-col justify-end h-full"
-                    [ngStyle]="heroTextPadding()"
-                  >
-                    <p class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest">
-                      AW24 Collection
-                    </p>
-                    <h2 class="mb-3 font-bold text-foreground/90 text-2xl">Structured Overcoat</h2>
-                    <button
-                      class="bg-primary px-5 py-2 w-fit font-bold text-background text-xs uppercase"
-                      style="border-radius: var(--radius, 0px)"
+                  @if (featuredProduct(); as product) {
+                    <div
+                      class="z-10 relative flex flex-col justify-end h-full"
+                      [ngStyle]="heroTextPadding()"
                     >
-                      SHOP NOW — $380
-                    </button>
-                  </div>
+                      <p
+                        class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest"
+                        [class]="hlmP"
+                      >
+                        {{ product.badge }}
+                      </p>
+                      <h2 class="mb-3 font-bold text-foreground/90 text-2xl" [class]="hlmH2">
+                        {{ product.name }}
+                      </h2>
+                      <button
+                        class="bg-primary px-5 py-2 w-fit font-bold text-background text-xs uppercase"
+                        style="border-radius: var(--radius, 0px)"
+                      >
+                        SHOP NOW — ${{ product.price }}
+                      </button>
+                    </div>
+                  }
                 </div>
 
                 <div
@@ -193,7 +223,7 @@
                         <div
                           class="flex justify-center items-center bg-linear-120 from-gray-500/10 to-gray-600/20 h-24"
                         >
-                          <span class="opacity-40 text-primary text-2xl">◼</span>
+                          <!-- <span class="opacity-40 text-primary text-2xl">◼</span> -->
                         </div>
 
                         <div class="p-3 preview-card">
@@ -216,8 +246,11 @@
                 </div>
 
                 <div class="bg-foreground/10 px-4 pb-4 preview-visual-sizes">
-                  <p class="opacity-60 mb-2 pt-2 font-bold text-foreground/90 text-xs uppercase">
-                    SELECT SIZE
+                  <p
+                    class="opacity-60 mb-2 pt-2 font-bold text-foreground/90 text-xs uppercase"
+                    [class]="hlmP"
+                  >
+                    <app-double-slash /> SELECT SIZE
                   </p>
 
                   <div class="flex gap-2">
@@ -251,7 +284,9 @@
         </div>
 
         <div class="mt-2 p-4 border border-foreground/10 rounded build-summary">
-          <p class="mb-4 text-xs preview-tag">BUILD_SUMMARY</p>
+          <p class="mb-4 text-xs uppercase preview-tag" [class]="hlmP">
+            <app-double-slash /> BUILD_SUMMARY
+          </p>
           <div
             class="gap-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
             style="background: color-mix(in srgb, var(--color-primary) 4%, transparent)"
@@ -266,8 +301,10 @@
             } @else {
               @for (stat of buildSummary(); track stat.label) {
                 <div class="lg:text-left text-center">
-                  <p class="mb-1 text-foreground/25 text-xs">{{ stat.label }}</p>
-                  <p class="font-semibold text-foreground/80 text-sm">{{ stat.value }}</p>
+                  <p class="mb-1 text-foreground/25 text-xs" [class]="hlmP">{{ stat.label }}</p>
+                  <p class="font-semibold text-foreground/80 text-sm" [class]="hlmP">
+                    {{ stat.value }}
+                  </p>
                 </div>
               }
             }
@@ -278,12 +315,109 @@
   </div>
 </div>
 
+@if (focusMode()) {
+  <div #focusContainer class="z-100 fixed inset-0 bg-background p-4 overflow-auto">
+    <div class="flex justify-end mb-4">
+      <button hlmBtn variant="outline" size="sm" (click)="toggleFocusMode()">
+        <ng-icon name="lucideMinimize2" class="mr-1" />
+        Exit Focus
+      </button>
+    </div>
+    <div
+      class="bg-background/80 border border-foreground/20 w-full min-h-0 overflow-hidden"
+      style="border-radius: var(--radius-lg, 2px); max-width: 1400px; margin: 0 auto"
+      [ngStyle]="previewCssVars()"
+    >
+      <div
+        class="flex justify-between items-center bg-background/40 px-5 py-3 border-b border-b-foreground/20 preview-body-tabs"
+      >
+        <span class="font-bold text-foreground/90 text-sm tracking-widest">
+          {{ brandName() }}
+        </span>
+        @if (showNavTabs()) {
+          <div class="flex items-center gap-4">
+            @for (tab of navTabs(); track $index) {
+              <span class="opacity-60 text-foreground/80 text-xs">{{ tab }}</span>
+            }
+          </div>
+        }
+        <div class="flex items-center gap-2">
+          <div
+            class="flex justify-center items-center bg-primary w-6 h-6"
+            style="border-radius: var(--radius-sm, 0px)"
+          >
+            <span class="font-bold text-background text-xs">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative bg-background/20 h-60 overflow-hidden">
+        <div class="absolute inset-0 bg-linear-120 from-background/30 to-background/50"></div>
+        @if (featuredProduct(); as product) {
+          <div class="z-10 relative flex flex-col justify-end p-6 h-full">
+            <p
+              class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest"
+              [class]="hlmP"
+            >
+              {{ product.badge }}
+            </p>
+            <h2 class="mb-3 font-bold text-foreground/90 text-3xl" [class]="hlmH2">
+              {{ product.name }}
+            </h2>
+            <button
+              class="bg-primary px-6 py-3 w-fit font-bold text-background text-sm uppercase"
+              style="border-radius: var(--radius, 0px)"
+            >
+              <app-double-slash /> SHOP NOW — ${{ product.price }}
+            </button>
+          </div>
+        }
+      </div>
+
+      <div
+        class="gap-3 grid bg-background/50 p-4 transition-all duration-300 preview-visual-cards"
+        [style.grid-template-columns]="previewCardCols()"
+      >
+        @for (product of products(); track product.name) {
+          <div class="overflow-hidden" style="border-radius: var(--radius, 0px)">
+            <div
+              class="flex justify-center items-center bg-linear-120 from-gray-500/10 to-gray-600/20 h-32"
+            >
+              <span class="opacity-40 text-primary text-3xl">◼</span>
+            </div>
+            <div class="p-3 preview-card">
+              <div class="flex justify-between items-start mb-1">
+                <span class="font-semibold text-foreground/80 text-sm">
+                  {{ product.name }}
+                </span>
+                <span
+                  class="bg-primary px-1.5 py-0.5 font-bold text-[9px] text-background uppercase"
+                  style="border-radius: var(--radius-sm, 0px)"
+                >
+                  {{ product.badge }}
+                </span>
+              </div>
+              <span class="font-bold text-primary text-xs">${{ product.price }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="bg-background/80 px-4 py-3 border-t border-t-background/90 text-center">
+        <span class="opacity-30 text-foreground/90 text-xs">
+          Powered by Spartan Library · BuilderAI
+        </span>
+      </div>
+    </div>
+  </div>
+}
+
 <hlm-dialog [state]="deployDialogState()" (closed)="deployDialogState.set('closed')" class="">
   <hlm-dialog-content class="sm:max-w-lg" *hlmDialogPortal="let ctx">
     <hlm-dialog-header>
-      <h3 hlmDialogTitle>Confirm Theme Selection</h3>
+      <h3 hlmDialogTitle [class]="hlmH3">Confirm Theme Selection</h3>
 
-      <p hlmDialogDescription>
+      <p hlmDialogDescription [class]="hlmP">
         You're about to continue with the
         <strong>{{ selectedTheme().name }}</strong>
         theme.
@@ -300,18 +434,18 @@
           </div>
 
           <div class="space-y-1">
-            <h4 class="font-semibold">
+            <h4 class="font-semibold" [class]="hlmH4">
               {{ selectedTheme().name }}
             </h4>
 
-            <p class="text-muted-foreground text-sm">
+            <p class="text-muted-foreground text-sm" [class]="hlmP">
               {{ selectedTheme().description }}
             </p>
           </div>
         </div>
       </div>
 
-      <p class="text-muted-foreground text-sm leading-relaxed">
+      <p class="text-muted-foreground text-sm leading-relaxed" [class]="hlmP">
         This theme will become the foundation of your generated website. If it isn't the look you're
         aiming for, you can go back and choose another theme before continuing.
       </p>

@@ -9,26 +9,34 @@ import {
   ElementRef,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ScrollAnimateDirective } from '../../../shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideInfinity, lucidePercent } from '@ng-icons/lucide';
 
 interface Stat {
-  readonly raw: string;
   readonly label: string;
   readonly numericValue: number | null;
-  readonly prefix: string;
-  readonly suffix: string;
+  readonly prefixIcon?: string;
+  readonly suffixIcon?: string;
+  readonly suffixText?: string;
+  readonly standaloneIcon?: string;
 }
 
 interface DisplayStat {
   readonly label: string;
-  display: string;
+  value: string;
+  readonly prefixIcon?: string;
+  readonly suffixIcon?: string;
+  readonly suffixText?: string;
+  readonly standaloneIcon?: string;
 }
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollAnimateDirective],
+  imports: [ScrollAnimateDirective, NgIcon],
+  providers: [provideIcons({ lucideInfinity, lucidePercent, lucideChevronLeft })],
 })
 export class Stats implements OnInit, OnDestroy {
   private readonly _platformId = inject(PLATFORM_ID);
@@ -36,23 +44,52 @@ export class Stats implements OnInit, OnDestroy {
   private _observer: IntersectionObserver | null = null;
   private _animationStarted = false;
 
-  protected readonly displayStats = signal<DisplayStat[]>([
-    { label: 'Build Stages', display: '0' },
-    { label: 'Schema Types', display: '∞' },
-    { label: 'AI-Generated', display: '0%' },
-    { label: 'Time to Deploy', display: '<0min' },
-  ]);
-
   private readonly _stats: Stat[] = [
-    { raw: '6', label: 'Build Stages', numericValue: 6, prefix: '', suffix: '' },
-    { raw: '∞', label: 'Schema Types', numericValue: null, prefix: '', suffix: '' },
-    { raw: '100%', label: 'AI-Generated', numericValue: 100, prefix: '', suffix: '%' },
-    { raw: '<2min', label: 'Time to Deploy', numericValue: 2, prefix: '<', suffix: 'min' },
+    {
+      label: 'Build Stages',
+      numericValue: 4,
+    },
+    {
+      label: 'Schema Types',
+      numericValue: null,
+      standaloneIcon: 'lucideInfinity',
+    },
+    {
+      label: 'AI-Generated',
+      numericValue: 100,
+      suffixIcon: 'lucidePercent',
+    },
+    {
+      label: 'Time to Deploy',
+      numericValue: 2,
+      prefixIcon: 'lucideChevronLeft',
+      suffixText: 'min',
+    },
   ];
+
+  protected readonly displayStats = signal<DisplayStat[]>(
+    this._stats.map((s) => ({
+      label: s.label,
+      value: s.numericValue !== null ? '0' : '',
+      prefixIcon: s.prefixIcon,
+      suffixIcon: s.suffixIcon,
+      suffixText: s.suffixText,
+      standaloneIcon: s.standaloneIcon,
+    })),
+  );
 
   ngOnInit(): void {
     if (!isPlatformBrowser(this._platformId)) {
-      this.displayStats.set(this._stats.map((s) => ({ label: s.label, display: s.raw })));
+      this.displayStats.set(
+        this._stats.map((s) => ({
+          label: s.label,
+          value: s.numericValue !== null ? String(s.numericValue) : '',
+          prefixIcon: s.prefixIcon,
+          suffixIcon: s.suffixIcon,
+          suffixText: s.suffixText,
+          standaloneIcon: s.standaloneIcon,
+        })),
+      );
       return;
     }
 
@@ -91,11 +128,7 @@ export class Stats implements OnInit, OnDestroy {
         }
 
         this.displayStats.update((stats) =>
-          stats.map((s, i) =>
-            i === index
-              ? { ...s, display: `${stat.prefix}${Math.round(current)}${stat.suffix}` }
-              : s,
-          ),
+          stats.map((s, i) => (i === index ? { ...s, value: `${Math.round(current)}` } : s)),
         );
       }, stepTime);
     });

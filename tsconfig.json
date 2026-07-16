@@ -9,11 +9,12 @@
     "skipLibCheck": true,
     "isolatedModules": true,
     "experimentalDecorators": true,
-    // "importHelpers": true,
     "target": "ES2022",
     "module": "preserve",
     "paths": {
       "@/*": ["./src/*"],
+      "@/spartan/stepper": ["./libs/stepper/lib"],
+      "@/spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles"],
       "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
       "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
       "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
@@ -28,7 +29,8 @@
       "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
       "@spartan/helm/progress": ["./libs/ui/progress/src/index.ts"],
       "@spartan/helm/radio-group": ["./libs/ui/radio-group/src/index.ts"],
-      "@spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles/index.ts"]
+      "@spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles/index.ts"],
+      "@spartan/helm/typography": ["./libs/ui/typography/src/index.ts"]
     }
   },
   "angularCompilerOptions": {

@@ -1,6 +1,6 @@
 <div class="flex flex-col gap-9">
   <div class="flex flex-col gap-2">
-    <div class="max-w-6xl p-6 space-y-8">
+    <div class="space-y-8 p-6 max-w-6xl">
       <div class="flex flex-col gap-12 preview">
         <div
           class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header"
@@ -22,11 +22,7 @@
         (keydown.escape)="isFocused.set(false)"
         role="dialog"
         tabindex="-1"
-        [class]="
-          isFocused()
-            ? 'fixed inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-sm'
-            : ''
-        "
+        [class]="backdropClass()"
       >
         <div
           role="document"
@@ -65,7 +61,7 @@
                 hlmBtn
                 variant="ghost"
                 (click)="isFocused.set(true)"
-                class="flex items-center gap-1 text-[0.5rem] md:text-[0.65rem] hover:text-primary tracking-widest"
+                class="flex items-center gap-1 text-[0.5rem] md:text-[0.65rem] hover:text-primary uppercase tracking-widest"
               >
                 <ng-icon name="heroArrowsPointingOut" /> FOCUS MODE
               </button>
@@ -75,7 +71,7 @@
           <!-- Textarea -->
           <textarea
             hlmTextarea
-            placeholder="e.g. A premium fashion brand targeting Gen Z..."
+            placeholder="e.g. A premium fashion brand targeting Gen Z with sustainable clothing and a minimalist aesthetic..."
             class="bg-transparent shadow-none border-none rounded-none outline-none focus-visible:ring-0 w-full text-base! resize-none"
             [class]="isFocused() ? 'h-[60vh]' : 'h-60'"
             [formControl]="descriptionControl"
@@ -87,8 +83,9 @@
               <span
                 class="flex items-center gap-1 text-[0.6rem] text-muted-foreground md:text-[0.65rem] tracking-wide"
               >
-                At least 25 characters required <ng-icon name="lucideDot" />
-                {{ descriptionControl.value.length }} / 25
+                At least {{ MIN_DESCRIPTION_LENGTH }} characters required
+                <ng-icon name="lucideDot" /> {{ descriptionControl.value.length }} /
+                {{ MIN_DESCRIPTION_LENGTH }}
               </span>
             } @else {
               <span class="flex items-center gap-1 text-[0.65rem] text-green-500 tracking-wide">
@@ -100,21 +97,23 @@
       </div>
       <button
         hlmBtn
-        routerLink="/ai-builder"
+        (click)="onNext()"
         [disabled]="descriptionControl.value.length < 25"
         class="flex items-center gap-2 disabled:hover:bg-primary md:px-9 py-7 md:w-fit disabled:cursor-not-allowed disabled:pointer-events-auto"
       >
-        <ng-icon name="heroBolt" /> <span>INITIATE AI INTERVIEW</span>
+        <ng-icon name="heroBolt" /> <span class="uppercase">INITIATE AI INTERVIEW</span>
         <ng-icon name="heroArrowRight" />
       </button>
     </div>
     <div class="flex flex-col md:flex-1 gap-4">
-      <h2 class="text-muted-foreground/50 text-xs">// CONTEXT_CHECKLIST</h2>
+      <h2 class="text-muted-foreground/50 text-xs uppercase" [class]="hlmH2">
+        <app-double-slash /> CONTEXT_CHECKLIST
+      </h2>
       <hlm-item-group>
         @for (item of contextChecklist; track item.id) {
           <hlm-item variant="muted" class="border border-border">
             <hlm-item-content>
-              <p hlmItemDescription>
+              <p hlmItemDescription [class]="hlmP">
                 <span hlmBadge class="bg-muted mr-2 rounded-full size-5 text-muted-foreground">{{
                   item.id
                 }}</span

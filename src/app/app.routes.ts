@@ -2,15 +2,15 @@ import { Routes } from '@angular/router';
 
 // Layouts
 import { MainLayout } from './layouts/main-layout/main-layout';
-import { BuilderLayout } from './layouts/builder-layout/builder-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 // Pages
 import { Home } from './pages/home/home';
-import { Brainstorm } from './pages/brainstorm/brainstorm';
-import { AiInterview } from './pages/ai-interview/ai-interview';
-import { Validation } from './pages/validation/validation';
-import { Preview } from './pages/preview/preview';
+// import { BuilderLayout } from './layouts/builder-layout/builder-layout';
+// import { Brainstorm } from './pages/brainstorm/brainstorm';
+// import { AiInterview } from './pages/ai-interview/ai-interview';
+// import { Validation } from './pages/validation/validation';
+// import { Preview } from './pages/preview/preview';
 import { StyleTest } from './pages/style-test/style-test';
 
 export const routes: Routes = [
@@ -23,17 +23,23 @@ export const routes: Routes = [
       // 1. Home Phase: Renders inside MainLayout (Navbar only)
       { path: 'home', component: Home },
       { path: 'style-test', component: StyleTest },
+
       // 2. Steps Phases: Renders inside BuilderLayout (Navbar + Steps Bar)
       {
-        path: '',
-        component: BuilderLayout,
-        children: [
-          { path: 'brain', component: Brainstorm },
-          { path: 'ai-builder', component: AiInterview },
-          { path: 'validation', component: Validation },
-          { path: 'preview', component: Preview },
-        ],
+        path: 'build',
+        loadComponent: () =>
+          import('@/app/features/builder/components/shell/builder').then((c) => c.BuilderShell),
       },
+      // {
+      //   path: '',
+      //   component: BuilderLayout,
+      //   children: [
+      //     { path: 'brain', component: Brainstorm },
+      //     { path: 'ai-builder', component: AiInterview },
+      //     { path: 'validation', component: Validation },
+      //     { path: 'preview', component: Preview },
+      //   ],
+      // },
     ],
   },
   {

@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCard, HlmCardHeader, HlmCardTitle, HlmCardDescription } from '@spartan/helm/card';
-import { HlmBadge } from '@spartan/helm/badge';
-import { ScrollAnimateDirective } from '../../../shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { PageHeader } from '@/app/components/page-header/page-header';
+import { hlmH3, hlmP } from '@spartan/helm/typography';
 
 interface PipelineStep {
   readonly number: string;
@@ -22,16 +23,19 @@ interface PipelineStep {
     HlmCardHeader,
     HlmCardTitle,
     HlmCardDescription,
-    HlmBadge,
     ScrollAnimateDirective,
+    PageHeader,
   ],
 })
 export class Pipeline {
+  protected readonly hlmH3 = hlmH3;
+  protected readonly hlmP = hlmP;
+
   protected readonly steps = signal<PipelineStep[]>([
     { number: '01', title: 'Brainstorm', subtitle: 'Raw business concept', route: '/brain' },
     { number: '02', title: 'AI Interview', subtitle: 'Schema extraction', route: '/ai-builder' },
-    { number: '03', title: 'Validation', subtitle: 'Name availability', route: '/validation' },
-    { number: '04', title: 'Preview', subtitle: 'Deploy site', route: '/preview' },
+    { number: '03', title: 'Preview', subtitle: 'Preview AI generated theme', route: '/preview' },
+    { number: '04', title: 'Validation', subtitle: 'Site Name vailability', route: '/validation' },
   ]);
 
   onMouseMove(event: MouseEvent): void {

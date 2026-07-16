@@ -1,4 +1,4 @@
-<div class="flex flex-col page-header">
+<div class="flex flex-col page-header" appScrollAnimate="fade-left" [animDelay]="0">
   <div class="flex justify-between items-center gap-2.5 my-2.5">
     <app-page-badge
       [badgeText]="badgeText()"
@@ -8,14 +8,14 @@
   </div>
 
   <h1
-    class="mb-2 font-work font-bold text-3xl md:text-4xl tracking-tight"
+    class="${hlmH1} mb-2 font-work font-bold text-3xl md:text-4xl tracking-tight"
     style="color: var(--foreground)"
   >
     {{ title() }} <span style="color: var(--primary)">{{ accentTitle() }}</span>
   </h1>
 
   @if (description()) {
-    <p style="color: var(--foreground)">
+    <p class="${hlmP}" style="color: var(--foreground)">
       {{ description() }}
     </p>
   }

@@ -1,3 +1,4 @@
+import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +11,7 @@ import {
 @Component({
   selector: 'app-typing-text',
   templateUrl: './typing-text.html',
+  imports: [NgClass],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypingText implements OnInit, OnDestroy {
@@ -18,6 +20,7 @@ export class TypingText implements OnInit, OnDestroy {
   public readonly deletingSpeed = input<number>(60);
   public readonly pauseAfterType = input<number>(1800);
   public readonly pauseAfterDelete = input<number>(400);
+  public readonly fontSizeClasses = input<string>('text-4xl md:text-5xl lg:text-6xl');
 
   protected readonly displayText = signal<string>('');
   protected readonly showCursor = signal<boolean>(true);

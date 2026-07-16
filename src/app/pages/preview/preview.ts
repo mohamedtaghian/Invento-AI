@@ -1,7 +1,7 @@
 import {
   Component,
-  OnDestroy,
-  afterNextRender,
+  HostListener,
+  PLATFORM_ID,
   computed,
   effect,
   inject,
@@ -9,14 +9,17 @@ import {
   ElementRef,
   viewChild,
   viewChildren,
+  output,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+
 import { NgStyle } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideChevronRight,
   lucideDownload,
-  lucideRefreshCw,
+  lucideMaximize2,
+  lucideMinimize2,
   lucideSmartphoneCharging,
   lucideTablet,
   lucideTvMinimal,
@@ -27,26 +30,48 @@ import { PreviewSize, PreviewViewport, Viewport } from '@/app/core/interface/Pre
 import { PreviewDataClient } from '@/app/core/service/preview-data-client';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { HlmDialogImports } from '@spartan/helm/dialog';
-import { HlmLabelImports } from '@spartan/helm/label';
+import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { ContainerWidth } from '@/app/components/container-width/container-width';
+import html2canvas from 'html2canvas';
+import { hlmH2, hlmH3, hlmH4, hlmP } from '@spartan/helm/typography';
+import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+
 @Component({
   selector: 'app-preview',
-  imports: [PageHeader, HlmButtonImports, HlmDialogImports, HlmLabelImports, NgIcon, NgStyle],
+  imports: [
+    PageHeader,
+    HlmButtonImports,
+    HlmDialogImports,
+    NgIcon,
+    NgStyle,
+    ContainerWidth,
+    DoubleSlash,
+  ],
   providers: [
     provideIcons({
       lucideDownload,
       lucideTvMinimal,
       lucideTablet,
       lucideSmartphoneCharging,
-      lucideRefreshCw,
+      lucideMaximize2,
+      lucideMinimize2,
       lucideChevronRight,
     }),
   ],
   templateUrl: './preview.html',
   styleUrl: './preview.css',
 })
-export class Preview implements OnDestroy {
+export class Preview {
+  protected readonly hlmH2 = hlmH2;
+  protected readonly hlmH3 = hlmH3;
+  protected readonly hlmH4 = hlmH4;
+  protected readonly hlmP = hlmP;
+  private readonly builderState = inject(BuilderState);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  readonly dataSaved = output<void>();
+
   private readonly previewDataClientService = inject(PreviewDataClient);
-  private readonly router = inject(Router);
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
   readonly products = this.previewDataClientService.products;
   readonly navTabs = this.previewDataClientService.navTabs;
@@ -59,11 +84,15 @@ export class Preview implements OnDestroy {
   readonly selectedViewport = signal<PreviewViewport>('desktop');
   readonly selectedSize = signal<PreviewSize>('M');
   readonly deployDialogState = signal<'closed' | 'open'>('closed');
+  readonly focusMode = signal(false);
   readonly themeButtons = viewChildren<ElementRef<HTMLButtonElement>>('themeButton');
-  private readonly _containerWidth = signal<number>(0);
-  private _resizeObserver?: ResizeObserver;
-  readonly previewContainerEl = viewChild<ElementRef<HTMLDivElement>>('previewContainer');
+  readonly previewCaptureRef = viewChild<ElementRef<HTMLElement>>('previewCapture');
+  readonly focusContainerRef = viewChild<ElementRef<HTMLElement>>('focusContainer');
+  protected readonly _containerWidth = signal<number>(0);
   readonly sizes: readonly PreviewSize[] = ['S', 'M', 'L', 'XL'] as const;
+
+  private readonly sizeFactors: Record<PreviewSize, number> = { S: 0.8, M: 1.0, L: 1.2, XL: 1.5 };
+
   readonly viewports: readonly Viewport[] = [
     { id: 'desktop', icon: 'lucideTvMinimal', label: 'Desktop', width: '100%' },
     { id: 'tablet', icon: 'lucideTablet', label: 'Tablet', width: '768px' },
@@ -101,10 +130,11 @@ export class Preview implements OnDestroy {
         return cw || 1200;
     }
   });
+  readonly sizeScale = computed(() => this.sizeFactors[this.selectedSize()]);
   readonly previewScale = computed<number>(() => {
     const cw = this._containerWidth();
     if (cw === 0) return 1;
-    return Math.min(1, cw / this.simulatedPxWidth());
+    return Math.min(1, cw / this.simulatedPxWidth()) * this.sizeScale();
   });
   readonly previewFrameStyles = computed<Record<string, string>>(() => ({
     width: `${this.simulatedPxWidth()}px`,
@@ -125,27 +155,24 @@ export class Preview implements OnDestroy {
   readonly heroTextPadding = computed<Record<string, string>>(() =>
     this.selectedViewport() === 'mobile' ? { padding: '1rem' } : { padding: '1.5rem' },
   );
+  readonly brandName = computed(
+    () => this.builderState.businessName() || this.builderState.brainstorm() || 'InventoAI',
+  );
+  readonly featuredProduct = computed(() => this.products()[0] || null);
   readonly buildSummary = computed(() => [
     { label: 'THEME', value: this.selectedTheme().name },
     { label: 'PRODUCTS', value: `${this.products().length} items` },
-    { label: 'VARIANTS', value: '11 SKUs' },
-    { label: 'PAGES', value: '8 routes' },
+    { label: 'VARIANTS', value: `${this.products().length * 4} SKUs` },
+    { label: 'PAGES', value: `${this.navTabs().length + 4} routes` },
     { label: 'STATUS', value: this.selectedViewport().toUpperCase() },
   ]);
 
   private readonly _userHasManuallySelectedTheme = signal(false);
+  private readonly _dismissedError = signal(false);
+  readonly showError = computed(() => this.themeError() && !this._dismissedError());
 
   constructor() {
-    afterNextRender(() => {
-      const el = this.previewContainerEl()?.nativeElement;
-      if (!el) return;
-      this._resizeObserver = new ResizeObserver(([entry]) => {
-        this._containerWidth.set(Math.floor(entry.contentRect.width));
-      });
-      this._resizeObserver.observe(el);
-
-      this.previewDataClientService.loadThemes();
-    });
+    this.previewDataClientService.loadThemes();
 
     effect(() => {
       const themes = this.themeSuggestions();
@@ -156,14 +183,98 @@ export class Preview implements OnDestroy {
     });
   }
 
-  selectTheme(theme: ThemeSuggestion): void {
-    this._userHasManuallySelectedTheme.set(true);
-    this.selectedTheme.set(theme);
+  @HostListener('document:fullscreenchange')
+  onFullscreenChange(): void {
+    if (!document.fullscreenElement) {
+      this.focusMode.set(false);
+    }
+  }
+
+  async toggleFocusMode(): Promise<void> {
+    if (this.focusMode()) {
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch {
+          /* ignore */
+        }
+      }
+      this.focusMode.set(false);
+    } else {
+      this.focusMode.set(true);
+      const el = this.focusContainerRef()?.nativeElement;
+      if (el && isPlatformBrowser(this.platformId)) {
+        try {
+          await el.requestFullscreen();
+        } catch {
+          /* ignore (user gesture may be missing) */
+        }
+      }
+    }
+  }
+
+  private readonly _exporting = signal(false);
+  readonly isExporting = this._exporting.asReadonly();
+
+  dismissError(): void {
+    this._dismissedError.set(true);
+  }
+
+  async exportPreview(): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const el = this.previewCaptureRef()?.nativeElement;
+    if (!el) return;
+
+    this._exporting.set(true);
+    try {
+      const canvas = await html2canvas(el, {
+        useCORS: true,
+        scale: 2,
+        onclone: (clonedDoc) => {
+          const ctx = document.createElement('canvas').getContext('2d')!;
+          const colorProps = [
+            'color',
+            'backgroundColor',
+            'borderColor',
+            'borderTopColor',
+            'borderRightColor',
+            'borderBottomColor',
+            'borderLeftColor',
+          ];
+          clonedDoc.querySelectorAll('*').forEach((node: Element) => {
+            const n = node as HTMLElement;
+            for (const prop of colorProps) {
+              const val = n.style[prop as unknown as number];
+              if (val && val.includes('oklch')) {
+                ctx.fillStyle = 'rgb(0,0,0)';
+                ctx.fillStyle = val;
+                ctx.fillRect(0, 0, 1, 1);
+                const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+                n.style[prop as unknown as number] = `rgb(${r},${g},${b})`;
+              }
+            }
+          });
+        },
+      });
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'theme-preview.png';
+        a.click();
+        URL.revokeObjectURL(url);
+        this._exporting.set(false);
+      });
+    } catch {
+      this._exporting.set(false);
+    }
   }
 
   confirmDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
-    queueMicrotask(() => this.router.navigate(['/validation']));
+    this.builderState.selectedTheme.set(this.selectedTheme().id);
+    this.dataSaved.emit();
   }
   cancelDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
@@ -171,8 +282,5 @@ export class Preview implements OnDestroy {
       const index = this.themeSuggestions().findIndex((t) => t.id === this.selectedTheme().id);
       this.themeButtons()[index]?.nativeElement.focus();
     });
-  }
-  ngOnDestroy(): void {
-    this._resizeObserver?.disconnect();
   }
 }

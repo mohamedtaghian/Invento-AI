@@ -1,8 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostListener, signal } from '@angular/core';
-import { HlmBadgeImports } from '../../../../libs/ui/badge/src';
-import { HlmTextareaImports } from '../../../../libs/ui/textarea/src';
-import { HlmItemImports } from '../../../../libs/ui/item/src';
-import { HlmButtonImports } from '../../../../libs/ui/button/src';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  HostListener,
+  inject,
+  output,
+  signal,
+} from '@angular/core';
+import { HlmBadgeImports } from '@spartan/helm/badge';
+import { HlmTextareaImports } from '@spartan/helm/textarea';
+import { HlmItemImports } from '@spartan/helm/item';
+import { HlmButtonImports } from '@spartan/helm/button';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   heroBolt,
@@ -11,10 +19,12 @@ import {
   heroArrowsPointingOut,
   heroCheck,
 } from '@ng-icons/heroicons/outline';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { lucideDot } from '@ng-icons/lucide';
-import { RouterLink } from '@angular/router';
 import { PageHeader } from '@/app/components/page-header/page-header';
+import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { hlmH2, hlmP } from '@spartan/helm/typography';
+import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 
 interface ContextChecklist {
   id: number;
@@ -30,8 +40,8 @@ interface ContextChecklist {
     NgIcon,
     HlmItemImports,
     ReactiveFormsModule,
-    RouterLink,
     PageHeader,
+    DoubleSlash,
   ],
   templateUrl: './brainstorm.html',
   styleUrl: './brainstorm.css',
@@ -48,6 +58,20 @@ interface ContextChecklist {
   ],
 })
 export class Brainstorm {
+  protected readonly MIN_DESCRIPTION_LENGTH = 25;
+
+  private readonly builderState = inject(BuilderState);
+  readonly dataSaved = output<void>();
+
+  protected readonly hlmH2 = hlmH2;
+  protected readonly hlmP = hlmP;
+
+  protected readonly backdropClass = computed(() =>
+    this.isFocused()
+      ? 'fixed inset-0 z-50 flex items-center justify-center p-8 bg-black/60 backdrop-blur-sm'
+      : '',
+  );
+
   isFocused = signal<boolean>(false);
   contextChecklist: ContextChecklist[] = [
     {
@@ -68,12 +92,22 @@ export class Brainstorm {
     },
   ];
 
-  descriptionControl: FormControl = new FormControl('');
+  readonly descriptionControl = new FormControl('', {
+    nonNullable: true,
+    validators: [Validators.required, Validators.minLength(this.MIN_DESCRIPTION_LENGTH)],
+  });
 
   @HostListener('document:keydown.escape')
   onEscape() {
     if (this.isFocused()) {
       this.isFocused.set(false);
+    }
+  }
+
+  onNext() {
+    if (this.descriptionControl.valid) {
+      this.builderState.brainstorm.set(this.descriptionControl.value);
+      this.dataSaved.emit();
     }
   }
 }
