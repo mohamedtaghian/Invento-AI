@@ -1,37 +1,10 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
-    "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "experimentalDecorators": true,
-    "target": "ES2022",
-    "module": "preserve",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/spartan/stepper": ["./libs/stepper/lib"],
-      "@/spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles"],
-      "@spartan/helm/navigation-menu": ["./libs/ui/navigation-menu/src/index.ts"],
-      "@spartan/helm/utils": ["./libs/ui/utils/src/index.ts"],
-      "@spartan/helm/button": ["./libs/ui/button/src/index.ts"],
-      "@spartan/helm/avatar": ["./libs/ui/avatar/src/index.ts"],
-      "@spartan/helm/badge": ["./libs/ui/badge/src/index.ts"],
-      "@spartan/helm/card": ["./libs/ui/card/src/index.ts"],
-      "@spartan/helm/textarea": ["./libs/ui/textarea/src/index.ts"],
-      "@spartan/helm/item": ["./libs/ui/item/src/index.ts"],
-      "@spartan/helm/separator": ["./libs/ui/separator/src/index.ts"],
-      "@spartan/helm/label": ["./libs/ui/label/src/index.ts"],
-      "@spartan/helm/input": ["./libs/ui/input/src/index.ts"],
-      "@spartan/helm/dialog": ["./libs/ui/dialog/src/index.ts"],
-      "@spartan/helm/progress": ["./libs/ui/progress/src/index.ts"],
-      "@spartan/helm/radio-group": ["./libs/ui/radio-group/src/index.ts"],
-      "@spartan/styles": ["./libs/ui/utils/src/lib/spartan-styles/index.ts"],
-      "@spartan/helm/typography": ["./libs/ui/typography/src/index.ts"]
-    }
+    "isolatedModules": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -42,10 +15,23 @@
   "files": [],
   "references": [
     {
-      "path": "./tsconfig.app.json"
+      "path": "./apps/site-builder/tsconfig.app.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./apps/site-builder/tsconfig.spec.json"
+    },
+    {
+      "path": "./apps/userSite/tsconfig.app.json"
+    },
+    {
+      "path": "./apps/invento/tsconfig.app.json"
+    },
+    {
+      "path": "./libs/core/tsconfig.lib.json"
+    },
+    {
+      "path": "./libs/shared/tsconfig.lib.json"
     }
-  ]
+  ],
+  "extends": "./tsconfig.base.json"
 }

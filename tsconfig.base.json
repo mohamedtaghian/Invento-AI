@@ -1,0 +1,84 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "skipLibCheck": true,
+    "strict": true,
+    "paths": {
+      "@/*": [
+        "./apps/site-builder/src/*"
+      ],
+      "@/spartan/stepper": [
+        "./libs/stepper/lib"
+      ],
+      "@/spartan/styles": [
+        "./libs/ui/utils/src/lib/spartan-styles"
+      ],
+      "@spartan/helm/navigation-menu": [
+        "./libs/ui/navigation-menu/src/index.ts"
+      ],
+      "@spartan/helm/utils": [
+        "./libs/ui/utils/src/index.ts"
+      ],
+      "@spartan/helm/button": [
+        "./libs/ui/button/src/index.ts"
+      ],
+      "@spartan/helm/avatar": [
+        "./libs/ui/avatar/src/index.ts"
+      ],
+      "@spartan/helm/badge": [
+        "./libs/ui/badge/src/index.ts"
+      ],
+      "@spartan/helm/card": [
+        "./libs/ui/card/src/index.ts"
+      ],
+      "@spartan/helm/textarea": [
+        "./libs/ui/textarea/src/index.ts"
+      ],
+      "@spartan/helm/item": [
+        "./libs/ui/item/src/index.ts"
+      ],
+      "@spartan/helm/separator": [
+        "./libs/ui/separator/src/index.ts"
+      ],
+      "@spartan/helm/label": [
+        "./libs/ui/label/src/index.ts"
+      ],
+      "@spartan/helm/input": [
+        "./libs/ui/input/src/index.ts"
+      ],
+      "@spartan/helm/dialog": [
+        "./libs/ui/dialog/src/index.ts"
+      ],
+      "@spartan/helm/progress": [
+        "./libs/ui/progress/src/index.ts"
+      ],
+      "@spartan/helm/radio-group": [
+        "./libs/ui/radio-group/src/index.ts"
+      ],
+      "@spartan/styles": [
+        "./libs/ui/utils/src/lib/spartan-styles/index.ts"
+      ],
+      "@spartan/helm/typography": [
+        "./libs/ui/typography/src/index.ts"
+      ],
+      "@invento/core": [
+        "./libs/core/src/index.ts"
+      ],
+      "@invento/shared": [
+        "./libs/shared/src/index.ts"
+      ],
+      "@invento/site-builder/*": [
+        "./apps/site-builder/src/*"
+      ],
+      "@invento/user-site/*": [
+        "./apps/userSite/src/*"
+      ],
+      "@invento/invento/*": [
+        "./apps/invento/src/*"
+      ]
+    }
+  }
+}
