@@ -2,8 +2,8 @@ import { Component, input, signal, effect } from '@angular/core';
 
 @Component({
   selector: 'app-loader',
-  templateUrl: './loader.component.html',
-  styleUrl: './loader.component.css',
+  templateUrl: './loader.html',
+  styleUrl: './loader.css',
 })
 export class LoaderComponent {
   isLoading = input<boolean>(true);

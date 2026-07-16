@@ -1,7 +1,9 @@
 <section class="px-4 sm:px-8 md:px-16 lg:px-24 py-10">
   <div appScrollAnimate="fade-up" [animDelay]="0" hlmCard class="gap-6 p-4 sm:p-8">
-    <!-- Label -->
-    <p class="px-2 font-mono text-muted-foreground text-sm">// SYSTEM_CAPABILITIES</p>
+    <!-- Used hlmP directive from SpartanUI to ahve the same shape in all project -->
+    <p class="px-2 font-mono text-muted-foreground text-sm uppercase" [class]="hlmP">
+      <app-double-slash /> SYSTEM_CAPABILITIES
+    </p>
 
     <!-- Grid -->
     <div hlmCardContent class="gap-3 grid grid-cols-1 sm:grid-cols-2 p-0">
@@ -17,14 +19,21 @@
           >
             <ng-icon [name]="cap.icon" class="text-sm" />
           </div>
-          <div class="flex flex-col gap-1 min-w-0">
-            <h3 hlmCardTitle class="font-semibold text-sm">{{ cap.title }}</h3>
-            <p hlmCardDescription class="text-xs break-words leading-relaxed">
+          <a [routerLink]="cap.link" class="flex flex-col gap-1 min-w-0">
+            <h3 hlmCardTitle class="font-semibold text-sm" [class]="hlmH3">{{ cap.title }}</h3>
+            <p hlmCardDescription class="text-xs wrap-break-word leading-relaxed" [class]="hlmP">
               {{ cap.description }}
             </p>
-          </div>
+          </a>
         </div>
       }
     </div>
   </div>
 </section>
+
+<!-- Mo'men Comment :
+  1- Add spartanUI typography directive to make sure all app use it
+  2- Add doubleSlash comp instead of add text slash
+  3- Change card to be link to go to the needed page instead of normal div
+  4- Main logic not touced
+-->

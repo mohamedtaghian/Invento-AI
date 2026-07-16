@@ -24,17 +24,7 @@
     radial-gradient(circle, #28ca41 60%, transparent 61%) right center/14px 14px no-repeat;
 }
 
-.preview-frame {
-  background: var(--background);
-  color: var(--foreground);
-}
-
 .preview-card {
   background: var(--secondary);
   border: 1px solid var(--border);
-}
-
-.preview-button {
-  background: var(--primary);
-  color: var(--primary-foreground);
 }

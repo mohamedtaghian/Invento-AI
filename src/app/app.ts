@@ -1,6 +1,6 @@
 import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoaderComponent } from './components/loader.component/loader.component';
+import { LoaderComponent } from '@/app/components/loader.component/loader';
 
 @Component({
   selector: 'app-root',

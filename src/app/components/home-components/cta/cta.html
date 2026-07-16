@@ -2,23 +2,36 @@
   <div class="mb-16 bg-border w-full h-px"></div>
 
   <div class="flex flex-col items-center gap-4 text-center">
+    <!-- Used hlmH2 directive from SpartanUI to ahve the same shape in all project -->
     <h2
+      [class]="hlmH2"
       appScrollAnimate="fade-up"
       [animDelay]="100"
-      class="font-bold text-foreground text-3xl md:text-4xl lg:text-5xl"
+      class="${hlmH2} font-bold text-foreground text-3xl md:text-4xl lg:text-5xl"
     >
       Ready to <span class="text-primary">compile your business?</span>
     </h2>
 
-    <p appScrollAnimate="fade-up" [animDelay]="200" class="text-muted-foreground text-base">
+    <!-- Used hlmP directive from SpartanUI to ahve the same shape in all project -->
+    <p
+      appScrollAnimate="fade-up"
+      [animDelay]="200"
+      class="${hlmP} text-muted-foreground text-base"
+      [class]="hlmP"
+    >
       From abstract idea to live storefront in under 2 minutes.
     </p>
 
     <div appScrollAnimate="zoom-in" [animDelay]="350">
-      <a hlmBtn routerLink="/brain" size="lg" class="gap-2 mt-4 px-8 font-mono text-sm">
+      <a hlmBtn routerLink="/build" size="lg" class="gap-2 mt-4 px-8 font-mono text-sm">
         <ng-icon name="lucideBolt" />
         INITIATE BUILD SEQUENCE
       </a>
     </div>
   </div>
 </section>
+
+<!-- Mo'men Comment :
+  1- Add spartanUI typography directive to make sure all app use it
+  2- Main logic not touced
+-->

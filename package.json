@@ -42,6 +42,7 @@
   "private": true,
   "packageManager": "npm@11.9.0",
   "dependencies": {
+    "@analogjs/router": "^2.6.3",
     "@angular/cdk": "^22.0.2",
     "@angular/common": "^22.0.2",
     "@angular/compiler": "^22.0.2",
@@ -62,6 +63,7 @@
     "embla-carousel-angular": "^22.0.0",
     "express": "^5.1.0",
     "gsap": "^3.15.0",
+    "html2canvas": "^1.4.1",
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.6.0",
     "tslib": "^2.3.0"

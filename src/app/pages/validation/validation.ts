@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
@@ -31,6 +31,7 @@ import {
   HlmCardTitle,
 } from '@spartan/helm/card';
 import { PageHeader } from '@/app/components/page-header/page-header';
+import { BuilderState } from '@/app/features/builder/services/builder-state';
 
 // Spartan Components mapped as clean standalone direct imports
 
@@ -72,11 +73,13 @@ type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUIL
   styleUrl: './validation.css',
 })
 export class Validation {
+  readonly dataSaved = output<void>();
   private engine = inject(InventoEngineService);
+  private readonly builderState = inject(BuilderState);
 
-  businessName = 'Malipo';
-  businessType = 'Inventory Management';
-  targetAudience = 'Small Businesses';
+  businessName = this.builderState.businessName() || 'Malipo';
+  businessType = this.builderState.businessType() || 'Inventory Management';
+  targetAudience = this.builderState.targetAudience() || 'Small Businesses';
 
   currentStep: WorkflowStep = 'INPUT';
   buildLogs: string[] = [];
@@ -172,5 +175,12 @@ export class Validation {
     this.aiReport = null;
     this.domains = [];
     this.buildLogs = [];
+  }
+
+  finish() {
+    this.builderState.businessName.set(this.businessName);
+    this.builderState.businessType.set(this.businessType);
+    this.builderState.targetAudience.set(this.targetAudience);
+    this.dataSaved.emit();
   }
 }

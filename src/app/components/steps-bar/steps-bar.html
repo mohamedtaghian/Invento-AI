@@ -1,17 +1,18 @@
-<div class="w-full border-b border-border bg-card py-4 shadow-sm overflow-hidden">
-  <div class="mx-auto flex max-w-5xl relative px-4 sm:px-6">
-    <div class="absolute left-[12.5%] right-[12.5%] top-4 h-0.5 bg-border z-0 md:hidden"></div>
+<div class="bg-card shadow-sm py-4 border-border border-b w-full overflow-hidden">
+  <div class="relative flex mx-auto px-4 sm:px-6 max-w-5xl">
+    <div class="md:hidden top-4 right-[12.5%] left-[12.5%] z-0 absolute bg-border h-0.5"></div>
 
-    <ol
-      class="relative z-10 flex w-full items-start justify-between md:flex-wrap md:items-center md:justify-center gap-y-4 md:gap-2 lg:gap-6 text-sm font-medium"
+    <ul
+      [class]="hlmUl"
+      class="z-10 relative flex md:flex-wrap justify-between md:justify-center items-start md:items-center gap-y-4 md:gap-2 lg:gap-6 w-full font-medium text-sm"
     >
-      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
+      <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/brain"
+          routerLink="/build"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           #rlaBrain="routerLinkActive"
-          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
+          class="z-10 flex md:flex-row flex-col items-center gap-1.5 md:gap-2 bg-card md:bg-transparent md:px-3 md:py-1.5 border rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
           [ngClass]="
             rlaBrain.isActive
               ? 'border-transparent md:border-primary/50 md:bg-primary/10'
@@ -19,7 +20,7 @@
           "
         >
           <span
-            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
+            class="flex justify-center items-center rounded-full ring-8 ring-card md:ring-0 w-8 md:w-5 h-8 md:h-5 font-bold text-xs transition-all duration-300 shrink-0"
             [ngClass]="
               rlaBrain.isActive
                 ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
@@ -29,7 +30,7 @@
             1
           </span>
           <span
-            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+            class="text-[10px] sm:text-xs md:text-sm text-center whitespace-nowrap transition-colors"
             [ngClass]="
               rlaBrain.isActive
                 ? 'text-foreground md:text-primary'
@@ -39,16 +40,16 @@
             Brainstorm
           </span>
         </a>
-        <span class="hidden md:block text-muted font-normal ml-1 lg:ml-3">❯</span>
+        <span class="hidden md:block ml-1 lg:ml-3 font-normal text-muted">❯</span>
       </li>
 
-      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
+      <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/ai-builder"
+          routerLink="/build"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           #rlaInterview="routerLinkActive"
-          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
+          class="z-10 flex md:flex-row flex-col items-center gap-1.5 md:gap-2 bg-card md:bg-transparent md:px-3 md:py-1.5 border rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
           [ngClass]="
             rlaInterview.isActive
               ? 'border-transparent md:border-primary/50 md:bg-primary/10'
@@ -56,7 +57,7 @@
           "
         >
           <span
-            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
+            class="flex justify-center items-center rounded-full ring-8 ring-card md:ring-0 w-8 md:w-5 h-8 md:h-5 font-bold text-xs transition-all duration-300 shrink-0"
             [ngClass]="
               rlaInterview.isActive
                 ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
@@ -66,7 +67,7 @@
             2
           </span>
           <span
-            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+            class="text-[10px] sm:text-xs md:text-sm text-center whitespace-nowrap transition-colors"
             [ngClass]="
               rlaInterview.isActive
                 ? 'text-foreground md:text-primary'
@@ -76,16 +77,16 @@
             AI Interview
           </span>
         </a>
-        <span class="hidden md:block text-muted font-normal ml-1 lg:ml-3">❯</span>
+        <span class="hidden md:block ml-1 lg:ml-3 font-normal text-muted">❯</span>
       </li>
 
-      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
+      <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/preview"
+          routerLink="/build"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           #rlaPreview="routerLinkActive"
-          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
+          class="z-10 flex md:flex-row flex-col items-center gap-1.5 md:gap-2 bg-card md:bg-transparent md:px-3 md:py-1.5 border rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
           [ngClass]="
             rlaPreview.isActive
               ? 'border-transparent md:border-primary/50 md:bg-primary/10'
@@ -93,7 +94,7 @@
           "
         >
           <span
-            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
+            class="flex justify-center items-center rounded-full ring-8 ring-card md:ring-0 w-8 md:w-5 h-8 md:h-5 font-bold text-xs transition-all duration-300 shrink-0"
             [ngClass]="
               rlaPreview.isActive
                 ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
@@ -103,7 +104,7 @@
             3
           </span>
           <span
-            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+            class="text-[10px] sm:text-xs md:text-sm text-center whitespace-nowrap transition-colors"
             [ngClass]="
               rlaPreview.isActive
                 ? 'text-foreground md:text-primary'
@@ -113,16 +114,16 @@
             Preview
           </span>
         </a>
-        <span class="hidden md:block text-muted font-normal ml-1 lg:ml-3">❯</span>
+        <span class="hidden md:block ml-1 lg:ml-3 font-normal text-muted">❯</span>
       </li>
 
-      <li class="flex flex-1 md:flex-none flex-col md:flex-row items-center md:gap-2 lg:gap-3">
+      <li class="flex md:flex-row flex-col flex-1 md:flex-none items-center md:gap-2 lg:gap-3">
         <a
-          routerLink="/validation"
+          routerLink="/build"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           #rlaValidation="routerLinkActive"
-          class="flex flex-col md:flex-row items-center gap-1.5 md:gap-2 rounded-lg border md:px-3 md:py-1.5 transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-ring z-10 bg-card md:bg-transparent"
+          class="z-10 flex md:flex-row flex-col items-center gap-1.5 md:gap-2 bg-card md:bg-transparent md:px-3 md:py-1.5 border rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring transition-all duration-200"
           [ngClass]="
             rlaValidation.isActive
               ? 'border-transparent md:border-primary/50 md:bg-primary/10'
@@ -130,7 +131,7 @@
           "
         >
           <span
-            class="flex h-8 w-8 md:h-5 md:w-5 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-all duration-300 ring-8 ring-card md:ring-0"
+            class="flex justify-center items-center rounded-full ring-8 ring-card md:ring-0 w-8 md:w-5 h-8 md:h-5 font-bold text-xs transition-all duration-300 shrink-0"
             [ngClass]="
               rlaValidation.isActive
                 ? 'bg-primary text-primary-foreground shadow-[0_0_12px_var(--primary)] border-none'
@@ -140,7 +141,7 @@
             4
           </span>
           <span
-            class="text-center text-[10px] sm:text-xs md:text-sm whitespace-nowrap transition-colors"
+            class="text-[10px] sm:text-xs md:text-sm text-center whitespace-nowrap transition-colors"
             [ngClass]="
               rlaValidation.isActive
                 ? 'text-foreground md:text-primary'
@@ -151,6 +152,6 @@
           </span>
         </a>
       </li>
-    </ol>
+    </ul>
   </div>
 </div>
