@@ -90,7 +90,7 @@
         <div>
           <div class="flex justify-between items-center mb-sm">
             <h3 class="text-sm font-semibold text-on-surface">Case Size</h3>
-            <a class="text-sm text-primary hover:underline" href="#">Sizing Guide</a>
+            <a hlmBtn variant="link" size="sm" href="#">Sizing Guide</a>
           </div>
           <div class="grid grid-cols-2 gap-3">
             @for (size of detail.sizes; track size.value; let i = $index) {
@@ -125,39 +125,40 @@
             class="flex items-center border border-outline-variant/40 rounded-lg bg-surface-container-lowest"
           >
             <button
+              hlmBtn
               type="button"
+              variant="outline"
+              size="icon-sm"
               (click)="decrementQuantity()"
-              class="px-3 py-2 text-on-surface hover:text-primary transition-colors"
             >
               <ng-icon name="lucideMinus" />
             </button>
             <span class="w-8 text-center font-semibold">{{ quantity() }}</span>
             <button
+              hlmBtn
               type="button"
+              variant="outline"
+              size="icon-sm"
               (click)="incrementQuantity()"
-              class="px-3 py-2 text-on-surface hover:text-primary transition-colors"
             >
               <ng-icon name="lucidePlus" />
             </button>
           </div>
           <button
+            hlmBtn
             type="button"
-            class="flex-grow bg-primary text-on-primary py-3 px-6 rounded-lg font-semibold hover:bg-primary-container transition-all active:scale-95 shadow-sm flex justify-center items-center gap-2"
+            variant="default"
+            size="lg"
+            class="flex-grow flex justify-center items-center gap-2"
           >
             <ng-icon name="lucideShoppingCart" />
             Add to Cart
           </button>
-          <button
-            type="button"
-            class="p-3 border border-outline-variant/40 rounded-lg text-on-surface hover:text-primary hover:border-primary/50 transition-colors bg-surface-container-lowest"
-          >
+          <button hlmBtn type="button" variant="outline" size="icon">
             <ng-icon name="lucideHeart" />
           </button>
         </div>
-        <button
-          type="button"
-          class="w-full py-3 px-6 rounded-lg font-semibold bg-surface-container-high text-on-surface hover:bg-surface-variant transition-colors border border-outline-variant/20"
-        >
+        <button hlmBtn type="button" variant="secondary" size="lg" class="w-full">
           Buy with <span class="font-bold">AuraPay</span>
         </button>
       </div>

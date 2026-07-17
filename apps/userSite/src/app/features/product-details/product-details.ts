@@ -14,6 +14,7 @@ import {
   lucideShoppingCart,
 } from '@ng-icons/lucide';
 import { HlmBadge } from '@spartan/helm/badge';
+import { HlmButton } from '@spartan/helm/button';
 import { ProductsData } from '@invento/user-site/app/features/product/service/products-data';
 import { ProductGallery } from '@invento/user-site/app/features/product-details/components/product-gallery/product-gallery';
 import { DecimalPipe } from '@angular/common';
@@ -22,7 +23,7 @@ import { DecimalPipe } from '@angular/common';
   selector: 'app-product-details',
   templateUrl: './product-details.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon, HlmBadge, RouterLink, ProductGallery, DecimalPipe],
+  imports: [NgIcon, HlmBadge, HlmButton, RouterLink, ProductGallery, DecimalPipe],
   providers: [
     provideIcons({
       lucideChevronRight,
