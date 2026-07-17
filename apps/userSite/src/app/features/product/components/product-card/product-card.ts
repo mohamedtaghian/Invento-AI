@@ -10,7 +10,7 @@ import {
   HlmCardContent,
 } from '@spartan/helm/card';
 import { HlmBadge } from '@spartan/helm/badge';
-import { Product } from '@invento/user-site/app/core/interface/product.interface';
+import { Product } from '@invento/user-site/app/features/product/types/product.interface';
 
 @Component({
   selector: 'app-product-card',

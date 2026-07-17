@@ -1,8 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { Product } from '../interface/product.interface';
+import { Product } from '../types/product.interface';
 
 @Injectable({ providedIn: 'root' })
-export class ProductsService {
+export class ProductsData {
   private readonly _products = signal<Product[]>([
     {
       id: 'p1',

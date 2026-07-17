@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ProductsService } from '../../core/service/products.service';
-import { SortOption } from '../../core/interface/product.interface';
+import { ProductsData } from '@invento/user-site/app/features/product/service/products-data';
+import { SortOption } from '@invento/user-site/app/features/product/types/product.interface';
 import {
   FiltersSidebar,
   CategoryFilter,
   ColorFilter,
-} from '../../components/products-components/filters-sidebar/filters-sidebar';
-import { ProductsToolbar } from '../../components/products-components/products-toolbar/products-toolbar';
-import { ProductsGrid } from '../../components/products-components/products-grid/products-grid';
-import { Pagination } from '../../components/products-components/pagination/pagination';
+} from '@invento/user-site/app/features/product/components/filters-sidebar/filters-sidebar';
+import { ProductsToolbar } from '@invento/user-site/app/features/product/components/products-toolbar/products-toolbar';
+import { ProductsGrid } from '@invento/user-site/app/features/product/components/products-grid/products-grid';
+import { Pagination } from '@invento/user-site/app/features/product/components/pagination/pagination';
 
 const PAGE_SIZE = 6;
 
@@ -20,8 +20,8 @@ const PAGE_SIZE = 6;
   imports: [FiltersSidebar, ProductsToolbar, ProductsGrid, Pagination],
 })
 export class Products {
-  private readonly _productsService = inject(ProductsService);
-  private readonly _allProducts = this._productsService.products;
+  private readonly _productsData = inject(ProductsData);
+  private readonly _allProducts = this._productsData.products;
 
   protected readonly categories = signal<CategoryFilter[]>([
     { label: 'Smartphones', value: 'smartphones', checked: false },
