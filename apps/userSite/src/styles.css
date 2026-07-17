@@ -271,7 +271,7 @@
   }
 
   .main-btn {
-    @apply flex! items-center! gap-2! bg-primary! shadow-[0_0_20px]! 
+    @apply flex! items-center! gap-2! bg-primary! shadow-[0_0_20px]!
     shadow-primary/30! px-5! py-2.5! font-bold! text-foreground! text-sm! transition-all!  rounded-(--btn-radius)! hover:cursor-pointer;
   }
   .theme-color-btn {
