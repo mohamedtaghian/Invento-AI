@@ -2,13 +2,62 @@
   // This setting tells the Tailwind IntelliSense extension: wherever you see these function names being called in the code, treat the string arguments inside them as Tailwind class strings
   // As, spartan/ui's helm components are almost entirely built using cva and hlm.
   "tailwindCSS.classFunctions": ["hlm", "cva", "classes"],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+  "tailwindCSS.experimental.configFile": null,
+
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "eslint.validate": ["javascript", "typescript", "html"],
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "js/ts.tsserver.maxMemory": 4096,
+  "files.watcherExclude": {
+    "**/.git/**": true,
+    "**/node_modules/**": true,
+    "**/.angular/**": true,
+    "**/.nx/**": true,
+    "**/dist/**": true,
+    "**/coverage/**": true,
+    "**/.cache/**": true,
+    "**/.turbo/**": true,
+    "**/tmp/**": true
+  },
+
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.angular": true,
+    "**/.nx": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.cache": true
+  },
+
+  "files.exclude": {
+    "**/.angular": true,
+    "**/.nx": true,
+    "**/dist": true,
+    "**/coverage": true,
+    "**/.cache": true
+  },
+
+  "git.autorefresh": false,
+  "git.autofetch": false,
+
+  "editor.codeLens": false,
+  "editor.minimap.enabled": false,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.occurrencesHighlight": "off",
+  "editor.selectionHighlight": false,
+  "editor.stickyScroll.enabled": false,
+  "editor.renderWhitespace": "selection",
+  "editor.guides.indentation": true,
+  "editor.largeFileOptimizations": true,
+  "editor.semanticHighlighting.enabled": true,
+
+  "problems.decorations.enabled": true,
+  "search.followSymlinks": false,
+  "extensions.autoUpdate": false,
+  "js/ts.validate.enabled": false
 }

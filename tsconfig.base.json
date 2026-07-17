@@ -32,7 +32,9 @@
       "@invento/shared": ["./libs/shared/src/index.ts"],
       "@invento/site-builder/*": ["./apps/site-builder/src/*"],
       "@invento/user-site/*": ["./apps/userSite/src/*"],
-      "@invento/invento/*": ["./apps/invento/src/*"]
+      "@invento/invento/*": ["./apps/invento/src/*"],
+      "@spartan/helm/breadcrumb": ["./libs/ui/breadcrumb/src/index.ts"],
+      "@spartan/helm/scroll-area": ["./libs/ui/scroll-area/src/index.ts"]
     }
   }
 }

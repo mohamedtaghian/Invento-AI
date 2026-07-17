@@ -1,52 +1,28 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideHeart, lucideShoppingCart } from '@ng-icons/lucide';
-import {
-  HlmCard,
-  HlmCardHeader,
-  HlmCardTitle,
-  HlmCardDescription,
-  HlmCardContent,
-} from '@spartan/helm/card';
-import { HlmBadge } from '@spartan/helm/badge';
-import { Product } from '../../types/product';
-import { flyToCart } from '../../service/cart-utils';
+import { ChangeDetectionStrategy, Component, inject, computed, signal } from '@angular/core';
+import { ProductStore } from '../../service/product-store';
 
 @Component({
-  selector: 'app-product-card',
-  templateUrl: './product-card.html',
+  selector: 'app-product-gallery',
+  templateUrl: './product-gallery.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'h-full block' },
-  imports: [
-    RouterLink,
-    DecimalPipe,
-    NgIcon,
-    HlmCard,
-    HlmCardHeader,
-    HlmCardTitle,
-    HlmCardDescription,
-    HlmCardContent,
-    HlmBadge,
-  ],
-  providers: [provideIcons({ lucideHeart, lucideShoppingCart })],
 })
-export class ProductCard {
-  public readonly product = input.required<Product>();
-  protected readonly isFavorited = signal(false);
+export class ProductGallery {
+  protected readonly store = inject(ProductStore);
+  private readonly _activeIndex = signal(0);
+  protected readonly activeIndex = this._activeIndex.asReadonly();
+  protected readonly activeImage = computed(
+    () => this.store.product()?.images[this._activeIndex()] ?? null,
+  );
 
-  protected toggleFavorite(event: MouseEvent): void {
-    event.stopPropagation();
-    this.isFavorited.update((v) => !v);
-    if (this.isFavorited()) {
-      this._burstParticles(event);
-    }
+  protected selectImage(index: number): void {
+    this._activeIndex.set(index);
   }
 
-  protected onAddToCart(event: MouseEvent): void {
-    event.stopPropagation();
-    flyToCart(event);
+  protected toggleWishlist(event: MouseEvent): void {
+    this.store.toggleWishlist();
+    if (this.store.isWishlisted()) {
+      this._burstParticles(event);
+    }
   }
 
   private _burstParticles(event: MouseEvent): void {

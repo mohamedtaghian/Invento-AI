@@ -1,52 +1,30 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideHeart, lucideShoppingCart } from '@ng-icons/lucide';
-import {
-  HlmCard,
-  HlmCardHeader,
-  HlmCardTitle,
-  HlmCardDescription,
-  HlmCardContent,
-} from '@spartan/helm/card';
-import { HlmBadge } from '@spartan/helm/badge';
-import { Product } from '../../types/product';
+import { lucideCircleCheck, lucideShoppingCart } from '@ng-icons/lucide';
+import { HlmButton } from '@spartan/helm/button';
+import { ProductStore } from '../../service/product-store';
+import { QuantityStepper } from '../quantity-stepper/quantity-stepper';
 import { flyToCart } from '../../service/cart-utils';
 
 @Component({
-  selector: 'app-product-card',
-  templateUrl: './product-card.html',
+  selector: 'app-purchase-actions',
+  templateUrl: './purchase-actions.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { class: 'h-full block' },
-  imports: [
-    RouterLink,
-    DecimalPipe,
-    NgIcon,
-    HlmCard,
-    HlmCardHeader,
-    HlmCardTitle,
-    HlmCardDescription,
-    HlmCardContent,
-    HlmBadge,
-  ],
-  providers: [provideIcons({ lucideHeart, lucideShoppingCart })],
+  imports: [NgIcon, HlmButton, QuantityStepper],
+  providers: [provideIcons({ lucideCircleCheck, lucideShoppingCart })],
 })
-export class ProductCard {
-  public readonly product = input.required<Product>();
-  protected readonly isFavorited = signal(false);
+export class PurchaseActions {
+  protected readonly store = inject(ProductStore);
 
-  protected toggleFavorite(event: MouseEvent): void {
-    event.stopPropagation();
-    this.isFavorited.update((v) => !v);
-    if (this.isFavorited()) {
-      this._burstParticles(event);
-    }
+  protected addToCart(event: MouseEvent): void {
+    flyToCart(event);
   }
 
-  protected onAddToCart(event: MouseEvent): void {
-    event.stopPropagation();
-    flyToCart(event);
+  protected toggleWishlist(event: MouseEvent): void {
+    this.store.toggleWishlist();
+    if (this.store.isWishlisted()) {
+      this._burstParticles(event);
+    }
   }
 
   private _burstParticles(event: MouseEvent): void {
