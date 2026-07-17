@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideHeart, lucideShoppingCart } from '@ng-icons/lucide';
 import {
@@ -18,6 +19,7 @@ import { Product } from '@invento/user-site/app/features/product/types/product.i
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'h-full block' },
   imports: [
+    RouterLink,
     DecimalPipe,
     NgIcon,
     HlmCard,
@@ -34,6 +36,7 @@ export class ProductCard {
   protected readonly isFavorited = signal(false);
 
   protected toggleFavorite(event: MouseEvent): void {
+    event.stopPropagation();
     this.isFavorited.update((v) => !v);
     if (this.isFavorited()) {
       this._burstParticles(event);
@@ -41,6 +44,7 @@ export class ProductCard {
   }
 
   protected onAddToCart(event: MouseEvent): void {
+    event.stopPropagation();
     this._flyToCart(event);
   }
 
