@@ -1,0 +1,32 @@
+<!-- Main Image -->
+<div
+  class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm aspect-square relative group flex-grow"
+>
+  <img [src]="images()[selectedIndex()]" alt="Product image" class="w-full h-full object-cover" />
+  <button
+    type="button"
+    class="absolute bottom-4 end-4 bg-surface/90 backdrop-blur rounded-full p-2 text-on-surface hover:text-primary shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+  >
+    <ng-icon name="lucideZoomIn" class="text-lg" />
+  </button>
+</div>
+
+<!-- Thumbnails -->
+<div
+  class="flex md:flex-col gap-sm overflow-x-auto md:overflow-y-auto md:w-24 flex-shrink-0 pb-2 md:pb-0"
+>
+  @for (img of images(); track img; let i = $index) {
+    <button
+      type="button"
+      (click)="selectImage(i)"
+      class="w-20 h-20 md:w-full md:h-24 flex-shrink-0 rounded-lg overflow-hidden relative"
+      [class.border-2]="selectedIndex() === i"
+      [class.border-primary]="selectedIndex() === i"
+      [class.border]="selectedIndex() !== i"
+      [class.border-outline-variant/30]="selectedIndex() !== i"
+      [class.hover:border-primary/50]="selectedIndex() !== i"
+    >
+      <img [src]="img" alt="Product thumbnail" class="w-full h-full object-cover" />
+    </button>
+  }
+</div>
