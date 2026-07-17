@@ -4,6 +4,7 @@ import { ProductDetails } from '@invento/user-site/app/features/product/componen
 import { CheckoutComponent } from './components/checkout/checkout';
 import { NotFoundComponent } from './components/not-found/not-found';
 import { OrderConfirmedComponent } from './components/order-confirmed/order-confirmed';
+import { HomeComponent } from './components/home/home';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'products', pathMatch: 'full' },
@@ -11,6 +12,7 @@ export const routes: Routes = [
   { path: 'product-details/:id', component: ProductDetails },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-confirmed', component: OrderConfirmedComponent },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
 
   // The wild component (404) MUST go at the very bottom
   { path: '**', component: NotFoundComponent },

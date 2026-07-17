@@ -1,0 +1,147 @@
+<div class="min-h-screen bg-[#f8f9fa] font-sans text-slate-800 pb-20">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 pt-6">
+    <!-- Hero Section -->
+    <section
+      class="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-sm mb-16 bg-slate-200"
+    >
+      <!-- Background Image Placeholder (Replace src with your actual image) -->
+      <img
+        src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2850&auto=format&fit=crop"
+        alt="Tech Professionals"
+        class="absolute inset-0 w-full h-full object-cover object-center"
+      />
+
+      <!-- Gradient Overlay for Text Readability -->
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent"
+      ></div>
+
+      <!-- Hero Content -->
+      <div class="relative h-full flex flex-col justify-center px-8 md:px-16 max-w-2xl">
+        <span
+          hlmBadge
+          variant="secondary"
+          class="hero-anim w-fit mb-6 bg-[#005bb5]/10 text-[#005bb5] hover:bg-[#005bb5]/20 font-bold tracking-wide uppercase text-[10px] px-3 py-1"
+        >
+          New Collection
+        </span>
+
+        <h1
+          class="hero-anim text-5xl md:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.1] mb-6"
+        >
+          Elevate Your Tech<br />Experience.
+        </h1>
+
+        <p class="hero-anim text-lg text-slate-600 mb-10 leading-relaxed max-w-lg">
+          Discover premium tools engineered for professionals. Precision, power, and seamless
+          integration for your workflow.
+        </p>
+
+        <div class="hero-anim flex flex-wrap items-center gap-4">
+          <button
+            hlmBtn
+            class="bg-[#005bb5] hover:bg-[#004a94] text-white px-8 py-6 rounded-lg font-bold shadow-sm transition-all hover:shadow-md"
+          >
+            Shop Now
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            class="bg-white/80 backdrop-blur-sm border-slate-300 text-slate-700 hover:bg-slate-50 px-8 py-6 rounded-lg font-bold"
+          >
+            Explore AI
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
+    <!-- Categories Section -->
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold text-slate-900 mb-6">Categories</h2>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+        @for (category of categories; track category.name) {
+          <div
+            hlmCard
+            class="category-card cursor-pointer hover:border-[#005bb5]/50 hover:shadow-md transition-colors transition-shadow duration-300 bg-white aspect-square flex flex-col items-center justify-center gap-4 group"
+          >
+            <div
+              class="w-12 h-12 rounded-full bg-[#005bb5]/10 flex items-center justify-center text-[#005bb5] group-hover:scale-110 transition-transform duration-300"
+            >
+              <ng-icon [name]="category.icon" class="text-2xl"></ng-icon>
+            </div>
+            <span
+              class="font-medium text-sm text-slate-700 group-hover:text-[#005bb5] transition-colors"
+            >
+              {{ category.name }}
+            </span>
+          </div>
+        }
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section>
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-2xl font-bold text-slate-900">Featured Products</h2>
+        <a
+          routerLink="/products"
+          class="text-sm font-bold text-[#005bb5] hover:text-[#004a94] flex items-center gap-1 transition-colors"
+        >
+          View All <ng-icon name="lucideArrowRight" class="text-base"></ng-icon>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        @for (product of featuredProducts; track product.id) {
+          <div
+            hlmCard
+            class="product-card bg-white overflow-hidden group flex flex-col hover:shadow-lg transition-shadow duration-300 border-slate-200"
+          >
+            <!-- Product Image Area -->
+            <div class="relative h-64 bg-slate-100 overflow-hidden">
+              @if (product.badge) {
+                <span
+                  hlmBadge
+                  class="absolute top-4 left-4 z-10 bg-[#e8eff5] text-[#005bb5] hover:bg-[#e8eff5] border-none text-[10px] uppercase font-bold tracking-wider"
+                >
+                  {{ product.badge }}
+                </span>
+              }
+
+              <button
+                class="absolute top-4 right-4 z-10 w-8 h-8 bg-white rounded-full flex items-center justify-center text-slate-400 hover:text-red-500 hover:shadow-md transition-all"
+              >
+                <ng-icon name="lucideHeart" class="text-sm"></ng-icon>
+              </button>
+
+              <img
+                [src]="product.image"
+                [alt]="product.name"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+            </div>
+
+            <!-- Product Details -->
+            <div class="p-6 flex flex-col flex-1">
+              <h3 class="font-bold text-slate-900 text-lg mb-2 line-clamp-1">{{ product.name }}</h3>
+              <p class="text-sm text-slate-500 mb-6 line-clamp-2 flex-1">
+                {{ product.description }}
+              </p>
+
+              <div class="flex items-center justify-between mt-auto">
+                <span class="text-2xl font-extrabold text-[#005bb5]">${{ product.price }}</span>
+                <button
+                  class="w-10 h-10 rounded-lg bg-[#e8eff5] text-[#005bb5] hover:bg-[#005bb5] hover:text-white flex items-center justify-center transition-colors"
+                >
+                  <ng-icon name="lucideShoppingCart" class="text-lg"></ng-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </div>
+</div>
