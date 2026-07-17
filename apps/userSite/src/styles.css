@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
@@ -90,12 +89,6 @@
   --destructive-foreground: oklch(0.637 0.237 25.331);
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
-
-  /* Added here these two vars as they're found in light mode and not in dark mode
-    Commented waiting for the final review */
-  /* --input-background: oklch(20.5% 0 0);
-  --switch-background: oklch(45% 0.09 249.454); */
-
   --ring: oklch(0.439 0 0);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -236,6 +229,9 @@
 
 @layer components {
   /* Created utility classes instead oif using global Element Selectors -> to avoid any issues with ( Spartan components, Spartan components, Feature-specific component styling ) */
+}
+
+@layer components {
   .text-heading-1,
   .text-heading-2,
   .text-heading-3,
@@ -271,6 +267,7 @@
   }
 
   .main-btn {
+    @apply flex! items-center! gap-2! bg-primary! shadow-[0_0_20px]!
     @apply flex! items-center! gap-2! bg-primary! shadow-[0_0_20px]!
     shadow-primary/30! px-5! py-2.5! font-bold! text-foreground! text-sm! transition-all!  rounded-(--btn-radius)! hover:cursor-pointer;
   }
