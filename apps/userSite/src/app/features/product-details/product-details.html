@@ -1,252 +1,27 @@
-@let detail = this.detail(); @let recs = this.recommendedProducts();
+<app-breadcrumb-trail />
 
-<!-- Breadcrumbs -->
-<nav class="flex text-sm text-on-surface-variant mb-lg" aria-label="Breadcrumb">
-  <ol class="inline-flex items-center space-x-1 md:space-x-2">
-    <li class="inline-flex items-center">
-      <a routerLink="/products" class="hover:text-primary transition-colors">Catalog</a>
-    </li>
-    <li>
-      <div class="flex items-center">
-        <ng-icon name="lucideChevronRight" class="text-[16px] mx-1" />
-        <span class="text-on-surface-variant">Electronics</span>
-      </div>
-    </li>
-    <li aria-current="page">
-      <div class="flex items-center">
-        <ng-icon name="lucideChevronRight" class="text-[16px] mx-1" />
-        <span class="text-primary font-medium">{{ detail?.name }}</span>
-      </div>
-    </li>
-  </ol>
-</nav>
+<main class="mx-auto w-full max-w-6xl flex-grow px-4 py-8 md:px-8">
+  @let p = store.product();
 
-@if (detail) {
-  <!-- Product PDP Layout Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-xl mb-xl">
-    <!-- Left: Image Gallery (7 cols) -->
-    <div class="lg:col-span-7">
-      <app-product-gallery [images]="detail.images" />
-    </div>
-
-    <!-- Right: Product Info (5 cols) -->
-    <div class="lg:col-span-5 flex flex-col">
-      <!-- Title & Price -->
-      <div class="mb-lg">
-        <div class="flex items-center gap-2 mb-2">
-          @if (detail.badge) {
-            <span hlmBadge class="text-xs uppercase tracking-wide">{{ detail.badge }}</span>
-          }
-          <span class="text-sm text-secondary flex items-center">
-            <ng-icon name="lucideStar" class="text-[16px] text-yellow-500 me-1" />
-            {{ detail.rating }} ({{ detail.reviewCount }} Reviews)
-          </span>
-        </div>
-        <h1 class="text-headline-lg md:text-headline-lg-mobile text-on-surface mb-2 font-bold">
-          {{ detail.name }}
-        </h1>
-        <p class="text-on-surface-variant text-body-lg mb-4">{{ detail.description }}</p>
-        <div class="text-3xl font-bold text-primary flex items-end gap-2">
-          ${{ detail.price | number }}
-          @if (detail.originalPrice) {
-            <span class="text-lg text-on-surface-variant line-through font-normal">
-              ${{ detail.originalPrice | number }}
-            </span>
-          }
-        </div>
+  @if (p) {
+    <div class="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <app-product-gallery />
       </div>
 
-      <hr class="border-outline-variant/20 mb-lg" />
-
-      <!-- Variations (Color/Size) -->
-      <div class="mb-lg space-y-md">
-        <!-- Color -->
-        <div>
-          <h3 class="text-sm font-semibold text-on-surface mb-sm">
-            Color:
-            <span class="font-normal text-on-surface-variant">{{
-              detail.colors[selectedColor()].name
-            }}</span>
-          </h3>
-          <div class="flex gap-3">
-            @for (color of detail.colors; track color.hex; let i = $index) {
-              <button
-                type="button"
-                (click)="selectColor(i)"
-                [attr.aria-label]="'Select ' + color.name"
-                class="w-10 h-10 rounded-full border-2 transition-all focus:outline-none"
-                [class.border-primary]="selectedColor() === i"
-                [class.ring-2]="selectedColor() === i"
-                [class.ring-white]="selectedColor() === i"
-                [class.border-outline-variant/30]="selectedColor() !== i"
-                [class.hover:border-primary/50]="selectedColor() !== i"
-                [style.background-color]="color.hex"
-              ></button>
-            }
-          </div>
-        </div>
-
-        <!-- Size -->
-        <div>
-          <div class="flex justify-between items-center mb-sm">
-            <h3 class="text-sm font-semibold text-on-surface">Case Size</h3>
-            <a hlmBtn variant="link" size="sm" href="#">Sizing Guide</a>
-          </div>
-          <div class="grid grid-cols-2 gap-3">
-            @for (size of detail.sizes; track size.value; let i = $index) {
-              <button
-                type="button"
-                (click)="selectSize(i)"
-                class="py-2 rounded-lg font-medium transition-colors"
-                [class.border-2]="selectedSize() === i"
-                [class.border-primary]="selectedSize() === i"
-                [class.bg-primary/5]="selectedSize() === i"
-                [class.text-primary]="selectedSize() === i"
-                [class.border]="selectedSize() !== i"
-                [class.border-outline-variant/30]="selectedSize() !== i"
-                [class.text-on-surface-variant]="selectedSize() !== i"
-                [class.hover:border-primary/50]="selectedSize() !== i"
-              >
-                {{ size.label }}
-              </button>
-            }
-          </div>
-        </div>
-      </div>
-
-      <!-- Actions -->
-      <div class="space-y-sm mb-lg">
-        <p class="text-sm text-green-700 flex items-center font-medium">
-          <ng-icon name="lucideCheckCircle" class="text-[18px] me-1" />
-          In Stock &ndash; Ships within 24 hours
-        </p>
-        <div class="flex gap-md">
-          <div
-            class="flex items-center border border-outline-variant/40 rounded-lg bg-surface-container-lowest"
-          >
-            <button
-              hlmBtn
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              (click)="decrementQuantity()"
-            >
-              <ng-icon name="lucideMinus" />
-            </button>
-            <span class="w-8 text-center font-semibold">{{ quantity() }}</span>
-            <button
-              hlmBtn
-              type="button"
-              variant="outline"
-              size="icon-sm"
-              (click)="incrementQuantity()"
-            >
-              <ng-icon name="lucidePlus" />
-            </button>
-          </div>
-          <button
-            hlmBtn
-            type="button"
-            variant="default"
-            size="lg"
-            class="flex-grow flex justify-center items-center gap-2"
-          >
-            <ng-icon name="lucideShoppingCart" />
-            Add to Cart
-          </button>
-          <button hlmBtn type="button" variant="outline" size="icon">
-            <ng-icon name="lucideHeart" />
-          </button>
-        </div>
-        <button hlmBtn type="button" variant="secondary" size="lg" class="w-full">
-          Buy with <span class="font-bold">AuraPay</span>
-        </button>
-      </div>
-
-      <!-- Accordion -->
-      <div class="border-t border-outline-variant/20 pt-md">
-        <div class="space-y-2">
-          <details
-            class="group bg-surface-container-lowest rounded-lg border border-outline-variant/20 overflow-hidden"
-            open
-          >
-            <summary
-              class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-surface/50 transition-colors text-on-surface"
-            >
-              Product Details
-              <ng-icon
-                name="lucideChevronDown"
-                class="transition-transform group-open:rotate-180"
-              />
-            </summary>
-            <div
-              class="text-on-surface-variant mt-3 text-sm p-4 pt-0 border-t border-outline-variant/10"
-            >
-              <ul class="list-disc ps-5 space-y-1">
-                @for (feature of detail.features; track feature) {
-                  <li>{{ feature }}</li>
-                }
-              </ul>
-            </div>
-          </details>
-          <details
-            class="group bg-surface-container-lowest rounded-lg border border-outline-variant/20 overflow-hidden"
-          >
-            <summary
-              class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-surface/50 transition-colors text-on-surface"
-            >
-              Shipping & Returns
-              <ng-icon
-                name="lucideChevronDown"
-                class="transition-transform group-open:rotate-180"
-              />
-            </summary>
-            <div
-              class="text-on-surface-variant mt-3 text-sm p-4 pt-0 border-t border-outline-variant/10"
-            >
-              Free standard shipping on all orders. Returns accepted within 30 days of purchase.
-            </div>
-          </details>
-        </div>
+      <div class="flex flex-col lg:col-span-5">
+        <app-product-summary />
+        <hr class="my-6 border-border" />
+        <app-variant-selector />
+        <app-purchase-actions />
+        <app-product-details-accordion />
       </div>
     </div>
-  </div>
 
-  <!-- Recommended Products -->
-  @if (recs.length) {
-    <section class="mt-xl pt-xl border-t border-outline-variant/20">
-      <h2 class="text-headline-md text-on-surface mb-lg font-semibold">Recommended for You</h2>
-      <div class="flex overflow-x-auto gap-lg pb-sm snap-x">
-        @for (rec of recs; track rec.id) {
-          <div
-            [routerLink]="['/product-details', rec.id]"
-            class="min-w-[280px] w-[280px] bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm snap-start group cursor-pointer hover:shadow-md transition-shadow"
-          >
-            <div class="h-[200px] bg-surface-variant relative overflow-hidden">
-              <img
-                [src]="rec.image"
-                [alt]="rec.name"
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-            <div class="p-4">
-              <div class="text-xs text-primary font-semibold mb-1">{{ rec.category }}</div>
-              <h3 class="font-semibold text-on-surface mb-1 truncate">{{ rec.name }}</h3>
-              <div class="flex items-center justify-between">
-                <span class="font-bold text-on-surface">${{ rec.price | number }}</span>
-                <span class="text-xs text-on-surface-variant flex items-center">
-                  <ng-icon name="lucideStar" class="text-[14px] text-yellow-500 me-1" />
-                  {{ rec.rating }}
-                </span>
-              </div>
-            </div>
-          </div>
-        }
-      </div>
-    </section>
+    <app-recommended-products />
+  } @else {
+    <div class="text-center py-20 text-muted-foreground">
+      <p>Product not found.</p>
+    </div>
   }
-} @else {
-  <div class="text-center py-xl text-on-surface-variant">
-    <p>Product not found.</p>
-  </div>
-}
+</main>

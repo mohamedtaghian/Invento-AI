@@ -1,9 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { PRODUCTS, DETAIL_PRODUCTS } from '../mock/products';
-import type {
-  ProductDetail,
-  RecommendedProduct,
-} from '@invento/user-site/app/features/product-details/types/product-detail.interface';
+import { Injectable, signal } from '@angular/core';
+import { PRODUCTS } from '../mock/products';
+import type { ProductDetail } from '@invento/user-site/app/features/product-details/data/product.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ProductsData {
@@ -11,36 +8,28 @@ export class ProductsData {
 
   readonly products = this._products.asReadonly();
 
-  private readonly _detailProducts = DETAIL_PRODUCTS;
-
   getProductById(id: string): ProductDetail | undefined {
-    const detail = this._detailProducts.find((p) => p.id === id);
-    if (detail) return detail;
-
     const product = this._products().find((p) => p.id === id);
     if (!product) return undefined;
 
     return {
-      ...product,
+      id: product.id,
+      category: product.category,
+      name: product.name,
+      tagline: product.description,
+      badge: product.badge,
       rating: 4.5,
       reviewCount: 86,
-      images: [product.image],
-      colors: [{ name: 'Default', hex: '#6b7280' }],
-      sizes: [{ label: 'Standard', value: 'std' }],
-      features: ['1 year warranty', 'Free shipping', '30-day returns'],
+      price: product.price,
+      compareAtPrice: product.originalPrice,
+      inStock: product.inStock,
+      shippingNote: 'Ships within 24 hours',
+      images: [{ id: 'img-main', src: product.image, alt: product.name }],
+      colors: [{ id: 'default', label: 'Default', hex: '#6b7280' }],
+      sizes: [{ id: 'std', label: 'Standard' }],
+      highlights: ['1 year warranty', 'Free shipping', '30-day returns'],
+      shippingReturnsPolicy:
+        'Free standard shipping on all orders. Returns accepted within 30 days of purchase.',
     };
   }
-
-  readonly recommendedProducts = computed<RecommendedProduct[]>(() =>
-    this._products()
-      .slice(0, 4)
-      .map((p) => ({
-        id: p.id,
-        name: p.name,
-        price: p.price,
-        image: p.image,
-        category: p.category,
-        rating: 4.8,
-      })),
-  );
 }
