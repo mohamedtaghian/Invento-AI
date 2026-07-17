@@ -218,6 +218,7 @@
       <div class="flex overflow-x-auto gap-lg pb-sm snap-x">
         @for (rec of recs; track rec.id) {
           <div
+            [routerLink]="['/product-details', rec.id]"
             class="min-w-[280px] w-[280px] bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm snap-start group cursor-pointer hover:shadow-md transition-shadow"
           >
             <div class="h-[200px] bg-surface-variant relative overflow-hidden">
