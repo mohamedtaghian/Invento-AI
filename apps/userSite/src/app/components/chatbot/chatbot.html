@@ -1,0 +1,62 @@
+<hlm-popover align="end" sideOffset="8">
+  <button hlmPopoverTrigger hlmBtn class="size-12">
+    <ng-icon name="lucideBotMessageSquare" size="25" />
+  </button>
+  <hlm-popover-content
+    *hlmPopoverPortal="let ctx"
+    class="relative bg-popover/40 backdrop-blur-xl p-0 border border-border rounded-4xl w-sm h-88 overflow-hidden"
+  >
+    <div
+      class="top-20 right-20 z-0 absolute bg-primary/25 blur-3xl rounded-full size-48 pointer-events-none"
+    ></div>
+
+    <hlm-popover-header
+      class="z-20 relative flex-row justify-between items-center bg-popover/60 px-4 py-3"
+    >
+      <div class="flex items-center gap-2">
+        <div class="flex justify-center items-center bg-muted rounded-full size-10">
+          <ng-icon name="lucideBotMessageSquare" size="20" class="text-primary" />
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold">Invento</span>
+          <span class="text-muted-foreground">Digital chatbot interface</span>
+        </div>
+      </div>
+      <button hlmBtn (click)="ctx.close()" variant="secondary" class="rounded-full size-8">
+        <ng-icon name="lucideX" />
+      </button>
+    </hlm-popover-header>
+
+    <div class="z-10 relative space-y-3 px-4 h-[calc(100%-4rem)] overflow-y-auto">
+      <div class="flex justify-start">
+        <div class="bg-popover px-4 py-2.5 rounded-2xl rounded-tl-none max-w-[75%] text-foreground">
+          <p class="text-sm">Hey! How can I help you today?</p>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <div
+          class="bg-primary px-4 py-2.5 rounded-2xl rounded-tr-none max-w-[75%] text-primary-foreground"
+        >
+          <p class="text-sm">I need help tracking an order.</p>
+        </div>
+      </div>
+    </div>
+    <div class="z-20 relative flex items-center px-4 py-3">
+      <div
+        class="flex items-center gap-1 bg-popover/50 shadow-sm backdrop-blur-md p-1 rounded-full focus-within:ring-2 focus-within:ring-ring w-full transition-shadow"
+      >
+        <input
+          hlmInput
+          [(ngModel)]="inputMessage"
+          type="text"
+          placeholder="Chat here..."
+          class="flex-1 bg-transparent shadow-none px-2 border-none rounded-full outline-none focus-visible:ring-0"
+        />
+        <button hlmBtn size="icon" class="rounded-full shrink-0">
+          <ng-icon name="lucideSendHorizonal" size="18" />
+        </button>
+      </div>
+    </div>
+  </hlm-popover-content>
+</hlm-popover>
