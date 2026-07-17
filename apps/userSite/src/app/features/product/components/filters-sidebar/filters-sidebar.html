@@ -1,0 +1,105 @@
+<div hlmCard class="top-24 sticky gap-6 p-4">
+  <div hlmCardHeader class="flex-row justify-between items-center p-0">
+    <h2 hlmCardTitle class="text-lg">Filters</h2>
+    <button hlmBtn variant="link" size="sm" class="px-0 text-sm" (click)="clearAll.emit()">
+      Clear All
+    </button>
+  </div>
+
+  <div hlmCardContent class="flex flex-col gap-6 p-0">
+    <!-- Categories -->
+    <div class="flex flex-col gap-3">
+      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Categories</h3>
+      <div class="flex flex-col gap-2">
+        @for (cat of categories(); track cat.value) {
+          <label class="group flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              [checked]="cat.checked"
+              (change)="categoryToggle.emit(cat.value)"
+              class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
+            />
+            <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors">
+              {{ cat.label }}
+            </span>
+          </label>
+        }
+      </div>
+    </div>
+
+    <!-- Colors -->
+    <!-- Colors -->
+    <div class="flex flex-col gap-3 pt-4 border-border border-t">
+      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Color</h3>
+      <div class="flex flex-wrap gap-2">
+        @for (color of colors(); track color.value) {
+          <button
+            type="button"
+            (click)="colorSelect.emit(color.value)"
+            [style.background]="color.hex"
+            class="border border-border rounded-full ring-2 w-6 h-6 transition-all"
+            [class.ring-primary]="selectedColor() === color.value"
+            [class.ring-transparent]="selectedColor() !== color.value"
+          >
+            <span class="sr-only">{{ color.value }}</span>
+          </button>
+        }
+      </div>
+    </div>
+
+    <!-- Price -->
+    <div class="flex flex-col gap-3 pt-4 border-border border-t">
+      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Price Range</h3>
+      <input
+        type="range"
+        min="0"
+        max="5000"
+        step="50"
+        [value]="maxPrice()"
+        (input)="onPriceInput($event)"
+        class="bg-border rounded-lg w-full h-1 accent-primary cursor-pointer"
+      />
+      <div class="flex justify-between text-muted-foreground text-xs">
+        <span>$0</span>
+        <span class="font-semibold text-primary">${{ maxPrice() | number }}</span>
+        <span>$5k+</span>
+      </div>
+    </div>
+
+    <!-- In Stock -->
+    <div class="flex justify-between items-center pt-4 border-border border-t">
+      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">In Stock Only</h3>
+      <button
+        type="button"
+        (click)="inStockChange.emit(!inStock())"
+        class="inline-flex relative items-center rounded-full w-9 h-5 transition-colors duration-200"
+        [class.bg-primary]="inStock()"
+        [class.bg-border]="!inStock()"
+      >
+        <span
+          class="inline-block bg-white shadow rounded-full w-4 h-4 transition-transform duration-200 transform"
+          [class.translate-x-4]="inStock()"
+          [class.translate-x-0.5]="!inStock()"
+        ></span>
+      </button>
+    </div>
+
+    <!-- Discount -->
+    <div class="flex justify-between items-center pt-4 border-border border-t">
+      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">On Sale</h3>
+      <button
+        type="button"
+        (click)="discountChange.emit(!onlyDiscount())"
+        class="inline-flex relative items-center rounded-full w-9 h-5 transition-colors duration-200"
+        [class.bg-primary]="onlyDiscount()"
+        [class.bg-border]="!onlyDiscount()"
+      >
+        <span
+          class="inline-block bg-white shadow rounded-full w-4 h-4 transition-transform duration-200 transform"
+          [class.translate-x-4]="onlyDiscount()"
+          [class.translate-x-0.5]="!onlyDiscount()"
+        ></span>
+      </button>
+    </div>
+  </div>
+</div>
