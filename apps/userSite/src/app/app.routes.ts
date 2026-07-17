@@ -7,12 +7,11 @@ import { OrderConfirmedComponent } from './components/order-confirmed/order-conf
 import { HomeComponent } from './components/home/home';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'products', pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'full' },
   { path: 'products', component: Products },
   { path: 'product-details/:id', component: ProductDetails },
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-confirmed', component: OrderConfirmedComponent },
-  { path: '', component: HomeComponent, pathMatch: 'full' },
 
   // The wild component (404) MUST go at the very bottom
   { path: '**', component: NotFoundComponent },
