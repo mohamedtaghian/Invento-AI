@@ -2,10 +2,10 @@
   <div class="flex flex-col gap-12 preview">
     <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
       <app-page-header
-        badgeText="STEP 04"
-        title="Site"
-        accentTitle="site validation  and  deployment"
-        description="Live Spartan component preview with generated CSS variables applied."
+        badgeText="validation_badge"
+        title="validation_title"
+        accentTitle="validation_accent"
+        description="validation_desc"
       />
     </div>
   </div>
@@ -19,10 +19,10 @@
               hlmCardTitle
               class="text-xs font-mono text-muted-foreground uppercase tracking-wider"
             >
-              // Blueprint_Parameters
+              {{ 'validation_blueprint' | translate }}
             </h3>
             <p hlmCardDescription>
-              Configure core branding directives to feed the AI validation model matrix.
+              {{ 'validation_blueprint_desc' | translate }}
             </p>
           </div>
 
@@ -33,7 +33,7 @@
                 for="bizName"
                 class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
               >
-                // BUSINESS_NAME *
+                {{ 'validation_biz_name' | translate }}
               </label>
               <div class="relative">
                 <span
@@ -46,7 +46,7 @@
                   type="text"
                   [(ngModel)]="businessName"
                   maxLength="24"
-                  placeholder="e.g. Malipo"
+                  placeholder="{{ 'validation_placeholder_name' | translate }}"
                   class="w-full pl-10 pr-16 font-medium font-mono"
                 />
                 <span
@@ -63,7 +63,7 @@
                 for="bizType"
                 class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
               >
-                // BUSINESS_SECTOR
+                {{ 'validation_biz_type' | translate }}
               </label>
               <div class="relative">
                 <input
@@ -72,7 +72,7 @@
                   type="text"
                   [(ngModel)]="businessType"
                   maxLength="40"
-                  placeholder="e.g. Inventory SaaS"
+                  placeholder="{{ 'validation_placeholder_type' | translate }}"
                   class="w-full pr-16"
                 />
                 <span
@@ -89,14 +89,14 @@
                 for="bizAudience"
                 class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
               >
-                // TARGET_AUDIENCE
+                {{ 'validation_target_audience' | translate }}
               </label>
               <input
                 hlmInput
                 id="bizAudience"
                 type="text"
                 [(ngModel)]="targetAudience"
-                placeholder="e.g. Small Businesses"
+                placeholder="{{ 'validation_placeholder_audience' | translate }}"
                 class="w-full"
               />
             </div>
@@ -104,9 +104,9 @@
         </div>
 
         <div class="rounded-xl border border-border bg-card p-6 space-y-4 shadow-sm">
-          <span class="text-xs font-mono text-muted-foreground uppercase tracking-wider block"
-            >// LIVE_FORMAT_CHECKS</span
-          >
+          <span class="text-xs font-mono text-muted-foreground uppercase tracking-wider block">{{
+            'validation_live_checks' | translate
+          }}</span>
 
           <div class="space-y-2">
             @for (check of liveChecks; track check.id) {
@@ -123,7 +123,7 @@
                   class="flex-1 text-sm font-medium"
                   [class.text-muted-foreground]="!businessName"
                 >
-                  {{ check.label }}
+                  {{ check.label | translate }}
                 </div>
               </div>
             }
@@ -142,16 +142,16 @@
           <div class="space-y-2">
             <h3 class="text-lg font-semibold tracking-tight">
               @if (currentStep === 'AI_ANALYSIS') {
-                Running Brand Metrics Matrix...
+                {{ 'validation_analyzing' | translate }}
               } @else {
-                Scraping Global Registries...
+                {{ 'validation_scraping' | translate }}
               }
             </h3>
             <p class="text-sm text-muted-foreground max-w-sm mx-auto">
-              Invento is processing core telemetry data for "<span
-                class="font-bold text-foreground"
-                >{{ businessName }}</span
-              >" across evaluation systems.
+              {{ 'validation_processing' | translate }} "<span class="font-bold text-foreground">{{
+                businessName
+              }}</span
+              >" {{ 'validation_across' | translate }}
             </p>
           </div>
         </div>
@@ -171,10 +171,10 @@
                   hlmCardTitle
                   class="text-xs font-mono text-muted-foreground uppercase tracking-wider"
                 >
-                  // Brand_Validation_Report
+                  {{ 'validation_report_title' | translate }}
                 </h3>
                 <p hlmCardDescription class="text-xs mt-0.5">
-                  Synthetic metric scorecard output maps performance profiles.
+                  {{ 'validation_report_desc' | translate }}
                 </p>
               </div>
               <div class="text-right">
@@ -190,7 +190,9 @@
                 <div
                   class="bg-background/80 p-3.5 rounded-xl border border-border font-mono text-center shadow-sm"
                 >
-                  <p class="text-[10px] text-muted-foreground font-semibold">MEMORABILITY</p>
+                  <p class="text-[10px] text-muted-foreground font-semibold">
+                    {{ 'validation_memorability' | translate }}
+                  </p>
                   <p class="text-xl font-bold text-foreground mt-1">
                     {{ aiReport?.memorability
                     }}<span class="text-xs text-muted-foreground font-normal">/10</span>
@@ -199,7 +201,9 @@
                 <div
                   class="bg-background/80 p-3.5 rounded-xl border border-border font-mono text-center shadow-sm"
                 >
-                  <p class="text-[10px] text-muted-foreground font-semibold">PRONUNCIATION</p>
+                  <p class="text-[10px] text-muted-foreground font-semibold">
+                    {{ 'validation_pronunciation' | translate }}
+                  </p>
                   <p class="text-xl font-bold text-foreground mt-1">
                     {{ aiReport?.pronunciation
                     }}<span class="text-xs text-muted-foreground font-normal">/10</span>
@@ -208,7 +212,9 @@
                 <div
                   class="bg-background/80 p-3.5 rounded-xl border border-border font-mono text-center shadow-sm"
                 >
-                  <p class="text-[10px] text-muted-foreground font-semibold">PROFESSIONAL</p>
+                  <p class="text-[10px] text-muted-foreground font-semibold">
+                    {{ 'validation_professional' | translate }}
+                  </p>
                   <p class="text-xl font-bold text-foreground mt-1">
                     {{ aiReport?.professionalism
                     }}<span class="text-xs text-muted-foreground font-normal">/10</span>
@@ -217,7 +223,9 @@
                 <div
                   class="bg-background/80 p-3.5 rounded-xl border border-border font-mono text-center shadow-sm"
                 >
-                  <p class="text-[10px] text-muted-foreground font-semibold">BRANDABILITY</p>
+                  <p class="text-[10px] text-muted-foreground font-semibold">
+                    {{ 'validation_brandability' | translate }}
+                  </p>
                   <p class="text-xl font-bold text-foreground mt-1">
                     {{ aiReport?.brandability
                     }}<span class="text-xs text-muted-foreground font-normal">/10</span>
@@ -227,7 +235,7 @@
 
               <div class="space-y-3 border-t border-border/40 pt-5">
                 <p class="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-                  // Registrar_Namespace_Checks
+                  {{ 'validation_registrar' | translate }}
                 </p>
 
                 @for (dom of domains; track dom.tld) {
@@ -258,14 +266,15 @@
                         size="sm"
                         class="text-[11px] flex items-center gap-1.5 h-8 px-3"
                       >
-                        <ng-icon name="lucideShoppingCart" class="text-xs" /> Buy {{ dom.price }}
+                        <ng-icon name="lucideShoppingCart" class="text-xs" />
+                        {{ 'validation_buy' | translate }} {{ dom.price }}
                       </button>
                     } @else {
                       <span
                         hlmBadge
                         variant="outline"
                         class="text-[9px] font-mono border-dashed opacity-60"
-                        >Taken</span
+                        >{{ 'validation_taken' | translate }}</span
                       >
                     }
                   </div>
@@ -283,13 +292,15 @@
           <div
             class="text-[10px] text-zinc-500 border-b border-zinc-900 pb-2 mb-3 uppercase tracking-widest flex justify-between items-center font-mono"
           >
-            <span>>_ Engine_Deployment_Logs</span>
+            <span>{{ 'validation_engine_logs' | translate }}</span>
             @if (currentStep === 'BUILDING') {
-              <span class="animate-pulse text-primary font-bold tracking-normal"
-                >[ COMPILING RESOURCES ]</span
-              >
+              <span class="animate-pulse text-primary font-bold tracking-normal">{{
+                'validation_compiling' | translate
+              }}</span>
             } @else {
-              <span class="text-emerald-500 font-bold tracking-normal">[ BUILD SUCCESSFUL ]</span>
+              <span class="text-emerald-500 font-bold tracking-normal">{{
+                'validation_build_successful' | translate
+              }}</span>
             }
           </div>
 
@@ -328,21 +339,21 @@
 
           <div class="space-y-1.5">
             <p class="text-[10px] font-mono uppercase text-muted-foreground tracking-widest">
-              Engine Status
+              {{ 'validation_engine_status' | translate }}
             </p>
             <h3 class="text-sm font-semibold tracking-tight text-foreground">
               @if (currentStep === 'INPUT') {
-                Awaiting Blueprint
+                {{ 'validation_awaiting' | translate }}
               } @else if (currentStep === 'AI_ANALYSIS') {
-                Analyzing Matrix...
+                {{ 'validation_analyzing_matrix' | translate }}
               } @else if (currentStep === 'DOMAINS') {
-                Checking Namespaces...
+                {{ 'validation_checking_domains' | translate }}
               } @else if (currentStep === 'FINAL_REPORT') {
-                Validation Complete
+                {{ 'validation_complete' | translate }}
               } @else if (currentStep === 'BUILDING') {
-                Compiling Instance...
+                {{ 'validation_compiling_instance' | translate }}
               } @else if (currentStep === 'DEPLOYED') {
-                System Live
+                {{ 'validation_system_live' | translate }}
               }
             </h3>
           </div>
@@ -352,20 +363,20 @@
       <div hlmCard class="shadow-sm">
         <div hlmCardHeader class="p-5 pb-3">
           <h3 hlmCardTitle class="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-            // Build_Context
+            {{ 'validation_build_context' | translate }}
           </h3>
         </div>
         <div hlmCardContent class="p-5 pt-0 font-mono text-xs space-y-3">
           <div class="flex justify-between border-b border-border/50 pb-2">
-            <span class="text-muted-foreground">Target:</span>
+            <span class="text-muted-foreground">{{ 'validation_target' | translate }}</span>
             <span class="font-bold text-foreground">{{ businessName || '---' }}</span>
           </div>
           <div class="flex justify-between border-b border-border/50 pb-2">
-            <span class="text-muted-foreground">Sector:</span>
+            <span class="text-muted-foreground">{{ 'validation_sector' | translate }}</span>
             <span class="font-bold text-foreground">{{ businessType || '---' }}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-muted-foreground">Audience:</span>
+            <span class="text-muted-foreground">{{ 'validation_audience' | translate }}</span>
             <span class="font-bold text-foreground">{{ targetAudience || '---' }}</span>
           </div>
         </div>
@@ -378,7 +389,7 @@
           [disabled]="!businessName || !isFormatValid"
           (click)="startValidationPipeline()"
         >
-          Initialize Validation
+          {{ 'validation_initialize' | translate }}
         </button>
       }
 
@@ -388,7 +399,7 @@
           class="w-full py-6 font-mono uppercase tracking-wider text-xs shadow-md"
           (click)="executePublish()"
         >
-          🚀 Deploy Invento Instance
+          {{ 'validation_deploy' | translate }}
         </button>
       }
 
@@ -400,7 +411,8 @@
           variant="outline"
           class="w-full py-6 font-mono text-xs flex items-center justify-center gap-2 shadow-sm border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10"
         >
-          Access Live Control Panel <ng-icon name="lucideExternalLink" class="text-xs" />
+          {{ 'validation_access_panel' | translate }}
+          <ng-icon name="lucideExternalLink" class="text-xs" />
         </a>
       }
     </div>

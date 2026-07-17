@@ -14,6 +14,7 @@ import { TypingText } from '@/app/components/home-components/typing-text/typing-
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { hlmH1, hlmP } from '@spartan/helm/typography';
+import { TranslatePipe } from '@invento/core';
 
 @Component({
   selector: 'app-hero',
@@ -28,6 +29,7 @@ import { hlmH1, hlmP } from '@spartan/helm/typography';
     TypingText,
     PageHeader,
     DoubleSlash,
+    TranslatePipe,
   ],
   providers: [
     provideIcons({ lucideBolt, lucideCode, lucideChevronRight, lucideCheck, lucideTerminal }),
@@ -38,22 +40,22 @@ export class Hero {
   protected readonly hlmP = hlmP;
 
   protected readonly welcomeWords = [
-    'Your Business',
-    'Your Brand',
-    'Your Store',
-    'Your Vision',
-    'Your Future',
+    'hero_welcome_1',
+    'hero_welcome_2',
+    'hero_welcome_3',
+    'hero_welcome_4',
+    'hero_welcome_5',
   ];
 
   protected readonly terminalGenratingWords = [
-    'Thinking...',
-    'Generating response...',
-    'Working on it...',
-    'Processing your request...',
+    'hero_gen_1',
+    'hero_gen_2',
+    'hero_gen_3',
+    'hero_gen_4',
   ];
 
   protected readonly terminalThemeWords = [
-    'Processing your request...',
+    'hero_gen_4',
     '"oklch(58.7% .153 252)"',
     '"oklch(52.7% .140 225)"',
     '"oklch(50.0% .135 210)"',

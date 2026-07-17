@@ -1,0 +1,35 @@
+<label class="relative inline-flex items-center gap-2 cursor-pointer" aria-label="Switch language">
+  <span
+    class="text-xs font-medium select-none transition-colors duration-200"
+    [class.text-muted-foreground]="localeService.locale() === 'ar'"
+    [class.text-foreground]="localeService.locale() === 'en'"
+  >
+    EN
+  </span>
+
+  <input
+    type="checkbox"
+    class="sr-only peer"
+    [checked]="localeService.locale() === 'ar'"
+    (change)="toggle()"
+    [attr.aria-checked]="localeService.locale() === 'ar'"
+    role="switch"
+  />
+
+  <div
+    class="relative w-11 h-6 rounded-full transition-colors duration-200 peer-focus-visible:outline-none peer-focus-visible:ring-2 peer-focus-visible:ring-ring bg-input peer-checked:bg-primary"
+  >
+    <div
+      class="absolute top-0.5 w-5 h-5 rounded-full bg-background shadow-sm transition-all duration-200"
+      [style.inset-inline-start]="localeService.locale() === 'ar' ? '1.375rem' : '0.125rem'"
+    ></div>
+  </div>
+
+  <span
+    class="text-xs font-medium select-none transition-colors duration-200"
+    [class.text-muted-foreground]="localeService.locale() === 'en'"
+    [class.text-foreground]="localeService.locale() === 'ar'"
+  >
+    AR
+  </span>
+</label>

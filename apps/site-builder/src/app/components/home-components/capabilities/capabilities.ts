@@ -6,6 +6,7 @@ import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.d
 import { hlmH3, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@invento/core';
 
 interface Capability {
   readonly icon: string;
@@ -27,6 +28,7 @@ interface Capability {
     ScrollAnimateDirective,
     DoubleSlash,
     RouterLink,
+    TranslatePipe,
   ],
   providers: [provideIcons({ lucideTerminal, lucideLayers, lucideDatabase, lucideGlobe })],
 })
@@ -37,30 +39,26 @@ export class Capabilities {
   protected readonly capabilities = signal<Capability[]>([
     {
       icon: 'lucideTerminal',
-      title: 'AI Interview Engine',
-      description:
-        'Threaded questionnaire that streams questions progressively as you answer, extracting your business schema.',
+      title: 'caps_1_title',
+      description: 'caps_1_desc',
       link: '/ai-builder',
     },
     {
       icon: 'lucideLayers',
-      title: 'Emotion → CSS Variables',
-      description:
-        'Select a brand archetype and watch CSS variables update live in a split-screen variable bridge.',
+      title: 'caps_2_title',
+      description: 'caps_2_desc',
       link: '/preview',
     },
     {
       icon: 'lucideDatabase',
-      title: 'Product Schema Builder',
-      description:
-        'Spartan-compatible schema editor with size matrices, SKU validation, and custom properties.',
+      title: 'caps_3_title',
+      description: 'caps_3_desc',
       link: 'preview',
     },
     {
       icon: 'lucideGlobe',
-      title: 'Ghost Site Preview',
-      description:
-        'Iframe-style preview showing Spartan components reacting to generated CSS variables in real-time.',
+      title: 'caps_4_title',
+      description: 'caps_4_desc',
       link: 'preview',
     },
   ]);

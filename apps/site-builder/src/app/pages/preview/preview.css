@@ -28,3 +28,11 @@
   background: var(--secondary);
   border: 1px solid var(--border);
 }
+
+[dir='rtl'] hlm-dialog-content {
+  text-align: start;
+}
+
+[dir='rtl'] hlm-dialog-content .color-dot:first-child {
+  margin-inline-end: 0;
+}

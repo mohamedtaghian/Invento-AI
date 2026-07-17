@@ -20,11 +20,11 @@
               <ng-icon [name]="stat.suffixIcon" size="22" />
             }
             @if (stat.suffixText) {
-              <span class="text-2xl">{{ stat.suffixText }}</span>
+              <span class="text-2xl">{{ stat.suffixText | translate }}</span>
             }
           }
         </span>
-        <span class="text-muted-foreground text-sm">{{ stat.label }}</span>
+        <span class="text-muted-foreground text-sm">{{ stat.label | translate }}</span>
       </div>
     }
   </div>

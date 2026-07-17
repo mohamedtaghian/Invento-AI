@@ -5,12 +5,13 @@ import { lucideBolt } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
+import { TranslatePipe } from '@invento/core';
 
 @Component({
   selector: 'app-cta',
   templateUrl: './cta.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, NgIcon, HlmButton, ScrollAnimateDirective],
+  imports: [RouterLink, NgIcon, HlmButton, ScrollAnimateDirective, TranslatePipe],
   providers: [provideIcons({ lucideBolt })],
 })
 export class Cta {

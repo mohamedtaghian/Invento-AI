@@ -7,8 +7,6 @@ import {
   signal,
 } from '@angular/core';
 import { HlmBadgeImports } from '@spartan/helm/badge';
-import { HlmTextareaImports } from '@spartan/helm/textarea';
-import { HlmItemImports } from '@spartan/helm/item';
 import { HlmButtonImports } from '@spartan/helm/button';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
@@ -26,6 +24,10 @@ import { BrainstormApi } from '@/app/features/builder/services/brainstorm-api';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@invento/core';
+import { LocaleService } from '../../../../../../libs/core/src/lib/i18n/locale-service';
+import { HlmTextareaImports } from '@spartan/helm/textarea';
+import { HlmItemImports } from '@spartan/helm/item';
 
 interface ContextChecklist {
   id: number;
@@ -43,6 +45,7 @@ interface ContextChecklist {
     ReactiveFormsModule,
     PageHeader,
     DoubleSlash,
+    TranslatePipe,
   ],
   templateUrl: './brainstorm.html',
   styleUrl: './brainstorm.css',
@@ -64,6 +67,7 @@ export class Brainstorm {
   private readonly builderState = inject(BuilderState);
   private readonly brainstormApi = inject(BrainstormApi);
   private readonly router = inject(Router);
+  private readonly localeService = inject(LocaleService);
 
   protected readonly hlmH2 = hlmH2;
   protected readonly hlmP = hlmP;
@@ -80,19 +84,19 @@ export class Brainstorm {
   contextChecklist: ContextChecklist[] = [
     {
       id: 1,
-      content: 'Describe your business concept',
+      content: 'brainstorm_check_1',
     },
     {
       id: 2,
-      content: 'Include your target audience',
+      content: 'brainstorm_check_2',
     },
     {
       id: 3,
-      content: 'Mention your core value proposition',
+      content: 'brainstorm_check_3',
     },
     {
       id: 4,
-      content: 'Add revenue model or industry vertical',
+      content: 'brainstorm_check_4',
     },
   ];
 
@@ -134,5 +138,9 @@ export class Brainstorm {
         this.router.navigate(['/build/ai-interview']);
       },
     });
+  }
+
+  public isRtl(): boolean {
+    return this.localeService.isRtl();
   }
 }

@@ -32,6 +32,7 @@ import {
 } from '@spartan/helm/card';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { TranslatePipe } from '@invento/core';
 
 // Spartan Components mapped as clean standalone direct imports
 
@@ -54,6 +55,7 @@ type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUIL
     HlmCardDescription,
     HlmCardContent,
     PageHeader,
+    TranslatePipe,
   ],
   providers: [
     provideIcons({
@@ -97,17 +99,17 @@ export class Validation {
     return [
       {
         id: 1,
-        label: 'Length between 3–25 characters',
+        label: 'validation_check_length',
         passed: cleaned.length >= 3 && cleaned.length <= 25,
       },
       {
         id: 2,
-        label: 'No special characters allowed',
+        label: 'validation_check_special',
         passed: cleaned.length > 0 && !specialCharRegex.test(cleaned),
       },
       {
         id: 3,
-        label: 'Cannot start with a number',
+        label: 'validation_check_number',
         passed: cleaned.length > 0 && !numberRegex.test(cleaned),
       },
     ];

@@ -15,7 +15,7 @@
       <span class="relative">SYSTEM_ONLINE — v1.0.0</span>
     </span> -->
     <!-- Added her the same page header used for all pages waiting for Andrew approve -->
-    <app-page-header badgeText="SYSTEM_ONLINE — v1.0.0" title="" accentTitle=""></app-page-header>
+    <app-page-header badgeText="hero_badge" title="" accentTitle=""></app-page-header>
     <!-- Used hlmH1 directive from SpartanUI to have the same shape in all project -->
     <h1 class="flex flex-col gap-1 leading-tight" [class]="hlmH1">
       <span
@@ -23,7 +23,7 @@
         [animDelay]="100"
         class="block font-bold text-foreground text-5xl md:text-6xl lg:text-7xl"
       >
-        Program
+        {{ 'hero_title' | translate }}
       </span>
       <!-- Typing Animation -->
       <span appScrollAnimate="fade-up" [animDelay]="200" class="block min-h-[1.2em]">
@@ -37,14 +37,13 @@
       class="max-w-lg text-muted-foreground text-base leading-relaxed"
       [class]="hlmP"
     >
-      BuilderAI is an end-to-end AI construction engine that translates abstract business ideas into
-      concrete data schemas, CSS variables, and production-ready Spartan storefronts.
+      {{ 'hero_desc' | translate }}
     </p>
     <div appScrollAnimate="fade-up" [animDelay]="400" class="flex sm:flex-row flex-col gap-3 mt-2">
       <!-- Added here Chevron right icon instead of using normal text as (→) -->
       <a hlmBtn routerLink="/build" class="justify-center gap-2 w-full sm:w-auto font-mono text-sm">
         <ng-icon name="lucideBolt" />
-        BEGIN CONSTRUCTION
+        {{ 'hero_btn' | translate }}
         <ng-icon name="lucideChevronRight" />
       </a>
       <!-- Commented the View Architecture btn as it is not used for anything here Waiting for ANDREW Approve -->
@@ -80,21 +79,24 @@
         <span class="bg-red-500 rounded-full w-2.5 h-2.5"></span>
         <span class="bg-yellow-500 rounded-full w-2.5 h-2.5"></span>
         <span class="bg-green-500 rounded-full w-2.5 h-2.5"></span>
-        <span class="ml-2 font-mono text-muted-foreground text-xs">schema.config.ts</span>
+        <span class="ml-2 font-mono text-muted-foreground text-xs">{{
+          'hero_terminal_file' | translate
+        }}</span>
       </div>
 
       <!-- Panel body -->
       <div class="flex flex-col gap-2.5 p-5 font-mono text-xs sm:text-sm leading-relaxed">
         <div appScrollAnimate="fade-up" [animDelay]="350" class="text-muted-foreground uppercase">
           <app-double-slash />
-          user prompt
+          {{ 'hero_terminal_user_prompt' | translate }}
         </div>
         <div appScrollAnimate="fade-up" [animDelay]="450" class="text-foreground">
           <ng-icon name="lucideTerminal" class="text-foreground" />
-          "a modern skincare store"
+          {{ 'hero_terminal_prompt_value' | translate }}
         </div>
         <div appScrollAnimate="fade-up" [animDelay]="550" class="text-muted-foreground">
-          <ng-icon name="lucideTerminal" class="text-foreground" /> schema:
+          <ng-icon name="lucideTerminal" class="text-foreground" />
+          {{ 'hero_terminal_schema' | translate }}
           <app-typing-text fontSizeClasses="text-md" [words]="terminalGenratingWords" />
         </div>
         <div
@@ -102,8 +104,9 @@
           [animDelay]="650"
           class="flex items-center gap-2.5 text-foreground"
         >
-          <ng-icon name="lucideTerminal" class="text-foreground" /> theme:
-          <span> &#123; primary: </span>
+          <ng-icon name="lucideTerminal" class="text-foreground" />
+          {{ 'hero_terminal_theme' | translate }}
+          <span> &#123; {{ 'hero_terminal_theme_primary' | translate }} </span>
           <app-typing-text fontSizeClasses="text-md" [words]="terminalThemeWords" />
           <span>&#125;</span>
         </div>
@@ -112,7 +115,8 @@
           [animDelay]="750"
           class="flex items-center gap-2 text-foreground"
         >
-          storefront: ready <ng-icon name="lucideCheck" class="text-green-500" />
+          {{ 'hero_terminal_storefront' | translate }}
+          <ng-icon name="lucideCheck" class="text-green-500" />
           <span class="hero-terminal__cursor" aria-hidden="true"></span>
         </div>
       </div>

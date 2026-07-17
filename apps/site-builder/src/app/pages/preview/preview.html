@@ -1,10 +1,10 @@
 <div class="flex flex-col gap-12 preview">
   <div class="flex sm:flex-row flex-col sm:justify-between sm:items-center gap-3 preview-header">
     <app-page-header
-      badgeText="STEP 03"
-      title="Site"
-      accentTitle="Preview"
-      description="Live Spartan component preview with generated CSS variables applied."
+      badgeText="preview_badge"
+      title="preview_title"
+      accentTitle="preview_accent"
+      description="preview_desc"
     />
   </div>
 
@@ -24,7 +24,9 @@
     <div class="gap-6 grid grid-cols-1 xl:grid-cols-4">
       <div class="space-y-5 xl:col-span-1">
         <div class="preview-body-theme">
-          <p class="uppercase preview-tag" [class]="hlmP"><app-double-slash /> ACTIVE_THEME</p>
+          <p class="uppercase preview-tag" [class]="hlmP">
+            <app-double-slash /> {{ 'preview_active_theme' | translate }}
+          </p>
           <div class="space-y-2">
             @if (isLoading()) {
               @for (skelton of skeletonThemes; track $index) {
@@ -51,7 +53,7 @@
                     <span class="color-dot" [style.background]="theme.colors.primary"></span>
                   </div>
                   <span class="text-foreground text-xs">
-                    {{ theme.name }}
+                    {{ theme.name | translate }}
                   </span>
                 </button>
               }
@@ -60,7 +62,9 @@
         </div>
 
         <div class="preview-body-viewport">
-          <p class="uppercase preview-tag" [class]="hlmP"><app-double-slash /> VIEWPORT</p>
+          <p class="uppercase preview-tag" [class]="hlmP">
+            <app-double-slash /> {{ 'preview_viewport' | translate }}
+          </p>
           <div class="flex gap-2">
             @for (viewport of viewports; track viewport.id) {
               <button
@@ -68,7 +72,7 @@
                 class="flex-1 justify-center! text-foreground"
                 [class.bg-primary]="selectedViewport() === viewport.id"
                 [class.bg-foreground/10]="selectedViewport() !== viewport.id"
-                [attr.aria-label]="viewport.label"
+                [attr.aria-label]="viewport.label | translate"
                 (click)="selectedViewport.set(viewport.id)"
               >
                 <ng-icon [name]="viewport.icon" />
@@ -87,8 +91,8 @@
             id="edit-profile"
             (click)="deployDialogState.set('open')"
           >
-            Deploy Site
-            <ng-icon name="lucideChevronRight" />
+            {{ 'preview_deploy' | translate }}
+            <ng-icon [name]="deployChevron()" />
           </button>
 
           <!-- Currently export logic not working fine -->
@@ -117,17 +121,20 @@
             <span class="window-controls"></span>
 
             <div
+              dir="ltr"
               class="flex flex-1 items-center gap-2 bg-primary/20 px-3 py-1 border-primary/80 rounded url-tab"
             >
               <span class="bg-primary rounded-full w-2 h-2"></span>
-              <span class="text-primary text-xs">https://site.build.example</span>
+              <span class="text-primary text-xs">{{ 'preview_url_placeholder' | translate }}</span>
             </div>
 
             <button
               hlmBtn
               class="flex items-center gap-1 bg-transparent text-primary hover:text-foreground text-xs"
               (click)="toggleFocusMode()"
-              [attr.aria-label]="focusMode() ? 'Exit focus mode' : 'Enter focus mode'"
+              [attr.aria-label]="
+                (focusMode() ? 'preview_exit_focus' : 'preview_enter_focus') | translate
+              "
             >
               <ng-icon [name]="focusMode() ? 'lucideMinimize2' : 'lucideMaximize2'" size="14" />
             </button>
@@ -154,7 +161,9 @@
                   @if (showNavTabs()) {
                     <div class="flex items-center gap-4">
                       @for (tab of navTabs(); track $index) {
-                        <span class="opacity-60 text-foreground/80 text-xs">{{ tab }}</span>
+                        <span class="opacity-60 text-foreground/80 text-xs">{{
+                          tab | translate
+                        }}</span>
                       }
                     </div>
                   }
@@ -182,16 +191,16 @@
                         class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest"
                         [class]="hlmP"
                       >
-                        {{ product.badge }}
+                        {{ product.badge | translate }}
                       </p>
                       <h2 class="mb-3 font-bold text-foreground/90 text-2xl" [class]="hlmH2">
-                        {{ product.name }}
+                        {{ product.name | translate }}
                       </h2>
                       <button
                         class="bg-primary px-5 py-2 w-fit font-bold text-background text-xs uppercase"
                         style="border-radius: var(--radius, 0px)"
                       >
-                        SHOP NOW — ${{ product.price }}
+                        {{ 'preview_shop_now' | translate }} — ${{ product.price }}
                       </button>
                     </div>
                   }
@@ -229,13 +238,13 @@
                         <div class="p-3 preview-card">
                           <div class="flex justify-between items-start mb-1">
                             <span class="font-semibold text-foreground/80 text-xs">
-                              {{ product.name }}
+                              {{ product.name | translate }}
                             </span>
                             <span
                               class="bg-primary px-1.5 py-0.5 font-bold text-[9px] text-background uppercase"
                               style="border-radius: var(--radius-sm, 0px)"
                             >
-                              {{ product.badge }}
+                              {{ product.badge | translate }}
                             </span>
                           </div>
                           <span class="font-bold text-primary text-xs">${{ product.price }}</span>
@@ -250,7 +259,7 @@
                     class="opacity-60 mb-2 pt-2 font-bold text-foreground/90 text-xs uppercase"
                     [class]="hlmP"
                   >
-                    <app-double-slash /> SELECT SIZE
+                    <app-double-slash /> {{ 'preview_select_size' | translate }}
                   </p>
 
                   <div class="flex gap-2">
@@ -275,7 +284,7 @@
 
                 <div class="bg-background/80 px-4 py-3 border-t border-t-background/90 text-center">
                   <span class="opacity-30 text-foreground/90 text-xs">
-                    Powered by Spartan Library · BuilderAI
+                    {{ 'preview_powered_by' | translate }}
                   </span>
                 </div>
               </div>
@@ -285,7 +294,7 @@
 
         <div class="mt-2 p-4 border border-foreground/10 rounded build-summary">
           <p class="mb-4 text-xs uppercase preview-tag" [class]="hlmP">
-            <app-double-slash /> BUILD_SUMMARY
+            <app-double-slash /> {{ 'preview_build_summary' | translate }}
           </p>
           <div
             class="gap-3 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
@@ -301,7 +310,9 @@
             } @else {
               @for (stat of buildSummary(); track stat.label) {
                 <div class="lg:text-left text-center">
-                  <p class="mb-1 text-foreground/25 text-xs" [class]="hlmP">{{ stat.label }}</p>
+                  <p class="mb-1 text-foreground/25 text-xs" [class]="hlmP">
+                    {{ stat.label | translate }}
+                  </p>
                   <p class="font-semibold text-foreground/80 text-sm" [class]="hlmP">
                     {{ stat.value }}
                   </p>
@@ -319,8 +330,8 @@
   <div #focusContainer class="z-100 fixed inset-0 bg-background p-4 overflow-auto">
     <div class="flex justify-end mb-4">
       <button hlmBtn variant="outline" size="sm" (click)="toggleFocusMode()">
-        <ng-icon name="lucideMinimize2" class="mr-1" />
-        Exit Focus
+        <ng-icon name="lucideMinimize2" class="me-1" />
+        {{ 'preview_exit_focus' | translate }}
       </button>
     </div>
     <div
@@ -337,7 +348,7 @@
         @if (showNavTabs()) {
           <div class="flex items-center gap-4">
             @for (tab of navTabs(); track $index) {
-              <span class="opacity-60 text-foreground/80 text-xs">{{ tab }}</span>
+              <span class="opacity-60 text-foreground/80 text-xs">{{ tab | translate }}</span>
             }
           </div>
         }
@@ -359,16 +370,16 @@
               class="opacity-80 mb-1 text-primary text-xs uppercase tracking-widest"
               [class]="hlmP"
             >
-              {{ product.badge }}
+              {{ product.badge | translate }}
             </p>
             <h2 class="mb-3 font-bold text-foreground/90 text-3xl" [class]="hlmH2">
-              {{ product.name }}
+              {{ product.name | translate }}
             </h2>
             <button
               class="bg-primary px-6 py-3 w-fit font-bold text-background text-sm uppercase"
               style="border-radius: var(--radius, 0px)"
             >
-              <app-double-slash /> SHOP NOW — ${{ product.price }}
+              <app-double-slash /> {{ 'preview_shop_now' | translate }} — ${{ product.price }}
             </button>
           </div>
         }
@@ -388,13 +399,13 @@
             <div class="p-3 preview-card">
               <div class="flex justify-between items-start mb-1">
                 <span class="font-semibold text-foreground/80 text-sm">
-                  {{ product.name }}
+                  {{ product.name | translate }}
                 </span>
                 <span
                   class="bg-primary px-1.5 py-0.5 font-bold text-[9px] text-background uppercase"
                   style="border-radius: var(--radius-sm, 0px)"
                 >
-                  {{ product.badge }}
+                  {{ product.badge | translate }}
                 </span>
               </div>
               <span class="font-bold text-primary text-xs">${{ product.price }}</span>
@@ -405,7 +416,7 @@
 
       <div class="bg-background/80 px-4 py-3 border-t border-t-background/90 text-center">
         <span class="opacity-30 text-foreground/90 text-xs">
-          Powered by Spartan Library · BuilderAI
+          {{ 'preview_powered_by' | translate }}
         </span>
       </div>
     </div>
@@ -415,12 +426,12 @@
 <hlm-dialog [state]="deployDialogState()" (closed)="deployDialogState.set('closed')" class="">
   <hlm-dialog-content class="sm:max-w-lg" *hlmDialogPortal="let ctx">
     <hlm-dialog-header>
-      <h3 hlmDialogTitle [class]="hlmH3">Confirm Theme Selection</h3>
+      <h3 hlmDialogTitle [class]="hlmH3">{{ 'preview_confirm_title' | translate }}</h3>
 
       <p hlmDialogDescription [class]="hlmP">
-        You're about to continue with the
-        <strong>{{ selectedTheme().name }}</strong>
-        theme.
+        {{ 'preview_confirm_desc' | translate }}
+        <strong>{{ selectedTheme().name | translate }}</strong
+        >.
       </p>
     </hlm-dialog-header>
 
@@ -435,26 +446,29 @@
 
           <div class="space-y-1">
             <h4 class="font-semibold" [class]="hlmH4">
-              {{ selectedTheme().name }}
+              {{ selectedTheme().name | translate }}
             </h4>
 
             <p class="text-muted-foreground text-sm" [class]="hlmP">
-              {{ selectedTheme().description }}
+              {{ selectedTheme().description | translate }}
             </p>
           </div>
         </div>
       </div>
 
       <p class="text-muted-foreground text-sm leading-relaxed" [class]="hlmP">
-        This theme will become the foundation of your generated website. If it isn't the look you're
-        aiming for, you can go back and choose another theme before continuing.
+        {{ 'preview_confirm_detail' | translate }}
       </p>
     </div>
 
     <hlm-dialog-footer>
-      <button hlmBtn variant="ghost" (click)="cancelDeployment(ctx)">Choose Another Theme</button>
+      <button hlmBtn variant="ghost" (click)="cancelDeployment(ctx)">
+        {{ 'preview_choose_another' | translate }}
+      </button>
 
-      <button hlmBtn (click)="confirmDeployment(ctx)">Continue to Validation</button>
+      <button hlmBtn (click)="confirmDeployment(ctx)">
+        {{ 'preview_continue_validation' | translate }}
+      </button>
     </hlm-dialog-footer>
   </hlm-dialog-content>
 </hlm-dialog>
