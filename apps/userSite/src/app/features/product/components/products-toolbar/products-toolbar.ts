@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, output, OnDestroy } from '@angular/core';
-import { SortOption } from '@invento/user-site/app/features/product/types/product.interface';
+import { SortOption } from '../../types/product';
 import { HlmBadge } from '@spartan/helm/badge';
 
 @Component({

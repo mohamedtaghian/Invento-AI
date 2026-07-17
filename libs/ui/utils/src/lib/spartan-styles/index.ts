@@ -35,3 +35,13 @@ export {
   navMenuClasses,
   navMenuTriggerClasses,
 } from './hlm-navigation-menu.classes';
+export {
+  breadcrumbClasses,
+  breadcrumbListClassesByStyle,
+  breadcrumbItemClassesByStyle,
+  breadcrumbLinkClassesByStyle,
+  breadcrumbPageClassesByStyle,
+  breadcrumbSeparatorClassesByStyle,
+  breadcrumbEllipsisClassesByStyle,
+} from './hlm-breadcrumb.classes';
+export { scrollAreaClassesByStyle } from './hlm-scroll-area.classes';

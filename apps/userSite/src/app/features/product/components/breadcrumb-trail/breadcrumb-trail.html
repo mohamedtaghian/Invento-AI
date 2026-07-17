@@ -1,0 +1,19 @@
+<div class="w-1/4 mx-auto rounded-full p-1 my-6 text-center">
+  <nav hlmBreadcrumb aria-label="Breadcrumb" class="">
+    <ul hlmBreadcrumbList [class]="hlmUl">
+      <li hlmBreadcrumbItem>
+        <a hlmBreadcrumbLink [link]="'/products'">Catalog</a>
+        <span hlmBreadcrumbSeparator></span>
+      </li>
+      @if (store.product(); as product) {
+        <li hlmBreadcrumbItem>
+          <span>{{ product.category }}</span>
+          <span hlmBreadcrumbSeparator></span>
+        </li>
+        <li hlmBreadcrumbItem>
+          <span hlmBreadcrumbPage>{{ product.name }}</span>
+        </li>
+      }
+    </ul>
+  </nav>
+</div>
