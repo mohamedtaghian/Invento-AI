@@ -15,7 +15,7 @@ const PAGE_SIZE = 6;
 @Component({
   selector: 'app-products',
   templateUrl: './products.html',
-  styleUrl: './products.css',
+
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FiltersSidebar, ProductsToolbar, ProductsGrid, Pagination],
 })
