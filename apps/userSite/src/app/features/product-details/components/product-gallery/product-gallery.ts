@@ -1,20 +1,20 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideZoomIn } from '@ng-icons/lucide';
+import { ChangeDetectionStrategy, Component, inject, computed, signal } from '@angular/core';
+import { ProductStore } from '../../data/product-store';
 
 @Component({
   selector: 'app-product-gallery',
   templateUrl: './product-gallery.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon],
-  providers: [provideIcons({ lucideZoomIn })],
-  host: { class: 'flex flex-col md:flex-row-reverse gap-md' },
 })
 export class ProductGallery {
-  public readonly images = input.required<string[]>();
-  public readonly selectedIndex = signal(0);
+  protected readonly store = inject(ProductStore);
+  private readonly _activeIndex = signal(0);
+  protected readonly activeIndex = this._activeIndex.asReadonly();
+  protected readonly activeImage = computed(
+    () => this.store.product()?.images[this._activeIndex()] ?? null,
+  );
 
   protected selectImage(index: number): void {
-    this.selectedIndex.set(index);
+    this._activeIndex.set(index);
   }
 }

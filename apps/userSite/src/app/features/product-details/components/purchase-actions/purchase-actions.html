@@ -1,0 +1,34 @@
+@let p = store.product()!;
+
+<div class="mb-6 space-y-3">
+  @if (p.inStock) {
+    <p class="flex items-center text-sm font-medium text-green-700">
+      <ng-icon name="lucideCircleCheck" class="me-1" size="sm" />
+      In Stock — {{ p.shippingNote }}
+    </p>
+  }
+
+  <div class="flex gap-3 items-center">
+    <app-quantity-stepper />
+
+    <button hlmBtn class="flex-grow" [disabled]="!store.canAddToCart()" (click)="addToCart()">
+      <ng-icon name="lucideShoppingCart" class="me-1" />
+      Add to Cart
+    </button>
+
+    <button
+      hlmBtn
+      variant="outline"
+      size="icon"
+      [attr.aria-pressed]="isWishlisted()"
+      (click)="toggleWishlist()"
+      aria-label="Toggle wishlist"
+    >
+      <ng-icon name="lucideHeart" [class.text-primary]="isWishlisted()" />
+    </button>
+  </div>
+
+  <button hlmBtn variant="secondary" class="w-full">
+    Buy with <span class="ms-1 font-bold">AuraPay</span>
+  </button>
+</div>

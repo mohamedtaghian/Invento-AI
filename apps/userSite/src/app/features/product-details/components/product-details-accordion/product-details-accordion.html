@@ -1,0 +1,37 @@
+@let p = store.product()!;
+
+<div class="border-t border-border pt-4 space-y-2">
+  <details class="group bg-card rounded-lg border border-border overflow-hidden" open>
+    <summary
+      class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-muted/50 transition-colors text-foreground"
+    >
+      Product Details
+      <ng-icon
+        name="lucideChevronDown"
+        class="transition-transform group-open:rotate-180 text-muted-foreground"
+      />
+    </summary>
+    <div class="text-muted-foreground mt-3 text-sm p-4 pt-0 border-t border-border/50">
+      <ul class="list-disc ps-5 space-y-1">
+        @for (highlight of p.highlights; track highlight) {
+          <li>{{ highlight }}</li>
+        }
+      </ul>
+    </div>
+  </details>
+
+  <details class="group bg-card rounded-lg border border-border overflow-hidden">
+    <summary
+      class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-muted/50 transition-colors text-foreground"
+    >
+      Shipping & Returns
+      <ng-icon
+        name="lucideChevronDown"
+        class="transition-transform group-open:rotate-180 text-muted-foreground"
+      />
+    </summary>
+    <div class="text-muted-foreground mt-3 text-sm p-4 pt-0 border-t border-border/50">
+      <p>{{ p.shippingReturnsPolicy }}</p>
+    </div>
+  </details>
+</div>

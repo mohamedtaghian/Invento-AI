@@ -1,32 +1,28 @@
-<!-- Main Image -->
-<div
-  class="bg-surface-container-lowest border border-outline-variant/30 rounded-xl overflow-hidden shadow-sm aspect-square relative group flex-grow"
->
-  <img [src]="images()[selectedIndex()]" alt="Product image" class="w-full h-full object-cover" />
-  <button
-    type="button"
-    class="absolute bottom-4 end-4 bg-surface/90 backdrop-blur rounded-full p-2 text-on-surface hover:text-primary shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-  >
-    <ng-icon name="lucideZoomIn" class="text-lg" />
-  </button>
-</div>
+@let images = store.product()?.images ?? []; @let activeIdx = activeIndex();
+@let active = activeImage(); @let name = store.product()?.name ?? '';
 
-<!-- Thumbnails -->
-<div
-  class="flex md:flex-col gap-sm overflow-x-auto md:overflow-y-auto md:w-24 flex-shrink-0 pb-2 md:pb-0"
->
-  @for (img of images(); track img; let i = $index) {
-    <button
-      type="button"
-      (click)="selectImage(i)"
-      class="w-20 h-20 md:w-full md:h-24 flex-shrink-0 rounded-lg overflow-hidden relative"
-      [class.border-2]="selectedIndex() === i"
-      [class.border-primary]="selectedIndex() === i"
-      [class.border]="selectedIndex() !== i"
-      [class.border-outline-variant/30]="selectedIndex() !== i"
-      [class.hover:border-primary/50]="selectedIndex() !== i"
-    >
-      <img [src]="img" alt="Product thumbnail" class="w-full h-full object-cover" />
-    </button>
-  }
+<div class="flex flex-col-reverse gap-3 md:flex-row">
+  <div class="flex gap-3 overflow-x-auto pb-1 md:w-24 md:flex-col md:overflow-y-auto md:pb-0">
+    @for (img of images; track img.id; let i = $index) {
+      <button
+        type="button"
+        (click)="selectImage(i)"
+        [attr.aria-pressed]="i === activeIdx"
+        [attr.aria-label]="'View image ' + (i + 1) + ' of ' + name"
+        class="h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 bg-card transition-colors md:h-24 md:w-full"
+        [class.border-primary]="i === activeIdx"
+        [class.border-border]="i !== activeIdx"
+      >
+        <img [src]="img.src" [alt]="img.alt" class="h-full w-full object-cover" />
+      </button>
+    }
+  </div>
+
+  <div
+    class="group relative aspect-square flex-grow overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+  >
+    @if (active) {
+      <img [src]="active.src" [alt]="active.alt" class="h-full w-full object-cover" />
+    }
+  </div>
 </div>
