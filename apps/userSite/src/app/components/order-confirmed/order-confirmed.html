@@ -2,13 +2,16 @@
   <div class="w-full max-w-5xl">
     <!-- Top Header Card -->
     <div
-      class="bg-white rounded-xl border border-slate-200 shadow-sm p-10 text-center mb-6 confirm-anim"
+      hlmCard
+      class="bg-white rounded-xl border-slate-200 shadow-sm p-10 text-center mb-6 confirm-anim block"
     >
+      <!-- Animated Checkmark Icon -->
       <div
-        class="w-12 h-12 bg-[#005bb5] rounded-full flex items-center justify-center mx-auto mb-4"
+        class="success-circle w-12 h-12 bg-[#005bb5] rounded-full flex items-center justify-center mx-auto mb-4"
       >
         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
+            class="checkmark-path"
             stroke-linecap="round"
             stroke-linejoin="round"
             stroke-width="3"
@@ -16,6 +19,7 @@
           ></path>
         </svg>
       </div>
+
       <h1 class="text-3xl font-bold mb-2">Thank You for Your Order!</h1>
       <p class="text-slate-600 mb-1">Order #AC-9942</p>
       <p class="text-sm text-slate-500">
@@ -27,7 +31,8 @@
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
       <!-- Left Column: Order Summary -->
       <div
-        class="md:col-span-7 bg-white rounded-xl border border-slate-200 shadow-sm p-8 confirm-anim"
+        hlmCard
+        class="md:col-span-7 bg-white rounded-xl border-slate-200 shadow-sm p-8 confirm-anim block"
       >
         <h2 class="text-xl font-bold mb-4">Order Summary</h2>
         <hr class="border-slate-200 mb-6" />
@@ -71,7 +76,7 @@
       <!-- Right Column: Status & Shipping -->
       <div class="md:col-span-5 flex flex-col gap-6">
         <!-- Delivery Status -->
-        <div class="bg-[#e8eff5] rounded-xl border border-[#cbd5e1] p-6 confirm-anim">
+        <div hlmCard class="bg-[#e8eff5] rounded-xl border-[#cbd5e1] p-6 confirm-anim block">
           <h2 class="text-xl font-bold mb-6">Delivery Status</h2>
 
           <div class="relative border-l-2 border-[#005bb5] ml-3 space-y-6">
@@ -119,7 +124,7 @@
         </div>
 
         <!-- Shipping Details -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 confirm-anim">
+        <div hlmCard class="bg-white rounded-xl border-slate-200 shadow-sm p-6 confirm-anim block">
           <h2 class="text-xl font-bold mb-3">Shipping Details</h2>
           <hr class="border-slate-200 mb-4" />
           <h4 class="font-bold text-sm mb-2">Alex Mercer</h4>
@@ -141,7 +146,8 @@
         <!-- Continue Button -->
         <a
           routerLink="/"
-          class="confirm-anim w-full bg-[#005bb5] hover:bg-[#004a94] text-white font-bold py-3.5 rounded-lg text-center transition-colors shadow-sm block"
+          hlmBtn
+          class="confirm-anim w-full h-auto bg-[#005bb5] hover:bg-[#004a94] text-white font-bold py-3.5 rounded-lg text-center transition-colors shadow-sm block"
         >
           Continue Shopping
         </a>

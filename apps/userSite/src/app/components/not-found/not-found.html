@@ -1,7 +1,7 @@
 <div
   class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background"
 >
-  <!-- Glowing Background Blobs (Inspired by Image 2) -->
+  <!-- Glowing Background Blobs -->
   <div
     class="floating-shape absolute w-[30rem] h-[30rem] bg-primary/20 rounded-full blur-[100px] -top-20 -left-20 pointer-events-none"
   ></div>
@@ -9,7 +9,7 @@
     class="floating-shape absolute w-[25rem] h-[25rem] bg-secondary/40 rounded-full blur-[80px] bottom-0 right-10 pointer-events-none"
   ></div>
 
-  <!-- Abstract Geometric Shapes (Inspired by Image 1) -->
+  <!-- Abstract Geometric Shapes -->
   <svg
     class="floating-shape absolute top-1/4 right-1/4 w-12 h-12 text-primary opacity-50"
     fill="none"
@@ -29,24 +29,19 @@
 
   <!-- Main Content -->
   <div class="z-10 flex flex-col items-center text-center relative px-6">
-    <!-- Layered 404 Text Effect (Inspired by Image 1) -->
+    <!-- Layered 404 Text Effect -->
     <div class="relative inline-block mb-8 content-reveal">
-      <!-- Top hollow layer -->
       <h1
         class="text-[10rem] md:text-[15rem] font-bold leading-none text-transparent opacity-20 absolute -top-12 md:-top-16 left-0 select-none"
         style="-webkit-text-stroke: 3px var(--color-primary)"
       >
         404
       </h1>
-
-      <!-- Main solid layer -->
       <h1
         class="text-[10rem] md:text-[15rem] font-bold leading-none text-primary relative z-10 select-none"
       >
         404
       </h1>
-
-      <!-- Bottom hollow layer -->
       <h1
         class="text-[10rem] md:text-[15rem] font-bold leading-none text-transparent opacity-20 absolute -bottom-12 md:-bottom-16 left-0 select-none"
         style="-webkit-text-stroke: 3px var(--color-primary)"
@@ -56,16 +51,25 @@
     </div>
 
     <!-- Typography & Button -->
-    <h2 class="text-heading-2 mb-4 mt-8 content-reveal">Oops... looks like you are lost</h2>
+    <p class="text-xs font-mono text-muted-foreground uppercase tracking-wider mb-2 content-reveal">
+      // SYSTEM_ERROR
+    </p>
+    <h2 class="text-3xl font-bold tracking-tight text-foreground mb-4 mt-2 content-reveal">
+      Page Not Found
+    </h2>
 
-    <p class="text-muted-foreground mb-10 max-w-md mx-auto content-reveal text-lg">
-      There is no such page in our ecosystem, but you can always find your way back home.
+    <p class="text-muted-foreground mb-10 max-w-md mx-auto content-reveal text-sm">
+      There is no active route at this destination in the ecosystem registry.
     </p>
 
     <div class="content-reveal">
-      <!-- Using your global main-btn class, but rounding it fully to match the pictures -->
-      <a routerLink="/" class="main-btn !rounded-full !px-8 !py-4 hover:scale-105">
-        Return to main page
+      <a
+        routerLink="/"
+        hlmBtn
+        variant="default"
+        class="font-mono uppercase tracking-wider text-xs px-8 py-6 shadow-md hover:scale-105 transition-transform duration-300"
+      >
+        Reboot Interface
       </a>
     </div>
   </div>

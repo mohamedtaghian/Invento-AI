@@ -12,7 +12,8 @@
 
       <!-- Product 1 -->
       <div
-        class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 mb-4"
+        hlmCard
+        class="bg-white p-4 rounded-xl border-slate-200 shadow-sm flex flex-row items-center gap-4 mb-4"
       >
         <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
           <img
@@ -39,7 +40,8 @@
 
       <!-- Product 2 -->
       <div
-        class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 mb-8"
+        hlmCard
+        class="bg-white p-4 rounded-xl border-slate-200 shadow-sm flex flex-row items-center gap-4 mb-8"
       >
         <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
           <img
@@ -88,7 +90,8 @@
       <form
         [formGroup]="checkoutForm"
         (ngSubmit)="onSubmit()"
-        class="bg-white p-8 rounded-xl border border-slate-200 shadow-sm"
+        hlmCard
+        class="bg-white p-8 rounded-xl border-slate-200 shadow-sm block"
       >
         <!-- Step 1 -->
         <div class="mb-10">
@@ -103,16 +106,18 @@
           <div class="grid grid-cols-2 gap-4 mb-4">
             <div>
               <label
+                hlmLabel
                 for="firstName"
                 class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
                 >First Name</label
               >
               <input
+                hlmInput
                 id="firstName"
                 type="text"
                 formControlName="firstName"
                 placeholder="Jane"
-                class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+                class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
                 [class.border-red-500]="
                   checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
                 "
@@ -120,16 +125,18 @@
             </div>
             <div>
               <label
+                hlmLabel
                 for="lastName"
                 class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
                 >Last Name</label
               >
               <input
+                hlmInput
                 id="lastName"
                 type="text"
                 formControlName="lastName"
                 placeholder="Doe"
-                class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+                class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
                 [class.border-red-500]="
                   checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched
                 "
@@ -139,16 +146,18 @@
 
           <div class="mb-4">
             <label
+              hlmLabel
               for="address"
               class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
               >Address Line 1</label
             >
             <input
+              hlmInput
               id="address"
               type="text"
               formControlName="address"
               placeholder="123 Innovation Way"
-              class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+              class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
               [class.border-red-500]="
                 checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched
               "
@@ -157,16 +166,18 @@
 
           <div>
             <label
+              hlmLabel
               for="city"
               class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
               >City</label
             >
             <input
+              hlmInput
               id="city"
               type="text"
               formControlName="city"
               placeholder="Metropolis"
-              class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+              class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
               [class.border-red-500]="
                 checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched
               "
@@ -186,6 +197,7 @@
 
           <div class="mb-4 relative">
             <label
+              hlmLabel
               for="cardNumber"
               class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
               >Card Number</label
@@ -205,11 +217,12 @@
                 ></path>
               </svg>
               <input
+                hlmInput
                 id="cardNumber"
                 type="text"
                 formControlName="cardNumber"
                 placeholder="0000 0000 0000 0000"
-                class="w-full border border-slate-300 rounded-md py-2.5 pl-10 pr-3 font-mono focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+                class="w-full border-slate-300 rounded-md py-2.5 pl-10 pr-3 font-mono focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
                 [class.border-red-500]="
                   checkoutForm.get('cardNumber')?.invalid && checkoutForm.get('cardNumber')?.touched
                 "
@@ -220,16 +233,18 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <label
+                hlmLabel
                 for="expiry"
                 class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
                 >Expiry (MM/YY)</label
               >
               <input
+                hlmInput
                 id="expiry"
                 type="text"
                 formControlName="expiry"
                 placeholder="12/25"
-                class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+                class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
                 [class.border-red-500]="
                   checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched
                 "
@@ -237,16 +252,18 @@
             </div>
             <div>
               <label
+                hlmLabel
                 for="cvc"
                 class="text-xs font-bold uppercase tracking-wider mb-2 block text-slate-700"
                 >CVC</label
               >
               <input
+                hlmInput
                 id="cvc"
                 type="text"
                 formControlName="cvc"
                 placeholder="123"
-                class="w-full border border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
+                class="w-full border-slate-300 rounded-md p-2.5 focus:ring-2 focus:ring-[#005bb5]/20 focus:border-[#005bb5] outline-none"
                 [class.border-red-500]="
                   checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched
                 "
@@ -256,8 +273,9 @@
         </div>
 
         <button
+          hlmBtn
           type="submit"
-          class="w-full bg-[#005bb5] hover:bg-[#004a94] text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          class="w-full h-auto bg-[#005bb5] hover:bg-[#004a94] text-white font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors"
         >
           Pay $515.16 Securely
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
