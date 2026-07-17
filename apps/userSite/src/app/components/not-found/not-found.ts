@@ -2,16 +2,18 @@ import { Component, afterNextRender } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import gsap from 'gsap';
 
+// Spartan UI Imports
+import { HlmButton } from '@spartan/helm/button';
+
 @Component({
   selector: 'app-not-found',
   standalone: true,
-  imports: [RouterLink], // Required for the "Return" button to work
+  imports: [RouterLink, HlmButton],
   templateUrl: './not-found.html',
 })
 export class NotFoundComponent {
   constructor() {
     afterNextRender(() => {
-      // 1. Continuous floating animation for abstract background elements
       gsap.to('.floating-shape', {
         y: 'random(-40, 40)',
         x: 'random(-40, 40)',
@@ -23,7 +25,6 @@ export class NotFoundComponent {
         stagger: 0.2,
       });
 
-      // 2. Initial pop-in animation for the main content
       gsap.from('.content-reveal', {
         y: 60,
         opacity: 0,

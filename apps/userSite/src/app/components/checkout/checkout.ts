@@ -3,10 +3,16 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import gsap from 'gsap';
 
+// Spartan UI Imports
+import { HlmLabel } from '@spartan/helm/label';
+import { HlmInput } from '@spartan/helm/input';
+import { HlmButton } from '@spartan/helm/button';
+import { HlmCard } from '@spartan/helm/card';
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, HlmLabel, HlmInput, HlmButton, HlmCard],
   templateUrl: './checkout.html',
 })
 export class CheckoutComponent {
@@ -38,7 +44,6 @@ export class CheckoutComponent {
 
   onSubmit() {
     if (this.checkoutForm.valid) {
-      // Navigate to order confirmed on successful submission
       this.router.navigate(['/order-confirmed']);
     } else {
       this.checkoutForm.markAllAsTouched();
