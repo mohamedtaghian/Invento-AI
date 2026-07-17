@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Preview } from './preview';
 import { PreviewDataClient } from '@/app/core/service/preview-data-client';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { LocaleService } from '@invento/core';
 import {
   MOCK_THEMES,
   MOCK_PREVIEW_PRODUCTS,
@@ -33,9 +34,26 @@ describe('Preview', () => {
   let builderState: BuilderState;
 
   beforeEach(async () => {
+    const mockLocale = {
+      locale: vi.fn().mockReturnValue('en'),
+      isRtl: vi.fn().mockReturnValue(false),
+      translate: vi.fn((key: string, params?: Record<string, string | number>) => {
+        const map: Record<string, string> = {
+          build_items: `${params?.['n'] ?? 0} items`,
+          build_skus: `${params?.['n'] ?? 0} SKUs`,
+          build_routes: `${params?.['n'] ?? 0} routes`,
+        };
+        return map[key] ?? key;
+      }),
+    } as unknown as LocaleService;
+
     await TestBed.configureTestingModule({
       imports: [Preview],
-      providers: [PreviewDataClient, BuilderState],
+      providers: [
+        PreviewDataClient,
+        BuilderState,
+        { provide: LocaleService, useValue: mockLocale },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Preview);
@@ -111,9 +129,9 @@ describe('Preview', () => {
   it('computes dynamic buildSummary', () => {
     fixture.detectChanges();
     const summary = component.buildSummary();
-    const variantsEntry = summary.find((s) => s.label === 'VARIANTS');
+    const variantsEntry = summary.find((s) => s.label === 'preview_variants');
     expect(variantsEntry?.value).toBe(`${MOCK_PREVIEW_PRODUCTS.length * 4} SKUs`);
-    const pagesEntry = summary.find((s) => s.label === 'PAGES');
+    const pagesEntry = summary.find((s) => s.label === 'preview_pages');
     expect(pagesEntry?.value).toBe(`${MOCK_PREVIEW_TABS.length + 4} routes`);
   });
 });

@@ -12,6 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideInfinity, lucidePercent } from '@ng-icons/lucide';
+import { TranslatePipe } from '@invento/core';
 
 interface Stat {
   readonly label: string;
@@ -35,7 +36,7 @@ interface DisplayStat {
   selector: 'app-stats',
   templateUrl: './stats.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ScrollAnimateDirective, NgIcon],
+  imports: [ScrollAnimateDirective, NgIcon, TranslatePipe],
   providers: [provideIcons({ lucideInfinity, lucidePercent, lucideChevronLeft })],
 })
 export class Stats implements OnInit, OnDestroy {
@@ -46,24 +47,24 @@ export class Stats implements OnInit, OnDestroy {
 
   private readonly _stats: Stat[] = [
     {
-      label: 'Build Stages',
+      label: 'stats_stages',
       numericValue: 4,
     },
     {
-      label: 'Schema Types',
+      label: 'stats_schemas',
       numericValue: null,
       standaloneIcon: 'lucideInfinity',
     },
     {
-      label: 'AI-Generated',
+      label: 'stats_ai_generated',
       numericValue: 100,
       suffixIcon: 'lucidePercent',
     },
     {
-      label: 'Time to Deploy',
+      label: 'stats_time',
       numericValue: 2,
       prefixIcon: 'lucideChevronLeft',
-      suffixText: 'min',
+      suffixText: 'stats_min',
     },
   ];
 

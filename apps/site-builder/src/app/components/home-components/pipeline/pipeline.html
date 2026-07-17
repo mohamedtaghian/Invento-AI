@@ -11,7 +11,7 @@
   >
     BUILD_PIPELINE
   </span> -->
-  <app-page-header badgeText="BUILD_PIPELINE" title="" accentTitle=""></app-page-header>
+  <app-page-header badgeText="pipeline_badge" title="" accentTitle=""></app-page-header>
 
   <!-- Grid -->
   <div class="gap-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 w-full">
@@ -34,8 +34,12 @@
           {{ step.number }}
         </span>
         <div hlmCardHeader class="relative gap-1 p-0">
-          <h3 hlmCardTitle class="font-semibold text-base" [class]="hlmH3">{{ step.title }}</h3>
-          <p hlmCardDescription class="font-mono text-xs" [class]="hlmP">{{ step.subtitle }}</p>
+          <h3 hlmCardTitle class="font-semibold text-base" [class]="hlmH3">
+            {{ step.title | translate }}
+          </h3>
+          <p hlmCardDescription class="font-mono text-xs" [class]="hlmP">
+            {{ step.subtitle | translate }}
+          </p>
         </div>
       </a>
     }

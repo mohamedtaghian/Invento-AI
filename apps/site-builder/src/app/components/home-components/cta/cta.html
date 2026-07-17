@@ -9,7 +9,8 @@
       [animDelay]="100"
       class="${hlmH2} font-bold text-foreground text-3xl md:text-4xl lg:text-5xl"
     >
-      Ready to <span class="text-primary">compile your business?</span>
+      {{ 'cta_title' | translate }}
+      <span class="text-primary">{{ 'cta_title_accent' | translate }}</span>
     </h2>
 
     <!-- Used hlmP directive from SpartanUI to ahve the same shape in all project -->
@@ -19,13 +20,13 @@
       class="${hlmP} text-muted-foreground text-base"
       [class]="hlmP"
     >
-      From abstract idea to live storefront in under 2 minutes.
+      {{ 'cta_desc' | translate }}
     </p>
 
     <div appScrollAnimate="zoom-in" [animDelay]="350">
       <a hlmBtn routerLink="/build" size="lg" class="gap-2 mt-4 px-8 font-mono text-sm">
         <ng-icon name="lucideBolt" />
-        INITIATE BUILD SEQUENCE
+        {{ 'cta_btn' | translate }}
       </a>
     </div>
   </div>

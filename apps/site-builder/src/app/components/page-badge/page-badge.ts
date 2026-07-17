@@ -1,9 +1,10 @@
 import { Component, input, InputSignal } from '@angular/core';
 import { HlmBadgeImports } from '@spartan/helm/badge';
+import { TranslatePipe } from '@invento/core';
 
 @Component({
   selector: 'app-page-badge',
-  imports: [HlmBadgeImports],
+  imports: [HlmBadgeImports, TranslatePipe],
   templateUrl: './page-badge.html',
   styleUrl: './page-badge.css',
 })

@@ -4,9 +4,12 @@ import {
   Component,
   OnInit,
   OnDestroy,
+  computed,
+  inject,
   signal,
   input,
 } from '@angular/core';
+import { LocaleService } from '@invento/core';
 
 @Component({
   selector: 'app-typing-text',
@@ -15,7 +18,12 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypingText implements OnInit, OnDestroy {
-  public readonly words = input<string[]>(['Your Business']);
+  private readonly _localeService = inject(LocaleService);
+
+  public readonly words = input<string[]>(['hero_welcome_1']);
+  protected readonly _translatedWords = computed(() =>
+    this.words().map((w) => this._localeService.translate(w)),
+  );
   public readonly typingSpeed = input<number>(100);
   public readonly deletingSpeed = input<number>(60);
   public readonly pauseAfterType = input<number>(1800);
@@ -48,7 +56,7 @@ export class TypingText implements OnInit, OnDestroy {
   }
 
   private _startTyping(): void {
-    const words = this.words();
+    const words = this._translatedWords();
     const currentWord = words[this._wordIndex];
 
     if (!this._isDeleting) {

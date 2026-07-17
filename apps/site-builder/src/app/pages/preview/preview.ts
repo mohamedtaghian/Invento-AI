@@ -35,6 +35,7 @@ import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import { hlmH2, hlmH3, hlmH4, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { LocaleService, TranslatePipe } from '@invento/core';
 
 @Component({
   selector: 'app-preview',
@@ -46,6 +47,7 @@ import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
     NgStyle,
     ContainerWidth,
     DoubleSlash,
+    TranslatePipe,
   ],
   providers: [
     provideIcons({
@@ -69,6 +71,7 @@ export class Preview {
   private readonly builderState = inject(BuilderState);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly router = inject(Router);
+  private readonly _localeService = inject(LocaleService);
 
   private readonly previewDataClientService = inject(PreviewDataClient);
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
@@ -93,9 +96,9 @@ export class Preview {
   private readonly sizeFactors: Record<PreviewSize, number> = { S: 0.8, M: 1.0, L: 1.2, XL: 1.5 };
 
   readonly viewports: readonly Viewport[] = [
-    { id: 'desktop', icon: 'lucideTvMinimal', label: 'Desktop', width: '100%' },
-    { id: 'tablet', icon: 'lucideTablet', label: 'Tablet', width: '768px' },
-    { id: 'mobile', icon: 'lucideSmartphoneCharging', label: 'Mobile', width: '390px' },
+    { id: 'desktop', icon: 'lucideTvMinimal', label: 'preview_desktop', width: '100%' },
+    { id: 'tablet', icon: 'lucideTablet', label: 'preview_tablet', width: '768px' },
+    { id: 'mobile', icon: 'lucideSmartphoneCharging', label: 'preview_mobile', width: '390px' },
   ] as const;
   readonly previewCssVars = computed<Record<string, string>>(() => {
     const c = this.selectedTheme().colors;
@@ -158,12 +161,24 @@ export class Preview {
     () => this.builderState.businessName() || this.builderState.brainstorm() || 'InventoAI',
   );
   readonly featuredProduct = computed(() => this.products()[0] || null);
+  readonly deployChevron = computed(() =>
+    this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
+  );
   readonly buildSummary = computed(() => [
-    { label: 'THEME', value: this.selectedTheme().name },
-    { label: 'PRODUCTS', value: `${this.products().length} items` },
-    { label: 'VARIANTS', value: `${this.products().length * 4} SKUs` },
-    { label: 'PAGES', value: `${this.navTabs().length + 4} routes` },
-    { label: 'STATUS', value: this.selectedViewport().toUpperCase() },
+    { label: 'preview_theme', value: this._localeService.translate(this.selectedTheme().name) },
+    {
+      label: 'preview_products',
+      value: this._localeService.translate('build_items', { n: this.products().length }),
+    },
+    {
+      label: 'preview_variants',
+      value: this._localeService.translate('build_skus', { n: this.products().length * 4 }),
+    },
+    {
+      label: 'preview_pages',
+      value: this._localeService.translate('build_routes', { n: this.navTabs().length + 4 }),
+    },
+    { label: 'preview_status', value: this.selectedViewport().toUpperCase() },
   ]);
 
   private readonly _userHasManuallySelectedTheme = signal(false);

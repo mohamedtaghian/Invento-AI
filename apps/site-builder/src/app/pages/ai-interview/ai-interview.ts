@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   afterNextRender,
+  computed,
   signal,
   inject,
   ViewChild,
@@ -28,6 +29,7 @@ import { hlmP } from '@spartan/helm/typography';
 import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmInputImports } from '@spartan/helm/input';
 import { SpartanStepperImports } from '@/spartan/stepper';
+import { TranslatePipe } from '@invento/core';
 
 /* ── LEGACY IMPORTS ──────────────────────────────────────────────
    Restore these if reverting to the GSAP card stepper:
@@ -51,9 +53,51 @@ export interface TextQuestion extends BaseQuestion {
 }
 export type InterviewQuestion = ChoiceQuestion | TextQuestion;
 
-const OTHER_OPTION = 'Other (specify)';
+import { LocaleService } from '@invento/core';
+
+const OTHER_OPTION = 'opt_other';
 const OTHER_MIN_LEN = 10;
 const OTHER_MAX_LEN = 25;
+
+const KEY_TO_ENGLISH: Record<string, string> = {
+  opt_ecommerce_physical: 'E-Commerce (Physical)',
+  opt_ecommerce_digital: 'E-Commerce (Digital)',
+  opt_saas: 'SaaS / Platform',
+  opt_service: 'Service Business',
+  opt_marketplace: 'Marketplace',
+  opt_content_media: 'Content / Media',
+  opt_fashion_apparel: 'Fashion & Apparel',
+  opt_beauty_wellness: 'Beauty & Wellness',
+  opt_food_beverage: 'Food & Beverage',
+  opt_tech_gadgets: 'Tech & Gadgets',
+  opt_home_living: 'Home & Living',
+  opt_sports_outdoors: 'Sports & Outdoors',
+  opt_jewelry_accessories: 'Jewelry & Accessories',
+  opt_gen_z: 'Gen Z (13–24)',
+  opt_millennials: 'Millennials (25–40)',
+  opt_gen_x: 'Gen X (41–56)',
+  opt_boomers: 'Baby Boomers (57+)',
+  opt_all_ages: 'All Ages',
+  opt_niche: 'Niche Enthusiasts',
+  opt_business: 'Business / Enterprise',
+  opt_budget: 'Budget (<$20)',
+  opt_mid_range: 'Mid-range ($20–$100)',
+  opt_premium: 'Premium ($100–$500)',
+  opt_luxury: 'Luxury ($500+)',
+  opt_dtc: 'DTC Website',
+  opt_mobile_app: 'Mobile App',
+  opt_wholesale: 'Wholesale / Retail',
+  opt_social: 'Social Commerce',
+  opt_subscription: 'Subscription Model',
+  opt_drops: 'Limited Drops',
+  opt_price: 'Price / Affordability',
+  opt_quality: 'Quality / Craftsmanship',
+  opt_innovation: 'Innovation / Technology',
+  opt_sustainability: 'Sustainability / Ethics',
+  opt_experience: 'Customer Experience',
+  opt_design: 'Design / Aesthetics',
+  opt_other: 'Other (specify)',
+};
 
 @Component({
   selector: 'app-ai-interview',
@@ -67,6 +111,7 @@ const OTHER_MAX_LEN = 25;
     ReactiveFormsModule,
     PageHeader,
     SpartanStepperImports,
+    TranslatePipe,
   ],
   providers: [provideIcons({ lucideMessageSquare, lucideChevronLeft, lucideChevronRight })],
   templateUrl: './ai-interview.html',
@@ -76,10 +121,26 @@ const OTHER_MAX_LEN = 25;
 export class AiInterview {
   private readonly builderState = inject(BuilderState);
   private readonly router = inject(Router);
+  private readonly _localeService = inject(LocaleService);
   protected readonly hlmP = hlmP;
   protected readonly OTHER_OPTION = OTHER_OPTION;
   protected readonly OTHER_MIN_LEN = OTHER_MIN_LEN;
   protected readonly OTHER_MAX_LEN = OTHER_MAX_LEN;
+
+  protected readonly chevronBack = computed(() =>
+    this._localeService.isRtl() ? 'lucideChevronRight' : 'lucideChevronLeft',
+  );
+  protected readonly chevronNext = computed(() =>
+    this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
+  );
+
+  private resolveEnglish(key: string): string {
+    return KEY_TO_ENGLISH[key] ?? key;
+  }
+
+  private resolveEnglishArray(arr: string[]): string[] {
+    return arr.map((k) => this.resolveEnglish(k));
+  }
 
   @ViewChild('stepper') stepper?: CdkStepper;
 
@@ -144,104 +205,98 @@ export class AiInterview {
     {
       id: 'business_name',
       label: 'BRAND_NAME',
-      prompt: 'What is your brand name?',
+      prompt: 'question_business_name',
       type: 'text',
     },
     {
       id: 'business_type',
       label: 'ENTITY_TYPE',
-      prompt: 'What type of business are you building?',
+      prompt: 'question_business_type',
       type: 'select',
       options: [
-        'E-Commerce (Physical)',
-        'E-Commerce (Digital)',
-        'SaaS / Platform',
-        'Service Business',
-        'Marketplace',
-        'Content / Media',
+        'opt_ecommerce_physical',
+        'opt_ecommerce_digital',
+        'opt_saas',
+        'opt_service',
+        'opt_marketplace',
+        'opt_content_media',
         OTHER_OPTION,
       ],
-      aiPrefill: 'E-Commerce (Physical)',
+      aiPrefill: 'opt_ecommerce_physical',
     },
     {
       id: 'industry',
       label: 'INDUSTRY_VERTICAL',
-      prompt: 'Which industry vertical does this operate in?',
+      prompt: 'question_industry',
       type: 'select',
       options: [
-        'Fashion & Apparel',
-        'Beauty & Wellness',
-        'Food & Beverage',
-        'Tech & Gadgets',
-        'Home & Living',
-        'Sports & Outdoors',
-        'Jewelry & Accessories',
+        'opt_fashion_apparel',
+        'opt_beauty_wellness',
+        'opt_food_beverage',
+        'opt_tech_gadgets',
+        'opt_home_living',
+        'opt_sports_outdoors',
+        'opt_jewelry_accessories',
         OTHER_OPTION,
       ],
-      aiPrefill: 'Fashion & Apparel',
+      aiPrefill: 'opt_fashion_apparel',
     },
     {
       id: 'target',
       label: 'TARGET_DEMOGRAPHIC',
-      prompt: 'Describe your primary customer segment',
+      prompt: 'question_target',
       type: 'select',
       options: [
-        'Gen Z (13–24)',
-        'Millennials (25–40)',
-        'Gen X (41–56)',
-        'Baby Boomers (57+)',
-        'All Ages',
-        'Niche Enthusiasts',
-        'Business / Enterprise',
+        'opt_gen_z',
+        'opt_millennials',
+        'opt_gen_x',
+        'opt_boomers',
+        'opt_all_ages',
+        'opt_niche',
+        'opt_business',
         OTHER_OPTION,
       ],
-      aiPrefill: 'Millennials (25–40)',
+      aiPrefill: 'opt_millennials',
     },
     {
       id: 'pricing',
       label: 'PRICING_TIER',
-      prompt: 'What pricing tier does your product occupy?',
+      prompt: 'question_pricing',
       type: 'select',
-      options: [
-        'Budget (<$20)',
-        'Mid-range ($20–$100)',
-        'Premium ($100–$500)',
-        'Luxury ($500+)',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'Premium ($100–$500)',
+      options: ['opt_budget', 'opt_mid_range', 'opt_premium', 'opt_luxury', OTHER_OPTION],
+      aiPrefill: 'opt_premium',
     },
     {
       id: 'channels',
       label: 'DISTRIBUTION_CHANNELS',
-      prompt: 'How will products reach customers?',
+      prompt: 'question_channels',
       type: 'multiselect',
       options: [
-        'DTC Website',
-        'Mobile App',
-        'Wholesale / Retail',
-        'Social Commerce',
-        'Subscription Model',
-        'Limited Drops',
+        'opt_dtc',
+        'opt_mobile_app',
+        'opt_wholesale',
+        'opt_social',
+        'opt_subscription',
+        'opt_drops',
         OTHER_OPTION,
       ],
-      aiPrefill: 'DTC Website, Limited Drops, Social Commerce',
+      aiPrefill: 'opt_dtc, opt_drops, opt_social',
     },
     {
       id: 'differentiator',
       label: 'UNIQUE_VALUE_PROP',
-      prompt: 'What is your primary competitive differentiator?',
+      prompt: 'question_differentiator',
       type: 'select',
       options: [
-        'Price / Affordability',
-        'Quality / Craftsmanship',
-        'Innovation / Technology',
-        'Sustainability / Ethics',
-        'Customer Experience',
-        'Design / Aesthetics',
+        'opt_price',
+        'opt_quality',
+        'opt_innovation',
+        'opt_sustainability',
+        'opt_experience',
+        'opt_design',
         OTHER_OPTION,
       ],
-      aiPrefill: 'Design / Aesthetics',
+      aiPrefill: 'opt_design',
     },
   ];
 
@@ -368,13 +423,21 @@ export class AiInterview {
     const raw = this.form.value as Record<string, string | string[]>;
     const other = this.otherTextInputs();
     for (const key of Object.keys(raw)) {
-      const val = raw[key];
+      let val = raw[key];
       const trimmedOther = other[key]?.trim();
-      if (val === OTHER_OPTION && trimmedOther) {
-        raw[key] = trimmedOther;
-      } else if (Array.isArray(val) && val.includes(OTHER_OPTION) && trimmedOther) {
-        raw[key] = val.map((v) => (v === OTHER_OPTION ? trimmedOther : v));
+      if (typeof val === 'string') {
+        if (val === OTHER_OPTION && trimmedOther) {
+          val = trimmedOther;
+        } else {
+          val = this.resolveEnglish(val);
+        }
+      } else if (Array.isArray(val)) {
+        val = this.resolveEnglishArray(val);
+        if (val.includes(this.resolveEnglish(OTHER_OPTION)) && trimmedOther) {
+          val = val.map((v) => (v === this.resolveEnglish(OTHER_OPTION) ? trimmedOther : v));
+        }
       }
+      raw[key] = val;
     }
 
     this.builderState.aiAnswers.set(raw);

@@ -2,7 +2,7 @@
   <div appScrollAnimate="fade-up" [animDelay]="0" hlmCard class="gap-6 p-4 sm:p-8">
     <!-- Used hlmP directive from SpartanUI to ahve the same shape in all project -->
     <p class="px-2 font-mono text-muted-foreground text-sm uppercase" [class]="hlmP">
-      <app-double-slash /> SYSTEM_CAPABILITIES
+      <app-double-slash /> {{ 'caps_header' | translate }}
     </p>
 
     <!-- Grid -->
@@ -20,9 +20,11 @@
             <ng-icon [name]="cap.icon" class="text-sm" />
           </div>
           <a [routerLink]="cap.link" class="flex flex-col gap-1 min-w-0">
-            <h3 hlmCardTitle class="font-semibold text-sm" [class]="hlmH3">{{ cap.title }}</h3>
+            <h3 hlmCardTitle class="font-semibold text-sm" [class]="hlmH3">
+              {{ cap.title | translate }}
+            </h3>
             <p hlmCardDescription class="text-xs wrap-break-word leading-relaxed" [class]="hlmP">
-              {{ cap.description }}
+              {{ cap.description | translate }}
             </p>
           </a>
         </div>

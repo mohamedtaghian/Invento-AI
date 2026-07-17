@@ -3,9 +3,12 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  computed,
+  inject,
   input,
   signal,
 } from '@angular/core';
+import { LocaleService } from '@invento/core';
 
 @Component({
   selector: 'app-ai-loader',
@@ -14,12 +17,13 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiLoader implements OnInit, OnDestroy {
+  private readonly _localeService = inject(LocaleService);
+
   isNavigating = input(false);
-  words = input([
-    'Analyzing your brand essence...',
-    'Generating preview...',
-    'Polishing your theme...',
-  ]);
+  words = input(['loading_analyzing', 'loading_generating', 'loading_polishing']);
+  protected readonly _translatedWords = computed(() =>
+    this.words().map((w) => this._localeService.translate(w)),
+  );
   typingSpeed = input(100);
   deletingSpeed = input(60);
   pauseAfterType = input(1800);
@@ -51,7 +55,7 @@ export class AiLoader implements OnInit, OnDestroy {
   }
 
   private _startTyping(): void {
-    const words = this.words();
+    const words = this._translatedWords();
     const currentWord = words[this._wordIndex];
 
     if (!this._isDeleting) {

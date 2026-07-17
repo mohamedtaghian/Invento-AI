@@ -4,6 +4,7 @@ import { HlmCard, HlmCardHeader, HlmCardTitle, HlmCardDescription } from '@spart
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
 import { PageHeader } from '@/app/components/page-header/page-header';
 import { hlmH3, hlmP } from '@spartan/helm/typography';
+import { TranslatePipe } from '@invento/core';
 
 interface PipelineStep {
   readonly number: string;
@@ -25,6 +26,7 @@ interface PipelineStep {
     HlmCardDescription,
     ScrollAnimateDirective,
     PageHeader,
+    TranslatePipe,
   ],
 })
 export class Pipeline {
@@ -32,10 +34,20 @@ export class Pipeline {
   protected readonly hlmP = hlmP;
 
   protected readonly steps = signal<PipelineStep[]>([
-    { number: '01', title: 'Brainstorm', subtitle: 'Raw business concept', route: '/brain' },
-    { number: '02', title: 'AI Interview', subtitle: 'Schema extraction', route: '/ai-builder' },
-    { number: '03', title: 'Preview', subtitle: 'Preview AI generated theme', route: '/preview' },
-    { number: '04', title: 'Validation', subtitle: 'Site Name vailability', route: '/validation' },
+    { number: '01', title: 'pipeline_step_1', subtitle: 'pipeline_step_1_sub', route: '/brain' },
+    {
+      number: '02',
+      title: 'pipeline_step_2',
+      subtitle: 'pipeline_step_2_sub',
+      route: '/ai-builder',
+    },
+    { number: '03', title: 'pipeline_step_3', subtitle: 'pipeline_step_3_sub', route: '/preview' },
+    {
+      number: '04',
+      title: 'pipeline_step_4',
+      subtitle: 'pipeline_step_4_sub',
+      route: '/validation',
+    },
   ]);
 
   onMouseMove(event: MouseEvent): void {
