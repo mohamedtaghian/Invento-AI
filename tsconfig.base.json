@@ -35,7 +35,8 @@
       "@invento/invento/*": ["./apps/invento/src/*"],
       "@spartan/helm/breadcrumb": ["./libs/ui/breadcrumb/src/index.ts"],
       "@spartan/helm/scroll-area": ["./libs/ui/scroll-area/src/index.ts"],
-      "@spartan/helm/popover": ["./libs/ui/popover/src/index.ts"]
+      "@spartan/helm/popover": ["./libs/ui/popover/src/index.ts"],
+      "@spartan/helm/sheet": ["./libs/ui/sheet/src/index.ts"]
     }
   }
 }
