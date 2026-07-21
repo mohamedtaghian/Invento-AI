@@ -42,13 +42,14 @@ import {
   templateUrl: './home.html',
 })
 export class HomeComponent {
+  // Strings MUST match the exact key names passed to provideIcons
   categories = [
-    { name: 'Laptops', icon: 'lucide-laptop' },
-    { name: 'Audio', icon: 'lucide-headphones' },
-    { name: 'Mobile', icon: 'lucide-smartphone' },
-    { name: 'Wearables', icon: 'lucide-watch' },
-    { name: 'Cameras', icon: 'lucide-camera' },
-    { name: 'Networking', icon: 'lucide-wifi' },
+    { name: 'Laptops', icon: 'lucideLaptop' },
+    { name: 'Audio', icon: 'lucideHeadphones' },
+    { name: 'Mobile', icon: 'lucideSmartphone' },
+    { name: 'Wearables', icon: 'lucideWatch' },
+    { name: 'Cameras', icon: 'lucideCamera' },
+    { name: 'Networking', icon: 'lucideWifi' },
   ];
 
   featuredProducts = [
@@ -88,17 +89,14 @@ export class HomeComponent {
 
   constructor() {
     afterNextRender(() => {
-      // Create a master timeline for a sequenced entrance
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
-      // 1. Animate Hero Text & Buttons
       tl.from('.hero-anim', {
         y: 30,
         opacity: 0,
         duration: 0.8,
         stagger: 0.15,
       })
-        // 2. Animate Category Cards smoothly dropping in
         .from(
           '.category-card',
           {
@@ -109,7 +107,6 @@ export class HomeComponent {
           },
           '-=0.4',
         )
-        // 3. Animate Product Cards fading up
         .from(
           '.product-card',
           {
