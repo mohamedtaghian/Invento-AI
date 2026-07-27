@@ -1,15 +1,20 @@
-<div class="min-h-screen bg-[#f1f5f9] p-6 md:p-10 font-sans text-slate-800 flex justify-center">
+<div class="min-h-screen bg-background p-6 md:p-10 font-sans text-foreground flex justify-center">
   <div class="w-full max-w-5xl">
     <!-- Top Header Card -->
     <div
       hlmCard
-      class="bg-white rounded-xl border-slate-200 shadow-sm p-10 text-center mb-6 confirm-anim block"
+      class="bg-card rounded-xl border-border shadow-sm p-10 text-center mb-6 confirm-anim block"
     >
       <!-- Animated Checkmark Icon -->
       <div
-        class="success-circle w-12 h-12 bg-[#005bb5] rounded-full flex items-center justify-center mx-auto mb-4"
+        class="success-circle w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4"
       >
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg
+          class="w-6 h-6 text-primary-foreground"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
           <path
             class="checkmark-path"
             stroke-linecap="round"
@@ -20,9 +25,9 @@
         </svg>
       </div>
 
-      <h1 class="text-3xl font-bold mb-2">Thank You for Your Order!</h1>
-      <p class="text-slate-600 mb-1">Order #AC-9942</p>
-      <p class="text-sm text-slate-500">
+      <h1 class="text-3xl font-bold mb-2 text-foreground">Thank You for Your Order!</h1>
+      <p class="text-muted-foreground mb-1">Order #AC-9942</p>
+      <p class="text-sm text-muted-foreground">
         A confirmation email has been sent to your registered address.
       </p>
     </div>
@@ -32,13 +37,13 @@
       <!-- Left Column: Order Summary -->
       <div
         hlmCard
-        class="md:col-span-7 bg-white rounded-xl border-slate-200 shadow-sm p-8 confirm-anim block"
+        class="md:col-span-7 bg-card rounded-xl border-border shadow-sm p-8 confirm-anim block"
       >
-        <h2 class="text-xl font-bold mb-4">Order Summary</h2>
-        <hr class="border-slate-200 mb-6" />
+        <h2 class="text-xl font-bold mb-4 text-foreground">Order Summary</h2>
+        <hr class="border-border mb-6" />
 
         <div class="flex items-start gap-4 mb-8">
-          <div class="w-20 h-20 bg-slate-100 rounded-lg overflow-hidden flex-shrink-0">
+          <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
             <img
               src="https://placehold.co/150x150/e2e8f0/475569?text=Headphones"
               alt="Headphones"
@@ -47,46 +52,46 @@
           </div>
           <div class="flex-1">
             <div class="flex justify-between items-start">
-              <h4 class="font-bold">AuraX Pro ANC Headphones</h4>
-              <p class="font-bold">$299.00</p>
+              <h4 class="font-bold text-foreground">AuraX Pro ANC Headphones</h4>
+              <p class="font-bold text-foreground">$299.00</p>
             </div>
-            <p class="text-sm text-slate-500 mt-1">Color: Midnight Blue</p>
-            <p class="text-sm text-slate-500 mt-1">Qty: 1</p>
+            <p class="text-sm text-muted-foreground mt-1">Color: Midnight Blue</p>
+            <p class="text-sm text-muted-foreground mt-1">Qty: 1</p>
           </div>
         </div>
 
-        <div class="space-y-3 text-sm mb-6 text-slate-600">
+        <div class="space-y-3 text-sm mb-6 text-muted-foreground">
           <div class="flex justify-between">
-            <span>Subtotal</span><span class="font-medium text-slate-800">$299.00</span>
+            <span>Subtotal</span><span class="font-medium text-foreground">$299.00</span>
           </div>
           <div class="flex justify-between">
-            <span>Shipping</span><span class="font-medium text-slate-800">Free</span>
+            <span>Shipping</span><span class="font-medium text-foreground">Free</span>
           </div>
           <div class="flex justify-between">
-            <span>Tax</span><span class="font-medium text-slate-800">$24.67</span>
+            <span>Tax</span><span class="font-medium text-foreground">$24.67</span>
           </div>
         </div>
-        <hr class="border-slate-200 mb-4" />
-        <div class="flex justify-between items-center text-lg font-bold">
+        <hr class="border-border mb-4" />
+        <div class="flex justify-between items-center text-lg font-bold text-foreground">
           <span>Total</span>
-          <span>$323.67</span>
+          <span class="text-primary">$323.67</span>
         </div>
       </div>
 
       <!-- Right Column: Status & Shipping -->
       <div class="md:col-span-5 flex flex-col gap-6">
         <!-- Delivery Status -->
-        <div hlmCard class="bg-[#e8eff5] rounded-xl border-[#cbd5e1] p-6 confirm-anim block">
-          <h2 class="text-xl font-bold mb-6">Delivery Status</h2>
+        <div hlmCard class="bg-accent/40 rounded-xl border-border p-6 confirm-anim block">
+          <h2 class="text-xl font-bold mb-6 text-foreground">Delivery Status</h2>
 
-          <div class="relative border-l-2 border-[#005bb5] ml-3 space-y-6">
+          <div class="relative border-l-2 border-primary ml-3 space-y-6">
             <!-- Step 1 (Active) -->
             <div class="relative pl-6">
               <div
-                class="absolute -left-[11px] top-0 w-5 h-5 bg-[#005bb5] rounded-full flex items-center justify-center"
+                class="absolute -left-[11px] top-0 w-5 h-5 bg-primary rounded-full flex items-center justify-center"
               >
                 <svg
-                  class="w-3 h-3 text-white"
+                  class="w-3 h-3 text-primary-foreground"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -99,39 +104,46 @@
                   ></path>
                 </svg>
               </div>
-              <h4 class="font-bold text-sm leading-none pt-0.5">Order Placed</h4>
-              <p class="text-xs text-slate-500 mt-1">Oct 24, 2026 - 10:42 AM</p>
+              <h4 class="font-bold text-sm leading-none pt-0.5 text-foreground">Order Placed</h4>
+              <p class="text-xs text-muted-foreground mt-1">Oct 24, 2026 - 10:42 AM</p>
             </div>
 
             <!-- Step 2 (Pending) -->
             <div class="relative pl-6">
               <div
-                class="absolute -left-[11px] top-0 w-5 h-5 bg-white border-2 border-slate-300 rounded-full"
+                class="absolute -left-[11px] top-0 w-5 h-5 bg-card border-2 border-border rounded-full"
               ></div>
-              <h4 class="font-bold text-sm leading-none pt-0.5 text-slate-500">Processing</h4>
-              <p class="text-xs text-slate-400 mt-1">Expected: Today</p>
+              <h4 class="font-bold text-sm leading-none pt-0.5 text-muted-foreground">
+                Processing
+              </h4>
+              <p class="text-xs text-muted-foreground/70 mt-1">Expected: Today</p>
             </div>
 
             <!-- Step 3 (Pending) -->
             <div class="relative pl-6">
               <div
-                class="absolute -left-[11px] top-0 w-5 h-5 bg-[#e8eff5] border-2 border-slate-300 rounded-full"
+                class="absolute -left-[11px] top-0 w-5 h-5 bg-card border-2 border-border rounded-full"
               ></div>
-              <h4 class="font-bold text-sm leading-none pt-0.5 text-slate-500">Shipped</h4>
-              <p class="text-xs text-slate-400 mt-1">Pending</p>
+              <h4 class="font-bold text-sm leading-none pt-0.5 text-muted-foreground">Shipped</h4>
+              <p class="text-xs text-muted-foreground/70 mt-1">Pending</p>
             </div>
           </div>
         </div>
 
         <!-- Shipping Details -->
-        <div hlmCard class="bg-white rounded-xl border-slate-200 shadow-sm p-6 confirm-anim block">
-          <h2 class="text-xl font-bold mb-3">Shipping Details</h2>
-          <hr class="border-slate-200 mb-4" />
-          <h4 class="font-bold text-sm mb-2">Alex Mercer</h4>
-          <p class="text-sm text-slate-600 mb-1">123 Horizon Lane, Suite 404</p>
-          <p class="text-sm text-slate-600 mb-4">Neo-Seattle, WA 98101</p>
-          <p class="text-sm text-slate-600 flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div hlmCard class="bg-card rounded-xl border-border shadow-sm p-6 confirm-anim block">
+          <h2 class="text-xl font-bold mb-3 text-foreground">Shipping Details</h2>
+          <hr class="border-border mb-4" />
+          <h4 class="font-bold text-sm mb-2 text-foreground">Alex Mercer</h4>
+          <p class="text-sm text-muted-foreground mb-1">123 Horizon Lane, Suite 404</p>
+          <p class="text-sm text-muted-foreground mb-4">Neo-Seattle, WA 98101</p>
+          <p class="text-sm text-muted-foreground flex items-center gap-2">
+            <svg
+              class="w-4 h-4 text-muted-foreground"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -147,7 +159,7 @@
         <a
           routerLink="/"
           hlmBtn
-          class="confirm-anim w-full h-auto bg-[#005bb5] hover:bg-[#004a94] text-white font-bold py-3.5 rounded-lg text-center transition-colors shadow-sm block"
+          class="confirm-anim w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-lg text-center transition-colors shadow-sm block cursor-pointer"
         >
           Continue Shopping
         </a>
