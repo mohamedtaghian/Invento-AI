@@ -1,0 +1,33 @@
+<div hlmCard class="p-4">
+  <div hlmCardHeader class="flex flex-row items-center justify-between p-0 pb-2">
+    <div class="flex items-center gap-2">
+      @if (icon(); as iconName) {
+        <ng-icon [name]="iconName" size="20" class="text-muted-foreground" />
+      }
+      <h3 hlmCardTitle class="text-sm font-medium">{{ title() }}</h3>
+    </div>
+    @switch (trend()) {
+      @case ('up') {
+        <span hlmBadge variant="outline" class="flex items-center gap-1 text-green-600">
+          <ng-icon name="lucideTrendingUp" size="14" />
+          {{ 'kpi_trend_up' | translate }}
+        </span>
+      }
+      @case ('down') {
+        <span hlmBadge variant="outline" class="flex items-center gap-1 text-red-600">
+          <ng-icon name="lucideTrendingDown" size="14" />
+          {{ 'kpi_trend_down' | translate }}
+        </span>
+      }
+      @default {
+        <span hlmBadge variant="outline" class="flex items-center gap-1 text-muted-foreground">
+          <ng-icon name="lucideMinus" size="14" />
+          {{ 'kpi_trend_neutral' | translate }}
+        </span>
+      }
+    }
+  </div>
+  <div hlmCardContent class="p-0 pt-1">
+    <span class="text-2xl font-bold">{{ value() }}</span>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+{
+  "name": "skeleton",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/skeleton/src",
+  "prefix": "hlm",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

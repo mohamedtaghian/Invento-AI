@@ -1,0 +1,10 @@
+<div hlmCard class="flex flex-col items-center justify-center p-8 text-center">
+  <div hlmCardContent class="flex flex-col items-center gap-4 p-0">
+    <ng-icon [name]="icon()" size="48" class="text-muted-foreground" />
+    <h3 class="text-lg font-semibold">{{ title() }}</h3>
+    <p class="text-sm text-muted-foreground max-w-sm">{{ description() }}</p>
+    @if (actionLabel(); as label) {
+      <button hlmBtn (click)="actionClick.emit()">{{ label }}</button>
+    }
+  </div>
+</div>

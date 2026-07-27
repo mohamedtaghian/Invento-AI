@@ -1,0 +1,9 @@
+{
+  "name": "sidebar",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/sidebar/src",
+  "prefix": "hlm",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

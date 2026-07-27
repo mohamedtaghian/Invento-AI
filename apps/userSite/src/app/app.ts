@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Chatbot } from './components/chatbot/chatbot';
-import { Footer } from './components/footer/footer';
-import { Navbar } from './components/navbar/navbar';
+import { Footer } from '@invento/user-site/app/shared/components/footer/footer';
+import { Navbar } from '@invento/user-site/app/shared/components/navbar/navbar';
+import { Chatbot } from '@invento/user-site/app/features/chatbot/chatbot';
 
 @Component({
   imports: [RouterModule, Chatbot, Navbar, Footer],

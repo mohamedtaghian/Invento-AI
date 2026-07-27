@@ -1,0 +1,9 @@
+{
+  "name": "tooltip",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/tooltip/src",
+  "prefix": "hlm",
+  "tags": [],
+  "projectType": "library",
+  "targets": {}
+}

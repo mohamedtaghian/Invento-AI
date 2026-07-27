@@ -15,3 +15,7 @@ export * from './lib/components/home-components/hero/hero';
 export * from './lib/components/home-components/pipeline/pipeline';
 export * from './lib/components/home-components/stats/stats';
 export * from './lib/components/home-components/typing-text/typing-text';
+export * from './lib/components/brand-logo/brand-logo';
+export * from './lib/components/chatbot/chat-ui';
+export * from './lib/components/chatbot/chat-popup';
+export * from './lib/components/chatbot/chat-panel';

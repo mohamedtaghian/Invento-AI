@@ -97,16 +97,17 @@ export class HomeComponent {
         duration: 0.8,
         stagger: 0.15,
       })
-        .from(
-          '.category-card',
-          {
-            y: 20,
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.1,
-          },
-          '-=0.4',
-        )
+        // Check it
+        // .from(
+        //   '.category-card',
+        //   {
+        //     y: 20,
+        //     opacity: 0,
+        //     duration: 0.5,
+        //     stagger: 0.1,
+        //   },
+        //   '-=0.4',
+        // )
         .from(
           '.product-card',
           {

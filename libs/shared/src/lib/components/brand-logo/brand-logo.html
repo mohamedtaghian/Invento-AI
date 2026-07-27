@@ -1,0 +1,31 @@
+<div class="flex items-center gap-2">
+  @if (logoSrc(); as src) {
+    <span class="flex shrink-0">
+      <img
+        [src]="src"
+        [style.height]="imgHeight[size()]"
+        class="dark:hidden"
+        [attr.alt]="appName()"
+      />
+      <img
+        [src]="logoSrcDark() || src"
+        [style.height]="imgHeight[size()]"
+        class="hidden dark:block"
+        [attr.alt]="appName()"
+      />
+    </span>
+  } @else if (iconName(); as icon) {
+    <ng-icon
+      [name]="icon"
+      [size]="size() === 'sm' ? '20' : size() === 'lg' ? '32' : '24'"
+      class="text-primary shrink-0"
+    />
+  }
+  @if (showLabel()) {
+    <span
+      [class.text-lg]="size() === 'lg'"
+      [class.text-sm]="size() === 'sm'"
+      class="font-bold truncate"
+    >{{ appName() }}</span>
+  }
+</div>
