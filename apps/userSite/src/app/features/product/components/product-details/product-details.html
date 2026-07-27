@@ -1,0 +1,55 @@
+<div class="top-6 right-6 z-50 fixed">
+  <button
+    id="cart-icon"
+    class="relative flex justify-center items-center bg-primary shadow-xl rounded-full w-12 h-12 text-primary-foreground"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+    <span
+      id="cart-count"
+      class="hidden -top-1 -right-1 absolute flex justify-center items-center bg-red-500 px-1 rounded-full min-w-[20px] h-5 font-bold text-white text-xs"
+      >0</span
+    >
+  </button>
+</div>
+
+<app-breadcrumb-trail />
+
+<main class="mx-auto w-full max-w-6xl grow px-4 py-8 md:px-8">
+  @let p = store.product();
+
+  @if (p) {
+    <div class="mb-12 grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <app-product-gallery />
+      </div>
+
+      <div class="flex flex-col lg:col-span-5">
+        <app-product-summary />
+        <hr class="my-6 border-border" />
+        <app-variant-selector />
+        <app-purchase-actions />
+        <app-product-details-accordion />
+      </div>
+    </div>
+
+    <app-recommended-products />
+  } @else {
+    <div class="text-center py-20 text-muted-foreground">
+      <p>Product not found.</p>
+    </div>
+  }
+</main>

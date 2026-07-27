@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-
 @layer theme, base, components, utilities;
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
@@ -232,10 +231,6 @@
     font-weight: var(--font-weight-normal);
     line-height: 1.5;
   } */
-}
-
-@layer components {
-  /* Created utility classes instead oif using global Element Selectors -> to avoid any issues with ( Spartan components, Spartan components, Feature-specific component styling ) */
 }
 
 @layer components {

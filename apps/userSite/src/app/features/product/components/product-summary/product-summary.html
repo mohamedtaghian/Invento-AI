@@ -1,0 +1,23 @@
+@let p = store.product()!;
+
+<div class="mb-2 flex items-center gap-2">
+  @if (p.badge) {
+    <span hlmBadge>{{ p.badge }}</span>
+  }
+  <span class="flex items-center text-sm text-muted-foreground">
+    <ng-icon name="lucideStar" class="text-yellow-500 me-1" size="sm" />
+    {{ p.rating }} ({{ p.reviewCount }} Reviews)
+  </span>
+</div>
+
+<h1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">{{ p.name }}</h1>
+<p class="mb-4 text-base text-muted-foreground">{{ p.tagline }}</p>
+
+<div class="flex items-end gap-2 text-3xl font-bold text-primary">
+  {{ p.price | currency }}
+  @if (p.compareAtPrice) {
+    <span class="text-lg font-normal text-muted-foreground line-through">{{
+      p.compareAtPrice | currency
+    }}</span>
+  }
+</div>

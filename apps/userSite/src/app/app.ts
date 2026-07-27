@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { Chatbot } from './components/chatbot/chatbot';
+import { Footer } from './components/footer/footer';
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterModule, Chatbot, Footer],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',
