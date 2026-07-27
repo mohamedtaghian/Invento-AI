@@ -1,0 +1,25 @@
+<hlm-sidebar-wrapper>
+  <app-sidebar />
+  <main hlmSidebarInset class="h-svh flex flex-col">
+    <app-header />
+    <div class="flex-1 overflow-auto p-6 relative">
+      <router-outlet />
+
+      @if (isChatOpen()) {
+        <div class="fixed bottom-4 end-4 z-50 w-80 h-96">
+          <app-chat-panel (closePanel)="toggleChat()" />
+        </div>
+      }
+
+      <button
+        hlmBtn
+        size="icon"
+        class="fixed bottom-4 end-4 z-50 shadow-lg"
+        (click)="toggleChat()"
+        [attr.aria-label]="'header_toggle_ai' | translate"
+      >
+        <ng-icon name="lucideBot" size="20" />
+      </button>
+    </div>
+  </main>
+</hlm-sidebar-wrapper>

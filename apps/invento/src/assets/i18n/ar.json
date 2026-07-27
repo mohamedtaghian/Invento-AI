@@ -1,4 +1,18 @@
 {
   "lang_switch": "English",
-  "app_name": "إنفينتو"
+  "app_name": "إنفينتو",
+  "nav_home": "الرئيسية",
+  "nav_products": "المنتجات",
+  "nav_users": "المستخدمون",
+  "nav_orders": "الطلبات",
+  "nav_suppliers": "الموردون",
+  "nav_analytics": "التحليلات",
+  "nav_ai_advisor": "المستشار الذكي",
+  "nav_collapse": "طي القائمة",
+  "nav_expand": "توسيع القائمة",
+  "header_notifications": "الإشعارات",
+  "header_toggle_ai": "تبديل المستشار الذكي",
+  "kpi_trend_up": "مرتفع",
+  "kpi_trend_down": "منخفض",
+  "kpi_trend_neutral": "مستقر"
 }

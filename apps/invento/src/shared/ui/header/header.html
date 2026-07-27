@@ -1,0 +1,38 @@
+<header class="flex items-center justify-between h-16 px-4 border-b border-border bg-card">
+  <!-- <app-brand-logo
+    logoSrc="light-logo.png"
+    logoSrcDark="logo.png"
+    [appName]="'app_name' | translate"
+    size="md"
+  /> -->
+
+  <div class="flex items-center gap-2">
+    <button
+      hlmBtn
+      variant="ghost"
+      size="icon"
+      class="relative"
+      [attr.aria-label]="'header_notifications' | translate"
+    >
+      <ng-icon name="lucideBell" size="18" />
+      <span hlmBadge variant="destructive" class="absolute -top-1 -inset-e-1 px-1 text-[10px]"
+        >3</span
+      >
+    </button>
+
+    <button
+      hlmBtn
+      variant="ghost"
+      size="icon"
+      (click)="switchLocale()"
+      [attr.aria-label]="'lang_switch' | translate"
+    >
+      <ng-icon name="lucideGlobe" size="18" />
+    </button>
+
+    <hlm-avatar class="ms-2">
+      <img src="https://i.pravatar.cc/40?u=admin" alt="Avatar" hlmAvatarImage />
+      <span hlmAvatarFallback>AD</span>
+    </hlm-avatar>
+  </div>
+</header>

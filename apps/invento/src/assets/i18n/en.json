@@ -1,4 +1,18 @@
 {
   "lang_switch": "العربية",
-  "app_name": "Invento"
+  "app_name": "Invento",
+  "nav_home": "Home",
+  "nav_products": "Products",
+  "nav_users": "Users",
+  "nav_orders": "Orders",
+  "nav_suppliers": "Suppliers",
+  "nav_analytics": "Analytics",
+  "nav_ai_advisor": "AI Advisor",
+  "nav_collapse": "Collapse sidebar",
+  "nav_expand": "Expand sidebar",
+  "header_notifications": "Notifications",
+  "header_toggle_ai": "Toggle AI Advisor",
+  "kpi_trend_up": "Up",
+  "kpi_trend_down": "Down",
+  "kpi_trend_neutral": "Stable"
 }

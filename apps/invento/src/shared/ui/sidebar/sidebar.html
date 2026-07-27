@@ -1,0 +1,38 @@
+<hlm-sidebar [side]="sidebarSide()" variant="sidebar" collapsible="icon">
+  <hlm-sidebar-header>
+    <div class="flex items-center gap-1 px-2 py-1">
+      <!-- <app-brand-logo
+        logoSrc="light-logo.png"
+        logoSrcDark="logo.png"
+        [appName]="appName | translate"
+        [showLabel]="false"
+        size="md"
+        class="shrink-0"
+      /> -->
+      <span class="font-bold truncate group-data-[collapsible=icon]:hidden">{{
+        'app_name' | translate
+      }}</span>
+      <button hlmSidebarTrigger class="ms-auto" srOnlyText="Toggle Sidebar">''</button>
+    </div>
+  </hlm-sidebar-header>
+  <hlm-sidebar-content>
+    <ul hlmSidebarMenu>
+      @for (item of navItems; track item.route) {
+        <li hlmSidebarMenuItem>
+          <a
+            hlmSidebarMenuButton
+            [routerLink]="item.route"
+            #rla="routerLinkActive"
+            routerLinkActive
+            [isActive]="rla.isActive"
+            [tooltip]="item.label | translate"
+          >
+            <ng-icon [name]="item.icon" size="18" />
+            <span>{{ item.label | translate }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </hlm-sidebar-content>
+</hlm-sidebar>
+<button hlmSidebarRail [attr.aria-label]="'toggle_sidebar' | translate"></button>
