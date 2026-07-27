@@ -1,34 +1,4 @@
 <section class="px-4 sm:px-8 md:px-16 lg:px-24 pt-4 pb-10">
-  <div class="top-6 right-6 z-50 fixed">
-    <button
-      id="cart-icon"
-      class="relative flex justify-center items-center bg-primary shadow-xl rounded-full w-12 h-12 text-primary-foreground"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="22"
-        height="22"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="8" cy="21" r="1" />
-        <circle cx="19" cy="21" r="1" />
-        <path
-          d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
-        />
-      </svg>
-      <span
-        id="cart-count"
-        class="hidden -top-1 -right-1 absolute flex justify-center items-center bg-red-500 px-1 rounded-full min-w-[20px] h-5 font-bold text-white text-xs"
-        >0</span
-      >
-    </button>
-  </div>
-
   <app-products-toolbar
     title="Products"
     [count]="filteredProducts().length"
