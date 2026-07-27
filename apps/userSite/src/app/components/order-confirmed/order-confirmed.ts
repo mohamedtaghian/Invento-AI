@@ -15,17 +15,17 @@ import { HlmCard } from '@spartan/helm/card';
 export class OrderConfirmedComponent {
   constructor() {
     afterNextRender(() => {
-      // Updated to .success-circle
+      // Animated Checkmark Pop
       gsap.from('.success-circle', { scale: 0, rotation: -45, duration: 0.6, ease: 'back.out(2)' });
 
-      // Updated to .checkmark-path
+      // Draw SVG Checkmark Path
       gsap.fromTo(
         '.checkmark-path',
         { strokeDasharray: 100, strokeDashoffset: 100 },
         { strokeDashoffset: 0, duration: 0.8, delay: 0.8, ease: 'power2.inOut' },
       );
 
-      // Updated to target all elements with the .confirm-anim class
+      // Sequenced Entrance Animation for Cards
       gsap.from('.confirm-anim', {
         y: 20,
         opacity: 0,
@@ -33,7 +33,7 @@ export class OrderConfirmedComponent {
         delay: 0.4,
       });
 
-      // Targets the steps inside your timeline line
+      // Stagger Timeline Steps
       gsap.from('.border-l-2 > div', { x: -10, opacity: 0, stagger: 0.15, delay: 0.8 });
     });
   }
