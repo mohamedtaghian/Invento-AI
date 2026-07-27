@@ -1,0 +1,28 @@
+<div class="flex items-center justify-center flex-col gap-2.5">
+  <button
+    hlmBtn
+    variant="outline"
+    size="icon"
+    [disabled]="store.quantity() <= 1"
+    (click)="store.decrement()"
+    class="bg-background border border-input"
+    aria-label="Decrease quantity"
+  >
+    <ng-icon name="lucideMinus" color="text-primary" />
+  </button>
+
+  <span class="flex w-10 items-center justify-center text-sm font-semibold" aria-live="polite">
+    {{ store.quantity() }}
+  </span>
+
+  <button
+    hlmBtn
+    variant="outline"
+    size="icon"
+    (click)="store.increment()"
+    class="border border-input"
+    aria-label="Increase quantity"
+  >
+    <ng-icon name="lucidePlus" color="text-primary" />
+  </button>
+</div>

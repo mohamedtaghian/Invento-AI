@@ -1,21 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ProductsData } from '@invento/user-site/app/features/product/service/products-data';
-import { SortOption } from '@invento/user-site/app/features/product/types/product.interface';
-import {
-  FiltersSidebar,
-  CategoryFilter,
-  ColorFilter,
-} from '@invento/user-site/app/features/product/components/filters-sidebar/filters-sidebar';
-import { ProductsToolbar } from '@invento/user-site/app/features/product/components/products-toolbar/products-toolbar';
-import { ProductsGrid } from '@invento/user-site/app/features/product/components/products-grid/products-grid';
-import { Pagination } from '@invento/user-site/app/features/product/components/pagination/pagination';
+import { ProductsData } from '../../service/products-data';
+import { SortOption } from '../../types/product';
+import { FiltersSidebar, CategoryFilter, ColorFilter } from '../filters-sidebar/filters-sidebar';
+import { ProductsToolbar } from '../products-toolbar/products-toolbar';
+import { ProductsGrid } from '../products-grid/products-grid';
+import { Pagination } from '../pagination/pagination';
 
 const PAGE_SIZE = 6;
 
 @Component({
   selector: 'app-products',
-  templateUrl: './products.html',
-
+  templateUrl: './product.html',
+  styleUrls: ['./product.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FiltersSidebar, ProductsToolbar, ProductsGrid, Pagination],
 })

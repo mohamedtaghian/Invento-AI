@@ -1,6 +1,7 @@
 <div
   hlmCard
-  class="group relative flex flex-col hover:shadow-lg p-0 h-full overflow-hidden transition-shadow duration-300"
+  [routerLink]="['/product-details', product().id]"
+  class="group relative flex flex-col hover:shadow-lg p-0 h-full overflow-hidden transition-shadow duration-300 cursor-pointer"
 >
   <!-- Badge (Best Seller / New) -->
   @if (product().badge) {
