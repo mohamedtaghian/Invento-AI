@@ -28,7 +28,7 @@ export class Navbar {
   protected readonly links: NavLink[] = [
     { label: 'Home', path: '/' },
     { label: 'Shop', path: '/products' },
-    { label: 'FAQ', path: '/FAQ' },
+    { label: 'FAQ', path: '/faq' },
   ];
 
   protected readonly currentUrl = toSignal(
