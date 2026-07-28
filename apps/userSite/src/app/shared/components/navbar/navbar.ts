@@ -28,6 +28,7 @@ export class Navbar {
   protected readonly links: NavLink[] = [
     { label: 'Home', path: '/' },
     { label: 'Shop', path: '/products' },
+    { label: 'Orders', path: '/orders' },
     { label: 'FAQ', path: '/FAQ' },
   ];
 
