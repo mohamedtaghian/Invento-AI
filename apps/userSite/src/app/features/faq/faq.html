@@ -1,0 +1,208 @@
+<div class="min-h-screen bg-background font-sans text-foreground pb-20">
+  <div class="max-w-[1400px] mx-auto px-6 md:px-10 pt-6">
+    <!-- Hero Section -->
+    <section class="faq-hero relative mb-12">
+      <div
+        class="relative rounded-3xl overflow-hidden bg-gradient-to-br from-primary/8 via-primary/4 to-transparent border border-border/50 p-8 md:p-16"
+      >
+        <div class="relative z-10 max-w-2xl">
+          <span
+            hlmBadge
+            variant="secondary"
+            class="faq-hero-anim w-fit mb-6 bg-primary/10 text-primary hover:bg-primary/20 font-bold tracking-wide uppercase text-[10px] px-3 py-1"
+          >
+            Help Center
+          </span>
+
+          <h1
+            class="faq-hero-anim text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-4"
+          >
+            Frequently Asked<br />Questions
+          </h1>
+
+          <p class="faq-hero-anim text-base text-muted-foreground leading-relaxed mb-8 max-w-lg">
+            Find answers to common questions about our products, shipping, payments, and more.
+          </p>
+
+          <!-- Search Bar -->
+          <div class="faq-hero-anim relative max-w-xl">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <ng-icon name="lucideHelpCircle" size="20px" class="text-muted-foreground"></ng-icon>
+            </div>
+            <input
+              type="text"
+              placeholder="Search questions..."
+              class="w-full pl-12 pr-4 py-4 bg-card border border-border rounded-xl text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all text-sm"
+              [value]="searchQuery"
+              (input)="onSearch($event)"
+            />
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="faq-hero-anim relative z-10 flex gap-4 mt-10 text-center">
+          <div class="flex flex-col">
+            <span class="text-2xl font-extrabold text-primary">{{ totalQuestions }}+</span>
+            <span class="text-xs text-muted-foreground font-medium">Questions Answered</span>
+          </div>
+          <div class="w-px bg-border"></div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-extrabold text-primary">{{ faqCategories.length }}</span>
+            <span class="text-xs text-muted-foreground font-medium">Categories</span>
+          </div>
+          <div class="w-px bg-border"></div>
+          <div class="flex flex-col">
+            <span class="text-2xl font-extrabold text-primary">24/7</span>
+            <span class="text-xs text-muted-foreground font-medium">Chatbot Support</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main FAQ Content -->
+    <div class="flex flex-col lg:flex-row gap-8">
+      <!-- Category Sidebar -->
+      <aside class="lg:w-72 shrink-0">
+        <h3 class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4 px-1">
+          Categories
+        </h3>
+        <nav
+          class="custom-scrollbar flex flex-row lg:flex-col gap-2 overflow-x-auto lg:overflow-x-visible pb-2 lg:pb-0"
+        >
+          @for (category of filteredCategories; track category.id) {
+            <button
+              class="faq-category-tab flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all duration-200 whitespace-nowrap shrink-0 text-sm font-medium group"
+              [ngClass]="
+                activeCategory === category.id
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'bg-card text-foreground hover:bg-muted border border-border/50'
+              "
+              (click)="setCategory(category.id)"
+            >
+              <div
+                class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0"
+                [ngClass]="
+                  activeCategory === category.id ? 'bg-primary-foreground/20' : 'bg-primary/10'
+                "
+              >
+                <ng-icon
+                  [name]="category.icon"
+                  size="16px"
+                  [ngClass]="
+                    activeCategory === category.id ? 'text-primary-foreground' : 'text-primary'
+                  "
+                ></ng-icon>
+              </div>
+              <span>{{ category.title }}</span>
+              <span
+                class="ml-auto text-[10px] font-bold px-2 py-0.5 rounded-full transition-colors"
+                [ngClass]="
+                  activeCategory === category.id
+                    ? 'bg-primary-foreground/20 text-primary-foreground'
+                    : 'bg-muted text-muted-foreground'
+                "
+              >
+                {{ category.items.length }}
+              </span>
+            </button>
+          }
+        </nav>
+      </aside>
+
+      <!-- FAQ Items -->
+      <section class="flex-1 min-w-0">
+        @if (activeCategoryData) {
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+              <ng-icon [name]="activeCategoryData.icon" size="20px" class="text-primary"></ng-icon>
+            </div>
+            <div>
+              <h2 class="text-xl font-bold text-foreground">{{ activeCategoryData.title }}</h2>
+              <p class="text-xs text-muted-foreground">
+                {{ activeCategoryData.items.length }} questions in this category
+              </p>
+            </div>
+          </div>
+        }
+
+        <div class="space-y-3">
+          @for (item of activeFaqItems; track item.question; let i = $index) {
+            <details
+              class="faq-item group bg-card rounded-xl border border-border overflow-hidden faq-details"
+            >
+              <summary
+                class="flex justify-between items-center cursor-pointer list-none p-5 hover:bg-muted/50 transition-colors"
+              >
+                <div class="flex items-center gap-4">
+                  <span
+                    class="w-7 h-7 rounded-lg bg-primary/10 text-primary text-xs font-bold flex items-center justify-center shrink-0"
+                  >
+                    {{ i + 1 }}
+                  </span>
+                  <span class="font-semibold text-foreground text-sm md:text-base">{{
+                    item.question
+                  }}</span>
+                </div>
+                <ng-icon
+                  name="lucideChevronDown"
+                  size="18px"
+                  class="shrink-0 ml-4 transition-transform duration-300 group-open:rotate-180 text-muted-foreground"
+                ></ng-icon>
+              </summary>
+              <div
+                class="faq-answer text-muted-foreground text-sm leading-relaxed p-5 pt-0 border-t border-border/50"
+              >
+                <div class="pt-4">
+                  {{ item.answer }}
+                </div>
+              </div>
+            </details>
+          }
+        </div>
+
+        <!-- No results -->
+        @if (filteredCategories.length === 0) {
+          <div class="text-center py-16">
+            <div
+              class="w-16 h-16 rounded-full bg-muted mx-auto mb-4 flex items-center justify-center"
+            >
+              <ng-icon name="lucideHelpCircle" size="28px" class="text-muted-foreground"></ng-icon>
+            </div>
+            <h3 class="text-lg font-bold text-foreground mb-2">No results found</h3>
+            <p class="text-muted-foreground text-sm">
+              Try a different search term or browse the categories.
+            </p>
+          </div>
+        }
+      </section>
+    </div>
+
+    <!-- Contact CTA Section -->
+    <section class="mt-16">
+      <div class="rounded-2xl border border-border bg-card p-8 md:p-12 text-center">
+        <div
+          class="w-14 h-14 rounded-2xl bg-primary/10 mx-auto mb-5 flex items-center justify-center"
+        >
+          <ng-icon name="lucideHeadphones" size="24px" class="text-primary"></ng-icon>
+        </div>
+        <h3 class="text-2xl font-bold text-foreground mb-3">Still have questions?</h3>
+        <p class="text-muted-foreground mb-6 max-w-md mx-auto text-sm leading-relaxed">
+          Can't find what you're looking for? Our support team is happy to help. Use the chatbot in
+          the bottom-right corner for instant assistance.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a
+            href="mailto:support@store.com"
+            class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-colors shadow-sm hover:shadow-md"
+          >
+            Email Support
+          </a>
+          <span class="text-muted-foreground text-sm font-medium">or</span>
+          <span class="text-sm text-muted-foreground"
+            >call <span class="font-bold text-foreground">1-800-TECH-HELP</span></span
+          >
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
