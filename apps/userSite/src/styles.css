@@ -66,6 +66,10 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --scrollbar-thumb: oklch(58.758% 0.15328 252.79 / 0.35);
+  --scrollbar-thumb-hover: oklch(58.758% 0.15328 252.79 / 0.65);
+  --scrollbar-track: transparent;
 }
 
 /* Becuase using  @custom-variant dark (&:is(.dark *)) above now we can dirctly work throug .dark instead of :root.dark*/
@@ -113,6 +117,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+
+  --scrollbar-thumb: oklch(68% 0.14 252.79 / 0.35);
+  --scrollbar-thumb-hover: oklch(68% 0.14 252.79 / 0.65);
+  --scrollbar-track: transparent;
 }
 
 @theme inline {
@@ -159,6 +167,27 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
+  }
+
+  /* Sleek rounded WebKit/Blink scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
   }
 
   body {
@@ -274,5 +303,10 @@
   }
   .theme-color-btn {
     @apply flex! items-center! gap-3! bg-foreground/20! p-5! border-foreground/20! rounded-(--btn-radius)! w-full! text-left! transition-all!;
+  }
+
+  .custom-scrollbar {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
   }
 }
