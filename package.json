@@ -59,6 +59,7 @@
     "@ng-icons/lucide": "^33.3.0",
     "@ngxpert/hot-toast": "^6.3.0",
     "@spartan-ng/brain": "^0.0.1-alpha.720",
+    "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel": ">=8.0.0 <9.0.0",
