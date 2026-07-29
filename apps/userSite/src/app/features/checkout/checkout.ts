@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal, computed } from '@angular/core';
+import { Component, afterNextRender, inject, signal, computed, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
@@ -19,7 +19,7 @@ import { ProductsData } from '../product/service/products-data';
   imports: [ReactiveFormsModule, CurrencyPipe, HlmLabel, HlmInput, HlmButton, HlmCard],
   templateUrl: './checkout.html',
 })
-export class CheckoutComponent {
+export class CheckoutComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private productsData = inject(ProductsData);
@@ -42,6 +42,7 @@ export class CheckoutComponent {
     lastName: ['', Validators.required],
     address: ['', Validators.required],
     city: ['', Validators.required],
+    paymentMethod: ['card', Validators.required],
     cardNumber: ['', [Validators.required, Validators.minLength(16)]],
     expiry: ['', Validators.required],
     cvc: ['', Validators.required],
@@ -60,7 +61,31 @@ export class CheckoutComponent {
     });
   }
 
-  // 3. Logic to handle the + and - buttons
+  ngOnInit() {
+    // 3. Dynamically manage validators based on the selected payment method
+    this.checkoutForm.get('paymentMethod')?.valueChanges.subscribe((method) => {
+      const cardControls = ['cardNumber', 'expiry', 'cvc'];
+
+      if (method === 'cod') {
+        cardControls.forEach((ctrl) => {
+          this.checkoutForm.get(ctrl)?.clearValidators();
+          this.checkoutForm.get(ctrl)?.updateValueAndValidity();
+        });
+      } else {
+        this.checkoutForm
+          .get('cardNumber')
+          ?.setValidators([Validators.required, Validators.minLength(16)]);
+        this.checkoutForm.get('expiry')?.setValidators([Validators.required]);
+        this.checkoutForm.get('cvc')?.setValidators([Validators.required]);
+
+        cardControls.forEach((ctrl) => {
+          this.checkoutForm.get(ctrl)?.updateValueAndValidity();
+        });
+      }
+    });
+  }
+
+  // 4. Logic to handle the + and - buttons
   updateQuantity(index: number, delta: number) {
     this.cartItems.update((items) => {
       const updated = [...items];
