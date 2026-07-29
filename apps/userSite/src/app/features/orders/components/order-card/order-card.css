@@ -1,0 +1,19 @@
+/* Order details open/close accordion transition */
+.order-details .order-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.order-details[open] .order-answer {
+  grid-template-rows: 1fr;
+}
+
+.order-details .order-answer > div {
+  overflow: hidden;
+}
+
+/* Remove default summary triangle */
+.order-details summary::-webkit-details-marker {
+  display: none;
+}

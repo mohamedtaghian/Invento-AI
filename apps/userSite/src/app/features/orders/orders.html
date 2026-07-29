@@ -1,0 +1,81 @@
+<div class="bg-background px-4 sm:px-8 md:px-16 lg:px-24 py-8 min-h-screen">
+  <div class="mx-auto max-w-6xl">
+    <!-- Hero Header Component -->
+    <app-orders-hero />
+
+    <!-- Filter & Search Bar Component -->
+    <app-orders-filter-bar />
+
+    <!-- Orders List Section -->
+    <section class="space-y-6">
+      @if (ordersService.isLoading()) {
+        <!-- Backend Loading Skeleton -->
+        <div class="space-y-4">
+          @for (i of [1, 2, 3]; track i) {
+            <div class="space-y-4 bg-card/50 p-6 border border-border/80 rounded-2xl animate-pulse">
+              <div class="flex justify-between items-center">
+                <div class="bg-muted rounded-lg w-48 h-5"></div>
+                <div class="bg-muted rounded-lg w-24 h-5"></div>
+              </div>
+              <div class="bg-muted/60 rounded-xl w-full h-16"></div>
+            </div>
+          }
+        </div>
+      } @else if (ordersService.error()) {
+        <!-- Backend Error State -->
+        <div
+          class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-rose-500/30 rounded-3xl text-center"
+        >
+          <div
+            class="flex justify-center items-center bg-rose-500/10 mb-4 rounded-full w-16 h-16 text-rose-500"
+          >
+            <ng-icon name="lucideCircleX" class="text-2xl"></ng-icon>
+          </div>
+          <h3 class="mb-2 font-bold text-foreground text-xl">Unable to load orders</h3>
+          <p class="mb-6 max-w-md text-muted-foreground text-sm">{{ ordersService.error() }}</p>
+          <button
+            hlmBtn
+            variant="outline"
+            (click)="ordersService.loadOrders()"
+            class="px-6 rounded-xl"
+          >
+            Try Again
+          </button>
+        </div>
+      } @else if (ordersService.filteredOrders().length === 0) {
+        <!-- Empty State -->
+        <div
+          class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-border rounded-3xl text-center"
+        >
+          <div
+            class="flex justify-center items-center bg-muted mb-4 rounded-full w-16 h-16 text-muted-foreground"
+          >
+            <ng-icon name="lucidePackage" class="text-2xl"></ng-icon>
+          </div>
+          <h3 class="mb-2 font-bold text-foreground text-xl">No orders found</h3>
+          <p class="mb-6 max-w-md text-muted-foreground text-sm">
+            We couldn't find any orders matching your current filter or search criteria. Try
+            clearing your search or switching filter categories.
+          </p>
+          <div class="flex items-center gap-3">
+            @if (ordersService.searchQuery() || ordersService.selectedFilter() !== 'all') {
+              <button hlmBtn variant="outline" (click)="resetFilters()" class="px-5 rounded-xl">
+                Reset Filters
+              </button>
+            }
+            <a hlmBtn routerLink="/products" class="px-6 rounded-xl"> Browse Store </a>
+          </div>
+        </div>
+      } @else {
+        <!-- Order Cards Scrollable Container -->
+        <div
+          class="flex flex-col space-y-6 pr-1 sm:pr-2.5 max-h-[650px] md:max-h-[720px] overflow-y-auto orders-list-scroller"
+        >
+          @for (order of ordersService.filteredOrders(); track order.id) {
+            <app-order-card [order]="order" />
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>
