@@ -10,6 +10,7 @@ import { SalesCategory } from './components/sales-category/sales-category';
 import { CustomerGrowth } from './components/customer-growth/customer-growth';
 import { AnalyticsService, AnalyticsRange, AnalyticsResponse } from './services/analytics-service';
 import { OrdersDonut } from './components/orders-donut/orders-donut';
+import { AiAdvisorPanel } from '@invento/invento/features/ai-advisor';
 
 @Component({
   standalone: true,
@@ -24,6 +25,7 @@ import { OrdersDonut } from './components/orders-donut/orders-donut';
     CustomerGrowth,
     HlmCardImports,
     HlmButtonImports,
+    AiAdvisorPanel,
   ],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',

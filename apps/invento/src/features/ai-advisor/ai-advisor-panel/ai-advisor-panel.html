@@ -1,1 +1,167 @@
-<p>Ai Advisor Panel works!</p>
+<hlm-sheet side="right">
+  <button
+    hlmSheetTrigger
+    hlmBtn
+    class="bg-primary hover:bg-primary/90 px-4 rounded-full text-primary-foreground"
+  >
+    <ng-icon name="lucideSparkles" size="16" class="mr-1.5" />
+    AI Advisor
+  </button>
+
+  <hlm-sheet-content
+    *hlmSheetPortal="let ctx"
+    class="flex flex-col p-0 w-105 sm:w-105 sm:max-w-none"
+  >
+    <!-- Header -->
+    <hlm-sheet-header class="p-4 border-b">
+      <div class="flex items-start gap-3">
+        <div class="flex justify-center items-center bg-primary/10 rounded-full size-10 shrink-0">
+          <ng-icon name="lucideSparkles" size="18" class="text-primary" />
+        </div>
+        <div>
+          <h3 hlmSheetTitle>AI Restock Advisor</h3>
+          <p hlmSheetDescription>Powered by Storai Intelligence</p>
+        </div>
+      </div>
+    </hlm-sheet-header>
+
+    <!-- Filter pills -->
+    <div class="px-4 pt-4">
+      <div class="flex items-center gap-1 bg-muted p-1 rounded-full">
+        <button
+          type="button"
+          class="flex-1 px-3 py-1.5 rounded-full font-medium text-sm transition-colors"
+          [class.bg-background]="activeFilter() === 'all'"
+          [class.shadow-sm]="activeFilter() === 'all'"
+          [class.text-muted-foreground]="activeFilter() !== 'all'"
+          (click)="setFilter('all')"
+        >
+          All
+        </button>
+        <button
+          type="button"
+          class="flex-1 px-3 py-1.5 rounded-full font-medium text-sm transition-colors"
+          [class.bg-background]="activeFilter() === 'restock'"
+          [class.shadow-sm]="activeFilter() === 'restock'"
+          [class.text-muted-foreground]="activeFilter() !== 'restock'"
+          (click)="setFilter('restock')"
+        >
+          Restock
+        </button>
+        <button
+          type="button"
+          class="flex-1 px-3 py-1.5 rounded-full font-medium text-sm transition-colors"
+          [class.bg-background]="activeFilter() === 'overstock'"
+          [class.shadow-sm]="activeFilter() === 'overstock'"
+          [class.text-muted-foreground]="activeFilter() !== 'overstock'"
+          (click)="setFilter('overstock')"
+        >
+          Overstock
+        </button>
+      </div>
+    </div>
+
+    <!-- Meta row -->
+    <div class="flex justify-between items-center px-4 pt-4 pb-2 text-muted-foreground text-xs">
+      <span>{{ count() }} recommendations</span>
+      <span>Updated just now</span>
+    </div>
+
+    <!-- Recommendations list -->
+    <div class="flex-1 space-y-3 px-4 pb-4 overflow-y-auto">
+      @if (recommendations.isLoading()) {
+        @for (i of [1, 2, 3]; track i) {
+          <div class="bg-muted p-3 border rounded-xl h-32 animate-pulse"></div>
+        }
+      } @else if (recommendations.error()) {
+        <div class="py-12 text-destructive text-sm text-center">
+          Couldn't load recommendations. Please try again.
+        </div>
+      } @else {
+        @for (item of data(); track item.id) {
+          <div
+            class="space-y-3 p-3 border rounded-xl"
+            [class.border-destructive/30]="item.urgency === 'critical'"
+            [class.bg-destructive/5]="item.urgency === 'critical'"
+          >
+            <!-- Row: image, name/sku, badge -->
+            <div class="flex items-start gap-3">
+              <div
+                class="flex justify-center items-center bg-muted rounded-md size-10 overflow-hidden font-medium text-muted-foreground text-sm shrink-0"
+              >
+                @if (item.imageUrl) {
+                  <img
+                    [src]="item.imageUrl"
+                    [alt]="item.productName"
+                    class="size-full object-cover"
+                  />
+                } @else {
+                  {{ item.productName.charAt(0) }}
+                }
+              </div>
+
+              <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-center gap-2">
+                  <h4 class="font-medium text-sm truncate">{{ item.productName }}</h4>
+                  <span
+                    hlmBadge
+                    class="gap-1 shrink-0"
+                    [class.bg-destructive/10]="item.urgency === 'critical'"
+                    [class.text-destructive]="item.urgency === 'critical'"
+                    [class.bg-amber-100]="item.urgency === 'watch'"
+                    [class.text-amber-700]="item.urgency === 'watch'"
+                  >
+                    <span
+                      class="rounded-full size-1.5"
+                      [class.bg-destructive]="item.urgency === 'critical'"
+                      [class.bg-amber-600]="item.urgency === 'watch'"
+                    ></span>
+                    {{ urgencyLabel(item.urgency) }}
+                  </span>
+                </div>
+                <p class="mt-0.5 text-muted-foreground text-xs">
+                  {{ item.sku }} · {{ item.stockCount }} in stock · {{ item.soldLast30d }} sold/30d
+                </p>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <p class="text-foreground/80 text-sm leading-relaxed">{{ item.description }}</p>
+
+            <!-- Suggestion box -->
+            <div class="flex items-start gap-2 bg-background px-3 py-2 border rounded-lg text-xs">
+              <ng-icon name="lucideArrowRight" size="14" class="mt-0.5 text-primary shrink-0" />
+              <span>{{ item.suggestion }}</span>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex justify-between items-center pt-1">
+              <a
+                [href]="item.productUrl"
+                target="_blank"
+                rel="noopener"
+                class="inline-flex items-center gap-1 font-medium text-primary text-xs hover:underline"
+              >
+                <ng-icon name="lucideExternalLink" size="13" />
+                View Product
+              </a>
+              <button
+                hlmBtn
+                size="sm"
+                class="gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground"
+                (click)="draftReorderEmail(item)"
+              >
+                <ng-icon name="lucideMail" size="14" />
+                Draft Reorder Email
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <div class="py-12 text-muted-foreground text-sm text-center">
+            No recommendations in this category.
+          </div>
+        }
+      }
+    </div>
+  </hlm-sheet-content>
+</hlm-sheet>
