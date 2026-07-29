@@ -7,6 +7,7 @@ import { NotFoundComponent } from '@invento/user-site/app/shared/components/not-
 import { OrderConfirmedComponent } from '@invento/user-site/app/features/order-confirmed/order-confirmed';
 import { HomeComponent } from '@invento/user-site/app/features/home/home';
 import { FaqComponent } from '@invento/user-site/app/features/faq/faq';
+import { OrdersComponent } from '@invento/user-site/app/features/orders/orders';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'checkout', component: CheckoutComponent },
   { path: 'order-confirmed', component: OrderConfirmedComponent },
   { path: 'faq', component: FaqComponent },
+  { path: 'orders', component: OrdersComponent },
 
   // The wild component (404) MUST go at the very bottom
   { path: '**', component: NotFoundComponent },

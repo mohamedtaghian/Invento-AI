@@ -1,0 +1,28 @@
+/* Custom Scrollbar for Orders List Container */
+.orders-list-scroller {
+  scrollbar-color: var(--primary) transparent;
+  scrollbar-width: thin;
+}
+
+.orders-list-scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+.orders-list-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.orders-list-scroller::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 9999px;
+  opacity: 0.35;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.orders-list-scroller::-webkit-scrollbar-thumb:hover {
+  background: var(--primary);
+  opacity: 0.8;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}

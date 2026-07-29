@@ -1,0 +1,288 @@
+<div
+  class="bg-card shadow-sm hover:shadow-md border border-border rounded-2xl overflow-hidden transition-all duration-300"
+>
+  <!-- Card Top Header -->
+  <div
+    class="flex sm:flex-row flex-col justify-between sm:items-center gap-4 bg-muted/20 p-6 border-border border-b"
+  >
+    <div class="flex flex-wrap items-center gap-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <h3 class="font-bold text-foreground text-base">{{ order().orderNumber }}</h3>
+          <span
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full font-semibold text-xs"
+            [ngClass]="getStatusConfig(order().status).badgeClass"
+          >
+            <span
+              class="rounded-full w-1.5 h-1.5 shrink-0"
+              [ngClass]="getStatusConfig(order().status).dotClass"
+            ></span>
+            <span>{{ getStatusConfig(order().status).label }}</span>
+          </span>
+        </div>
+        <div class="flex items-center gap-2 mt-1 text-muted-foreground text-xs">
+          <span class="inline-flex items-center gap-1">
+            <ng-icon name="lucideCalendar" class="text-xs"></ng-icon>
+            {{ order().date }}
+          </span>
+          @if (
+            order().estimatedDelivery &&
+            order().status !== 'delivered' &&
+            order().status !== 'cancelled'
+          ) {
+            <span>•</span>
+            <span class="font-medium text-primary"
+              >Est. Delivery: {{ order().estimatedDelivery }}</span
+            >
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-between sm:justify-end items-center gap-6 sm:gap-4">
+      <div class="text-left sm:text-right">
+        <div class="font-medium text-muted-foreground text-xs">Total Amount</div>
+        <div class="font-extrabold text-foreground text-lg">
+          {{ order().total | currency }}
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button
+          hlmBtn
+          variant="outline"
+          size="sm"
+          (click)="reorder(order().orderNumber)"
+          class="hidden sm:inline-flex items-center gap-1.5 rounded-xl h-9 text-xs"
+        >
+          <ng-icon name="lucideRotateCcw" class="text-sm"></ng-icon>
+          <span>Reorder</span>
+        </button>
+        <button
+          hlmBtn
+          variant="ghost"
+          size="icon"
+          (click)="downloadInvoice(order().orderNumber)"
+          aria-label="Download Invoice"
+          class="rounded-xl w-9 h-9 text-muted-foreground hover:text-foreground"
+          title="Download Invoice"
+        >
+          <ng-icon name="lucideDownload" class="text-base"></ng-icon>
+        </button>
+        @if (order().status === 'processing') {
+          <button
+            hlmBtn
+            variant="ghost"
+            size="sm"
+            (click)="cancelOrder(order().id, order().orderNumber)"
+            class="hover:bg-rose-500/10 rounded-xl h-9 text-rose-600 hover:text-rose-700 text-xs"
+          >
+            Cancel
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Card Body: Items Preview -->
+  <div class="p-6">
+    <div class="space-y-4">
+      @for (item of order().items; track item.id) {
+        <div
+          class="flex justify-between items-center gap-4 bg-background p-3 border border-border/60 hover:border-border rounded-xl transition-colors"
+        >
+          <div class="flex items-center gap-4 min-w-0">
+            <div
+              class="bg-muted border border-border/50 rounded-lg w-14 h-14 overflow-hidden shrink-0"
+            >
+              <img
+                [src]="item.image"
+                [alt]="item.name"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div class="min-w-0">
+              <h4 class="max-w-xs md:max-w-md font-semibold text-foreground text-sm truncate">
+                {{ item.name }}
+              </h4>
+              <div class="flex items-center gap-3 mt-1 text-muted-foreground text-xs">
+                @if (item.color) {
+                  <span>Color: {{ item.color }}</span>
+                }
+                <span>Qty: {{ item.quantity }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-right shrink-0">
+            <span class="font-bold text-foreground text-sm">{{
+              item.price * item.quantity | currency
+            }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Expandable Order & Shipment Details Section -->
+  <details class="group order-details border-border/80 border-t">
+    <summary
+      class="flex justify-between items-center bg-muted/10 hover:bg-muted/30 px-6 py-3.5 font-semibold text-muted-foreground group-open:text-primary text-xs transition-colors cursor-pointer select-none"
+    >
+      <span class="inline-flex items-center gap-2">
+        <span>View Order & Shipment Details</span>
+        <span class="bg-muted p-2 rounded-lg font-normal text-[10px] text-muted-foreground"
+          >Tracking • Address • Payment</span
+        >
+      </span>
+      <ng-icon
+        name="lucideChevronDown"
+        class="text-base group-open:rotate-180 transition-transform duration-300"
+      ></ng-icon>
+    </summary>
+
+    <div class="order-answer">
+      <div class="bg-background/50 px-6 py-6">
+        <!-- Section 1: Progress Timeline -->
+        <div class="mb-8">
+          <h5 class="mb-4 font-bold text-muted-foreground text-xs uppercase tracking-wider">
+            Shipment Progress
+          </h5>
+          <div class="relative gap-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            @for (step of order().timeline; track step.title; let idx = $index) {
+              <div
+                class="flex flex-col items-start p-3 border rounded-xl transition-all"
+                [ngClass]="
+                  step.current
+                    ? 'bg-primary/5 border-primary/40 shadow-sm'
+                    : step.completed
+                      ? 'bg-muted/20 border-border/60'
+                      : 'bg-muted/10 border-border/30 opacity-60'
+                "
+              >
+                <div class="flex justify-between items-center mb-2 w-full">
+                  <span
+                    class="flex justify-center items-center rounded-full w-6 h-6 font-bold text-xs"
+                    [ngClass]="
+                      step.completed
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted text-muted-foreground'
+                    "
+                  >
+                    @if (step.completed) {
+                      <ng-icon name="lucideCircleCheck" class="text-sm"></ng-icon>
+                    } @else {
+                      <span>{{ idx + 1 }}</span>
+                    }
+                  </span>
+                  @if (step.current) {
+                    <span
+                      class="bg-primary/10 px-2 py-0.5 rounded-full font-bold text-[10px] text-primary uppercase tracking-wider"
+                      >Current</span
+                    >
+                  }
+                </div>
+                <span
+                  class="font-bold text-foreground text-xs leading-snug"
+                  [ngClass]="step.current ? 'text-primary' : ''"
+                >
+                  {{ step.title }}
+                </span>
+                @if (step.date) {
+                  <span class="mt-1 text-[11px] text-muted-foreground">{{ step.date }}</span>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Section 2: Address, Tracking & Payment Summary -->
+        <div class="gap-6 grid grid-cols-1 md:grid-cols-3 pt-6 border-border/60 border-t text-sm">
+          <!-- Shipping Address -->
+          <div>
+            <div
+              class="flex items-center gap-2 mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider"
+            >
+              <ng-icon name="lucideMapPin" class="text-sm"></ng-icon>
+              <span>Shipping Address</span>
+            </div>
+            <div class="font-semibold text-foreground">
+              {{ order().shippingAddress.name }}
+            </div>
+            <div class="space-y-0.5 mt-1 text-muted-foreground text-xs">
+              <p>{{ order().shippingAddress.address }}</p>
+              <p>
+                {{ order().shippingAddress.city }}, {{ order().shippingAddress.state }}
+                {{ order().shippingAddress.zip }}
+              </p>
+              <p>{{ order().shippingAddress.country }}</p>
+            </div>
+          </div>
+
+          <!-- Carrier & Tracking -->
+          <div>
+            <div
+              class="flex items-center gap-2 mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider"
+            >
+              <ng-icon name="lucideTruck" class="text-sm"></ng-icon>
+              <span>Carrier & Tracking</span>
+            </div>
+            @if (order().trackingNumber) {
+              <div class="font-semibold text-foreground">
+                {{ order().carrier || 'Standard Shipping' }}
+              </div>
+              <div class="flex items-center gap-2 mt-1.5">
+                <code class="bg-muted/60 px-2 py-1 rounded font-mono text-foreground text-xs">
+                  {{ order().trackingNumber }}
+                </code>
+                <button
+                  type="button"
+                  (click)="copyTracking(order().trackingNumber)"
+                  class="inline-flex items-center gap-1 font-medium text-primary text-xs hover:underline"
+                >
+                  <ng-icon
+                    [name]="
+                      copiedTracking() === order().trackingNumber
+                        ? 'lucideCircleCheck'
+                        : 'lucideCopy'
+                    "
+                    class="text-sm"
+                  ></ng-icon>
+                  <span>{{ copiedTracking() === order().trackingNumber ? 'Copied' : 'Copy' }}</span>
+                </button>
+              </div>
+            } @else {
+              <div class="text-muted-foreground text-xs italic">
+                Tracking will be assigned once shipped.
+              </div>
+            }
+          </div>
+
+          <!-- Payment Method -->
+          <div>
+            <div
+              class="flex items-center gap-2 mb-2 font-bold text-muted-foreground text-xs uppercase tracking-wider"
+            >
+              <ng-icon name="lucideCreditCard" class="text-sm"></ng-icon>
+              <span>Payment Details</span>
+            </div>
+            <div class="font-semibold text-foreground">
+              {{ order().paymentMethod.type }}
+              @if (order().paymentMethod.last4) {
+                <span class="font-normal text-muted-foreground"
+                  >ending in {{ order().paymentMethod.last4 }}</span
+                >
+              }
+            </div>
+            <div class="mt-1 text-muted-foreground text-xs">
+              Total paid:
+              <strong class="text-foreground">{{ order().total | currency }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+</div>

@@ -41,10 +41,11 @@
     "**/.cache": true
   },
 
-  "git.autorefresh": false,
+  "git.autorefresh": true,
   "git.autofetch": false,
+  "git.mergeEditor": true,
 
-  "editor.codeLens": false,
+  "editor.codeLens": true,
   "editor.minimap.enabled": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
