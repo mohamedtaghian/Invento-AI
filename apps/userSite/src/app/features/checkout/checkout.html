@@ -10,100 +10,67 @@
       <h2 class="text-lg font-bold mb-4 text-foreground">Order Summary</h2>
       <hr class="border-border mb-6" />
 
-      <!-- Product 1 -->
-      <div
-        hlmCard
-        class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-4"
-      >
-        <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
-          <img
-            src="https://placehold.co/150x150/e2e8f0/475569?text=Headphones"
-            alt="Headphones"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1">
-          <h4 class="font-bold text-sm text-foreground">Aura Sonic Pro Headphones</h4>
-          <p class="text-xs text-muted-foreground mb-2">Matte Black</p>
-          <div class="flex items-center justify-between">
-            <p class="font-bold text-primary">$299.00</p>
-            <div
-              class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
-            >
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
+      <!-- Dynamic Products -->
+      @for (item of cartItems(); track item.product.id; let i = $index) {
+        <div
+          hlmCard
+          class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-4"
+        >
+          <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
+            <img
+              [src]="item.product.image"
+              [alt]="item.product.name"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex-1">
+            <h4 class="font-bold text-sm text-foreground">{{ item.product.name }}</h4>
+            <p class="text-xs text-muted-foreground mb-2">{{ item.color }}</p>
+            <div class="flex items-center justify-between">
+              <p class="font-bold text-primary">{{ item.product.price | currency }}</p>
+              <div
+                class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
               >
-                &minus;
-              </button>
-              <span class="text-sm font-medium text-foreground">1</span>
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &plus;
-              </button>
+                <button
+                  type="button"
+                  (click)="updateQuantity(i, -1)"
+                  class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  &minus;
+                </button>
+                <span class="text-sm font-medium text-foreground">{{ item.quantity }}</span>
+                <button
+                  type="button"
+                  (click)="updateQuantity(i, 1)"
+                  class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  &plus;
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div
-        hlmCard
-        class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-8"
-      >
-        <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
-          <img
-            src="https://placehold.co/150x150/e2e8f0/475569?text=Stand"
-            alt="Laptop Stand"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1">
-          <h4 class="font-bold text-sm text-foreground">Elevate Laptop Stand</h4>
-          <p class="text-xs text-muted-foreground mb-2">Silver</p>
-          <div class="flex items-center justify-between">
-            <p class="font-bold text-primary">$89.00</p>
-            <div
-              class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
-            >
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &minus;
-              </button>
-              <span class="text-sm font-medium text-foreground">2</span>
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &plus;
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
 
       <!-- Totals -->
-      <div class="space-y-3 text-sm mb-6 px-2">
+      <div class="space-y-3 text-sm mb-6 px-2 mt-8">
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Subtotal</span
-          ><span class="text-foreground">$477.00</span>
+          <span class="text-muted-foreground">Subtotal</span>
+          <span class="text-foreground">{{ subtotal() | currency }}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Shipping</span
-          ><span class="text-foreground">Calculated at next step</span>
+          <span class="text-muted-foreground">Shipping</span>
+          <span class="text-foreground">Calculated at next step</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Tax</span><span class="text-foreground">$38.16</span>
+          <span class="text-muted-foreground">Tax (8%)</span>
+          <span class="text-foreground">{{ tax() | currency }}</span>
         </div>
       </div>
       <hr class="border-border mb-6" />
       <div class="flex justify-between items-center text-xl font-bold px-2">
         <span class="text-foreground">Total</span>
-        <span class="text-primary">$515.16</span>
+        <span class="text-primary">{{ total() | currency }}</span>
       </div>
     </div>
 
@@ -144,6 +111,11 @@
                   checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
                 "
               />
+              @if (
+                checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
+              ) {
+                <span class="text-xs text-destructive mt-1 block">First name is required.</span>
+              }
             </div>
             <div>
               <label
@@ -163,6 +135,9 @@
                   checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched
                 "
               />
+              @if (checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched) {
+                <span class="text-xs text-destructive mt-1 block">Last name is required.</span>
+              }
             </div>
           </div>
 
@@ -184,6 +159,9 @@
                 checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched
               "
             />
+            @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
+              <span class="text-xs text-destructive mt-1 block">Address is required.</span>
+            }
           </div>
 
           <div>
@@ -204,10 +182,13 @@
                 checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched
               "
             />
+            @if (checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched) {
+              <span class="text-xs text-destructive mt-1 block">City is required.</span>
+            }
           </div>
         </div>
 
-        <!-- Step 2 -->
+        <!-- Step 2: Payment Method -->
         <div class="mb-8">
           <div class="flex items-center gap-3 mb-6">
             <span
@@ -217,81 +198,134 @@
             <h3 class="text-lg font-bold text-foreground">Payment Method</h3>
           </div>
 
-          <div class="mb-4 relative">
-            <label
-              hlmLabel
-              for="cardNumber"
-              class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
-              >Card Number</label
-            >
-            <div class="relative">
-              <svg
-                class="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
-                ></path>
-              </svg>
+          <!-- Method Selection -->
+          <div class="flex gap-6 mb-6">
+            <label class="flex items-center gap-2 cursor-pointer">
               <input
-                hlmInput
-                id="cardNumber"
-                type="text"
-                formControlName="cardNumber"
-                placeholder="0000 0000 0000 0000"
-                class="w-full bg-input-background border-border rounded-md py-2.5 pl-10 pr-3 font-mono focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
-                [class.border-destructive]="
-                  checkoutForm.get('cardNumber')?.invalid && checkoutForm.get('cardNumber')?.touched
-                "
+                type="radio"
+                formControlName="paymentMethod"
+                value="card"
+                class="w-4 h-4 text-primary focus:ring-primary border-border bg-input-background"
               />
-            </div>
+              <span class="text-sm font-medium text-foreground">Credit Card</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="paymentMethod"
+                value="cod"
+                class="w-4 h-4 text-primary focus:ring-primary border-border bg-input-background"
+              />
+              <span class="text-sm font-medium text-foreground">Cash on Delivery</span>
+            </label>
           </div>
 
-          <div class="grid grid-cols-2 gap-4">
-            <div>
+          <!-- Dynamic Payment Inputs -->
+          @if (checkoutForm.get('paymentMethod')?.value === 'card') {
+            <div class="mb-4 relative">
               <label
                 hlmLabel
-                for="expiry"
+                for="cardNumber"
                 class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
-                >Expiry (MM/YY)</label
+                >Card Number</label
               >
-              <input
-                hlmInput
-                id="expiry"
-                type="text"
-                formControlName="expiry"
-                placeholder="12/25"
-                class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
-                [class.border-destructive]="
-                  checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched
-                "
-              />
+              <div class="relative">
+                <svg
+                  class="w-5 h-5 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                  ></path>
+                </svg>
+                <input
+                  hlmInput
+                  id="cardNumber"
+                  type="text"
+                  formControlName="cardNumber"
+                  placeholder="0000 0000 0000 0000"
+                  class="w-full bg-input-background border-border rounded-md py-2.5 pl-10 pr-3 font-mono focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  [class.border-destructive]="
+                    checkoutForm.get('cardNumber')?.invalid &&
+                    checkoutForm.get('cardNumber')?.touched
+                  "
+                />
+              </div>
+              @if (checkoutForm.get('cardNumber')?.touched) {
+                @if (checkoutForm.get('cardNumber')?.hasError('required')) {
+                  <span class="text-xs text-destructive mt-1 block">Card number is required.</span>
+                }
+                @if (checkoutForm.get('cardNumber')?.hasError('minlength')) {
+                  <span class="text-xs text-destructive mt-1 block"
+                    >Card number must be 16 digits.</span
+                  >
+                }
+              }
             </div>
-            <div>
-              <label
-                hlmLabel
-                for="cvc"
-                class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
-                >CVC</label
-              >
-              <input
-                hlmInput
-                id="cvc"
-                type="text"
-                formControlName="cvc"
-                placeholder="123"
-                class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
-                [class.border-destructive]="
-                  checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched
-                "
-              />
+
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label
+                  hlmLabel
+                  for="expiry"
+                  class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                  >Expiry (MM/YY)</label
+                >
+                <input
+                  hlmInput
+                  id="expiry"
+                  type="text"
+                  formControlName="expiry"
+                  placeholder="12/25"
+                  class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  [class.border-destructive]="
+                    checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched
+                  "
+                />
+                @if (checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched) {
+                  <span class="text-xs text-destructive mt-1 block">Expiry date is required.</span>
+                }
+              </div>
+              <div>
+                <label
+                  hlmLabel
+                  for="cvc"
+                  class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                  >CVC</label
+                >
+                <input
+                  hlmInput
+                  id="cvc"
+                  type="text"
+                  formControlName="cvc"
+                  placeholder="123"
+                  class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  [class.border-destructive]="
+                    checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched
+                  "
+                />
+                @if (checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched) {
+                  <span class="text-xs text-destructive mt-1 block">CVC is required.</span>
+                }
+              </div>
             </div>
-          </div>
+          }
+
+          @if (checkoutForm.get('paymentMethod')?.value === 'cod') {
+            <div
+              class="bg-muted/50 border border-border rounded-lg p-4 text-sm text-muted-foreground"
+            >
+              <p>
+                You will pay <strong>{{ total() | currency }}</strong> in cash upon delivery to the
+                selected shipping address.
+              </p>
+            </div>
+          }
         </div>
 
         <button
@@ -299,15 +333,27 @@
           type="submit"
           class="w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
-          Pay $515.16 Securely
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-            ></path>
-          </svg>
+          @if (checkoutForm.get('paymentMethod')?.value === 'card') {
+            Pay {{ total() | currency }} Securely
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+              ></path>
+            </svg>
+          } @else {
+            Place Order ({{ total() | currency }})
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              ></path>
+            </svg>
+          }
         </button>
       </form>
     </div>
