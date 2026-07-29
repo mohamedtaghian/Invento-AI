@@ -1,12 +1,12 @@
 <hlm-sidebar-wrapper>
   <app-sidebar />
-  <main hlmSidebarInset class="h-svh flex flex-col">
+  <main hlmSidebarInset class="flex flex-col min-w-0 h-svh">
     <app-header />
-    <div class="flex-1 overflow-auto p-6 relative">
+    <div class="relative flex-1 p-6 min-w-0 overflow-auto">
       <router-outlet />
 
       @if (isChatOpen()) {
-        <div class="fixed bottom-4 end-4 z-50 w-80 h-96">
+        <div class="bottom-4 z-50 fixed inset-e-4 w-80 h-96">
           <app-chat-panel (closePanel)="toggleChat()" />
         </div>
       }
@@ -14,7 +14,7 @@
       <button
         hlmBtn
         size="icon"
-        class="fixed bottom-4 end-4 z-50 shadow-lg"
+        class="bottom-4 z-50 fixed inset-e-4 shadow-lg"
         (click)="toggleChat()"
         [attr.aria-label]="'header_toggle_ai' | translate"
       >
