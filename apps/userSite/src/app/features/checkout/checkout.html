@@ -10,100 +10,67 @@
       <h2 class="text-lg font-bold mb-4 text-foreground">Order Summary</h2>
       <hr class="border-border mb-6" />
 
-      <!-- Product 1 -->
-      <div
-        hlmCard
-        class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-4"
-      >
-        <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
-          <img
-            src="https://placehold.co/150x150/e2e8f0/475569?text=Headphones"
-            alt="Headphones"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1">
-          <h4 class="font-bold text-sm text-foreground">Aura Sonic Pro Headphones</h4>
-          <p class="text-xs text-muted-foreground mb-2">Matte Black</p>
-          <div class="flex items-center justify-between">
-            <p class="font-bold text-primary">$299.00</p>
-            <div
-              class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
-            >
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
+      <!-- Dynamic Products -->
+      @for (item of cartItems(); track item.product.id; let i = $index) {
+        <div
+          hlmCard
+          class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-4"
+        >
+          <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
+            <img
+              [src]="item.product.image"
+              [alt]="item.product.name"
+              class="w-full h-full object-cover"
+            />
+          </div>
+          <div class="flex-1">
+            <h4 class="font-bold text-sm text-foreground">{{ item.product.name }}</h4>
+            <p class="text-xs text-muted-foreground mb-2">{{ item.color }}</p>
+            <div class="flex items-center justify-between">
+              <p class="font-bold text-primary">{{ item.product.price | currency }}</p>
+              <div
+                class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
               >
-                &minus;
-              </button>
-              <span class="text-sm font-medium text-foreground">1</span>
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &plus;
-              </button>
+                <button
+                  type="button"
+                  (click)="updateQuantity(i, -1)"
+                  class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  &minus;
+                </button>
+                <span class="text-sm font-medium text-foreground">{{ item.quantity }}</span>
+                <button
+                  type="button"
+                  (click)="updateQuantity(i, 1)"
+                  class="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  &plus;
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Product 2 -->
-      <div
-        hlmCard
-        class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-8"
-      >
-        <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
-          <img
-            src="https://placehold.co/150x150/e2e8f0/475569?text=Stand"
-            alt="Laptop Stand"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1">
-          <h4 class="font-bold text-sm text-foreground">Elevate Laptop Stand</h4>
-          <p class="text-xs text-muted-foreground mb-2">Silver</p>
-          <div class="flex items-center justify-between">
-            <p class="font-bold text-primary">$89.00</p>
-            <div
-              class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
-            >
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &minus;
-              </button>
-              <span class="text-sm font-medium text-foreground">2</span>
-              <button
-                type="button"
-                class="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                &plus;
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      }
 
       <!-- Totals -->
-      <div class="space-y-3 text-sm mb-6 px-2">
+      <div class="space-y-3 text-sm mb-6 px-2 mt-8">
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Subtotal</span
-          ><span class="text-foreground">$477.00</span>
+          <span class="text-muted-foreground">Subtotal</span>
+          <span class="text-foreground">{{ subtotal() | currency }}</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Shipping</span
-          ><span class="text-foreground">Calculated at next step</span>
+          <span class="text-muted-foreground">Shipping</span>
+          <span class="text-foreground">Calculated at next step</span>
         </div>
         <div class="flex justify-between">
-          <span class="text-muted-foreground">Tax</span><span class="text-foreground">$38.16</span>
+          <span class="text-muted-foreground">Tax (8%)</span>
+          <span class="text-foreground">{{ tax() | currency }}</span>
         </div>
       </div>
       <hr class="border-border mb-6" />
       <div class="flex justify-between items-center text-xl font-bold px-2">
         <span class="text-foreground">Total</span>
-        <span class="text-primary">$515.16</span>
+        <span class="text-primary">{{ total() | currency }}</span>
       </div>
     </div>
 
@@ -144,6 +111,11 @@
                   checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
                 "
               />
+              @if (
+                checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
+              ) {
+                <span class="text-xs text-destructive mt-1 block">First name is required.</span>
+              }
             </div>
             <div>
               <label
@@ -163,6 +135,9 @@
                   checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched
                 "
               />
+              @if (checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched) {
+                <span class="text-xs text-destructive mt-1 block">Last name is required.</span>
+              }
             </div>
           </div>
 
@@ -184,6 +159,9 @@
                 checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched
               "
             />
+            @if (checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
+              <span class="text-xs text-destructive mt-1 block">Address is required.</span>
+            }
           </div>
 
           <div>
@@ -204,6 +182,9 @@
                 checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched
               "
             />
+            @if (checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched) {
+              <span class="text-xs text-destructive mt-1 block">City is required.</span>
+            }
           </div>
         </div>
 
@@ -250,6 +231,16 @@
                 "
               />
             </div>
+            @if (checkoutForm.get('cardNumber')?.touched) {
+              @if (checkoutForm.get('cardNumber')?.hasError('required')) {
+                <span class="text-xs text-destructive mt-1 block">Card number is required.</span>
+              }
+              @if (checkoutForm.get('cardNumber')?.hasError('minlength')) {
+                <span class="text-xs text-destructive mt-1 block"
+                  >Card number must be 16 digits.</span
+                >
+              }
+            }
           </div>
 
           <div class="grid grid-cols-2 gap-4">
@@ -271,6 +262,9 @@
                   checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched
                 "
               />
+              @if (checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched) {
+                <span class="text-xs text-destructive mt-1 block">Expiry date is required.</span>
+              }
             </div>
             <div>
               <label
@@ -290,6 +284,9 @@
                   checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched
                 "
               />
+              @if (checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched) {
+                <span class="text-xs text-destructive mt-1 block">CVC is required.</span>
+              }
             </div>
           </div>
         </div>
@@ -299,7 +296,7 @@
           type="submit"
           class="w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
         >
-          Pay $515.16 Securely
+          Pay {{ total() | currency }} Securely
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
