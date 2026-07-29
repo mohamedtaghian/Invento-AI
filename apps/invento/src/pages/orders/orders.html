@@ -1,1 +1,598 @@
-<p>Orders works!</p>
+<div class="space-y-6 mx-auto max-w-7xl">
+  <!-- Header & Breadcrumbs -->
+  <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-4">
+    <div class="space-y-1">
+      <nav class="flex items-center gap-1.5 font-medium text-muted-foreground text-xs">
+        <span>{{ 'orders.breadcrumb_storefront' | translate }}</span>
+        <ng-icon
+          name="lucideChevronRight"
+          size="14"
+          class="text-muted-foreground/60 rtl:rotate-180"
+        />
+        <span class="font-semibold text-foreground">{{
+          'orders.breadcrumb_orders' | translate
+        }}</span>
+      </nav>
+      <h1 class="font-bold text-foreground text-2xl sm:text-3xl tracking-tight">
+        {{ 'orders.title' | translate }}
+      </h1>
+      <p class="text-muted-foreground text-sm">
+        {{ 'orders.subtitle' | translate }}
+      </p>
+    </div>
+
+    <div class="flex items-center self-start sm:self-auto gap-3">
+      <button
+        hlmBtn
+        variant="outline"
+        class="flex items-center gap-2 bg-card hover:bg-accent shadow-sm hover:text-accent-foreground"
+        (click)="store.exportOrders()"
+      >
+        <ng-icon name="lucideDownload" size="16" />
+        <span>{{ 'orders.export' | translate }}</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- KPI Cards Grid -->
+  <div class="gap-3 sm:gap-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+    <app-order-stat-card
+      [title]="'orders.kpi_total' | translate"
+      [value]="store.stats().total"
+      trend="up"
+      trendValue="+12.5%"
+      trendSubtitle="vs last month"
+      iconName="lucideShoppingCart"
+      colorVariant="indigo"
+    />
+    <app-order-stat-card
+      [title]="'orders.kpi_pending' | translate"
+      [value]="store.stats().pending"
+      trend="up"
+      trendValue="+3.2%"
+      trendSubtitle="vs last week"
+      iconName="lucideClock"
+      colorVariant="amber"
+    />
+    <app-order-stat-card
+      [title]="'orders.kpi_processing' | translate"
+      [value]="store.stats().processing"
+      trend="down"
+      trendValue="-5.0%"
+      trendSubtitle="vs yesterday"
+      iconName="lucideRefreshCw"
+      colorVariant="sky"
+    />
+    <app-order-stat-card
+      [title]="'orders.kpi_delivered' | translate"
+      [value]="store.stats().delivered"
+      trend="up"
+      trendValue="+18.4%"
+      trendSubtitle="vs last month"
+      iconName="lucideCheckCircle2"
+      colorVariant="emerald"
+    />
+    <app-order-stat-card
+      [title]="'orders.kpi_cancelled' | translate"
+      [value]="store.stats().cancelled"
+      trend="down"
+      trendValue="-2.1%"
+      trendSubtitle="vs last month"
+      iconName="lucideXCircle"
+      colorVariant="rose"
+    />
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="flex lg:flex-row flex-col justify-between lg:items-center gap-4">
+    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full lg:w-auto">
+      <!-- Search Input -->
+      <div class="relative sm:flex-initial flex-1 w-full sm:w-72 md:w-80">
+        <ng-icon
+          name="lucideSearch"
+          size="16"
+          class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none start-3"
+        />
+        <input
+          hlmInput
+          type="text"
+          [placeholder]="'orders.search_placeholder' | translate"
+          [value]="store.searchQuery()"
+          (input)="onSearchChange($event)"
+          class="bg-card shadow-sm ps-9 border-border rounded-full focus:ring-2 focus:ring-primary/20 w-full h-9"
+        />
+      </div>
+
+      <div class="flex items-center gap-2.5 w-full sm:w-auto">
+        <!-- Status Filter -->
+        <div class="relative sm:flex-initial flex-1">
+          <select
+            [value]="store.statusFilter()"
+            (change)="onStatusChange($event)"
+            class="bg-card shadow-sm px-3.5 pe-8 border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20 w-full h-9 font-medium text-foreground text-sm appearance-none cursor-pointer"
+          >
+            <option value="all">{{ 'orders.filter_all' | translate }}</option>
+            <option value="pending">{{ 'orders.filter_pending' | translate }}</option>
+            <option value="processing">{{ 'orders.filter_processing' | translate }}</option>
+            <option value="shipped">{{ 'orders.filter_shipped' | translate }}</option>
+            <option value="delivered">{{ 'orders.filter_delivered' | translate }}</option>
+            <option value="cancelled">{{ 'orders.filter_cancelled' | translate }}</option>
+          </select>
+          <div
+            class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none end-2.5"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Date Timeframe Filter -->
+        <div class="relative sm:flex-initial flex-1">
+          <div
+            class="top-1/2 absolute flex items-center text-muted-foreground -translate-y-1/2 pointer-events-none start-3"
+          >
+            <ng-icon name="lucideCalendar" size="15" />
+          </div>
+          <select
+            [value]="store.timeFilter()"
+            (change)="onTimeChange($event)"
+            class="bg-card shadow-sm ps-8 pe-8 border border-border rounded-full focus:outline-none focus:ring-2 focus:ring-primary/20 w-full h-9 font-medium text-foreground text-sm appearance-none cursor-pointer"
+          >
+            <option value="all_time">{{ 'orders.time_all' | translate }}</option>
+            <option value="today">{{ 'orders.time_today' | translate }}</option>
+            <option value="this_week">{{ 'orders.time_week' | translate }}</option>
+            <option value="this_month">{{ 'orders.time_month' | translate }}</option>
+          </select>
+          <div
+            class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none end-2.5"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Count Display -->
+    <div class="self-end lg:self-auto font-medium text-muted-foreground text-sm shrink-0">
+      {{ 'orders.count' | translate: { count: store.totalOrdersCount() } }}
+    </div>
+  </div>
+
+  <!-- Floating Bulk Action Bar (When orders selected) -->
+  @if (store.selectedOrderIds().size > 0) {
+    <div
+      class="flex justify-between items-center bg-primary/10 slide-in-from-top-2 shadow-sm p-3 px-4 border border-primary/20 rounded-xl animate-in duration-200 fade-in"
+    >
+      <div class="flex items-center gap-3">
+        <span
+          class="inline-flex justify-center items-center bg-primary rounded-full w-6 h-6 font-bold text-primary-foreground text-xs"
+        >
+          {{ store.selectedOrderIds().size }}
+        </span>
+        <span class="font-medium text-foreground text-sm">
+          {{ 'orders.selected_count' | translate: { count: store.selectedOrderIds().size } }}
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button
+          hlmBtn
+          size="sm"
+          variant="outline"
+          class="bg-card h-8 font-medium text-xs"
+          (click)="store.exportOrders()"
+        >
+          <ng-icon name="lucideDownload" size="14" class="me-1" />
+          {{ 'orders.export' | translate }}
+        </button>
+        <button
+          hlmBtn
+          size="sm"
+          variant="ghost"
+          class="p-0 w-8 h-8 text-muted-foreground hover:text-foreground"
+          (click)="store.clearSelection()"
+        >
+          <ng-icon name="lucideX" size="16" />
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Orders Data Table Card -->
+  <div hlmCard class="bg-card shadow-sm border-border rounded-xl overflow-hidden">
+    @if (store.filteredOrders().length > 0) {
+      <div class="overflow-x-auto">
+        <table class="w-full text-start border-collapse">
+          <thead>
+            <tr
+              class="bg-muted/30 border-border border-b font-semibold text-muted-foreground text-xs tracking-wider"
+            >
+              <th class="px-2 sm:px-3 md:px-4 py-3 w-10 text-center">
+                <input
+                  type="checkbox"
+                  [checked]="store.isAllCurrentPageSelected()"
+                  (change)="store.toggleSelectAll()"
+                  class="border-border rounded focus:ring-primary/20 text-primary cursor-pointer"
+                />
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_id' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_customer' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_date' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_items' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_total' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_payment' | translate }}
+              </th>
+              <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">
+                {{ 'orders.col_fulfillment' | translate }}
+              </th>
+              <th class="px-2 sm:px-3 md:px-4 py-3 w-14 text-center whitespace-nowrap">
+                {{ 'orders.col_actions' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60 text-sm">
+            @for (order of store.paginatedOrders(); track order.id) {
+              <tr
+                class="group hover:bg-muted/40 transition-colors"
+                [class.bg-primary/5]="store.selectedOrderIds().has(order.id)"
+              >
+                <!-- Checkbox -->
+                <td class="px-2 sm:px-3 md:px-4 py-3.5 text-center">
+                  <input
+                    type="checkbox"
+                    [checked]="store.selectedOrderIds().has(order.id)"
+                    (change)="store.toggleSelectOrder(order.id)"
+                    class="border-border rounded focus:ring-primary/20 text-primary cursor-pointer"
+                  />
+                </td>
+
+                <!-- Order ID -->
+                <td
+                  class="px-2.5 sm:px-3 md:px-4 py-3.5 font-semibold text-primary whitespace-nowrap"
+                >
+                  <button
+                    type="button"
+                    class="focus:outline-none font-semibold hover:underline"
+                    (click)="viewDetails(order, $event)"
+                  >
+                    {{ order.id }}
+                  </button>
+                </td>
+
+                <!-- Customer -->
+                <td
+                  class="px-2.5 sm:px-3 md:px-4 py-3.5 min-w-[130px] max-w-[170px] sm:max-w-[210px] lg:max-w-none"
+                >
+                  <div class="font-semibold text-foreground truncate">{{ order.customerName }}</div>
+                  <div class="text-muted-foreground text-xs truncate">
+                    {{ order.customerEmail || '—' }}
+                  </div>
+                </td>
+
+                <!-- Date & Time -->
+                <td class="px-2.5 sm:px-3 md:px-4 py-3.5 whitespace-nowrap">
+                  <div class="font-medium text-foreground">{{ getDatePart(order.createdAt) }}</div>
+                  <div class="text-muted-foreground text-xs">
+                    {{ getTimePart(order.createdAt) }}
+                  </div>
+                </td>
+
+                <!-- Items Count -->
+                <td class="px-2.5 sm:px-3 md:px-4 py-3.5 text-muted-foreground whitespace-nowrap">
+                  <span>{{ order.quantity }} </span>
+                  <span>{{
+                    (order.quantity === 1 ? 'orders.item' : 'orders.items') | translate
+                  }}</span>
+                </td>
+
+                <!-- Total Price -->
+                <td
+                  class="px-2.5 sm:px-3 md:px-4 py-3.5 font-bold text-foreground whitespace-nowrap"
+                >
+                  {{ order.totalPrice | currency: 'USD' }}
+                </td>
+
+                <!-- Payment Status -->
+                <td class="px-2.5 sm:px-3 md:px-4 py-3.5 whitespace-nowrap">
+                  <span
+                    class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 border border-emerald-200 dark:border-emerald-800 rounded-full font-medium text-emerald-700 dark:text-emerald-400 text-xs"
+                  >
+                    <span class="bg-emerald-500 rounded-full w-1.5 h-1.5"></span>
+                    {{ 'orders.paid' | translate }}
+                  </span>
+                </td>
+
+                <!-- Fulfillment Status -->
+                <td class="px-2.5 sm:px-3 md:px-4 py-3.5 whitespace-nowrap">
+                  <span
+                    class="inline-flex justify-center items-center px-3 py-0.5 rounded-full text-xs"
+                    [class]="getFulfillmentBadgeClass(order.status)"
+                  >
+                    {{ 'orders.filter_' + order.status | translate }}
+                  </span>
+                </td>
+
+                <!-- Actions menu -->
+                <td class="relative px-2 sm:px-3 md:px-4 py-3.5 text-center whitespace-nowrap">
+                  <button
+                    hlmBtn
+                    variant="ghost"
+                    size="icon"
+                    class="w-8 h-8 text-muted-foreground hover:text-foreground"
+                    (click)="toggleRowMenu(order.id, $event)"
+                  >
+                    <ng-icon name="lucideMoreHorizontal" size="18" />
+                  </button>
+
+                  <!-- Context Action Menu Dropdown -->
+                  @if (activeDropdownId() === order.id) {
+                    <div
+                      class="top-10 z-50 absolute bg-popover shadow-lg p-1 border border-border rounded-lg w-44 text-popover-foreground animate-in duration-100 end-4 fade-in zoom-in-95"
+                    >
+                      <button
+                        type="button"
+                        class="flex items-center gap-2 hover:bg-accent px-3 py-1.5 rounded-md w-full font-medium text-xs text-start transition-colors hover:text-accent-foreground"
+                        (click)="viewDetails(order, $event)"
+                      >
+                        <ng-icon name="lucideEye" size="14" />
+                        <span>{{ 'orders.action_view' | translate }}</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="flex items-center gap-2 hover:bg-accent px-3 py-1.5 rounded-md w-full font-medium text-emerald-600 dark:text-emerald-400 text-xs text-start transition-colors hover:text-accent-foreground"
+                        (click)="updateStatus(order.id, 'delivered', $event)"
+                      >
+                        <ng-icon name="lucideCheckCircle2" size="14" />
+                        <span>{{ 'orders.action_deliver' | translate }}</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="flex items-center gap-2 hover:bg-accent px-3 py-1.5 rounded-md w-full font-medium text-rose-600 dark:text-rose-400 text-xs text-start transition-colors hover:text-accent-foreground"
+                        (click)="updateStatus(order.id, 'cancelled', $event)"
+                      >
+                        <ng-icon name="lucideXCircle" size="14" />
+                        <span>{{ 'orders.action_cancel' | translate }}</span>
+                      </button>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Table Footer / Pagination -->
+      <div
+        class="flex sm:flex-row flex-col justify-between items-center gap-3 sm:gap-4 bg-card px-3 sm:px-4 py-3 border-border border-t text-muted-foreground text-sm"
+      >
+        <!-- Left: Rows per page selector & range -->
+        <div
+          class="flex flex-wrap justify-between sm:justify-start items-center gap-3 sm:gap-4 w-full sm:w-auto"
+        >
+          <div class="flex items-center gap-2">
+            <span>{{ 'orders.rows_per_page' | translate }}</span>
+            <select
+              [value]="store.rowsPerPage()"
+              (change)="onRowsPerPageChange($event)"
+              class="bg-card px-2 pe-6 border border-border rounded-md focus:outline-none focus:ring-1 focus:ring-primary h-8 font-medium text-foreground text-xs appearance-none cursor-pointer"
+            >
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="20">20</option>
+              <option [value]="50">50</option>
+            </select>
+          </div>
+
+          <span>
+            {{
+              'orders.page_of'
+                | translate
+                  : {
+                      start: pageRangeStart(),
+                      end: pageRangeEnd(),
+                      total: store.totalOrdersCount(),
+                    }
+            }}
+          </span>
+        </div>
+
+        <!-- Right: Pagination navigation buttons -->
+        <div class="flex items-center gap-1">
+          <button
+            hlmBtn
+            variant="outline"
+            size="icon"
+            class="w-8 h-8"
+            [disabled]="store.currentPage() === 1"
+            (click)="store.setPage(1)"
+          >
+            <ng-icon name="lucideChevronsLeft" size="16" class="rtl:rotate-180" />
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            size="icon"
+            class="w-8 h-8"
+            [disabled]="store.currentPage() === 1"
+            (click)="store.setPage(store.currentPage() - 1)"
+          >
+            <ng-icon name="lucideChevronLeft" size="16" class="rtl:rotate-180" />
+          </button>
+
+          @for (page of pageNumbers(); track page) {
+            <button
+              hlmBtn
+              [variant]="store.currentPage() === page ? 'default' : 'outline'"
+              size="icon"
+              class="w-8 h-8 font-semibold text-xs"
+              (click)="store.setPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+
+          <button
+            hlmBtn
+            variant="outline"
+            size="icon"
+            class="w-8 h-8"
+            [disabled]="store.currentPage() === store.totalPages()"
+            (click)="store.setPage(store.currentPage() + 1)"
+          >
+            <ng-icon name="lucideChevronRight" size="16" class="rtl:rotate-180" />
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            size="icon"
+            class="w-8 h-8"
+            [disabled]="store.currentPage() === store.totalPages()"
+            (click)="store.setPage(store.totalPages())"
+          >
+            <ng-icon name="lucideChevronsRight" size="16" class="rtl:rotate-180" />
+          </button>
+        </div>
+      </div>
+    } @else {
+      <!-- Empty State -->
+      <app-empty-state
+        icon="lucideShoppingCart"
+        [title]="'orders.empty_title' | translate"
+        [description]="'orders.empty_desc' | translate"
+        [actionLabel]="'orders.empty_action' | translate"
+        (actionClick)="resetFilters()"
+      />
+    }
+  </div>
+
+  <!-- Order Details Overlay Modal -->
+  @if (selectedDetailOrder(); as orderDetail) {
+    <div class="z-50 fixed inset-0 flex justify-center items-center p-4">
+      <!-- Backdrop button for accessible dismissal -->
+      <button
+        type="button"
+        class="fixed inset-0 w-full h-full bg-black/50 backdrop-blur-xs border-0 cursor-default animate-in duration-200 fade-in"
+        (click)="closeDetails()"
+        aria-label="Close modal"
+      ></button>
+
+      <!-- Modal Dialog -->
+      <div
+        class="relative z-10 space-y-5 bg-card shadow-xl p-6 border border-border rounded-2xl w-full max-w-md text-foreground animate-in duration-200 fade-in zoom-in-95"
+        role="dialog"
+        aria-modal="true"
+      >
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center pb-3 border-border border-b">
+          <div class="flex items-center gap-2.5">
+            <h2 class="font-bold text-primary text-lg">{{ orderDetail.id }}</h2>
+            <span
+              class="inline-flex justify-center items-center px-2.5 py-0.5 rounded-full font-medium text-xs"
+              [class]="getFulfillmentBadgeClass(orderDetail.status)"
+            >
+              {{ 'orders.filter_' + orderDetail.status | translate }}
+            </span>
+          </div>
+          <button
+            hlmBtn
+            variant="ghost"
+            size="icon"
+            class="w-8 h-8 text-muted-foreground hover:text-foreground"
+            (click)="closeDetails()"
+          >
+            <ng-icon name="lucideX" size="18" />
+          </button>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="space-y-4 text-sm">
+          <div class="gap-3 grid grid-cols-2 bg-muted/30 p-3.5 border border-border/50 rounded-xl">
+            <div>
+              <div class="text-muted-foreground text-xs">
+                {{ 'orders.col_customer' | translate }}
+              </div>
+              <div class="mt-0.5 font-semibold text-foreground">{{ orderDetail.customerName }}</div>
+              <div class="text-muted-foreground text-xs">
+                {{ orderDetail.customerEmail || '—' }}
+              </div>
+            </div>
+            <div>
+              <div class="text-muted-foreground text-xs">{{ 'orders.col_date' | translate }}</div>
+              <div class="mt-0.5 font-medium text-foreground">
+                {{ getDatePart(orderDetail.createdAt) }}
+              </div>
+              <div class="text-muted-foreground text-xs">
+                {{ getTimePart(orderDetail.createdAt) }}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center py-2 border-border/50 border-y">
+            <div>
+              <div class="text-muted-foreground text-xs">{{ 'orders.col_items' | translate }}</div>
+              <div class="mt-0.5 font-semibold text-foreground">
+                {{ orderDetail.quantity }}
+                {{ (orderDetail.quantity === 1 ? 'orders.item' : 'orders.items') | translate }}
+              </div>
+            </div>
+            <div class="text-end">
+              <div class="text-muted-foreground text-xs">{{ 'orders.col_total' | translate }}</div>
+              <div class="mt-0.5 font-bold text-foreground text-lg">
+                {{ orderDetail.totalPrice | currency: 'USD' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between items-center">
+            <span class="text-muted-foreground text-xs"
+              >{{ 'orders.col_payment' | translate }}:</span
+            >
+            <span
+              class="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-0.5 border border-emerald-200 dark:border-emerald-800 rounded-full font-medium text-emerald-700 dark:text-emerald-400 text-xs"
+            >
+              <span class="bg-emerald-500 rounded-full w-1.5 h-1.5"></span>
+              {{ 'orders.paid' | translate }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Modal Actions -->
+        <div class="flex justify-end items-center gap-2 pt-2 border-border border-t">
+          <button hlmBtn variant="outline" size="sm" (click)="closeDetails()">Close</button>
+          <button
+            hlmBtn
+            size="sm"
+            class="bg-emerald-600 hover:bg-emerald-700 text-white"
+            (click)="updateStatus(orderDetail.id, 'delivered')"
+          >
+            {{ 'orders.action_deliver' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>
