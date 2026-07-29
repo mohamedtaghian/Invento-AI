@@ -9,12 +9,7 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <button
-        hlmBtn
-        class="bg-primary hover:bg-primary/90 px-4 rounded-full text-primary-foreground"
-      >
-        ✨ AI Advisor
-      </button>
+      <app-ai-advisor-panel />
 
       <hlm-select [value]="range()" (valueChange)="onRangeChange($event)">
         <hlm-select-trigger class="w-40">
