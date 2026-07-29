@@ -26,7 +26,7 @@
       </div>
 
       <h1 class="text-3xl font-bold mb-2 text-foreground">Thank You for Your Order!</h1>
-      <p class="text-muted-foreground mb-1">Order #AC-9942</p>
+      <p class="text-muted-foreground mb-1">Order #{{ order.id }}</p>
       <p class="text-sm text-muted-foreground">
         A confirmation email has been sent to your registered address.
       </p>
@@ -42,39 +42,43 @@
         <h2 class="text-xl font-bold mb-4 text-foreground">Order Summary</h2>
         <hr class="border-border mb-6" />
 
-        <div class="flex items-start gap-4 mb-8">
-          <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
-            <img
-              src="https://placehold.co/150x150/e2e8f0/475569?text=Headphones"
-              alt="Headphones"
-              class="w-full h-full object-cover"
-            />
-          </div>
-          <div class="flex-1">
-            <div class="flex justify-between items-start">
-              <h4 class="font-bold text-foreground">AuraX Pro ANC Headphones</h4>
-              <p class="font-bold text-foreground">$299.00</p>
+        <!-- Dynamic Order Items -->
+        @for (item of order.items; track item.product.id) {
+          <div class="flex items-start gap-4 mb-6">
+            <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
+              <img
+                [src]="item.product.image"
+                [alt]="item.product.name"
+                class="w-full h-full object-cover"
+              />
             </div>
-            <p class="text-sm text-muted-foreground mt-1">Color: Midnight Blue</p>
-            <p class="text-sm text-muted-foreground mt-1">Qty: 1</p>
+            <div class="flex-1">
+              <div class="flex justify-between items-start">
+                <h4 class="font-bold text-foreground">{{ item.product.name }}</h4>
+                <p class="font-bold text-foreground">{{ item.product.price | currency }}</p>
+              </div>
+              <p class="text-sm text-muted-foreground mt-1">Color: {{ item.color }}</p>
+              <p class="text-sm text-muted-foreground mt-1">Qty: {{ item.quantity }}</p>
+            </div>
           </div>
-        </div>
+        }
 
-        <div class="space-y-3 text-sm mb-6 text-muted-foreground">
+        <div class="space-y-3 text-sm mb-6 mt-8 text-muted-foreground">
           <div class="flex justify-between">
-            <span>Subtotal</span><span class="font-medium text-foreground">$299.00</span>
+            <span>Subtotal</span
+            ><span class="font-medium text-foreground">{{ subtotal | currency }}</span>
           </div>
           <div class="flex justify-between">
             <span>Shipping</span><span class="font-medium text-foreground">Free</span>
           </div>
           <div class="flex justify-between">
-            <span>Tax</span><span class="font-medium text-foreground">$24.67</span>
+            <span>Tax</span><span class="font-medium text-foreground">{{ tax | currency }}</span>
           </div>
         </div>
         <hr class="border-border mb-4" />
         <div class="flex justify-between items-center text-lg font-bold text-foreground">
           <span>Total</span>
-          <span class="text-primary">$323.67</span>
+          <span class="text-primary">{{ total | currency }}</span>
         </div>
       </div>
 
@@ -105,7 +109,9 @@
                 </svg>
               </div>
               <h4 class="font-bold text-sm leading-none pt-0.5 text-foreground">Order Placed</h4>
-              <p class="text-xs text-muted-foreground mt-1">Oct 24, 2026 - 10:42 AM</p>
+              <p class="text-xs text-muted-foreground mt-1">
+                {{ order.date | date: 'MMM d, yyyy - h:mm a' }}
+              </p>
             </div>
 
             <!-- Step 2 (Pending) -->
@@ -134,9 +140,11 @@
         <div hlmCard class="bg-card rounded-xl border-border shadow-sm p-6 confirm-anim block">
           <h2 class="text-xl font-bold mb-3 text-foreground">Shipping Details</h2>
           <hr class="border-border mb-4" />
-          <h4 class="font-bold text-sm mb-2 text-foreground">Alex Mercer</h4>
-          <p class="text-sm text-muted-foreground mb-1">123 Horizon Lane, Suite 404</p>
-          <p class="text-sm text-muted-foreground mb-4">Neo-Seattle, WA 98101</p>
+          <h4 class="font-bold text-sm mb-2 text-foreground">
+            {{ order.shipping.firstName }} {{ order.shipping.lastName }}
+          </h4>
+          <p class="text-sm text-muted-foreground mb-1">{{ order.shipping.address }}</p>
+          <p class="text-sm text-muted-foreground mb-4">{{ order.shipping.city }}</p>
           <p class="text-sm text-muted-foreground flex items-center gap-2">
             <svg
               class="w-4 h-4 text-muted-foreground"
@@ -151,7 +159,7 @@
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               ></path>
             </svg>
-            alex.mercer&#64;example.com
+            {{ order.shipping.email }}
           </p>
         </div>
 

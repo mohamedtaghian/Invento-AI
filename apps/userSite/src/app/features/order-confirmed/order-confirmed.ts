@@ -1,18 +1,54 @@
-import { Component, afterNextRender } from '@angular/core';
+import { Component, afterNextRender, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import gsap from 'gsap';
 
 // Spartan UI Imports
 import { HlmButton } from '@spartan/helm/button';
 import { HlmCard } from '@spartan/helm/card';
 
+// Import your data service
+import { ProductsData } from '../product/service/products-data';
+
 @Component({
   selector: 'app-order-confirmed',
   standalone: true,
-  imports: [RouterLink, HlmButton, HlmCard],
+  imports: [RouterLink, CurrencyPipe, DatePipe, HlmButton, HlmCard],
   templateUrl: './order-confirmed.html',
 })
 export class OrderConfirmedComponent {
+  private productsData = inject(ProductsData);
+
+  // Mocking the completed order payload
+  order = {
+    id: `AC-${Math.floor(1000 + Math.random() * 9000)}`,
+    date: new Date(),
+    items: [
+      { product: this.productsData.products()[0], quantity: 1, color: 'Matte Black' },
+      { product: this.productsData.products()[1], quantity: 2, color: 'Silver' },
+    ],
+    shipping: {
+      firstName: 'Jane',
+      lastName: 'Doe',
+      address: '123 Innovation Way',
+      city: 'Metropolis',
+      email: 'jane.doe@example.com',
+    },
+  };
+
+  // Calculate totals dynamically
+  get subtotal() {
+    return this.order.items.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  }
+
+  get tax() {
+    return this.subtotal * 0.08;
+  }
+
+  get total() {
+    return this.subtotal + this.tax;
+  }
+
   constructor() {
     afterNextRender(() => {
       // Animated Checkmark Pop
