@@ -10,7 +10,7 @@ export const appRoutes: Routes = [
       {
         path: 'home',
         loadComponent: () =>
-          import('@invento/invento/pages/home/home').then((c) => c.Home),
+          import('@invento/invento/pages/home/home').then((c) => c.HomeComponent),
       },
       {
         path: 'products',
@@ -19,13 +19,11 @@ export const appRoutes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () =>
-          import('@invento/invento/pages/users/users').then((c) => c.Users),
+        loadComponent: () => import('@invento/invento/pages/users/users').then((c) => c.Users),
       },
       {
         path: 'orders',
-        loadComponent: () =>
-          import('@invento/invento/pages/orders/orders').then((c) => c.Orders),
+        loadComponent: () => import('@invento/invento/pages/orders/orders').then((c) => c.Orders),
       },
       {
         path: 'suppliers',
