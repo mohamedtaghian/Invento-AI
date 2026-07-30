@@ -1,1 +1,672 @@
-<p>home works!</p>
+<div class="relative flex flex-col w-full min-h-full overflow-x-hidden">
+  <input
+    #fileInput
+    id="hero-file-input"
+    type="file"
+    accept="image/*"
+    class="hidden"
+    (change)="onFileSelected($event)"
+  />
+
+  <!-- Top Bar -->
+  <div
+    class="flex sm:flex-row flex-col justify-between sm:items-center gap-2 sm:gap-3 bg-background px-3 sm:px-6 py-3 sm:py-4 border-border border-b"
+  >
+    <div class="min-w-0">
+      <div class="flex items-center gap-1 mb-1 text-muted-foreground text-xs">
+        <span>Storefront</span>
+        <ng-icon name="lucideChevronRight" size="13" />
+        <span class="font-medium text-foreground">Home Page Editor</span>
+      </div>
+      <h1 class="font-semibold text-base sm:text-xl truncate tracking-tight">Home Page Editor</h1>
+      <p class="mt-0.5 text-muted-foreground text-xs sm:text-sm">
+        Customize your live storefront homepage — changes are published instantly to
+        <a href="#" class="font-medium text-primary hover:underline">yourbrand.com</a>
+      </p>
+    </div>
+    <div class="flex items-center self-end sm:self-auto gap-3">
+      <span class="flex items-center gap-1.5 font-medium text-green-600 text-xs sm:text-sm">
+        <span class="bg-green-500 rounded-full w-2 h-2 animate-pulse"></span>
+        Live
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Split -->
+  <div class="flex lg:flex-row flex-col flex-1 w-full min-h-0">
+    <!-- Left Editor -->
+    <div
+      class="flex-shrink-0 space-y-4 bg-muted/20 p-3 sm:p-5 border-border lg:border-e border-b lg:border-b-0 w-full lg:w-[380px] max-h-[400px] lg:max-h-none overflow-y-auto"
+    >
+      <!-- Hero Editor Card -->
+      <div
+        class="bg-card shadow-xs border border-border rounded-xl overflow-hidden text-card-foreground"
+      >
+        <div class="flex items-center gap-3 p-3 sm:p-5 pb-3">
+          <div
+            class="flex flex-shrink-0 justify-center items-center bg-muted rounded-xl w-9 sm:w-10 h-9 sm:h-10"
+          >
+            <ng-icon name="lucideImage" size="18" class="text-muted-foreground" />
+          </div>
+          <div>
+            <h3 class="font-semibold text-xs sm:text-sm">Hero Section</h3>
+            <p class="mt-0.5 text-[11px] text-muted-foreground sm:text-xs">
+              Main banner at the top of your homepage
+            </p>
+          </div>
+        </div>
+
+        <div class="space-y-4 px-3 sm:px-5 pb-4 sm:pb-5">
+          <div class="space-y-2">
+            <p class="font-semibold text-[11px] text-muted-foreground uppercase tracking-wider">
+              Hero Image
+            </p>
+
+            <!-- Fixed accessibility issue on click container -->
+            <button
+              type="button"
+              class="group block relative p-0 border-2 border-primary/40 hover:border-primary border-dashed rounded-xl w-full overflow-hidden text-start transition-colors duration-150 cursor-pointer"
+              (click)="fileInput.click()"
+            >
+              <img
+                [src]="heroImageUrl()"
+                (error)="fallbackImg($event)"
+                alt="Hero banner"
+                class="w-full h-[120px] sm:h-[140px] object-cover"
+              />
+              <div
+                class="absolute inset-0 flex flex-col justify-center items-center gap-2 bg-white/60 group-hover:bg-white/70 transition-colors duration-150"
+              >
+                <div
+                  class="flex justify-center items-center bg-primary/10 group-hover:bg-primary/20 rounded-full w-9 sm:w-10 h-9 sm:h-10 transition-colors duration-150"
+                >
+                  <ng-icon name="lucideUpload" size="18" class="text-primary" />
+                </div>
+                <span class="font-semibold text-primary text-xs tracking-wide">Replace image</span>
+              </div>
+            </button>
+          </div>
+
+          <div class="border-border border-t"></div>
+
+          <div class="space-y-3">
+            <p class="font-semibold text-[11px] text-muted-foreground uppercase tracking-wider">
+              Hero Content
+            </p>
+
+            <div class="space-y-1.5">
+              <label for="hero-title-input" class="font-medium text-foreground text-xs"
+                >Main Title</label
+              >
+              <input
+                id="hero-title-input"
+                type="text"
+                class="flex bg-transparent shadow-xs px-3 py-1 border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-9 placeholder:text-muted-foreground text-xs transition-colors"
+                [value]="heroTitle()"
+                (input)="onHeroTitleChange($any($event.target).value)"
+              />
+            </div>
+
+            <div class="space-y-1.5">
+              <label for="hero-subtitle-input" class="font-medium text-foreground text-xs"
+                >Subtitle / Description</label
+              >
+              <textarea
+                id="hero-subtitle-input"
+                class="flex bg-transparent shadow-xs px-3 py-2 border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full min-h-[70px] placeholder:text-muted-foreground text-xs transition-colors resize-none"
+                [value]="heroSubtitle()"
+                (input)="onHeroSubtitleChange($any($event.target).value)"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Editor Card -->
+      <div
+        class="bg-card shadow-xs border border-border rounded-xl overflow-hidden text-card-foreground"
+      >
+        <div class="flex items-center gap-3 p-3 sm:p-5 pb-3">
+          <div
+            class="flex flex-shrink-0 justify-center items-center bg-secondary rounded-xl w-9 sm:w-10 h-9 sm:h-10"
+          >
+            <ng-icon name="lucideLayoutGrid" size="18" class="text-indigo-600" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold text-xs sm:text-sm truncate">Categories Section</h3>
+            <p class="mt-0.5 text-[11px] text-muted-foreground sm:text-xs truncate">
+              Manage category titles & emojis/icons
+            </p>
+          </div>
+          <span
+            class="inline-flex items-center bg-secondary px-2 py-0.5 rounded-full font-semibold text-[11px] text-black"
+          >
+            {{ categories().length }} items
+          </span>
+        </div>
+
+        <div class="space-y-2 px-3 sm:px-5 pb-3">
+          <label
+            for="categories-title-input"
+            class="block font-semibold text-[11px] text-muted-foreground uppercase tracking-wider"
+          >
+            Section Title
+          </label>
+          <input
+            id="categories-title-input"
+            type="text"
+            class="flex bg-transparent shadow-xs px-3 py-1 border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-9 placeholder:text-muted-foreground text-xs transition-colors"
+            [value]="categoriesTitle()"
+            (input)="onCategoriesTitleChange($any($event.target).value)"
+          />
+        </div>
+
+        <div class="mx-3 sm:mx-5 border-border border-t"></div>
+
+        <button
+          type="button"
+          class="flex justify-between items-center hover:bg-muted/50 px-3 sm:px-5 py-3 w-full font-medium text-xs sm:text-sm transition-colors cursor-pointer"
+          (click)="categoryPickerOpen.set(!categoryPickerOpen())"
+        >
+          <span class="flex items-center gap-2">
+            <ng-icon name="lucideFolderTree" size="15" class="text-muted-foreground" />
+            Edit Categories List
+          </span>
+          <ng-icon
+            [name]="categoryPickerOpen() ? 'lucideChevronUp' : 'lucideChevronDown'"
+            size="15"
+            class="text-muted-foreground"
+          />
+        </button>
+
+        @if (categoryPickerOpen()) {
+          <div class="space-y-2 px-3 sm:px-5 pt-1 pb-4">
+            <div class="mb-2 border-border border-t"></div>
+            @for (cat of categories(); track cat.id) {
+              <div
+                class="group flex items-center gap-2 bg-muted/40 p-2 border border-border/50 rounded-lg"
+              >
+                <div class="flex-shrink-0 w-12">
+                  <input
+                    type="text"
+                    aria-label="Category icon"
+                    class="flex bg-background shadow-xs border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-8 text-xs sm:text-sm text-center transition-colors"
+                    [value]="cat.icon"
+                    (input)="updateCategoryIcon(cat.id, $any($event.target).value)"
+                  />
+                </div>
+                <div class="flex-1 min-w-0">
+                  <input
+                    type="text"
+                    aria-label="Category name"
+                    class="flex bg-background shadow-xs px-2.5 border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-8 text-xs transition-colors"
+                    [value]="cat.name"
+                    (input)="updateCategoryName(cat.id, $any($event.target).value)"
+                  />
+                </div>
+                <!-- Delete Button -->
+                <button
+                  type="button"
+                  title="Remove category"
+                  class="flex flex-shrink-0 justify-center items-center hover:bg-red-50 dark:hover:bg-red-950/40 rounded-md w-8 h-8 text-red-500 hover:text-red-600 transition-all cursor-pointer"
+                  (click)="removeCategory(cat.id)"
+                >
+                  <ng-icon name="lucideTrash2" size="15" />
+                </button>
+              </div>
+            }
+
+            <!-- Add New Category Button -->
+            <button
+              type="button"
+              class="flex justify-center items-center gap-2 hover:bg-primary/5 mt-3 py-2 border border-primary/40 hover:border-primary border-dashed rounded-lg w-full font-semibold text-primary text-xs transition-all cursor-pointer"
+              (click)="addCategory()"
+            >
+              <ng-icon name="lucidePlus" size="14" />
+              <span>Add Category</span>
+            </button>
+          </div>
+        } @else {
+          <div class="px-3 sm:px-5 pt-1 pb-3">
+            <div class="flex flex-wrap gap-1">
+              @for (cat of categories(); track cat.id) {
+                <span
+                  class="inline-flex items-center gap-1 bg-muted/70 px-2 py-0.5 rounded-md font-medium text-[10px] sm:text-[11px]"
+                >
+                  <span>{{ cat.icon }}</span>
+                  <span>{{ cat.name }}</span>
+                </span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Featured Products Editor Card -->
+      <div
+        class="bg-card shadow-xs border border-border rounded-xl overflow-hidden text-card-foreground"
+      >
+        <div class="flex items-center gap-3 p-3 sm:p-5 pb-3">
+          <div
+            class="flex flex-shrink-0 justify-center items-center bg-primary/10 rounded-xl w-9 sm:w-10 h-9 sm:h-10"
+          >
+            <ng-icon name="lucideCheckCircle2" size="18" class="text-primary" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <h3 class="font-semibold text-xs sm:text-sm truncate">Featured Products</h3>
+            <p class="mt-0.5 text-[11px] text-muted-foreground sm:text-xs truncate">
+              Choose and order products
+            </p>
+          </div>
+          <span
+            class="inline-flex items-center bg-secondary px-2 py-0.5 rounded-full font-semibold text-[11px] text-secondary-foreground"
+          >
+            {{ selectedProducts().length }} selected
+          </span>
+        </div>
+        <div class="space-y-2 px-3 sm:px-5 pb-3">
+          <label
+            for="featured-title-input"
+            class="block font-semibold text-[11px] text-muted-foreground uppercase tracking-wider"
+            >Section Title</label
+          >
+          <input
+            id="featured-title-input"
+            type="text"
+            class="flex bg-transparent shadow-xs px-3 py-1 border border-input rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full h-9 placeholder:text-muted-foreground text-xs transition-colors"
+            [value]="featuredTitle()"
+            (input)="onFeaturedTitleChange($any($event.target).value)"
+          />
+        </div>
+        <div class="mx-3 sm:mx-5 border-border border-t"></div>
+        <button
+          type="button"
+          class="flex justify-between items-center hover:bg-muted/50 px-3 sm:px-5 py-3 w-full font-medium text-xs sm:text-sm transition-colors cursor-pointer"
+          (click)="productPickerOpen.set(!productPickerOpen())"
+        >
+          <span class="flex items-center gap-2">
+            <ng-icon name="lucidePackage" size="15" class="text-muted-foreground" />
+            Select products
+          </span>
+          <ng-icon
+            [name]="productPickerOpen() ? 'lucideChevronUp' : 'lucideChevronDown'"
+            size="15"
+            class="text-muted-foreground"
+          />
+        </button>
+        @if (productPickerOpen()) {
+          <div class="space-y-1 pb-3">
+            <div class="mx-3 sm:mx-5 mb-2 border-border border-t"></div>
+            @for (product of products(); track product.id) {
+              <label
+                [for]="'product-checkbox-' + product.id"
+                class="flex items-center gap-2.5 hover:bg-muted/40 mx-1.5 px-2.5 sm:px-4 py-2.5 rounded-lg transition-colors cursor-pointer"
+                [ngClass]="product.selected ? 'bg-primary/5' : ''"
+              >
+                <span
+                  class="flex flex-shrink-0 justify-center items-center border-2 rounded-md w-4 sm:w-5 h-4 sm:h-5 transition-colors"
+                  [ngClass]="product.selected ? 'bg-primary border-primary' : 'border-border'"
+                >
+                  @if (product.selected) {
+                    <ng-icon name="lucideCheck" size="10" class="text-primary-foreground" />
+                  }
+                </span>
+                <img
+                  [src]="product.img"
+                  (error)="fallbackImg($event)"
+                  [alt]="product.name"
+                  class="flex-shrink-0 rounded-lg w-8 sm:w-10 h-8 sm:h-10 object-cover"
+                />
+                <div class="flex-1 min-w-0">
+                  <p class="font-medium text-xs truncate">{{ product.name }}</p>
+                  <p class="text-[11px] text-muted-foreground">{{ product.price }}</p>
+                </div>
+                <input
+                  [id]="'product-checkbox-' + product.id"
+                  type="checkbox"
+                  class="sr-only"
+                  [checked]="product.selected"
+                  (change)="toggleProduct(product.id)"
+                />
+              </label>
+            }
+          </div>
+        } @else {
+          <div class="px-3 sm:px-5 pt-1 pb-3">
+            @if (selectedProducts().length > 0) {
+              <div class="flex flex-wrap gap-1.5">
+                @for (product of selectedProducts(); track product.id) {
+                  <div class="flex items-center gap-1 bg-muted/60 px-2 py-1 rounded-lg">
+                    <img
+                      [src]="product.img"
+                      (error)="fallbackImg($event)"
+                      [alt]="product.name"
+                      class="rounded w-4 h-4 object-cover"
+                    />
+                    <span class="max-w-[75px] font-medium text-[10px] truncate">{{
+                      product.name
+                    }}</span>
+                  </div>
+                }
+              </div>
+            } @else {
+              <p class="text-muted-foreground text-xs italic">No products selected yet</p>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right Preview Section -->
+    <div class="flex flex-col flex-1 bg-muted/10 min-w-0 overflow-hidden">
+      <!-- Toolbar -->
+      <div
+        class="flex flex-wrap justify-between items-center gap-2 bg-background px-3 sm:px-4 py-2 border-border border-b"
+      >
+        <div class="flex items-center gap-2 min-w-0">
+          <div class="hidden sm:flex flex-shrink-0 items-center gap-1.5 me-1">
+            <span class="bg-red-400 rounded-full w-2.5 h-2.5"></span>
+            <span class="bg-yellow-400 rounded-full w-2.5 h-2.5"></span>
+            <span class="bg-green-400 rounded-full w-2.5 h-2.5"></span>
+          </div>
+          <div
+            class="flex items-center gap-1.5 bg-muted px-2.5 py-1 rounded-lg w-28 sm:w-48 min-w-0 text-[11px] text-muted-foreground sm:text-xs"
+          >
+            <ng-icon name="lucideGlobe" size="11" class="flex-shrink-0" />
+            <span class="truncate">yourbrand.com</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 ms-auto">
+          <button
+            type="button"
+            [ngClass]="
+              viewMode() === 'desktop'
+                ? 'bg-background border border-input shadow-xs text-foreground'
+                : 'hover:bg-accent hover:text-accent-foreground text-muted-foreground'
+            "
+            class="inline-flex justify-center items-center gap-1 px-2.5 py-1 rounded-md h-7 sm:h-8 font-medium text-[11px] sm:text-xs transition-colors cursor-pointer"
+            (click)="setViewMode('desktop')"
+          >
+            <ng-icon name="lucideMonitor" size="13" />
+            <span class="hidden sm:inline">Desktop</span>
+          </button>
+          <button
+            type="button"
+            [ngClass]="
+              viewMode() === 'mobile'
+                ? 'bg-background border border-input shadow-xs text-foreground'
+                : 'hover:bg-accent hover:text-accent-foreground text-muted-foreground'
+            "
+            class="inline-flex justify-center items-center gap-1 px-2.5 py-1 rounded-md h-7 sm:h-8 font-medium text-[11px] sm:text-xs transition-colors cursor-pointer"
+            (click)="setViewMode('mobile')"
+          >
+            <ng-icon name="lucideSmartphone" size="13" />
+            <span class="hidden sm:inline">Mobile</span>
+          </button>
+          <div class="mx-0.5 bg-border w-px h-4"></div>
+          <button
+            type="button"
+            class="inline-flex justify-center items-center gap-1 hover:bg-accent px-2 py-1 rounded-md h-7 sm:h-8 font-medium text-[11px] text-muted-foreground hover:text-foreground sm:text-xs transition-colors cursor-pointer"
+            (click)="openLive()"
+          >
+            <ng-icon name="lucideExternalLink" size="12" />
+            <span class="hidden sm:inline">Open live</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Preview Screen Wrapper -->
+      <div class="flex-1 p-1.5 sm:p-6 overflow-y-auto">
+        <div class="flex justify-center w-full">
+          <div
+            class="bg-background shadow-xl border border-border rounded-2xl w-full overflow-hidden transition-all duration-300"
+            [ngClass]="viewMode() === 'desktop' ? 'max-w-[720px]' : 'max-w-[360px]'"
+          >
+            <!-- STORE NAVBAR -->
+            <nav
+              class="top-0 z-20 sticky flex justify-between items-center bg-background/95 backdrop-blur-xs px-3 sm:px-5 py-2.5 sm:py-3 border-border border-b"
+            >
+              <div class="flex items-center gap-1.5">
+                <span class="font-bold text-foreground text-xs sm:text-base tracking-tight"
+                  >YourBrand</span
+                >
+              </div>
+
+              <div
+                class="flex items-center gap-2 sm:gap-5 font-medium text-[10px] text-muted-foreground sm:text-xs"
+              >
+                <a class="font-semibold text-primary cursor-pointer">Home</a>
+                <a class="hover:text-foreground transition-colors cursor-pointer">Shop</a>
+                <a class="hover:text-foreground transition-colors cursor-pointer">FAQ</a>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  class="flex justify-center items-center bg-primary hover:bg-primary/90 shadow-xs rounded-full w-6 sm:w-8 h-6 sm:h-8 text-primary-foreground transition-colors cursor-pointer"
+                  aria-label="Cart"
+                >
+                  <ng-icon name="lucideShoppingCart" size="12" />
+                </button>
+              </div>
+            </nav>
+
+            <!-- HERO SECTION -->
+            <div class="p-2 sm:p-4">
+              <div
+                class="relative flex items-center shadow-xs rounded-xl sm:rounded-2xl w-full min-h-[220px] sm:min-h-[360px] overflow-hidden"
+              >
+                <!-- Background Image -->
+                <img
+                  [src]="heroImageUrl()"
+                  (error)="fallbackImg($event)"
+                  alt="Hero background"
+                  class="absolute inset-0 w-full h-full object-cover"
+                />
+
+                <!-- Overlay -->
+                <div
+                  class="absolute inset-0 bg-gradient-to-r from-background via-background/90 sm:via-background/70 to-transparent"
+                ></div>
+
+                <!-- Hero Content -->
+                <div
+                  class="z-10 relative flex flex-col justify-center items-start p-3.5 sm:p-8 max-w-full sm:max-w-md"
+                >
+                  <h1
+                    class="mb-1.5 sm:mb-3 font-black text-foreground text-sm sm:text-3xl leading-snug tracking-tight"
+                  >
+                    {{ heroTitle() }}
+                  </h1>
+                  <p
+                    class="mb-3 sm:mb-6 text-[10px] text-muted-foreground sm:text-sm line-clamp-2 sm:line-clamp-none leading-relaxed"
+                  >
+                    {{ heroSubtitle() }}
+                  </p>
+                  <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                    <button
+                      type="button"
+                      class="bg-primary hover:bg-primary/90 shadow-sm px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-lg font-medium text-[11px] text-primary-foreground sm:text-sm transition-colors cursor-pointer"
+                    >
+                      Shop Now
+                    </button>
+                    <button
+                      type="button"
+                      class="bg-background/90 hover:bg-background shadow-xs px-3 sm:px-5 py-1.5 sm:py-2.5 border border-border rounded-lg font-medium text-[11px] text-foreground sm:text-sm transition-colors cursor-pointer"
+                    >
+                      Explore AI
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- CATEGORIES SECTION WITH DYNAMIC FLEXIBLE GRID -->
+            <div class="p-3 sm:p-6 border-border border-t">
+              <div class="flex justify-between items-center mb-2.5 sm:mb-3.5">
+                <h3 class="font-bold text-foreground text-xs sm:text-sm tracking-tight">
+                  {{ categoriesTitle() }}
+                </h3>
+              </div>
+
+              <!-- dynamic columns fill the available space evenly -->
+              <div
+                class="gap-2 sm:gap-3 grid"
+                [ngClass]="
+                  viewMode() === 'mobile'
+                    ? 'grid-cols-[repeat(auto-fit,minmax(80px,1fr))]'
+                    : 'grid-cols-[repeat(auto-fit,minmax(100px,1fr))]'
+                "
+              >
+                @for (cat of categories(); track cat.id) {
+                  <div
+                    class="flex flex-col justify-center items-center gap-1 bg-muted/50 hover:bg-muted p-2 sm:p-3.5 border border-border/40 hover:border-border rounded-xl min-w-0 text-center transition-all cursor-pointer"
+                  >
+                    @if (cat.icon.length <= 4) {
+                      <span class="mb-0.5 text-lg sm:text-2xl leading-none">{{ cat.icon }}</span>
+                    } @else {
+                      <ng-icon [name]="cat.icon" size="18" class="text-foreground" />
+                    }
+                    <span
+                      class="px-0.5 w-full font-medium text-[10px] text-foreground/90 sm:text-[11px] truncate leading-tight"
+                    >
+                      {{ cat.name }}
+                    </span>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- FEATURED PRODUCTS SECTION -->
+            @if (selectedProducts().length > 0) {
+              <div class="p-3 sm:p-6 border-border border-t">
+                <div class="flex justify-between items-center mb-3 sm:mb-4">
+                  <h3 class="font-bold text-foreground text-xs sm:text-sm tracking-tight">
+                    {{ featuredTitle() }}
+                  </h3>
+                  <a
+                    class="font-semibold text-[11px] text-primary sm:text-xs hover:underline cursor-pointer"
+                    >View All →</a
+                  >
+                </div>
+
+                <div
+                  class="gap-2 sm:gap-4 grid"
+                  [ngClass]="viewMode() === 'mobile' ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'"
+                >
+                  @for (product of selectedProducts(); track product.id) {
+                    <div
+                      class="group flex flex-col bg-card shadow-2xs p-2 sm:p-3 border border-border/60 hover:border-border rounded-xl sm:rounded-2xl min-w-0 transition-all cursor-pointer"
+                    >
+                      <div
+                        class="relative bg-muted mb-1.5 sm:mb-2.5 rounded-lg sm:rounded-xl aspect-square overflow-hidden"
+                      >
+                        <img
+                          [src]="product.img"
+                          (error)="fallbackImg($event)"
+                          [alt]="product.name"
+                          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <p
+                        class="font-semibold text-[11px] text-foreground sm:text-xs truncate leading-snug"
+                      >
+                        {{ product.name }}
+                      </p>
+                      <p class="mt-0.5 sm:mt-1 font-bold text-[11px] text-primary sm:text-xs">
+                        {{ product.price }}
+                      </p>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- FOOTER -->
+            <div class="bg-muted/30 px-3 sm:px-6 py-4 sm:py-6 border-border border-t rounded-b-2xl">
+              <div
+                class="gap-4 sm:gap-6 grid"
+                [ngClass]="viewMode() === 'mobile' ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-3'"
+              >
+                <div>
+                  <span class="font-extrabold text-foreground text-xs sm:text-sm tracking-tight"
+                    >YourBrand</span
+                  >
+                  <p
+                    class="mt-1 sm:mt-2 text-[10px] text-muted-foreground sm:text-[11px] leading-relaxed"
+                  >
+                    Empowering modern professionals with cutting-edge tools.
+                  </p>
+                </div>
+                <div class="flex gap-6 sm:gap-8">
+                  <div class="flex-1">
+                    <h4
+                      class="font-bold text-[10px] text-foreground sm:text-[11px] uppercase tracking-wider"
+                    >
+                      Legal
+                    </h4>
+                    <ul
+                      class="space-y-1 mt-1.5 font-medium text-[10px] text-muted-foreground sm:text-[11px]"
+                    >
+                      <li><a class="hover:text-foreground cursor-pointer">Privacy Policy</a></li>
+                      <li><a class="hover:text-foreground cursor-pointer">Terms of Service</a></li>
+                    </ul>
+                  </div>
+                  <div class="flex-1">
+                    <h4
+                      class="font-bold text-[10px] text-foreground sm:text-[11px] uppercase tracking-wider"
+                    >
+                      Support
+                    </h4>
+                    <ul
+                      class="space-y-1 mt-1.5 font-medium text-[10px] text-muted-foreground sm:text-[11px]"
+                    >
+                      <li><a class="hover:text-foreground cursor-pointer">Shipping Info</a></li>
+                      <li><a class="hover:text-foreground cursor-pointer">Returns</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="mt-4 sm:mt-6 pt-3 sm:pt-4 border-border/60 border-t font-medium text-[10px] text-muted-foreground text-center"
+              >
+                © 2026 YourBrand. All rights reserved.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Action Bar -->
+  <div
+    class="flex flex-wrap sm:flex-nowrap justify-end items-center gap-2 bg-background px-3 sm:px-6 py-2.5 sm:py-3 border-border border-t"
+  >
+    <button
+      type="button"
+      class="inline-flex justify-center items-center hover:bg-accent px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-medium text-muted-foreground text-xs sm:text-sm transition-colors hover:text-accent-foreground cursor-pointer"
+      (click)="discard()"
+    >
+      Discard
+    </button>
+    <button
+      type="button"
+      class="inline-flex justify-center items-center gap-1.5 bg-background hover:bg-accent shadow-xs px-3 sm:px-4 py-1.5 sm:py-2 border border-input rounded-md font-medium text-xs sm:text-sm transition-colors hover:text-accent-foreground cursor-pointer"
+      (click)="openLive()"
+    >
+      <ng-icon name="lucideExternalLink" size="14" />
+      <span class="hidden sm:inline">Preview Live Site</span>
+      <span class="sm:hidden">Live</span>
+    </button>
+    <button
+      type="button"
+      class="inline-flex justify-center items-center gap-1.5 bg-primary hover:bg-primary/90 disabled:opacity-50 shadow-xs px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-medium text-primary-foreground text-xs sm:text-sm transition-colors cursor-pointer disabled:pointer-events-none"
+      [disabled]="isSaved()"
+      (click)="saveChanges()"
+    >
+      <ng-icon name="lucideCheck" size="14" />
+      Save Changes
+    </button>
+  </div>
+</div>
