@@ -241,6 +241,7 @@ const EMPTY_DRAFT: AddSupplierDraft = {
 
 @Component({
   selector: 'app-suppliers',
+  standalone: true,
   imports: [NgClass, FormsModule, NgIcon, HlmCard, HlmButton, HlmBadge, HlmInput, HlmSeparator],
   providers: [
     provideIcons({
@@ -335,7 +336,6 @@ export class Suppliers {
     return 'Poor';
   }
 
-  // تحديث ألوان نصوص التقييم لدعم الـ Dark Mode
   protected getRatingColorClass(rating: number): string {
     if (rating >= 5) return 'text-emerald-600 dark:text-emerald-400';
     if (rating >= 4) return 'text-blue-600 dark:text-blue-400';
