@@ -497,12 +497,16 @@
     <!-- Total Suppliers -->
     <div
       hlmCard
-      class="!flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start"
+      class="group relative !flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start overflow-hidden transition-all duration-300 stat-card-indigo border-border/80 hover:border-indigo-300 dark:hover:border-indigo-700/80 hover:shadow-md hover:shadow-indigo-500/5 cursor-pointer"
     >
       <div
-        class="flex flex-shrink-0 justify-center items-center bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl w-12 h-12"
+        class="flex flex-shrink-0 justify-center items-center bg-indigo-50 group-hover:bg-indigo-100 dark:bg-indigo-500/10 dark:group-hover:bg-indigo-500/25 rounded-2xl w-12 h-12 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xs"
       >
-        <ng-icon name="lucideBuilding2" size="22" class="text-indigo-600 dark:text-indigo-400" />
+        <ng-icon
+          name="lucideBuilding2"
+          size="22"
+          class="text-indigo-600 dark:text-indigo-400 transition-transform duration-300"
+        />
       </div>
       <div class="flex flex-col justify-center items-start min-w-0">
         <span class="w-full font-medium text-muted-foreground text-xs truncate leading-none"
@@ -517,12 +521,16 @@
     <!-- Top-Rated -->
     <div
       hlmCard
-      class="!flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start"
+      class="group relative !flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start overflow-hidden transition-all duration-300 stat-card-amber border-border/80 hover:border-amber-300 dark:hover:border-amber-700/80 hover:shadow-md hover:shadow-amber-500/5 cursor-pointer"
     >
       <div
-        class="flex flex-shrink-0 justify-center items-center bg-amber-50 dark:bg-amber-500/10 rounded-2xl w-12 h-12"
+        class="flex flex-shrink-0 justify-center items-center bg-amber-50 group-hover:bg-amber-100 dark:bg-amber-500/10 dark:group-hover:bg-amber-500/25 rounded-2xl w-12 h-12 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xs"
       >
-        <ng-icon name="lucideStar" size="22" class="text-amber-600 dark:text-amber-400" />
+        <ng-icon
+          name="lucideStar"
+          size="22"
+          class="text-amber-600 dark:text-amber-400 transition-transform duration-300"
+        />
       </div>
       <div class="flex flex-col justify-center items-start min-w-0">
         <span class="w-full font-medium text-muted-foreground text-xs truncate leading-none"
@@ -537,12 +545,16 @@
     <!-- Active (30 days) -->
     <div
       hlmCard
-      class="!flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start"
+      class="group relative !flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start overflow-hidden transition-all duration-300 stat-card-emerald border-border/80 hover:border-emerald-300 dark:hover:border-emerald-700/80 hover:shadow-md hover:shadow-emerald-500/5 cursor-pointer"
     >
       <div
-        class="flex flex-shrink-0 justify-center items-center bg-emerald-50 dark:bg-emerald-500/10 rounded-2xl w-12 h-12"
+        class="flex flex-shrink-0 justify-center items-center bg-emerald-50 group-hover:bg-emerald-100 dark:bg-emerald-500/10 dark:group-hover:bg-emerald-500/25 rounded-2xl w-12 h-12 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xs"
       >
-        <ng-icon name="lucideRefreshCw" size="22" class="text-emerald-600 dark:text-emerald-400" />
+        <ng-icon
+          name="lucideRefreshCw"
+          size="22"
+          class="text-emerald-600 dark:text-emerald-400 transition-transform duration-300"
+        />
       </div>
       <div class="flex flex-col justify-center items-start min-w-0">
         <span class="w-full font-medium text-muted-foreground text-xs truncate leading-none"
@@ -557,12 +569,16 @@
     <!-- Awaiting Reply -->
     <div
       hlmCard
-      class="!flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start"
+      class="group relative !flex !flex-row justify-start !items-center gap-3.5 p-4 w-full min-w-0 text-start overflow-hidden transition-all duration-300 stat-card-purple border-border/80 hover:border-purple-300 dark:hover:border-purple-700/80 hover:shadow-md hover:shadow-purple-500/5 cursor-pointer"
     >
       <div
-        class="flex flex-shrink-0 justify-center items-center bg-purple-50 dark:bg-purple-500/10 rounded-2xl w-12 h-12"
+        class="flex flex-shrink-0 justify-center items-center bg-purple-50 group-hover:bg-purple-100 dark:bg-purple-500/10 dark:group-hover:bg-purple-500/25 rounded-2xl w-12 h-12 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xs"
       >
-        <ng-icon name="lucideMail" size="22" class="text-purple-600 dark:text-purple-400" />
+        <ng-icon
+          name="lucideMail"
+          size="22"
+          class="text-purple-600 dark:text-purple-400 transition-transform duration-300"
+        />
       </div>
       <div class="flex flex-col justify-center items-start min-w-0">
         <span class="w-full font-medium text-muted-foreground text-xs truncate leading-none"
@@ -682,19 +698,19 @@
   <div class="px-4 sm:px-6 pb-6">
     <div hlmCard class="divide-y divide-border overflow-hidden">
       @for (supplier of filteredSuppliers(); track supplier.id) {
-        <div>
+        <div class="group relative hover:bg-muted/30 transition-colors duration-200">
           <!-- Main row -->
           <div class="flex lg:flex-row flex-col justify-between lg:items-center gap-4 p-4 sm:p-5">
             <!-- Left Info Section -->
             <div class="flex items-start gap-3 min-w-0">
               <!-- Avatar -->
               <div
-                class="flex flex-shrink-0 justify-center items-center bg-indigo-50 dark:bg-indigo-500/10 mt-0.5 lg:mt-0 rounded-xl w-10 h-10"
+                class="flex flex-shrink-0 justify-center items-center bg-indigo-50 group-hover:bg-indigo-100/90 dark:bg-indigo-500/10 dark:group-hover:bg-indigo-500/20 mt-0.5 lg:mt-0 rounded-xl w-10 h-10 transition-all duration-300 group-hover:scale-105 group-hover:shadow-2xs"
               >
                 <ng-icon
                   name="lucideBuilding2"
                   size="18"
-                  class="text-indigo-600 dark:text-indigo-400"
+                  class="text-indigo-600 dark:text-indigo-400 transition-transform duration-300"
                 />
               </div>
 

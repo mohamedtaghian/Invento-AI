@@ -3,16 +3,24 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmBadge } from '@spartan/helm/badge';
 import { HlmAvatar, HlmAvatarFallback, HlmAvatarImage } from '@spartan/helm/avatar';
-import {
-  lucideBell,
-  lucideGlobe,
-} from '@ng-icons/lucide';
+import { lucideBell, lucideGlobe } from '@ng-icons/lucide';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe, LocaleService } from '@invento/core';
 import { BrandLogo } from '@invento/shared';
 
 @Component({
   selector: 'app-header',
-  imports: [NgIcon, HlmButton, HlmBadge, HlmAvatar, HlmAvatarImage, HlmAvatarFallback, TranslatePipe, BrandLogo],
+  imports: [
+    RouterLink,
+    NgIcon,
+    HlmButton,
+    HlmBadge,
+    HlmAvatar,
+    HlmAvatarImage,
+    HlmAvatarFallback,
+    TranslatePipe,
+    BrandLogo,
+  ],
   providers: [
     provideIcons({
       lucideBell,

@@ -40,6 +40,76 @@ export const appRoutes: Routes = [
         loadComponent: () =>
           import('@invento/invento/pages/ai-advisor/ai-advisor').then((c) => c.AiAdvisor),
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/profile/profile').then(
+            (c) => c.ProfileComponent,
+          ),
+      },
+      {
+        path: 'acc-setting/profile',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/profile/profile').then(
+            (c) => c.ProfileComponent,
+          ),
+      },
+      {
+        path: 'security',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/security/security').then(
+            (c) => c.SecurityComponent,
+          ),
+      },
+      {
+        path: 'acc-setting/security',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/security/security').then(
+            (c) => c.SecurityComponent,
+          ),
+      },
+      {
+        path: 'my-stores',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/myStores/my-stores').then(
+            (c) => c.MyStoresComponent,
+          ),
+      },
+      {
+        path: 'acc-setting/my-stores',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/myStores/my-stores').then(
+            (c) => c.MyStoresComponent,
+          ),
+      },
+      {
+        path: 'notifications',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/notifications/notifications').then(
+            (c) => c.NotificationsComponent,
+          ),
+      },
+      {
+        path: 'acc-setting/notifications',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/notifications/notifications').then(
+            (c) => c.NotificationsComponent,
+          ),
+      },
+      {
+        path: 'billing',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/bilingPlan/biling-plan').then(
+            (c) => c.BilingPlanComponent,
+          ),
+      },
+      {
+        path: 'acc-setting/billing',
+        loadComponent: () =>
+          import('@invento/invento/pages/accSetting/bilingPlan/biling-plan').then(
+            (c) => c.BilingPlanComponent,
+          ),
+      },
     ],
   },
   {

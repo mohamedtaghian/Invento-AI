@@ -6,3 +6,130 @@
   height: 100%;
   overflow: hidden;
 }
+
+/* Stat card hover matching reference image (Radial glow beam behind icon, theme border, 6px lift) */
+.stat-card-indigo {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+  border-color: rgba(99, 102, 241, 0.2);
+}
+.stat-card-indigo:hover {
+  transform: translateY(-6px);
+  border-color: rgba(99, 102, 241, 0.55);
+  box-shadow:
+    0 12px 25px -5px rgba(99, 102, 241, 0.15),
+    0 8px 10px -6px rgba(99, 102, 241, 0.1);
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(99, 102, 241, 0.26) 0%,
+    rgba(99, 102, 241, 0.1) 40%,
+    rgba(255, 255, 255, 0) 75%
+  );
+}
+
+.stat-card-amber {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+.stat-card-amber:hover {
+  transform: translateY(-6px);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow:
+    0 12px 25px -5px rgba(245, 158, 11, 0.15),
+    0 8px 10px -6px rgba(245, 158, 11, 0.1);
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(245, 158, 11, 0.26) 0%,
+    rgba(245, 158, 11, 0.1) 40%,
+    rgba(255, 255, 255, 0) 75%
+  );
+}
+
+.stat-card-emerald {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+  border-color: rgba(16, 185, 129, 0.2);
+}
+.stat-card-emerald:hover {
+  transform: translateY(-6px);
+  border-color: rgba(16, 185, 129, 0.55);
+  box-shadow:
+    0 12px 25px -5px rgba(16, 185, 129, 0.15),
+    0 8px 10px -6px rgba(16, 185, 129, 0.1);
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(16, 185, 129, 0.26) 0%,
+    rgba(16, 185, 129, 0.1) 40%,
+    rgba(255, 255, 255, 0) 75%
+  );
+}
+
+.stat-card-purple {
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    background 0.35s ease;
+  border-color: rgba(168, 85, 247, 0.2);
+}
+.stat-card-purple:hover {
+  transform: translateY(-6px);
+  border-color: rgba(168, 85, 247, 0.55);
+  box-shadow:
+    0 12px 25px -5px rgba(168, 85, 247, 0.15),
+    0 8px 10px -6px rgba(168, 85, 247, 0.1);
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(168, 85, 247, 0.26) 0%,
+    rgba(168, 85, 247, 0.1) 40%,
+    rgba(255, 255, 255, 0) 75%
+  );
+}
+
+/* Dark mode stat card radial glows */
+:host-context(.dark) .stat-card-indigo:hover {
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(99, 102, 241, 0.35) 0%,
+    rgba(99, 102, 241, 0.12) 40%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  border-color: rgba(99, 102, 241, 0.7);
+}
+:host-context(.dark) .stat-card-amber:hover {
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(245, 158, 11, 0.35) 0%,
+    rgba(245, 158, 11, 0.12) 40%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  border-color: rgba(245, 158, 11, 0.7);
+}
+:host-context(.dark) .stat-card-emerald:hover {
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(16, 185, 129, 0.35) 0%,
+    rgba(16, 185, 129, 0.12) 40%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  border-color: rgba(16, 185, 129, 0.7);
+}
+:host-context(.dark) .stat-card-purple:hover {
+  background: radial-gradient(
+    circle at 18% 50%,
+    rgba(168, 85, 247, 0.35) 0%,
+    rgba(168, 85, 247, 0.12) 40%,
+    rgba(0, 0, 0, 0) 75%
+  );
+  border-color: rgba(168, 85, 247, 0.7);
+}
