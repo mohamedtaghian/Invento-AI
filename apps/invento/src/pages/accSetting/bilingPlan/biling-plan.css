@@ -1,0 +1,25 @@
+/* Billing & Plan page extra styling */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+.plan-card-bg {
+  background: radial-gradient(
+    circle at 90% 10%,
+    rgba(99, 102, 241, 0.08) 0%,
+    rgba(99, 102, 241, 0.02) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+:host-context(.dark) .plan-card-bg {
+  background: radial-gradient(
+    circle at 90% 10%,
+    rgba(99, 102, 241, 0.15) 0%,
+    rgba(99, 102, 241, 0.04) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}

@@ -231,10 +231,10 @@
             <div class="flex flex-wrap gap-1">
               @for (cat of categories(); track cat.id) {
                 <span
-                  class="inline-flex items-center gap-1 bg-muted/70 px-2 py-0.5 rounded-md font-medium text-[10px] sm:text-[11px]"
+                  class="inline-flex items-center gap-1 bg-muted/70 px-2 py-0.5 rounded-md font-medium text-[10px] sm:text-[11px] max-w-full"
                 >
-                  <span>{{ cat.icon }}</span>
-                  <span>{{ cat.name }}</span>
+                  <span class="flex-shrink-0">{{ cat.icon }}</span>
+                  <span class="max-w-[120px] truncate">{{ cat.name }}</span>
                 </span>
               }
             </div>
@@ -471,15 +471,15 @@
 
                 <!-- Hero Content -->
                 <div
-                  class="z-10 relative flex flex-col justify-center items-start p-3.5 sm:p-8 max-w-full sm:max-w-md"
+                  class="z-10 relative flex flex-col justify-center items-start p-3.5 sm:p-8 w-full max-w-full sm:max-w-md min-w-0"
                 >
                   <h1
-                    class="mb-1.5 sm:mb-3 font-black text-foreground text-sm sm:text-3xl leading-snug tracking-tight"
+                    class="mb-1.5 sm:mb-3 font-black text-foreground text-sm sm:text-3xl leading-snug tracking-tight break-words [overflow-wrap:anywhere] [word-break:break-word] min-w-0"
                   >
                     {{ heroTitle() }}
                   </h1>
                   <p
-                    class="mb-3 sm:mb-6 text-[10px] text-muted-foreground sm:text-sm line-clamp-2 sm:line-clamp-none leading-relaxed"
+                    class="mb-3 sm:mb-6 text-[10px] text-muted-foreground sm:text-sm line-clamp-2 sm:line-clamp-none leading-relaxed break-words [overflow-wrap:anywhere] [word-break:break-word] min-w-0"
                   >
                     {{ heroSubtitle() }}
                   </p>
@@ -503,8 +503,10 @@
 
             <!-- CATEGORIES SECTION WITH DYNAMIC FLEXIBLE GRID -->
             <div class="p-3 sm:p-6 border-border border-t">
-              <div class="flex justify-between items-center mb-2.5 sm:mb-3.5">
-                <h3 class="font-bold text-foreground text-xs sm:text-sm tracking-tight">
+              <div class="flex justify-between items-center mb-2.5 sm:mb-3.5 min-w-0">
+                <h3
+                  class="font-bold text-foreground text-xs sm:text-sm tracking-tight break-words [overflow-wrap:anywhere] [word-break:break-word] min-w-0"
+                >
                   {{ categoriesTitle() }}
                 </h3>
               </div>
@@ -540,12 +542,14 @@
             <!-- FEATURED PRODUCTS SECTION -->
             @if (selectedProducts().length > 0) {
               <div class="p-3 sm:p-6 border-border border-t">
-                <div class="flex justify-between items-center mb-3 sm:mb-4">
-                  <h3 class="font-bold text-foreground text-xs sm:text-sm tracking-tight">
+                <div class="flex justify-between items-center mb-3 sm:mb-4 min-w-0 gap-2">
+                  <h3
+                    class="font-bold text-foreground text-xs sm:text-sm tracking-tight break-words [overflow-wrap:anywhere] [word-break:break-word] min-w-0"
+                  >
                     {{ featuredTitle() }}
                   </h3>
                   <a
-                    class="font-semibold text-[11px] text-primary sm:text-xs hover:underline cursor-pointer"
+                    class="font-semibold text-[11px] text-primary sm:text-xs hover:underline cursor-pointer flex-shrink-0"
                     >View All →</a
                   >
                 </div>

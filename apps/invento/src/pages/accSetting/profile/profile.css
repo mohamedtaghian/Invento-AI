@@ -1,0 +1,17 @@
+/* Profile page extra styling */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+.avatar-dropzone {
+  transition: all 0.2s ease-in-out;
+}
+
+.avatar-dropzone:hover,
+.avatar-dropzone.dragging {
+  transform: scale(1.02);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+}

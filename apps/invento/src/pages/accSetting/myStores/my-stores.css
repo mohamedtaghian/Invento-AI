@@ -1,0 +1,18 @@
+/* My Stores page extra styling */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+}
+
+.store-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.store-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.06),
+    0 8px 10px -6px rgba(0, 0, 0, 0.04);
+}
