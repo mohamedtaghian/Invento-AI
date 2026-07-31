@@ -1,8 +1,9 @@
 <div class="min-h-screen bg-background font-sans text-foreground pb-20">
-  <div class="max-w-[1400px] mx-auto px-6 md:px-10 pt-6">
+  <!-- Reduced mobile padding from px-6 to px-4, and pt-6 to pt-4 -->
+  <div class="max-w-[1400px] mx-auto px-4 md:px-10 pt-4 md:pt-6">
     <!-- 1. Added 'hero-section' -->
     <section
-      class="hero-section relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden shadow-sm mb-16 bg-muted"
+      class="hero-section relative w-full h-[500px] md:h-[600px] rounded-2xl md:rounded-3xl overflow-hidden shadow-sm mb-12 md:mb-16 bg-muted"
     >
       <img
         src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2850&auto=format&fit=crop"
@@ -14,38 +15,47 @@
         class="absolute inset-0 bg-gradient-to-r from-background/95 via-background/80 to-transparent"
       ></div>
 
-      <div class="relative h-full flex flex-col justify-center px-8 md:px-16 max-w-2xl">
+      <!-- Reduced mobile horizontal padding -->
+      <div class="relative h-full flex flex-col justify-center px-5 sm:px-8 md:px-16 max-w-2xl">
         <span
           hlmBadge
           variant="secondary"
-          class="hero-anim w-fit mb-6 bg-primary/10 text-primary hover:bg-primary/20 font-bold tracking-wide uppercase text-[10px] px-3 py-1"
+          class="hero-anim w-fit mb-4 md:mb-6 bg-primary/10 text-primary hover:bg-primary/20 font-bold tracking-wide uppercase text-[10px] px-3 py-1"
         >
           New Collection
         </span>
 
+        <!-- Scaled down font size: 3xl for mobile, 4xl for small screens, 6xl for desktop -->
         <h1
-          class="hero-anim text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-[1.1] mb-6"
+          class="hero-anim text-4xl sm:text-5xl md:text-6xl font-bold md:font-extrabold tracking-tight text-foreground leading-[1.1] mb-4 md:mb-6"
         >
           Elevate Your Tech<br />Experience.
         </h1>
 
-        <p class="hero-anim text-lg text-muted-foreground mb-10 leading-relaxed max-w-lg">
+        <!-- Scaled down paragraph text for mobile -->
+        <p
+          class="hero-anim text-base md:text-lg text-muted-foreground mb-8 md:mb-10 leading-relaxed max-w-lg"
+        >
           Discover premium tools engineered for professionals. Precision, power, and seamless
           integration for your workflow.
         </p>
 
-        <div class="hero-anim flex flex-wrap items-center gap-4">
+        <!-- Changed to flex-col on mobile so buttons stack, flex-row on larger screens -->
+        <div
+          class="hero-anim flex flex-col sm:flex-row items-stretch sm:items-center gap-3 md:gap-4"
+        >
+          <!-- Reduced padding: py-3 instead of py-6, w-full on mobile -->
           <button
             hlmBtn
             routerLink="/products"
-            class="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 rounded-lg font-bold shadow-sm transition-all hover:shadow-md"
+            class="bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto rounded-lg font-bold shadow-sm transition-all hover:shadow-md text-sm md:text-base"
           >
             Shop Now
           </button>
           <button
             hlmBtn
             variant="outline"
-            class="bg-background/80 backdrop-blur-sm border-border text-foreground hover:bg-accent px-8 py-6 rounded-lg font-bold"
+            class="bg-background/80 backdrop-blur-sm border-border text-foreground hover:bg-accent px-6 py-3 md:px-8 md:py-4 w-full sm:w-auto rounded-lg font-bold text-sm md:text-base"
           >
             Explore AI
           </button>
@@ -53,23 +63,23 @@
       </div>
     </section>
 
-    <!-- 2. Added 'categories-section' -->
-    <section class="categories-section mb-16">
-      <h2 class="text-2xl font-bold text-foreground mb-6">Categories</h2>
+    <!-- 2. Categories section -->
+    <section class="categories-section mb-12 md:mb-16">
+      <h2 class="text-xl md:text-2xl font-bold text-foreground mb-4 md:mb-6">Categories</h2>
 
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-6">
         @for (category of categories; track category.name) {
           <div
             hlmCard
-            class="category-card cursor-pointer border-border hover:border-primary/50 hover:shadow-md transition-colors transition-shadow duration-300 bg-card aspect-square flex flex-col items-center justify-center gap-4 group"
+            class="category-card cursor-pointer border-border hover:border-primary/50 hover:shadow-md transition-colors transition-shadow duration-300 bg-card aspect-square flex flex-col items-center justify-center gap-2 md:gap-4 group p-2"
           >
             <div
-              class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300"
+              class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-300"
             >
-              <ng-icon [name]="category.icon" size="24px"></ng-icon>
+              <ng-icon [name]="category.icon" size="20px" class="md:text-[24px]"></ng-icon>
             </div>
             <span
-              class="font-medium text-sm text-foreground group-hover:text-primary transition-colors"
+              class="font-medium text-xs md:text-sm text-foreground group-hover:text-primary transition-colors text-center"
             >
               {{ category.name }}
             </span>
@@ -78,21 +88,25 @@
       </div>
     </section>
 
-    <!-- 3. Added 'products-section' -->
+    <!-- 3. Products section -->
     <section class="products-section">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-foreground">Featured Products</h2>
+      <div class="flex items-center justify-between mb-4 md:mb-6">
+        <h2 class="text-xl md:text-2xl font-bold text-foreground">Featured Products</h2>
         <a
           routerLink="/products"
-          class="text-sm font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
+          class="text-xs md:text-sm font-bold text-primary hover:text-primary/80 flex items-center gap-1 transition-colors"
         >
-          View All <ng-icon name="lucideArrowRight" size="18px"></ng-icon>
+          View All <ng-icon name="lucideArrowRight" size="16px" class="md:text-[18px]"></ng-icon>
         </a>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Added justify-items-center to center the cards on mobile -->
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 justify-items-center sm:justify-items-stretch"
+      >
         @for (product of featuredProducts; track product.id) {
-          <div class="product-card h-full">
+          <!-- Added w-full and max-w-[340px] to prevent massive stretching on large phones -->
+          <div class="product-card h-full w-full max-w-[340px] sm:max-w-none">
             <app-product-card [product]="product"></app-product-card>
           </div>
         }

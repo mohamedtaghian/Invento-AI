@@ -1,21 +1,7 @@
-// product.model.ts
-export interface Product {
-  id: string;
-  name: string;
-  sku: string;
-  category: string;
-  price: number;
-  originalPrice?: number;
-  stock: number;
-  status: 'Active' | 'Draft' | 'Out of Stock' | 'Archived';
-  date: string;
-  imageUrl: string;
-  discount?: string;
-  stockWarning?: string;
-}
-
+// apps/invento/src/pages/products/product.service.ts
 import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
+import { Product } from './product.model'; // <-- This import was missing!
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +44,6 @@ export class ProductService {
       date: '20 May 2025',
       imageUrl: 'assets/rug.png',
     },
-    // Add more mock items here as needed
   ];
 
   getProducts(): Observable<Product[]> {
