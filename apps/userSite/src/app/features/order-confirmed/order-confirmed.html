@@ -1,16 +1,20 @@
-<div class="min-h-screen bg-background p-6 md:p-10 font-sans text-foreground flex justify-center">
+<!-- Reduced base padding for mobile -->
+<div
+  class="min-h-screen bg-background p-4 sm:p-6 md:p-10 font-sans text-foreground flex justify-center"
+>
   <div class="w-full max-w-5xl">
     <!-- Top Header Card -->
+    <!-- Scaled down padding and text sizes for mobile -->
     <div
       hlmCard
-      class="bg-card rounded-xl border-border shadow-sm p-10 text-center mb-6 confirm-anim block"
+      class="bg-card rounded-xl border-border shadow-sm p-6 sm:p-8 md:p-10 text-center mb-4 sm:mb-6 confirm-anim block"
     >
-      <!-- Animated Checkmark Icon -->
+      <!-- Animated Checkmark Icon (Slightly smaller on mobile) -->
       <div
-        class="success-circle w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4"
+        class="success-circle w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4"
       >
         <svg
-          class="w-6 h-6 text-primary-foreground"
+          class="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -25,45 +29,57 @@
         </svg>
       </div>
 
-      <h1 class="text-3xl font-bold mb-2 text-foreground">Thank You for Your Order!</h1>
-      <p class="text-muted-foreground mb-1">Order #{{ order.id }}</p>
-      <p class="text-sm text-muted-foreground">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-2 text-foreground">Thank You for Your Order!</h1>
+      <p class="text-sm sm:text-base text-muted-foreground mb-1">Order #{{ order.id }}</p>
+      <p class="text-xs sm:text-sm text-muted-foreground">
         A confirmation email has been sent to your registered address.
       </p>
     </div>
 
     <!-- Main Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-start">
       <!-- Left Column: Order Summary -->
       <div
         hlmCard
-        class="md:col-span-7 bg-card rounded-xl border-border shadow-sm p-8 confirm-anim block"
+        class="md:col-span-7 bg-card rounded-xl border-border shadow-sm p-4 sm:p-6 md:p-8 confirm-anim block"
       >
-        <h2 class="text-xl font-bold mb-4 text-foreground">Order Summary</h2>
-        <hr class="border-border mb-6" />
+        <h2 class="text-lg sm:text-xl font-bold mb-3 sm:mb-4 text-foreground">Order Summary</h2>
+        <hr class="border-border mb-4 sm:mb-6" />
 
         <!-- Dynamic Order Items -->
         @for (item of order.items; track item.product.id) {
-          <div class="flex items-start gap-4 mb-6">
-            <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
+          <div class="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
+            <!-- Shrunk image slightly on mobile -->
+            <div class="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-lg overflow-hidden shrink-0">
               <img
                 [src]="item.product.image"
                 [alt]="item.product.name"
                 class="w-full h-full object-cover"
               />
             </div>
-            <div class="flex-1">
-              <div class="flex justify-between items-start">
-                <h4 class="font-bold text-foreground">{{ item.product.name }}</h4>
-                <p class="font-bold text-foreground">{{ item.product.price | currency }}</p>
+
+            <!-- Added min-w-0 to fix flexbox text overflow -->
+            <div class="flex-1 min-w-0">
+              <!-- Added gap-2 and shrink-0 to prevent text from merging with the price -->
+              <div class="flex justify-between items-start gap-2">
+                <!-- Added line-clamp-2 so long names wrap cleanly and don't push the price off-screen -->
+                <h4 class="font-bold text-sm sm:text-base text-foreground line-clamp-2">
+                  {{ item.product.name }}
+                </h4>
+                <!-- shrink-0 ensures the price always gets enough room -->
+                <p class="font-bold text-sm sm:text-base text-foreground shrink-0">
+                  {{ item.product.price | currency }}
+                </p>
               </div>
-              <p class="text-sm text-muted-foreground mt-1">Color: {{ item.color }}</p>
-              <p class="text-sm text-muted-foreground mt-1">Qty: {{ item.quantity }}</p>
+              <p class="text-xs sm:text-sm text-muted-foreground mt-1">Color: {{ item.color }}</p>
+              <p class="text-xs sm:text-sm text-muted-foreground mt-1">Qty: {{ item.quantity }}</p>
             </div>
           </div>
         }
 
-        <div class="space-y-3 text-sm mb-6 mt-8 text-muted-foreground">
+        <div
+          class="space-y-2 sm:space-y-3 text-xs sm:text-sm mb-5 sm:mb-6 mt-6 sm:mt-8 text-muted-foreground"
+        >
           <div class="flex justify-between">
             <span>Subtotal</span
             ><span class="font-medium text-foreground">{{ subtotal | currency }}</span>
@@ -76,21 +92,23 @@
           </div>
         </div>
         <hr class="border-border mb-4" />
-        <div class="flex justify-between items-center text-lg font-bold text-foreground">
+        <div
+          class="flex justify-between items-center text-base sm:text-lg font-bold text-foreground"
+        >
           <span>Total</span>
           <span class="text-primary">{{ total | currency }}</span>
         </div>
       </div>
 
       <!-- Right Column: Status & Shipping -->
-      <div class="md:col-span-5 flex flex-col gap-6">
+      <div class="md:col-span-5 flex flex-col gap-4 sm:gap-6">
         <!-- Delivery Status -->
-        <div hlmCard class="bg-accent/40 rounded-xl border-border p-6 confirm-anim block">
-          <h2 class="text-xl font-bold mb-6 text-foreground">Delivery Status</h2>
+        <div hlmCard class="bg-accent/40 rounded-xl border-border p-4 sm:p-6 confirm-anim block">
+          <h2 class="text-lg sm:text-xl font-bold mb-5 sm:mb-6 text-foreground">Delivery Status</h2>
 
-          <div class="relative border-l-2 border-primary ml-3 space-y-6">
+          <div class="relative border-l-2 border-primary ml-3 space-y-5 sm:space-y-6">
             <!-- Step 1 (Active) -->
-            <div class="relative pl-6">
+            <div class="relative pl-5 sm:pl-6">
               <div
                 class="absolute -left-[11px] top-0 w-5 h-5 bg-primary rounded-full flex items-center justify-center"
               >
@@ -109,45 +127,52 @@
                 </svg>
               </div>
               <h4 class="font-bold text-sm leading-none pt-0.5 text-foreground">Order Placed</h4>
-              <p class="text-xs text-muted-foreground mt-1">
+              <p class="text-[10px] sm:text-xs text-muted-foreground mt-1.5 sm:mt-1">
                 {{ order.date | date: 'MMM d, yyyy - h:mm a' }}
               </p>
             </div>
 
             <!-- Step 2 (Pending) -->
-            <div class="relative pl-6">
+            <div class="relative pl-5 sm:pl-6">
               <div
                 class="absolute -left-[11px] top-0 w-5 h-5 bg-card border-2 border-border rounded-full"
               ></div>
               <h4 class="font-bold text-sm leading-none pt-0.5 text-muted-foreground">
                 Processing
               </h4>
-              <p class="text-xs text-muted-foreground/70 mt-1">Expected: Today</p>
+              <p class="text-[10px] sm:text-xs text-muted-foreground/70 mt-1.5 sm:mt-1">
+                Expected: Today
+              </p>
             </div>
 
             <!-- Step 3 (Pending) -->
-            <div class="relative pl-6">
+            <div class="relative pl-5 sm:pl-6">
               <div
                 class="absolute -left-[11px] top-0 w-5 h-5 bg-card border-2 border-border rounded-full"
               ></div>
               <h4 class="font-bold text-sm leading-none pt-0.5 text-muted-foreground">Shipped</h4>
-              <p class="text-xs text-muted-foreground/70 mt-1">Pending</p>
+              <p class="text-[10px] sm:text-xs text-muted-foreground/70 mt-1.5 sm:mt-1">Pending</p>
             </div>
           </div>
         </div>
 
         <!-- Shipping Details -->
-        <div hlmCard class="bg-card rounded-xl border-border shadow-sm p-6 confirm-anim block">
-          <h2 class="text-xl font-bold mb-3 text-foreground">Shipping Details</h2>
+        <div
+          hlmCard
+          class="bg-card rounded-xl border-border shadow-sm p-4 sm:p-6 confirm-anim block"
+        >
+          <h2 class="text-lg sm:text-xl font-bold mb-3 text-foreground">Shipping Details</h2>
           <hr class="border-border mb-4" />
-          <h4 class="font-bold text-sm mb-2 text-foreground">
+          <h4 class="font-bold text-sm mb-1.5 sm:mb-2 text-foreground">
             {{ order.shipping.firstName }} {{ order.shipping.lastName }}
           </h4>
-          <p class="text-sm text-muted-foreground mb-1">{{ order.shipping.address }}</p>
-          <p class="text-sm text-muted-foreground mb-4">{{ order.shipping.city }}</p>
-          <p class="text-sm text-muted-foreground flex items-center gap-2">
+          <p class="text-xs sm:text-sm text-muted-foreground mb-1">{{ order.shipping.address }}</p>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4">
+            {{ order.shipping.city }}
+          </p>
+          <p class="text-xs sm:text-sm text-muted-foreground flex items-center gap-2">
             <svg
-              class="w-4 h-4 text-muted-foreground"
+              class="w-4 h-4 text-muted-foreground shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -159,7 +184,7 @@
                 d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               ></path>
             </svg>
-            {{ order.shipping.email }}
+            <span class="truncate">{{ order.shipping.email }}</span>
           </p>
         </div>
 
@@ -167,7 +192,7 @@
         <a
           routerLink="/"
           hlmBtn
-          class="confirm-anim w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-lg text-center transition-colors shadow-sm block cursor-pointer"
+          class="confirm-anim w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 sm:py-3.5 rounded-lg text-center transition-colors shadow-sm block cursor-pointer text-sm sm:text-base"
         >
           Continue Shopping
         </a>
