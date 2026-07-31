@@ -1,260 +1,280 @@
-<div class="p-8 h-full bg-background text-foreground flex flex-col gap-6 relative overflow-hidden">
-  <!-- HEADER -->
-  <div class="flex items-center justify-between">
-    <div>
-      <div class="text-sm text-muted-foreground mb-1 flex items-center gap-2">
+<div class="space-y-6 mx-auto max-w-7xl p-4 md:p-6 lg:p-8">
+  <!-- Header & Breadcrumbs -->
+  <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-4">
+    <div class="space-y-1">
+      <nav class="flex items-center gap-1.5 font-medium text-muted-foreground text-xs">
         <span>Storefront</span>
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M9 5l7 7-7 7"
-          ></path>
-        </svg>
-        <span class="text-foreground font-medium">Products</span>
-      </div>
-      <h1 class="text-heading-1">Products</h1>
+        <ng-icon
+          name="lucideChevronRight"
+          size="14"
+          class="text-muted-foreground/60 rtl:rotate-180"
+        />
+        <span class="font-semibold text-foreground">Products</span>
+      </nav>
+      <h1 class="font-bold text-foreground text-2xl sm:text-3xl tracking-tight">Products</h1>
       <p class="text-muted-foreground text-sm">
-        Manage your store catalog — {{ products.length }} products total
+        Manage your store catalog — {{ products().length }} products total
       </p>
     </div>
 
-    <div class="flex items-center gap-3">
-      <button
-        class="px-4 py-2 border border-border rounded-(--btn-radius) text-sm font-medium hover:bg-muted transition-colors"
-      >
+    <!-- Action Buttons -->
+    <div class="flex items-center self-start sm:self-auto gap-2 sm:gap-3 flex-wrap">
+      <button hlmBtn variant="outline" class="bg-card hover:bg-accent shadow-sm">
         Bulk Actions
       </button>
       <button
-        class="px-4 py-2 border border-border rounded-(--btn-radius) text-sm font-medium flex items-center gap-2 hover:bg-muted transition-colors"
+        hlmBtn
+        variant="outline"
+        class="flex items-center gap-2 bg-card hover:bg-accent shadow-sm"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
-          ></path>
-        </svg>
-        Export
+        <ng-icon name="lucideDownload" size="16" />
+        <span class="hidden sm:inline">Export</span>
       </button>
-      <button class="main-btn" (click)="toggleDrawer()">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 4v16m8-8H4"
-          ></path>
-        </svg>
-        Add Product
+      <button hlmBtn class="flex items-center gap-2" (click)="toggleDrawer()">
+        <ng-icon name="lucidePlus" size="16" />
+        <span>Add Product</span>
       </button>
     </div>
   </div>
 
-  <!-- FILTERS -->
-  <div class="flex items-center justify-between gap-4 mt-2">
-    <div class="relative flex-1 max-w-md">
-      <label for="search-products" class="sr-only">Search products</label>
+  <!-- Filter & Search Toolbar -->
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="relative w-full sm:w-72 md:w-96">
+      <ng-icon
+        name="lucideSearch"
+        size="16"
+        class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none start-3"
+      />
       <input
-        id="search-products"
+        hlmInput
         type="text"
         placeholder="Search by name or SKU..."
-        class="w-full pl-10 pr-4 py-2 bg-card border border-border rounded-full text-sm focus:outline-ring"
+        class="bg-card shadow-sm ps-9 border-border rounded-full focus:ring-2 focus:ring-primary/20 w-full h-9"
       />
-      <svg
-        class="w-4 h-4 absolute left-4 top-2.5 text-muted-foreground"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-        ></path>
-      </svg>
     </div>
   </div>
 
-  <!-- TABLE -->
-  <div class="bg-card border border-border rounded-(--radius) overflow-hidden shadow-sm flex-1">
-    <table class="w-full text-left text-sm">
-      <tbody>
-        @for (product of products; track product.id) {
-          <tr class="border-b border-border hover:bg-muted/30 transition-colors">
-            <td class="p-4 w-12">
-              <label [for]="'select-' + product.id" class="sr-only"
-                >Select {{ product.name }}</label
-              >
+  <!-- Products Data Table Card -->
+  <div hlmCard class="bg-card shadow-sm border-border rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-start border-collapse min-w-[800px]">
+        <thead>
+          <tr
+            class="bg-muted/30 border-border border-b font-semibold text-muted-foreground text-xs tracking-wider"
+          >
+            <th class="px-2 sm:px-3 md:px-4 py-3 w-10 text-center">
               <input
-                [id]="'select-' + product.id"
                 type="checkbox"
-                class="rounded border-border text-primary focus:ring-ring"
+                class="border-border rounded focus:ring-primary/20 text-primary cursor-pointer"
               />
-            </td>
-            <td class="p-4 flex items-center gap-4">
-              <div class="w-12 h-12 bg-muted rounded-md overflow-hidden">
-                <img
-                  [src]="product.imageUrl"
-                  [alt]="product.name"
-                  class="w-full h-full object-cover"
-                  onerror="this.src = 'https://placehold.co/48'"
-                />
-              </div>
-              <div>
-                <p class="font-medium text-foreground">{{ product.name }}</p>
-                @if (product.discount) {
-                  <p class="text-xs text-primary font-medium mt-0.5">{{ product.discount }}</p>
-                }
-              </div>
-            </td>
-            <td class="p-4 text-muted-foreground">{{ product.sku }}</td>
-            <td class="p-4 text-muted-foreground">{{ product.category }}</td>
-            <td class="p-4">
-              <p class="font-medium text-foreground">${{ product.price | number: '1.2-2' }}</p>
-              @if (product.originalPrice) {
-                <p class="text-xs text-muted-foreground line-through">
-                  ${{ product.originalPrice | number: '1.2-2' }}
-                </p>
-              }
-            </td>
-            <td class="p-4 text-muted-foreground">
-              {{ product.stock }}
-              @if (product.stockWarning) {
-                <span
-                  class="ml-2 text-xs text-orange-500 border border-orange-200 bg-orange-50 px-2 py-0.5 rounded-full inline-flex items-center gap-1"
-                >
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    ></path>
-                  </svg>
-                  {{ product.stockWarning }}
-                </span>
-              }
-            </td>
-            <td class="p-4">
-              <span
-                class="px-2.5 py-1 rounded-full text-xs font-medium border"
-                [ngClass]="{
-                  'bg-green-50 text-green-700 border-green-200': product.status === 'Active',
-                  'bg-red-50 text-destructive border-red-200': product.status === 'Out of Stock',
-                  'bg-gray-100 text-gray-600 border-gray-200':
-                    product.status === 'Draft' || product.status === 'Archived',
-                }"
-              >
-                {{ product.status }}
-              </span>
-            </td>
-            <td class="p-4 text-muted-foreground">{{ product.date }}</td>
+            </th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Product</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">SKU</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Category</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Price</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Stock</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Status</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Date Added</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="8" class="p-8 text-center text-muted-foreground">No products found.</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody class="divide-y divide-border/60 text-sm">
+          <!-- Loading State -->
+          @if (isLoading()) {
+            <tr>
+              <td colspan="8" class="p-12 text-center">
+                <div class="flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                  <ng-icon name="lucideLoader2" size="28" class="animate-spin text-primary" />
+                  <p class="font-medium text-sm">Loading catalog...</p>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            <!-- Products Iteration -->
+            @for (product of products(); track product.id) {
+              <tr class="group hover:bg-muted/40 transition-colors">
+                <td class="px-2 sm:px-3 md:px-4 py-3 text-center">
+                  <input
+                    type="checkbox"
+                    class="border-border rounded focus:ring-primary/20 text-primary cursor-pointer"
+                  />
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 min-w-[200px]">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-md overflow-hidden shrink-0 border border-border/50"
+                    >
+                      <img
+                        [src]="product.imageUrl"
+                        [alt]="product.name"
+                        class="w-full h-full object-cover"
+                        onerror="this.src = 'https://placehold.co/48'"
+                      />
+                    </div>
+                    <div>
+                      <p class="font-medium text-foreground">{{ product.name }}</p>
+                      @if (product.discount) {
+                        <p class="text-xs text-primary font-medium mt-0.5">
+                          {{ product.discount }}
+                        </p>
+                      }
+                    </div>
+                  </div>
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ product.sku }}
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ product.category }}
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 whitespace-nowrap">
+                  <p class="font-medium text-foreground">${{ product.price | number: '1.2-2' }}</p>
+                  @if (product.originalPrice) {
+                    <p class="text-xs text-muted-foreground line-through">
+                      ${{ product.originalPrice | number: '1.2-2' }}
+                    </p>
+                  }
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  <div class="flex items-center gap-2">
+                    <span>{{ product.stock }}</span>
+                    @if (product.stockWarning) {
+                      <span
+                        class="text-[10px] sm:text-xs text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/60 bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-full inline-flex items-center gap-1 font-medium"
+                      >
+                        <ng-icon name="lucideAlertCircle" size="12" />
+                        {{ product.stockWarning }}
+                      </span>
+                    }
+                  </div>
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 whitespace-nowrap">
+                  <span
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium text-xs border"
+                    [ngClass]="{
+                      'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-900/60':
+                        product.status === 'Active',
+                      'bg-rose-50 text-rose-600 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-900/60':
+                        product.status === 'Out of Stock',
+                      'bg-muted text-muted-foreground border-border':
+                        product.status === 'Draft' || product.status === 'Archived',
+                    }"
+                  >
+                    {{ product.status }}
+                  </span>
+                </td>
+
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ product.date }}
+                </td>
+              </tr>
+            } @empty {
+              <!-- Empty State (When not loading but 0 products exist) -->
+              <tr>
+                <td colspan="8" class="p-8 text-center text-muted-foreground">
+                  No products found in the catalog.
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <!-- ADD PRODUCT DRAWER (Animated via CSS Transitions) -->
-<div
-  class="fixed inset-0 z-50 flex justify-end transition-all"
-  [class.pointer-events-none]="!isDrawerOpen"
->
-  <!-- Backdrop -->
-  <div
-    class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300 ease-in-out"
-    [class.opacity-0]="!isDrawerOpen"
-    [class.opacity-100]="isDrawerOpen"
-    (click)="toggleDrawer()"
-    (keydown.enter)="toggleDrawer()"
-    tabindex="0"
-    role="button"
-    aria-label="Close drawer overlay"
-  ></div>
+@if (isDrawerOpen()) {
+  <div class="fixed inset-0 z-50 flex justify-end">
+    <!-- Backdrop -->
+    <div
+      class="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200"
+      (click)="toggleDrawer()"
+      role="button"
+      tabindex="0"
+      aria-label="Close drawer"
+    ></div>
 
-  <!-- Drawer Panel -->
-  <div
-    class="relative w-[500px] h-full bg-card shadow-2xl border-l border-border flex flex-col transition-transform duration-300 ease-in-out"
-    [class.translate-x-full]="!isDrawerOpen"
-    [class.translate-x-0]="isDrawerOpen"
-  >
-    <div class="p-6 border-b border-border flex justify-between items-center">
-      <h2 class="text-heading-2">Add New Product</h2>
-      <button
-        (click)="toggleDrawer()"
-        class="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground"
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-      </button>
-    </div>
+    <!-- Drawer Panel -->
+    <div
+      class="relative w-full sm:w-[500px] h-full bg-card shadow-2xl border-l border-border flex flex-col animate-in slide-in-from-right duration-300"
+    >
+      <div class="p-6 border-b border-border flex justify-between items-center">
+        <h2 class="text-xl font-bold text-foreground tracking-tight">Add New Product</h2>
+        <button
+          hlmBtn
+          variant="ghost"
+          size="icon"
+          (click)="toggleDrawer()"
+          class="text-muted-foreground hover:text-foreground"
+        >
+          <ng-icon name="lucideX" size="20" />
+        </button>
+      </div>
 
-    <!-- Form Content -->
-    <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-5">
-      <div>
-        <label for="product-name" class="text-label mb-2 block">Product Name</label>
-        <input
-          id="product-name"
-          type="text"
-          class="w-full p-2.5 bg-background border border-border rounded-(--btn-radius) text-input focus:outline-ring"
-          placeholder="e.g. Scented Candle"
-        />
-      </div>
-      <div>
-        <label for="product-sku" class="text-label mb-2 block">SKU</label>
-        <input
-          id="product-sku"
-          type="text"
-          class="w-full p-2.5 bg-background border border-border rounded-(--btn-radius) text-input focus:outline-ring"
-          placeholder="LG-XXX-000"
-        />
-      </div>
-      <div class="flex gap-4">
-        <div class="flex-1">
-          <label for="product-price" class="text-label mb-2 block">Price</label>
+      <!-- Form Content -->
+      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-5">
+        <div>
+          <label for="product-name" class="text-sm font-semibold mb-2 block text-foreground"
+            >Product Name</label
+          >
           <input
-            id="product-price"
-            type="number"
-            class="w-full p-2.5 bg-background border border-border rounded-(--btn-radius) text-input focus:outline-ring"
-            placeholder="0.00"
+            hlmInput
+            id="product-name"
+            type="text"
+            class="w-full placeholder:text-foreground/70 dark:placeholder:text-foreground/70"
+            placeholder="e.g. Scented Candle"
           />
         </div>
-        <div class="flex-1">
-          <label for="product-stock" class="text-label mb-2 block">Stock</label>
+        <div>
+          <label for="product-sku" class="text-sm font-semibold mb-2 block text-foreground"
+            >SKU</label
+          >
           <input
-            id="product-stock"
-            type="number"
-            class="w-full p-2.5 bg-background border border-border rounded-(--btn-radius) text-input focus:outline-ring"
-            placeholder="0"
+            hlmInput
+            id="product-sku"
+            type="text"
+            class="w-full placeholder:text-foreground/70 dark:placeholder:text-foreground/70"
+            placeholder="LG-XXX-000"
           />
         </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <div class="flex-1">
+            <label for="product-price" class="text-sm font-semibold mb-2 block text-foreground"
+              >Price</label
+            >
+            <input
+              hlmInput
+              id="product-price"
+              type="number"
+              class="w-full placeholder:text-foreground/70 dark:placeholder:text-foreground/70"
+              placeholder="0.00"
+            />
+          </div>
+          <div class="flex-1">
+            <label for="product-stock" class="text-sm font-semibold mb-2 block text-foreground"
+              >Stock</label
+            >
+            <input
+              hlmInput
+              id="product-stock"
+              type="number"
+              class="w-full placeholder:text-foreground/70 dark:placeholder:text-foreground/70"
+              placeholder="0"
+            />
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Footer -->
-    <div class="p-6 border-t border-border flex justify-end gap-3 bg-muted/20">
-      <button
-        class="px-5 py-2.5 border border-border rounded-(--btn-radius) font-medium hover:bg-muted transition-colors text-sm"
-        (click)="toggleDrawer()"
-      >
-        Cancel
-      </button>
-      <button class="main-btn" (click)="toggleDrawer()">Save Product</button>
+      <!-- Footer -->
+      <div class="p-6 border-t border-border flex justify-end gap-3 bg-muted/20">
+        <button hlmBtn variant="outline" (click)="toggleDrawer()">Cancel</button>
+        <button hlmBtn (click)="toggleDrawer()">Save Product</button>
+      </div>
     </div>
   </div>
-</div>
+}
