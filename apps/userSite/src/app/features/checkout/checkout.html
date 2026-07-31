@@ -1,48 +1,62 @@
-<div class="min-h-screen bg-background p-8 font-sans text-foreground">
-  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+<!-- Reduced base padding to p-4, scales to md:p-8 -->
+<div class="min-h-screen bg-background p-4 md:p-8 font-sans text-foreground">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
     <!-- Left Column: Order Summary -->
     <div class="lg:col-span-5 fade-in-left">
-      <h1 class="text-2xl font-bold mb-1 text-foreground">Secure Checkout</h1>
-      <p class="text-sm text-muted-foreground mb-8">
+      <h1 class="text-xl md:text-2xl font-bold mb-1 text-foreground">Secure Checkout</h1>
+      <p class="text-xs md:text-sm text-muted-foreground mb-6 md:mb-8">
         Review your items and complete your purchase securely.
       </p>
 
-      <h2 class="text-lg font-bold mb-4 text-foreground">Order Summary</h2>
-      <hr class="border-border mb-6" />
+      <h2 class="text-base md:text-lg font-bold mb-4 text-foreground">Order Summary</h2>
+      <hr class="border-border mb-4 md:mb-6" />
 
       <!-- Dynamic Products -->
       @for (item of cartItems(); track item.product.id; let i = $index) {
         <div
           hlmCard
-          class="bg-card p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-4 mb-4"
+          class="bg-card p-3 sm:p-4 rounded-xl border-border shadow-sm flex flex-row items-center gap-3 sm:gap-4 mb-4"
         >
-          <div class="w-20 h-20 bg-muted rounded-lg overflow-hidden shrink-0">
+          <!-- Shrunk image slightly on mobile to free up space -->
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-lg overflow-hidden shrink-0">
             <img
               [src]="item.product.image"
               [alt]="item.product.name"
               class="w-full h-full object-cover"
             />
           </div>
-          <div class="flex-1">
-            <h4 class="font-bold text-sm text-foreground">{{ item.product.name }}</h4>
-            <p class="text-xs text-muted-foreground mb-2">{{ item.color }}</p>
-            <div class="flex items-center justify-between">
-              <p class="font-bold text-primary">{{ item.product.price | currency }}</p>
+
+          <!-- ADDED min-w-0 HERE to allow child text to truncate properly -->
+          <div class="flex-1 min-w-0">
+            <!-- Added truncate to prevent long unbroken strings from destroying layout -->
+            <h4 class="font-bold text-sm text-foreground truncate">{{ item.product.name }}</h4>
+            <p class="text-xs text-muted-foreground mb-2 truncate">{{ item.color }}</p>
+
+            <!-- Added flex-wrap and gap-2 to handle tight spacing -->
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="font-bold text-primary text-sm sm:text-base">
+                {{ item.product.price | currency }}
+              </p>
+
+              <!-- Reduced padding and gap on mobile for the quantity controls -->
               <div
-                class="flex items-center gap-3 border border-border rounded-md px-2 py-1 bg-muted/50"
+                class="flex items-center gap-2 sm:gap-3 border border-border rounded-md px-1.5 sm:px-2 py-0.5 sm:py-1 bg-muted/50"
               >
                 <button
                   type="button"
                   (click)="updateQuantity(i, -1)"
-                  class="text-muted-foreground hover:text-foreground transition-colors"
+                  class="text-muted-foreground hover:text-foreground transition-colors px-1"
                 >
                   &minus;
                 </button>
-                <span class="text-sm font-medium text-foreground">{{ item.quantity }}</span>
+                <span
+                  class="text-xs sm:text-sm font-medium text-foreground min-w-[1ch] text-center"
+                  >{{ item.quantity }}</span
+                >
                 <button
                   type="button"
                   (click)="updateQuantity(i, 1)"
-                  class="text-muted-foreground hover:text-foreground transition-colors"
+                  class="text-muted-foreground hover:text-foreground transition-colors px-1"
                 >
                   &plus;
                 </button>
@@ -53,7 +67,7 @@
       }
 
       <!-- Totals -->
-      <div class="space-y-3 text-sm mb-6 px-2 mt-8">
+      <div class="space-y-3 text-sm mb-6 px-1 sm:px-2 mt-6 md:mt-8">
         <div class="flex justify-between">
           <span class="text-muted-foreground">Subtotal</span>
           <span class="text-foreground">{{ subtotal() | currency }}</span>
@@ -68,7 +82,9 @@
         </div>
       </div>
       <hr class="border-border mb-6" />
-      <div class="flex justify-between items-center text-xl font-bold px-2">
+      <div
+        class="flex justify-between items-center text-lg md:text-xl font-bold px-1 sm:px-2 mb-8 lg:mb-0"
+      >
         <span class="text-foreground">Total</span>
         <span class="text-primary">{{ total() | currency }}</span>
       </div>
@@ -80,24 +96,25 @@
         [formGroup]="checkoutForm"
         (ngSubmit)="onSubmit()"
         hlmCard
-        class="bg-card p-8 rounded-xl border-border shadow-sm block"
+        class="bg-card p-4 sm:p-6 md:p-8 rounded-xl border-border shadow-sm block"
       >
         <!-- Step 1 -->
-        <div class="mb-10">
-          <div class="flex items-center gap-3 mb-6">
+        <div class="mb-8 md:mb-10">
+          <div class="flex items-center gap-3 mb-5 md:mb-6">
             <span
-              class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold"
+              class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs font-bold shrink-0"
               >1</span
             >
-            <h3 class="text-lg font-bold text-foreground">Shipping Details</h3>
+            <h3 class="text-base md:text-lg font-bold text-foreground">Shipping Details</h3>
           </div>
 
-          <div class="grid grid-cols-2 gap-4 mb-4">
+          <!-- Changed from always grid-cols-2 to stacking on mobile (grid-cols-1) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
               <label
                 hlmLabel
                 for="firstName"
-                class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
                 >First Name</label
               >
               <input
@@ -106,7 +123,7 @@
                 type="text"
                 formControlName="firstName"
                 placeholder="Jane"
-                class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
                 [class.border-destructive]="
                   checkoutForm.get('firstName')?.invalid && checkoutForm.get('firstName')?.touched
                 "
@@ -121,7 +138,7 @@
               <label
                 hlmLabel
                 for="lastName"
-                class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
                 >Last Name</label
               >
               <input
@@ -130,7 +147,7 @@
                 type="text"
                 formControlName="lastName"
                 placeholder="Doe"
-                class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
                 [class.border-destructive]="
                   checkoutForm.get('lastName')?.invalid && checkoutForm.get('lastName')?.touched
                 "
@@ -145,7 +162,7 @@
             <label
               hlmLabel
               for="address"
-              class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+              class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
               >Address Line 1</label
             >
             <input
@@ -154,7 +171,7 @@
               type="text"
               formControlName="address"
               placeholder="123 Innovation Way"
-              class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+              class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
               [class.border-destructive]="
                 checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched
               "
@@ -168,7 +185,7 @@
             <label
               hlmLabel
               for="city"
-              class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+              class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
               >City</label
             >
             <input
@@ -177,7 +194,7 @@
               type="text"
               formControlName="city"
               placeholder="Metropolis"
-              class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+              class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
               [class.border-destructive]="
                 checkoutForm.get('city')?.invalid && checkoutForm.get('city')?.touched
               "
@@ -189,17 +206,17 @@
         </div>
 
         <!-- Step 2: Payment Method -->
-        <div class="mb-8">
-          <div class="flex items-center gap-3 mb-6">
+        <div class="mb-6 md:mb-8">
+          <div class="flex items-center gap-3 mb-5 md:mb-6">
             <span
-              class="flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-bold"
+              class="flex items-center justify-center w-6 h-6 rounded-full bg-muted text-muted-foreground text-xs font-bold shrink-0"
               >2</span
             >
-            <h3 class="text-lg font-bold text-foreground">Payment Method</h3>
+            <h3 class="text-base md:text-lg font-bold text-foreground">Payment Method</h3>
           </div>
 
-          <!-- Method Selection -->
-          <div class="flex gap-6 mb-6">
+          <!-- Method Selection: flex-wrap to prevent squishing on tiny phones -->
+          <div class="flex flex-wrap gap-4 sm:gap-6 mb-6">
             <label class="flex items-center gap-2 cursor-pointer">
               <input
                 type="radio"
@@ -226,7 +243,7 @@
               <label
                 hlmLabel
                 for="cardNumber"
-                class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
                 >Card Number</label
               >
               <div class="relative">
@@ -249,7 +266,7 @@
                   type="text"
                   formControlName="cardNumber"
                   placeholder="0000 0000 0000 0000"
-                  class="w-full bg-input-background border-border rounded-md py-2.5 pl-10 pr-3 font-mono focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  class="w-full bg-input-background border-border rounded-md py-2.5 pl-10 pr-3 font-mono text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
                   [class.border-destructive]="
                     checkoutForm.get('cardNumber')?.invalid &&
                     checkoutForm.get('cardNumber')?.touched
@@ -268,12 +285,13 @@
               }
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <!-- Reduced gap slightly on mobile for side-by-side inputs -->
+            <div class="grid grid-cols-2 gap-3 sm:gap-4">
               <div>
                 <label
                   hlmLabel
                   for="expiry"
-                  class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                  class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
                   >Expiry (MM/YY)</label
                 >
                 <input
@@ -282,7 +300,7 @@
                   type="text"
                   formControlName="expiry"
                   placeholder="12/25"
-                  class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
                   [class.border-destructive]="
                     checkoutForm.get('expiry')?.invalid && checkoutForm.get('expiry')?.touched
                   "
@@ -295,7 +313,7 @@
                 <label
                   hlmLabel
                   for="cvc"
-                  class="text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
+                  class="text-[10px] md:text-xs font-bold uppercase tracking-wider mb-2 block text-foreground"
                   >CVC</label
                 >
                 <input
@@ -304,7 +322,7 @@
                   type="text"
                   formControlName="cvc"
                   placeholder="123"
-                  class="w-full bg-input-background border-border rounded-md p-2.5 focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
+                  class="w-full bg-input-background border-border rounded-md p-2.5 text-sm md:text-base focus:ring-2 focus:ring-ring focus:border-primary outline-none transition-colors"
                   [class.border-destructive]="
                     checkoutForm.get('cvc')?.invalid && checkoutForm.get('cvc')?.touched
                   "
@@ -318,7 +336,7 @@
 
           @if (checkoutForm.get('paymentMethod')?.value === 'cod') {
             <div
-              class="bg-muted/50 border border-border rounded-lg p-4 text-sm text-muted-foreground"
+              class="bg-muted/50 border border-border rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-muted-foreground"
             >
               <p>
                 You will pay <strong>{{ total() | currency }}</strong> in cash upon delivery to the
@@ -331,11 +349,11 @@
         <button
           hlmBtn
           type="submit"
-          class="w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          class="w-full h-auto bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 md:py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors cursor-pointer text-sm md:text-base"
         >
           @if (checkoutForm.get('paymentMethod')?.value === 'card') {
             Pay {{ total() | currency }} Securely
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -345,7 +363,12 @@
             </svg>
           } @else {
             Place Order ({{ total() | currency }})
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-4 h-4 sm:w-5 sm:h-5 shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
