@@ -1,0 +1,144 @@
+<div class="flex flex-col gap-6">
+  <section hlmCard>
+    <div hlmCardHeader class="gap-3">
+      <div class="flex justify-between items-start gap-4">
+        <div>
+          <h3 hlmCardTitle>Payment Methods</h3>
+          <p hlmCardDescription>
+            Keep your cards up to date and choose which one is used for future purchases.
+          </p>
+        </div>
+        <button hlmBtn type="button" class="gap-2" (click)="toggleForm()">
+          <ng-icon name="lucidePlus" size="16" />
+          Add Card
+        </button>
+      </div>
+    </div>
+
+    <div hlmCardContent class="flex flex-col gap-5">
+      @if (showForm()) {
+        <form [formGroup]="form" (ngSubmit)="saveCard()" class="bg-muted/30 p-4 border rounded-xl">
+          <div class="gap-4 grid md:grid-cols-2">
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label hlmLabel for="cardName">Name on card</label>
+              <input hlmInput id="cardName" formControlName="cardName" autocomplete="cc-name" />
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label hlmLabel for="cardNumber">Card number</label>
+              <input
+                hlmInput
+                id="cardNumber"
+                formControlName="cardNumber"
+                inputmode="numeric"
+                autocomplete="cc-number"
+                placeholder="4242 4242 4242 4242"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label hlmLabel for="expiry">Expiry</label>
+              <input
+                hlmInput
+                id="expiry"
+                formControlName="expiry"
+                autocomplete="cc-exp"
+                placeholder="MM/YY"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label hlmLabel for="cvc">CVC</label>
+              <input
+                hlmInput
+                id="cvc"
+                formControlName="cvc"
+                inputmode="numeric"
+                autocomplete="cc-csc"
+                placeholder="123"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5 md:col-span-2">
+              <label hlmLabel for="zip">Billing ZIP</label>
+              <input hlmInput id="zip" formControlName="zip" autocomplete="postal-code" />
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-3 mt-4">
+            <button hlmBtn type="submit">Save card</button>
+            <button hlmBtn variant="ghost" type="button" (click)="toggleForm()">Cancel</button>
+          </div>
+        </form>
+      }
+
+      @if (cards().length === 0) {
+        <div class="p-6 border border-dashed rounded-xl text-muted-foreground text-sm text-center">
+          No saved payment methods yet. Add your first card to get started.
+        </div>
+      }
+
+      <div class="flex flex-col gap-3">
+        @for (card of cards(); track card.id) {
+          <div class="p-4 border rounded-xl">
+            <div class="flex md:flex-row flex-col md:justify-between md:items-center gap-4">
+              <div class="flex items-start gap-3">
+                <div
+                  class="flex justify-center items-center bg-primary/10 rounded-xl w-11 h-11 text-primary"
+                >
+                  <ng-icon name="lucideCreditCard" size="18" />
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <p class="font-medium">{{ card.brand }} •••• {{ card.last4 }}</p>
+                    @if (card.isDefault) {
+                      <span hlmBadge variant="secondary">Default</span>
+                    }
+                  </div>
+                  <p class="text-muted-foreground text-sm">{{ card.holderName }}</p>
+                  <p class="text-muted-foreground text-sm">Expires {{ card.expiry }}</p>
+                </div>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-2">
+                @if (!card.isDefault) {
+                  <button hlmBtn variant="outline" type="button" (click)="setDefaultCard(card.id)">
+                    Set as default
+                  </button>
+                }
+                <button
+                  hlmBtn
+                  variant="ghost"
+                  type="button"
+                  class="text-destructive hover:text-destructive"
+                  (click)="removeCard(card.id)"
+                >
+                  <ng-icon name="lucideTrash2" size="16" />
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h3 hlmCardTitle>Billing Preference</h3>
+      <p hlmCardDescription>Your saved cards are ready for future subscriptions and purchases.</p>
+    </div>
+
+    <div hlmCardContent class="flex flex-col gap-3 text-muted-foreground text-sm">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideCheck" size="16" class="text-primary" />
+        <span>Default payments are used automatically for renewals and invoices.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideCheck" size="16" class="text-primary" />
+        <span>You can update your method whenever your account needs it.</span>
+      </div>
+    </div>
+  </section>
+</div>

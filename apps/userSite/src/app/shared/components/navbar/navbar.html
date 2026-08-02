@@ -42,6 +42,17 @@
               {{ link.label }}
             </button>
           }
+          <hr class="my-2 border-border" />
+          <button
+            hlmBtn
+            hlmSheetClose
+            routerLink="/account-settings"
+            variant="ghost"
+            class="py-2 w-fit"
+            routerLinkActive="bg-secondary"
+          >
+            Account Settings
+          </button>
         </div>
       </hlm-sheet-content>
     </hlm-sheet>
@@ -61,7 +72,28 @@
       }
     </ul>
   </nav>
-  <div class="flex justify-end w-1/2 md:w-2/6">
+  <div class="flex justify-end items-center gap-2 w-1/2 md:w-2/6">
+    <a
+      routerLink="/account-settings"
+      routerLinkActive="bg-secondary text-foreground"
+      class="flex justify-center items-center hover:bg-secondary rounded-full w-10 h-10 text-muted-foreground hover:text-foreground transition-colors"
+      aria-label="Account settings"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="22"
+        height="22"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M20 21a8 8 0 0 0-16 0" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    </a>
     <a
       routerLink="/checkout"
       id="cart-icon"
