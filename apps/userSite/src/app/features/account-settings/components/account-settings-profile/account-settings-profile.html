@@ -1,0 +1,67 @@
+<div class="flex flex-col gap-6">
+  <!-- Profile Photo -->
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h3 hlmCardTitle>Profile Photo</h3>
+      <p hlmCardDescription>Upload a profile photo visible to your team and customers.</p>
+    </div>
+
+    <div hlmCardContent class="flex items-center gap-4">
+      <div
+        class="flex justify-center items-center bg-primary rounded-2xl w-20 h-20 font-semibold text-white text-xl shrink-0"
+      >
+        {{ initials() }}
+      </div>
+      <div class="flex flex-col gap-1">
+        <button hlmBtn variant="outline" type="button" class="gap-2 w-fit">
+          <ng-icon name="lucideUpload" size="16" />
+          Upload Photo
+        </button>
+        <p class="text-muted-foreground text-xs">
+          JPG, PNG or WebP. Max 4 MB. Min 200&times;200 px.
+        </p>
+        <p class="text-muted-foreground text-xs">Or drag and drop onto the avatar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Personal Information -->
+  <section hlmCard>
+    <div hlmCardHeader>
+      <h3 hlmCardTitle>Personal Information</h3>
+      <p hlmCardDescription>Your name and contact details used across Storai.</p>
+    </div>
+
+    <form hlmCardContent [formGroup]="form" (ngSubmit)="save()" class="flex flex-col gap-5">
+      <!-- First / Last name -->
+      <div class="gap-5 grid grid-cols-1 sm:grid-cols-2">
+        <div class="flex flex-col gap-1.5">
+          <label hlmLabel for="firstName">First Name</label>
+          <input hlmInput id="firstName" formControlName="firstName" autocomplete="given-name" />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label hlmLabel for="lastName">Last Name</label>
+          <input hlmInput id="lastName" formControlName="lastName" autocomplete="family-name" />
+        </div>
+      </div>
+
+      <!-- Email / Phone -->
+      <div class="gap-5 grid grid-cols-1 sm:grid-cols-2">
+        <div class="flex flex-col gap-1.5">
+          <label hlmLabel for="email">Email Address</label>
+          <input hlmInput id="email" type="email" formControlName="email" autocomplete="email" />
+        </div>
+        <div class="flex flex-col gap-1.5">
+          <label hlmLabel for="phone">Phone Number</label>
+          <input hlmInput id="phone" formControlName="phone" autocomplete="tel" />
+          <p class="text-muted-foreground text-xs">Used for account security and support only.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-2">
+        <button hlmBtn type="submit" [disabled]="form.invalid">Save Changes</button>
+        <button hlmBtn variant="ghost" type="button" (click)="cancel()">Cancel</button>
+      </div>
+    </form>
+  </section>
+</div>

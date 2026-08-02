@@ -17,6 +17,13 @@ export const routes: Routes = [
   { path: 'order-confirmed', component: OrderConfirmedComponent },
   { path: 'faq', component: FaqComponent },
   { path: 'orders', component: OrdersComponent },
+  {
+    path: 'account-settings',
+    loadChildren: () =>
+      import('@invento/user-site/app/features/account-settings/account-settings.routes').then(
+        (m) => m.ACCOUNT_SETTINGS_ROUTES,
+      ),
+  },
 
   // The wild component (404) MUST go at the very bottom
   { path: '**', component: NotFoundComponent },
