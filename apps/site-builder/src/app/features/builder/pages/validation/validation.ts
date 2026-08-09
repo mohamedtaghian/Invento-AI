@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
@@ -77,6 +78,7 @@ type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUIL
 export class Validation {
   private engine = inject(InventoEngineService);
   private readonly builderState = inject(BuilderState);
+  private readonly router = inject(Router);
 
   businessName = this.builderState.businessName() || 'Malipo';
   businessType = this.builderState.businessType() || 'Inventory Management';
@@ -182,5 +184,7 @@ export class Validation {
     this.builderState.businessName.set(this.businessName);
     this.builderState.businessType.set(this.businessType);
     this.builderState.targetAudience.set(this.targetAudience);
+    this.builderState.isNavigating.set(true);
+    this.router.navigate(['/build/preview']);
   }
 }

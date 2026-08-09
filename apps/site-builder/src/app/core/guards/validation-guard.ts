@@ -12,8 +12,6 @@ export const validationGuard: CanActivateFn = () => {
   if (!builderState.isAiInterviewComplete()) {
     return router.parseUrl('/build/ai-interview');
   }
-  if (!builderState.isPreviewComplete()) {
-    return router.parseUrl('/build/preview');
-  }
+
   return true;
 };
