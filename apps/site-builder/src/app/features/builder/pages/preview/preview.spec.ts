@@ -34,6 +34,9 @@ describe('Preview', () => {
   let builderState: BuilderState;
 
   beforeEach(async () => {
+    // BuilderState persists to sessionStorage; keep tests isolated from each other.
+    sessionStorage.clear();
+
     const mockLocale = {
       locale: vi.fn().mockReturnValue('en'),
       isRtl: vi.fn().mockReturnValue(false),
@@ -110,9 +113,18 @@ describe('Preview', () => {
     expect(component.focusMode()).toBe(false);
   });
 
-  it('dismisses error', () => {
-    component.dismissError();
-    expect(component.showError()).toBeFalsy();
+  it('keeps a manually selected theme when the theme list changes', () => {
+    fixture.detectChanges();
+
+    const chosen = MOCK_THEMES[1];
+    component.selectTheme(chosen);
+    expect(component.selectedTheme().id).toBe(chosen.id);
+
+    // A late theme load must not silently reset the user's choice.
+    TestBed.inject(PreviewDataClient).invalidate();
+    fixture.detectChanges();
+
+    expect(component.selectedTheme().id).toBe(chosen.id);
   });
 
   it('computes brandName from BuilderState', () => {

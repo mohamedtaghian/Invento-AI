@@ -1,29 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
-import {
-  lucideGlobe,
-  lucideAlertTriangle,
-  lucideCheckCircle2,
-  lucideSearch,
-  lucideLoader2,
-  lucideSparkles,
-  lucideLayers,
-  lucideTerminal,
-  lucideExternalLink,
-  lucideShoppingCart,
-} from '@ng-icons/lucide';
-import {
-  AIAnalysis,
-  DomainResult,
-  InventoEngineService,
-} from '../../../../core/service/invento-engine.service';
+import { lucideGlobe, lucideAlertTriangle, lucideLoader2, lucideSearch } from '@ng-icons/lucide';
+
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmInput } from '@spartan/helm/input';
 import { HlmButton } from '@spartan/helm/button';
-import { HlmBadge } from '@spartan/helm/badge';
 import {
   HlmCard,
   HlmCardContent,
@@ -32,174 +15,165 @@ import {
   HlmCardTitle,
 } from '@spartan/helm/card';
 import { PageHeader } from '@/app/shared/components/page-header/page-header';
+import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
-import { TranslatePipe } from '@invento/core';
+import { TranslatePipe, LocaleService } from '@invento/core';
+import { toast } from '@spartan/helm/sonner';
+import { switchMap, tap, finalize } from 'rxjs';
+import { DomainApi } from '@/app/features/builder/services/domain-api';
+import { ThemesApi } from '@/app/features/builder/services/themes-api';
+import { toastApiError } from '@/app/shared/utils/toast-api-error';
+import {
+  BUSINESS_NAME_CHECKS,
+  toDomainSlug,
+} from '@/app/features/builder/constants/business-name-rules';
 
-// Spartan Components mapped as clean standalone direct imports
-
-type WorkflowStep = 'INPUT' | 'AI_ANALYSIS' | 'DOMAINS' | 'FINAL_REPORT' | 'BUILDING' | 'DEPLOYED';
+type WorkflowStep = 'INPUT' | 'AI_ANALYSIS';
 
 @Component({
   selector: 'app-validation',
-  standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     NgIconComponent,
     HlmLabel,
     HlmInput,
     HlmButton,
-    HlmBadge,
     HlmCard,
     HlmCardHeader,
     HlmCardTitle,
     HlmCardDescription,
     HlmCardContent,
     PageHeader,
+    DoubleSlash,
     TranslatePipe,
   ],
   providers: [
-    provideIcons({
-      lucideGlobe,
-      lucideAlertTriangle,
-      lucideCheckCircle2,
-      lucideSearch,
-      lucideLoader2,
-      lucideSparkles,
-      lucideLayers,
-      lucideTerminal,
-      lucideExternalLink,
-      lucideShoppingCart,
-    }),
+    provideIcons({ lucideGlobe, lucideAlertTriangle, lucideLoader2, lucideSearch }),
   ],
   templateUrl: './validation.html',
   styleUrl: './validation.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Validation {
-  private engine = inject(InventoEngineService);
+  private readonly _localeService = inject(LocaleService);
   private readonly builderState = inject(BuilderState);
+  private readonly domainApi = inject(DomainApi);
+  private readonly themesApi = inject(ThemesApi);
   private readonly router = inject(Router);
 
-  businessName = this.builderState.businessName() || 'Malipo';
-  businessType = this.builderState.businessType() || 'Inventory Management';
-  targetAudience = this.builderState.targetAudience() || 'Small Businesses';
+  readonly businessName = this.builderState.businessName;
+  readonly businessType = this.builderState.businessType;
+  readonly targetAudience = this.builderState.targetAudience;
+  readonly domain = this.builderState.domain;
 
-  onBusinessNameChange(val: string) {
-    this.businessName = val;
-    this.builderState.businessName.set(val);
+  readonly isSubmitting = signal(false);
+  readonly currentStep = signal<WorkflowStep>('INPUT');
+
+  /** Once the user edits the domain themselves we stop deriving it from the name. */
+  private readonly domainTouched = signal(false);
+
+  readonly liveChecks = computed(() => {
+    const name = this.businessName().trim();
+    return BUSINESS_NAME_CHECKS.map((check) => ({
+      id: check.id,
+      label: check.labelKey,
+      passed: check.passes(name),
+    }));
+  });
+
+  readonly isFormatValid = computed(() => this.liveChecks().every((check) => check.passed));
+
+  readonly canSubmit = computed(
+    () =>
+      !!this.businessName() &&
+      !!this.domain() &&
+      this.builderState.isValidationComplete() &&
+      this.isFormatValid() &&
+      !this.isSubmitting(),
+  );
+
+  constructor() {
+    this.seedFromInterview();
   }
 
-  onBusinessTypeChange(val: string) {
-    this.businessType = val;
-    this.builderState.businessType.set(val);
+  /**
+   * The interview already asks what the business sells (q2) and who it targets
+   * (q3), so pre-fill this step from those answers instead of making the user
+   * retype them. Without this the fields start blank, and since they gate
+   * isValidationComplete the user would be bounced straight back here from
+   * Preview.
+   */
+  private seedFromInterview(): void {
+    const answers = this.builderState.aiAnswers();
+    const answerText = (id: string): string => {
+      const value = answers[id];
+      if (value === undefined || value === null) return '';
+      return Array.isArray(value) ? value.join(', ') : String(value).trim();
+    };
+
+    if (!this.businessName()) this.builderState.businessName.set(answerText('q1'));
+    if (!this.businessType()) this.builderState.businessType.set(answerText('q2'));
+    if (!this.targetAudience()) this.builderState.targetAudience.set(answerText('q3'));
+    if (!this.domain()) this.builderState.domain.set(toDomainSlug(this.businessName()));
   }
 
-  onTargetAudienceChange(val: string) {
-    this.targetAudience = val;
-    this.builderState.targetAudience.set(val);
+  onBusinessNameChange(value: string): void {
+    this.builderState.businessName.set(value);
+    if (!this.domainTouched()) {
+      this.builderState.domain.set(toDomainSlug(value));
+    }
   }
 
-  currentStep: WorkflowStep = 'INPUT';
-  buildLogs: string[] = [];
-
-  aiReport: AIAnalysis | null = null;
-  domains: DomainResult[] = [];
-  finalDeploymentUrl = '';
-
-  // New computed getter to power the Old UI's live validation checklist
-  get liveChecks(): { id: number; label: string; passed: boolean }[] {
-    const cleaned = (this.businessName || '').trim();
-    // Reusing the regex logic from your engine service
-    const specialCharRegex = new RegExp('[@#$%^&*()_+\\-=\\[\\]{};\':"\\\\|,.<>/?]');
-    const numberRegex = new RegExp('^\\d');
-
-    return [
-      {
-        id: 1,
-        label: 'validation_check_length',
-        passed: cleaned.length >= 3 && cleaned.length <= 25,
-      },
-      {
-        id: 2,
-        label: 'validation_check_special',
-        passed: cleaned.length > 0 && !specialCharRegex.test(cleaned),
-      },
-      {
-        id: 3,
-        label: 'validation_check_number',
-        passed: cleaned.length > 0 && !numberRegex.test(cleaned),
-      },
-    ];
+  onBusinessTypeChange(value: string): void {
+    this.builderState.businessType.set(value);
   }
 
-  // Derived boolean to lock/unlock the master submit button
-  get isFormatValid(): boolean {
-    return this.liveChecks.every((check) => check.passed);
+  onTargetAudienceChange(value: string): void {
+    this.builderState.targetAudience.set(value);
   }
 
-  startValidationPipeline(): void {
-    if (!this.isFormatValid) return;
-
-    this.currentStep = 'AI_ANALYSIS';
-    this.engine.analyzeBrandWithAI(this.businessName, this.businessType).subscribe({
-      next: (res) => {
-        this.aiReport = res;
-        this.currentStep = 'DOMAINS';
-
-        this.engine.checkDomainAvailability(this.businessName).subscribe({
-          next: (doms) => {
-            this.domains = doms;
-            this.currentStep = 'FINAL_REPORT';
-          },
-        });
-      },
-    });
+  onDomainChange(value: string): void {
+    this.domainTouched.set(true);
+    this.builderState.domain.set(value);
   }
 
-  executePublish(): void {
-    this.currentStep = 'BUILDING';
-    this.buildLogs = [];
-
-    const logsStream = [
-      '// [INVENTO-BUILDER]: Extracting client context configuration...',
-      '// [COMPILER]: Cloned workspace active clean template structure state',
-      '// [JSON]: Patched layout parameters inside static app config directory structures',
-      '// [NPM]: Resolving engine dependency manifests (npm install --silent)...',
-      '// [ANGULAR]: Executing local optimized tree-shaking compilation step (ng build --configuration production)...',
-      '// [DIST]: Bundle assets built out efficiently inside target folder dist/',
-      '// [VERCEL-API]: Uploading payload to Edge clusters network layout...',
-      '// [MONGODB]: Synced record references to application master records cluster schema',
-    ];
-
-    logsStream.forEach((log, index) => {
-      setTimeout(
-        () => {
-          this.buildLogs.push(log);
-        },
-        (index + 1) * 450,
-      );
-    });
-
-    this.engine.triggerProductionDeployment({ name: this.businessName }).subscribe({
-      next: (output) => {
-        this.finalDeploymentUrl = output.url;
-        this.currentStep = 'DEPLOYED';
-      },
-    });
-  }
-
-  resetConsole(): void {
-    this.currentStep = 'INPUT';
-    this.aiReport = null;
-    this.domains = [];
-    this.buildLogs = [];
-  }
-
-  finish() {
-    this.builderState.businessName.set(this.businessName);
-    this.builderState.businessType.set(this.businessType);
-    this.builderState.targetAudience.set(this.targetAudience);
+  finish(): void {
+    if (this.isSubmitting()) return;
+    this.isSubmitting.set(true);
     this.builderState.isNavigating.set(true);
-    this.router.navigate(['/build/preview']);
+    this.currentStep.set('AI_ANALYSIS');
+
+    this.domainApi
+      .confirmDomain({ businessName: this.businessName(), domain: this.domain() })
+      .pipe(
+        tap((res) => {
+          if (res?.isFallback) {
+            toast.warning(this._localeService.translate('toast_domain_fallback'));
+          } else {
+            toast.success(this._localeService.translate('validation_domain_confirmed'));
+          }
+        }),
+        // Theme generation is best-effort: both calls already degrade to an
+        // empty result rather than throwing, so Preview is always reachable
+        // once the domain is confirmed.
+        switchMap(() => this.themesApi.generateThemes()),
+        switchMap(() => this.themesApi.getThemes()),
+        finalize(() => {
+          this.isSubmitting.set(false);
+          this.builderState.isNavigating.set(false);
+        }),
+      )
+      .subscribe({
+        next: (themesRes) => {
+          if (themesRes?.themes?.length) {
+            this.builderState.themes.set(themesRes.themes);
+          }
+          this.router.navigate(['/build/preview']);
+        },
+        error: (err) => {
+          this.currentStep.set('INPUT');
+          toastApiError(err, 'validation_domain_failed', this._localeService);
+        },
+      });
   }
 }

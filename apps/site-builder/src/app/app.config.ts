@@ -1,5 +1,6 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter, withViewTransitions } from '@angular/router';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import {
@@ -12,12 +13,16 @@ import { TRANSLATION_LOADER } from '@invento/core';
 import type { Locale } from '@invento/core';
 import en from '@invento/site-builder/assets/i18n/en.json';
 import ar from '@invento/site-builder/assets/i18n/ar.json';
+import { apiAuthInterceptor } from './core/interceptors/api-auth-interceptor';
 
 // TO have only One instance exists for the entire application -> if we didn't provide service here it'll be provided according to each comp so each comp has it's own instance
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withViewTransitions()),
+    // withFetch() is already the v22 default; naming it keeps the SSR path explicit.
+    // The interceptor is what actually needs provideHttpClient() here.
+    provideHttpClient(withFetch(), withInterceptors([apiAuthInterceptor])),
     provideClientHydration(withEventReplay(), withNoIncrementalHydration()),
     HlmStyleService,
     {

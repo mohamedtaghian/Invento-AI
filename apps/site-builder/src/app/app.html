@@ -1,5 +1,4 @@
-<app-loader [isLoading]="isLoading()"></app-loader>
-<div class="bg-background">
-  <router-outlet></router-outlet>
-</div>
-<hlm-toaster />
+<main class="main-content flex-1 bg-background">
+  <router-outlet />
+</main>
+<hlm-toaster [richColors]="true" />
