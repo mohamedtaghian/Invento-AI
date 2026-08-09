@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { HlmSidebarImports } from '@spartan/helm/sidebar';
-import { lucideLayoutDashboard, lucidePackage, lucideUsers, lucideShoppingCart, lucideTruck, lucideBarChart3, lucideBot } from '@ng-icons/lucide';
+import { lucideLayoutDashboard, lucidePackage, lucideUsers, lucideShoppingCart, lucideTruck, lucideBarChart3, lucideBot, lucideTags } from '@ng-icons/lucide';
 import { TranslatePipe, LocaleService } from '@invento/core';
 import { BrandLogo } from '@invento/shared';
 
@@ -16,7 +16,7 @@ interface NavItem {
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive, NgIcon, HlmSidebarImports, TranslatePipe, BrandLogo],
   providers: [
-    provideIcons({ lucideLayoutDashboard, lucidePackage, lucideUsers, lucideShoppingCart, lucideTruck, lucideBarChart3, lucideBot }),
+    provideIcons({ lucideLayoutDashboard, lucidePackage, lucideUsers, lucideShoppingCart, lucideTruck, lucideBarChart3, lucideBot, lucideTags }),
   ],
   templateUrl: './sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,6 +30,7 @@ export class Sidebar {
   protected readonly navItems: NavItem[] = [
     { label: 'nav_home', icon: 'lucideLayoutDashboard', route: '/home' },
     { label: 'nav_products', icon: 'lucidePackage', route: '/products' },
+    { label: 'nav_attributes', icon: 'lucideTags', route: '/attributes' },
     { label: 'nav_users', icon: 'lucideUsers', route: '/users' },
     { label: 'nav_orders', icon: 'lucideShoppingCart', route: '/orders' },
     { label: 'nav_suppliers', icon: 'lucideTruck', route: '/suppliers' },
