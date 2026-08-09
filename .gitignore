@@ -50,3 +50,8 @@ Thumbs.db
 .nx/migrate-runs
 .angular
 .nx/workspace-data/
+
+
+.agents
+skills-lock.json
+AGENTS.md

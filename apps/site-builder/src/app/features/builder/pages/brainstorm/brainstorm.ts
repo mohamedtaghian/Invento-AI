@@ -18,14 +18,14 @@ import {
 } from '@ng-icons/heroicons/outline';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { lucideDot } from '@ng-icons/lucide';
-import { PageHeader } from '@/app/components/page-header/page-header';
+import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { BrainstormApi } from '@/app/features/builder/services/brainstorm-api';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@invento/core';
-import { LocaleService } from '../../../../../../libs/core/src/lib/i18n/locale-service';
+import { LocaleService } from '@invento/core';
 import { HlmTextareaImports } from '@spartan/helm/textarea';
 import { HlmItemImports } from '@spartan/helm/item';
 

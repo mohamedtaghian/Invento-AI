@@ -23,7 +23,7 @@ import { HlmTextarea } from '@spartan/helm/textarea';
 import { HlmSeparator } from '@spartan/helm/separator';
 import { Router } from '@angular/router';
 import { CdkStepper } from '@angular/cdk/stepper';
-import { PageHeader } from '@/app/components/page-header/page-header';
+import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { hlmP } from '@spartan/helm/typography';
 import { HlmLabelImports } from '@spartan/helm/label';

@@ -6,12 +6,12 @@ import { BuilderLayout } from './layouts/builder-layout/builder-layout';
 import { AuthLayout } from './layouts/auth-layout/auth-layout';
 
 // Pages
-import { Home } from './pages/home/home';
-import { Brainstorm } from './pages/brainstorm/brainstorm';
-import { AiInterview } from './pages/ai-interview/ai-interview';
-import { Preview } from './pages/preview/preview';
-import { Validation } from './pages/validation/validation';
-import { StyleTest } from './pages/style-test/style-test';
+import { Home } from './features/home/pages/home/home';
+import { Brainstorm } from './features/builder/pages/brainstorm/brainstorm';
+import { AiInterview } from './features/builder/pages/ai-interview/ai-interview';
+import { Preview } from './features/builder/pages/preview/preview';
+import { Validation } from './features/builder/pages/validation/validation';
+import { StyleTest } from './features/home/pages/style-test/style-test';
 
 // Guards
 import { brainstormGuard } from './core/guards/brainstorm-guard';

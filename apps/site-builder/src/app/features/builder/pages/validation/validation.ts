@@ -18,7 +18,7 @@ import {
   AIAnalysis,
   DomainResult,
   InventoEngineService,
-} from '../../core/service/invento-engine.service';
+} from '../../../../core/service/invento-engine.service';
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmInput } from '@spartan/helm/input';
 import { HlmButton } from '@spartan/helm/button';
@@ -30,7 +30,7 @@ import {
   HlmCardHeader,
   HlmCardTitle,
 } from '@spartan/helm/card';
-import { PageHeader } from '@/app/components/page-header/page-header';
+import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { TranslatePipe } from '@invento/core';
 
