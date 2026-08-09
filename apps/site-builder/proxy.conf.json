@@ -3,5 +3,10 @@
     "target": "https://test-site-builder.vercel.app",
     "secure": true,
     "changeOrigin": true
+  },
+  "/site-builder": {
+    "target": "http://localhost:3005",
+    "secure": false,
+    "changeOrigin": true
   }
 }

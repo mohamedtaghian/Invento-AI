@@ -6,28 +6,33 @@
       accentTitle="preview_accent"
       description="preview_desc"
     />
-  </div>
 
-  <!-- Use toaster in the future -->
-  <!-- @if (showError(); as err) {
-    <div
-      class="flex justify-between items-center bg-destructive/10 mb-4 p-3 border border-destructive rounded"
+    <button
+      hlmBtn
+      class="main-btn uppercase rounded-(--btn-radius) w-full sm:w-auto justify-center shrink-0"
+      id="edit-profile"
+      (click)="deployDialogState.set('open')"
     >
-      <span class="text-destructive text-sm">{{ err }}</span>
-      <button hlmBtn variant="ghost" size="sm" (click)="dismissError()" class="text-destructive">
-        ×
-      </button>
-    </div>
-  } -->
+      {{ 'preview_deploy' | translate }}
+      <ng-icon [name]="deployChevron()" />
+    </button>
+  </div>
 
   <div class="preview-body">
     <div class="gap-6 grid grid-cols-1 xl:grid-cols-4">
       <div class="space-y-5 xl:col-span-1">
         <div class="preview-body-theme">
-          <p class="uppercase preview-tag" [class]="hlmP">
+          <p class="flex items-center gap-2 uppercase preview-tag" [class]="hlmP">
             <app-double-slash /> {{ 'preview_active_theme' | translate }}
+            @if (!isLoading() && themeSuggestions().length > 1) {
+              <span class="ms-auto font-mono text-[10px] text-muted-foreground normal-case">
+                {{ themeSuggestions().length }}
+              </span>
+            }
           </p>
-          <div class="space-y-2">
+          <div
+            class="grid grid-cols-2 xl:grid-cols-1 gap-2 p-5 max-h-80 overflow-y-auto overscroll-contain pe-1"
+          >
             @if (isLoading()) {
               @for (skelton of skeletonThemes; track $index) {
                 <div class="flex items-center gap-3 animate-pulse theme-color-btn">
@@ -46,7 +51,7 @@
                   class="justify-start! w-full theme-color-btn"
                   [class.ring-2]="selectedTheme().id === theme.id"
                   [class.ring-primary]="selectedTheme().id === theme.id"
-                  (click)="selectedTheme.set(theme)"
+                  (click)="selectTheme(theme)"
                 >
                   <div class="flex gap-1 shrink-0 theme-color">
                     <span class="color-dot" [style.background]="theme.colors.background"></span>
@@ -58,6 +63,34 @@
                 </button>
               }
             }
+          </div>
+        </div>
+
+        <div class="preview-body-mode space-y-2">
+          <p class="uppercase preview-tag" [class]="hlmP">
+            <app-double-slash /> {{ 'preview_mode' | translate }}
+          </p>
+          <div class="flex gap-2">
+            <button
+              hlmBtn
+              class="flex-1 justify-center! gap-2 text-foreground cursor-pointer"
+              [class.bg-primary]="themeMode() === 'light'"
+              [class.bg-foreground/10]="themeMode() !== 'light'"
+              (click)="themeMode.set('light')"
+            >
+              <ng-icon name="lucideSun" class="text-xs" />
+              <span class="text-xs font-mono uppercase">{{ 'preview_light' | translate }}</span>
+            </button>
+            <button
+              hlmBtn
+              class="flex-1 justify-center! gap-2 text-foreground cursor-pointer"
+              [class.bg-primary]="themeMode() === 'dark'"
+              [class.bg-foreground/10]="themeMode() !== 'dark'"
+              (click)="themeMode.set('dark')"
+            >
+              <ng-icon name="lucideMoon" class="text-xs" />
+              <span class="text-xs font-mono uppercase">{{ 'preview_dark' | translate }}</span>
+            </button>
           </div>
         </div>
 
@@ -80,40 +113,9 @@
             }
           </div>
         </div>
-
-        <div
-          class="flex xl:flex-row flex-col xl:justify-center items-stretch xl:items-center gap-2 w-full xl:w-auto"
-        >
-          <button
-            hlmBtn
-            variant="outline"
-            class="main-btn uppercase rounded-(--btn-radius) w-full xl:w-auto justify-center"
-            id="edit-profile"
-            (click)="deployDialogState.set('open')"
-          >
-            {{ 'preview_deploy' | translate }}
-            <ng-icon [name]="deployChevron()" />
-          </button>
-
-          <!-- Currently export logic not working fine -->
-          <!-- <button
-            hlmBtn
-            variant="ghost"
-            class="uppercase rounded-(--btn-radius) border-foreground/20 w-full xl:w-auto justify-center"
-            (click)="exportPreview()"
-            [disabled]="isExporting()"
-          >
-            @if (isExporting()) {
-              Exporting…
-            } @else {
-              Export
-              <ng-icon name="lucideDownload" />
-            }
-          </button> -->
-        </div>
       </div>
 
-      <div #previewCapture class="space-y-4 xl:col-span-3 min-w-0 preview-body-visuals">
+      <div class="space-y-4 xl:col-span-3 min-w-0 preview-body-visuals">
         <div class="border border-foreground/20 rounded overflow-hidden">
           <div
             class="flex items-center gap-3 bg-background/20 px-4 py-2.5 border-b border-b-foreground/20 preview-body-address-bar"
@@ -125,7 +127,7 @@
               class="flex flex-1 items-center gap-2 bg-primary/20 px-3 py-1 border-primary/80 rounded url-tab"
             >
               <span class="bg-primary rounded-full w-2 h-2"></span>
-              <span class="text-primary text-xs">{{ 'preview_url_placeholder' | translate }}</span>
+              <span class="text-primary text-xs font-mono">{{ previewUrl() }}</span>
             </div>
 
             <button
@@ -154,9 +156,18 @@
                 <div
                   class="flex justify-between items-center bg-background/40 px-5 py-3 border-b border-b-foreground/20 preview-body-tabs"
                 >
-                  <span class="font-bold text-foreground/90 text-sm tracking-widest">
-                    {{ brandName() }}
-                  </span>
+                  <div class="flex items-center gap-2">
+                    @if (logoUrl(); as logo) {
+                      <img
+                        [src]="logo"
+                        alt="Logo"
+                        class="h-6 w-auto max-w-24 object-contain rounded"
+                      />
+                    }
+                    <span class="font-bold text-foreground/90 text-sm tracking-widest">
+                      {{ brandName() }}
+                    </span>
+                  </div>
 
                   @if (showNavTabs()) {
                     <div class="flex items-center gap-4">
@@ -423,8 +434,8 @@
   </div>
 }
 
-<hlm-dialog [state]="deployDialogState()" (closed)="deployDialogState.set('closed')" class="">
-  <hlm-dialog-content class="sm:max-w-lg" *hlmDialogPortal="let ctx">
+<hlm-dialog [state]="deployDialogState()" (closed)="closeDeployDialog()">
+  <hlm-dialog-content class="sm:max-w-lg" *hlmDialogPortal>
     <hlm-dialog-header>
       <h3 hlmDialogTitle [class]="hlmH3">{{ 'preview_confirm_title' | translate }}</h3>
 
@@ -462,12 +473,22 @@
     </div>
 
     <hlm-dialog-footer>
-      <button hlmBtn variant="ghost" (click)="cancelDeployment(ctx)">
+      <button hlmBtn variant="ghost" [disabled]="isDeploying()" (click)="cancelDeployment()">
         {{ 'preview_choose_another' | translate }}
       </button>
 
-      <button hlmBtn (click)="confirmDeployment(ctx)">
-        {{ 'preview_continue_validation' | translate }}
+      <button
+        hlmBtn
+        [disabled]="isDeploying()"
+        (click)="confirmDeployment()"
+        class="flex items-center gap-2 cursor-pointer"
+      >
+        @if (isDeploying()) {
+          <ng-icon name="lucideLoader2" class="animate-spin text-sm" />
+          <span>{{ 'toast_deploying_site' | translate }}</span>
+        } @else {
+          <span>{{ 'preview_deploy' | translate }}</span>
+        }
       </button>
     </hlm-dialog-footer>
   </hlm-dialog-content>

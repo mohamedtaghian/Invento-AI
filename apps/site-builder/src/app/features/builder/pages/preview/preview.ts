@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   HostListener,
   PLATFORM_ID,
@@ -10,32 +11,39 @@ import {
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-
-import { NgStyle } from '@angular/common';
+import { isPlatformBrowser, NgStyle } from '@angular/common';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
+  lucideChevronLeft,
   lucideChevronRight,
-  lucideDownload,
   lucideMaximize2,
   lucideMinimize2,
+  lucideMoon,
   lucideSmartphoneCharging,
+  lucideSun,
   lucideTablet,
   lucideTvMinimal,
 } from '@ng-icons/lucide';
 import { HlmButtonImports } from '@spartan/helm/button';
-import { ThemeSuggestion } from '@/app/core/interface/Preview';
-import { PreviewSize, PreviewViewport, Viewport } from '@/app/core/interface/Preview';
+import {
+  ThemeSuggestion,
+  PreviewSize,
+  PreviewViewport,
+  Viewport,
+} from '@/app/core/interface/Preview';
 import { PreviewDataClient } from '@/app/core/service/preview-data-client';
 import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { HlmDialogImports } from '@spartan/helm/dialog';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { PublishApi } from '@/app/features/builder/services/publish-api';
 import { ContainerWidth } from '@/app/shared/components/container-width/container-width';
-import { Router } from '@angular/router';
-import html2canvas from 'html2canvas';
 import { hlmH2, hlmH3, hlmH4, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { LocaleService, TranslatePipe } from '@invento/core';
+import { toast } from '@spartan/helm/sonner';
+import { ApiConfig } from '@/app/core/config/api-config';
+import { PALETTE_DEFAULTS, DEFAULT_RADIUS } from '@/app/core/utils/palette';
+import { toastApiError } from '@/app/shared/utils/toast-api-error';
 
 @Component({
   selector: 'app-preview',
@@ -51,58 +59,76 @@ import { LocaleService, TranslatePipe } from '@invento/core';
   ],
   providers: [
     provideIcons({
-      lucideDownload,
       lucideTvMinimal,
       lucideTablet,
       lucideSmartphoneCharging,
       lucideMaximize2,
       lucideMinimize2,
+      lucideChevronLeft,
       lucideChevronRight,
+      lucideSun,
+      lucideMoon,
     }),
   ],
   templateUrl: './preview.html',
   styleUrl: './preview.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Preview {
   protected readonly hlmH2 = hlmH2;
   protected readonly hlmH3 = hlmH3;
   protected readonly hlmH4 = hlmH4;
   protected readonly hlmP = hlmP;
+
   private readonly builderState = inject(BuilderState);
   private readonly platformId = inject(PLATFORM_ID);
-  private readonly router = inject(Router);
   private readonly _localeService = inject(LocaleService);
-
   private readonly previewDataClientService = inject(PreviewDataClient);
+  private readonly publishApi = inject(PublishApi);
+  private readonly apiConfig = inject(ApiConfig);
+
   readonly themeSuggestions = this.previewDataClientService.themeSuggestions;
   readonly products = this.previewDataClientService.products;
   readonly navTabs = this.previewDataClientService.navTabs;
   readonly isLoading = this.previewDataClientService.isLoading;
-
   readonly themeError = this.previewDataClientService.themeError;
+  readonly logoUrl = this.builderState.logoUrl;
+
+  readonly previewUrl = computed(() => {
+    const userDomain = this.builderState.domain() || 'my-site';
+    const cleanDomain = userDomain.toLowerCase().trim().replace(/[^a-z0-9-]/g, '');
+    return `https://invento-${cleanDomain || 'my-site'}.example`;
+  });
+
   readonly skeletonThemes = Array(4);
   readonly skeletonProducts = Array(3);
   readonly selectedTheme = signal<ThemeSuggestion>(this.themeSuggestions()[0]);
   readonly selectedViewport = signal<PreviewViewport>('desktop');
   readonly selectedSize = signal<PreviewSize>('M');
+  readonly themeMode = signal<'light' | 'dark'>('light');
   readonly deployDialogState = signal<'closed' | 'open'>('closed');
   readonly focusMode = signal(false);
+  readonly isDeploying = signal(false);
+
   readonly themeButtons = viewChildren<ElementRef<HTMLButtonElement>>('themeButton');
-  readonly previewCaptureRef = viewChild<ElementRef<HTMLElement>>('previewCapture');
   readonly focusContainerRef = viewChild<ElementRef<HTMLElement>>('focusContainer');
   protected readonly _containerWidth = signal<number>(0);
-  readonly sizes: readonly PreviewSize[] = ['S', 'M', 'L', 'XL'] as const;
 
+  readonly sizes: readonly PreviewSize[] = ['S', 'M', 'L', 'XL'] as const;
   private readonly sizeFactors: Record<PreviewSize, number> = { S: 0.8, M: 1.0, L: 1.2, XL: 1.5 };
 
   readonly viewports: readonly Viewport[] = [
-    { id: 'desktop', icon: 'lucideTvMinimal', label: 'preview_desktop', width: '100%' },
-    { id: 'tablet', icon: 'lucideTablet', label: 'preview_tablet', width: '768px' },
-    { id: 'mobile', icon: 'lucideSmartphoneCharging', label: 'preview_mobile', width: '390px' },
+    { id: 'desktop', icon: 'lucideTvMinimal', label: 'preview_desktop', width: 1200 },
+    { id: 'tablet', icon: 'lucideTablet', label: 'preview_tablet', width: 768 },
+    { id: 'mobile', icon: 'lucideSmartphoneCharging', label: 'preview_mobile', width: 390 },
   ] as const;
+
   readonly previewCssVars = computed<Record<string, string>>(() => {
-    const c = this.selectedTheme().colors;
-    const r = this.selectedTheme().radius;
+    const theme = this.selectedTheme();
+    const isDark = this.themeMode() === 'dark';
+    const c = (isDark ? theme?.darkColors : theme?.colors) ?? theme?.colors ?? PALETTE_DEFAULTS;
+    const r = theme?.radius ?? DEFAULT_RADIUS;
+
     return {
       '--background': c.background,
       '--foreground': c.foreground,
@@ -119,30 +145,29 @@ export class Preview {
       '--radius-lg': `calc(${r} * 1.5)`,
     };
   });
+
   readonly simulatedPxWidth = computed<number>(() => {
-    const cw = this._containerWidth();
-    switch (this.selectedViewport()) {
-      case 'mobile':
-        return 390;
-      case 'tablet':
-        return 768;
-      case 'desktop':
-        return Math.max(cw || 1200, 1200);
-      default:
-        return cw || 1200;
+    const configured = this.viewports.find((v) => v.id === this.selectedViewport())?.width;
+    if (this.selectedViewport() === 'desktop') {
+      return Math.max(this._containerWidth() || 0, configured ?? 1200);
     }
+    return configured ?? this._containerWidth() ?? 1200;
   });
+
   readonly sizeScale = computed(() => this.sizeFactors[this.selectedSize()]);
+
   readonly previewScale = computed<number>(() => {
     const cw = this._containerWidth();
     if (cw === 0) return 1;
     return Math.min(1, cw / this.simulatedPxWidth()) * this.sizeScale();
   });
+
   readonly previewFrameStyles = computed<Record<string, string>>(() => ({
     width: `${this.simulatedPxWidth()}px`,
     zoom: String(this.previewScale()),
     transition: 'zoom 300ms ease-in-out, width 300ms ease-in-out',
   }));
+
   readonly previewCardCols = computed<string>(() => {
     switch (this.selectedViewport()) {
       case 'mobile':
@@ -153,17 +178,23 @@ export class Preview {
         return 'repeat(3, minmax(0, 1fr))';
     }
   });
+
   readonly showNavTabs = computed<boolean>(() => this.selectedViewport() !== 'mobile');
+
   readonly heroTextPadding = computed<Record<string, string>>(() =>
     this.selectedViewport() === 'mobile' ? { padding: '1rem' } : { padding: '1.5rem' },
   );
+
   readonly brandName = computed(
     () => this.builderState.businessName() || this.builderState.brainstorm() || 'InventoAI',
   );
+
   readonly featuredProduct = computed(() => this.products()[0] || null);
+
   readonly deployChevron = computed(() =>
     this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
   );
+
   readonly buildSummary = computed(() => [
     { label: 'preview_theme', value: this._localeService.translate(this.selectedTheme().name) },
     {
@@ -182,8 +213,6 @@ export class Preview {
   ]);
 
   private readonly _userHasManuallySelectedTheme = signal(false);
-  private readonly _dismissedError = signal(false);
-  readonly showError = computed(() => this.themeError() && !this._dismissedError());
 
   constructor() {
     this.previewDataClientService.loadThemes();
@@ -194,13 +223,19 @@ export class Preview {
       }
     });
 
+    // Keep the default selection in step with whatever themes arrive, but never
+    // override a theme the user picked themselves.
     effect(() => {
-      const themes = this.themeSuggestions();
-      const firstTheme = themes[0];
+      const firstTheme = this.themeSuggestions()[0];
       if (firstTheme && !this._userHasManuallySelectedTheme()) {
         this.selectedTheme.set(firstTheme);
       }
     });
+  }
+
+  selectTheme(theme: ThemeSuggestion): void {
+    this._userHasManuallySelectedTheme.set(true);
+    this.selectedTheme.set(theme);
   }
 
   @HostListener('document:fullscreenchange')
@@ -220,87 +255,62 @@ export class Preview {
         }
       }
       this.focusMode.set(false);
-    } else {
-      this.focusMode.set(true);
-      const el = this.focusContainerRef()?.nativeElement;
-      if (el && isPlatformBrowser(this.platformId)) {
-        try {
-          await el.requestFullscreen();
-        } catch {
-          /* ignore (user gesture may be missing) */
-        }
+      return;
+    }
+
+    this.focusMode.set(true);
+    const el = this.focusContainerRef()?.nativeElement;
+    if (el && isPlatformBrowser(this.platformId)) {
+      try {
+        await el.requestFullscreen();
+      } catch {
+        /* ignore (user gesture may be missing) */
       }
     }
   }
 
-  private readonly _exporting = signal(false);
-  readonly isExporting = this._exporting.asReadonly();
+  confirmDeployment(): void {
+    if (this.isDeploying()) return;
+    this.isDeploying.set(true);
 
-  dismissError(): void {
-    this._dismissedError.set(true);
+    const toastId = toast.loading(this._localeService.translate('toast_deploying_site'));
+
+    this.publishApi.publishSite({ themeId: this.selectedTheme().id }).subscribe({
+      next: () => {
+        this.isDeploying.set(false);
+        this.closeDeployDialog();
+        this.builderState.selectedTheme.set(this.selectedTheme().id);
+
+        toast.success(this._localeService.translate('toast_deploy_success'), { id: toastId });
+
+        const redirectUrl = this.apiConfig.dashboardUrl;
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 1000);
+      },
+      error: (err) => {
+        this.isDeploying.set(false);
+        toastApiError(err, 'toast_deploy_failed', this._localeService, toastId);
+      },
+    });
   }
 
-  async exportPreview(): Promise<void> {
-    if (!isPlatformBrowser(this.platformId)) return;
-    const el = this.previewCaptureRef()?.nativeElement;
-    if (!el) return;
-
-    this._exporting.set(true);
-    try {
-      const canvas = await html2canvas(el, {
-        useCORS: true,
-        scale: 2,
-        onclone: (clonedDoc) => {
-          const ctx = document.createElement('canvas').getContext('2d')!;
-          const colorProps = [
-            'color',
-            'backgroundColor',
-            'borderColor',
-            'borderTopColor',
-            'borderRightColor',
-            'borderBottomColor',
-            'borderLeftColor',
-          ];
-          clonedDoc.querySelectorAll('*').forEach((node: Element) => {
-            const n = node as HTMLElement;
-            for (const prop of colorProps) {
-              const val = n.style[prop as unknown as number];
-              if (val && val.includes('oklch')) {
-                ctx.fillStyle = 'rgb(0,0,0)';
-                ctx.fillStyle = val;
-                ctx.fillRect(0, 0, 1, 1);
-                const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
-                n.style[prop as unknown as number] = `rgb(${r},${g},${b})`;
-              }
-            }
-          });
-        },
-      });
-      canvas.toBlob((blob) => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'theme-preview.png';
-        a.click();
-        URL.revokeObjectURL(url);
-        this._exporting.set(false);
-      });
-    } catch {
-      this._exporting.set(false);
-    }
-  }
-
-  confirmDeployment(ctx: { close: (result?: unknown) => void }): void {
-    ctx.close();
-    this.builderState.selectedTheme.set(this.selectedTheme().id);
-    window.location.href = 'http://localhost:4200/dashboard';
-  }
-  cancelDeployment(ctx: { close: (result?: unknown) => void }): void {
-    ctx.close();
+  cancelDeployment(): void {
+    this.closeDeployDialog();
     queueMicrotask(() => {
       const index = this.themeSuggestions().findIndex((t) => t.id === this.selectedTheme().id);
       this.themeButtons()[index]?.nativeElement.focus();
     });
+  }
+
+  /**
+   * The dialog's open/closed state is owned solely by this signal.
+   *
+   * Calling the portal's own ctx.close() alongside the [state] binding made the
+   * dialog close, then reopen when change detection re-applied state="open",
+   * then close again once (closed) fired — a visible flicker.
+   */
+  closeDeployDialog(): void {
+    this.deployDialogState.set('closed');
   }
 }

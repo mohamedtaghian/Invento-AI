@@ -14,10 +14,7 @@ import { Validation } from './features/builder/pages/validation/validation';
 import { StyleTest } from './features/home/pages/style-test/style-test';
 
 // Guards
-import { brainstormGuard } from './core/guards/brainstorm-guard';
-import { aiInterviewGuard } from './core/guards/ai-interview-guard';
-import { previewGuard } from './core/guards/preview-guard';
-import { validationGuard } from './core/guards/validation-guard';
+import { stepGuard } from './core/guards/step-guard';
 
 export const routes: Routes = [
   {
@@ -39,22 +36,22 @@ export const routes: Routes = [
           {
             path: 'brainstorm',
             component: Brainstorm,
-            canActivate: [brainstormGuard],
+            canActivate: [stepGuard('brainstorm')],
           },
           {
             path: 'ai-interview',
             component: AiInterview,
-            canActivate: [aiInterviewGuard],
+            canActivate: [stepGuard('ai-interview')],
           },
           {
             path: 'validation',
             component: Validation,
-            canActivate: [validationGuard],
+            canActivate: [stepGuard('validation')],
           },
           {
             path: 'preview',
             component: Preview,
-            canActivate: [previewGuard],
+            canActivate: [stepGuard('preview')],
           },
           { path: '**', redirectTo: 'brainstorm' },
         ],

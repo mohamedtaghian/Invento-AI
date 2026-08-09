@@ -1,15 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   afterNextRender,
   computed,
   signal,
   inject,
-  ViewChild,
+  viewChild,
   OnInit,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-icons/lucide';
+import {
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideMessageSquare,
+  lucideLoader2,
+} from '@ng-icons/lucide';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmTextarea } from '@spartan/helm/textarea';
@@ -26,6 +33,8 @@ import { TranslatePipe, LocaleService } from '@invento/core';
 import { toast } from '@spartan/helm/sonner';
 import { INTERVIEW_QUESTIONS } from '../../constants/interview-questions';
 import { AiInterviewApi, SubmitAnswersPayload } from '../../services/ai-interview-api';
+import { decodeAnswer, encodeAnswer, isAnswered } from '../../utils/answer-codec';
+import { toastApiError } from '@/app/shared/utils/toast-api-error';
 
 @Component({
   selector: 'app-ai-interview',
@@ -41,7 +50,14 @@ import { AiInterviewApi, SubmitAnswersPayload } from '../../services/ai-intervie
     SpartanStepperImports,
     TranslatePipe,
   ],
-  providers: [provideIcons({ lucideMessageSquare, lucideChevronLeft, lucideChevronRight })],
+  providers: [
+    provideIcons({
+      lucideMessageSquare,
+      lucideChevronLeft,
+      lucideChevronRight,
+      lucideLoader2,
+    }),
+  ],
   templateUrl: './ai-interview.html',
   styleUrl: './ai-interview.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,9 +67,11 @@ export class AiInterview implements OnInit {
   private readonly router = inject(Router);
   private readonly _localeService = inject(LocaleService);
   private readonly aiInterviewApi = inject(AiInterviewApi);
+  private readonly destroyRef = inject(DestroyRef);
   protected readonly hlmP = hlmP;
 
   readonly isSubmitting = signal(false);
+  readonly invalidQuestionId = signal<string | null>(null);
 
   protected readonly chevronBack = computed(() =>
     this._localeService.isRtl() ? 'lucideChevronRight' : 'lucideChevronLeft',
@@ -62,14 +80,11 @@ export class AiInterview implements OnInit {
     this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
   );
 
-  @ViewChild('stepper') stepper?: CdkStepper;
+  readonly stepper = viewChild<CdkStepper>('stepper');
 
-  visibleQuestions = computed(() => {
+  readonly visibleQuestions = computed(() => {
     const hasLogo = this.builderState.hasLogo();
-    return INTERVIEW_QUESTIONS.filter((q) => {
-      if (q.showWhen === 'logoUploaded' && !hasLogo) return false;
-      return true;
-    });
+    return INTERVIEW_QUESTIONS.filter((q) => q.showWhen !== 'logoUploaded' || hasLogo);
   });
 
   form = new FormGroup({});
@@ -78,13 +93,11 @@ export class AiInterview implements OnInit {
   constructor() {
     afterNextRender({
       read: () => {
-        requestAnimationFrame(() => {
-          document
-            .querySelector<
-              HTMLInputElement | HTMLTextAreaElement
-            >('app-ai-interview input, app-ai-interview textarea')
-            ?.focus();
-        });
+        document
+          .querySelector<
+            HTMLInputElement | HTMLTextAreaElement
+          >('app-ai-interview input, app-ai-interview textarea')
+          ?.focus();
       },
     });
   }
@@ -94,90 +107,28 @@ export class AiInterview implements OnInit {
     const prefill = this.builderState.aiAnswers();
 
     this.visibleQuestions().forEach((q) => {
-      const validators = q.required ? [Validators.required] : [];
-      let initialValue: string | string[] = q.type === 'multi' ? [] : '';
+      const initialValue = decodeAnswer(q, prefill[q.id]);
 
-      if (prefill[q.id] !== undefined && prefill[q.id] !== null) {
-        const rawVal = prefill[q.id];
-
-        if (q.type === 'multi') {
-          let matchedOptions: string[];
-          if (Array.isArray(rawVal)) {
-            matchedOptions = rawVal.map((v) => {
-              if (typeof v === 'number' && q.options?.[v]) return q.options[v];
-              if (/^\d+$/.test(String(v).trim()) && q.options?.[parseInt(String(v).trim(), 10)]) {
-                return q.options[parseInt(String(v).trim(), 10)];
-              }
-              return String(v);
-            });
-          } else {
-            const rawStr = String(rawVal).trim();
-            const parts = rawStr.split(',').map((s) => s.trim());
-            matchedOptions = parts.map((part) => {
-              if (/^\d+$/.test(part) && q.options?.[parseInt(part, 10)]) {
-                return q.options[parseInt(part, 10)];
-              }
-              const found = (q.options || []).find(
-                (opt) =>
-                  opt.toLowerCase().includes(part.toLowerCase()) ||
-                  part.toLowerCase().includes(opt.toLowerCase()),
-              );
-              return found || part;
-            });
-          }
-
-          initialValue = matchedOptions;
-          this.selectedChannels.update((prev) => ({ ...prev, [q.id]: initialValue as string[] }));
-        } else if (q.type === 'single') {
-          const strVal = String(rawVal).trim();
-          let matchedOpt: string | undefined;
-
-          if (/^\d+$/.test(strVal) && q.options?.[parseInt(strVal, 10)]) {
-            matchedOpt = q.options[parseInt(strVal, 10)];
-          } else {
-            matchedOpt = (q.options || []).find(
-              (opt) =>
-                opt.toLowerCase() === strVal.toLowerCase() ||
-                strVal.toLowerCase().includes(opt.toLowerCase()) ||
-                opt.toLowerCase().includes(strVal.toLowerCase()),
-            );
-          }
-          initialValue = matchedOpt || strVal;
-        } else {
-          initialValue = String(rawVal);
-        }
+      if (q.type === 'multi') {
+        this.selectedChannels.update((prev) => ({ ...prev, [q.id]: initialValue as string[] }));
       }
 
-      controls[q.id] = new FormControl(initialValue, validators);
+      controls[q.id] = new FormControl(initialValue, q.required ? [Validators.required] : []);
     });
 
     this.form = new FormGroup(controls);
 
-    this.form.valueChanges.subscribe((val) => {
-      const current = this.builderState.aiAnswers();
-      this.builderState.aiAnswers.set({ ...current, ...val });
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((val) => {
+      this.builderState.aiAnswers.update((current) => ({ ...current, ...val }));
     });
   }
 
-  invalidQuestionId = signal<string | null>(null);
-
   scrollToStep(index: number) {
-    setTimeout(() => {
-      const stepElements = document.querySelectorAll(
-        'spartan-step, [spartanstep], .spartan-step, cdk-step',
-      );
-      const activeEl =
-        stepElements[index] ||
-        document.querySelector('.spartan-step-active') ||
-        document.querySelector('spartan-step');
-      if (activeEl) {
-        activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        const focusable = activeEl.querySelector<HTMLElement>(
-          'input, textarea, button, [tabindex="0"]',
-        );
-        if (focusable) focusable.focus();
-      }
-    }, 100);
+    const step = document.querySelectorAll('[cdkstepcontent], cdk-step')[index];
+    if (!step) return;
+
+    step.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    step.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus();
   }
 
   onSelectionChange(event: StepperSelectionEvent) {
@@ -185,48 +136,36 @@ export class AiInterview implements OnInit {
   }
 
   onPrevStep() {
-    if (this.stepper) {
-      this.stepper.previous();
-      this.scrollToStep(this.stepper.selectedIndex);
-    }
+    const stepper = this.stepper();
+    if (!stepper) return;
+    stepper.previous();
+    this.scrollToStep(stepper.selectedIndex);
   }
 
   onNextStep() {
-    if (this.stepper) {
-      this.stepper.next();
-      this.scrollToStep(this.stepper.selectedIndex);
-    }
+    const stepper = this.stepper();
+    if (!stepper) return;
+    stepper.next();
+    this.scrollToStep(stepper.selectedIndex);
   }
 
   isQuestionInvalid(questionId: string): boolean {
     if (this.invalidQuestionId() === questionId) return true;
+
     const control = this.form.get(questionId);
-    if (!control || !control.touched) return false;
-    const val = control.value;
-    const q = INTERVIEW_QUESTIONS.find((item) => item.id === questionId);
-    if (!q) return false;
-    if (q.type === 'multi') {
-      return !Array.isArray(val) || val.length === 0;
-    }
-    return val === null || val === undefined || String(val).trim() === '';
+    if (!control?.touched) return false;
+
+    const question = this.visibleQuestions().find((item) => item.id === questionId);
+    return question ? !isAnswered(question, control.value) : false;
   }
 
+  /** Index of the first visible question still missing a required answer, or -1. */
   findFirstInvalidQuestionIndex(): number {
-    const questions = this.visibleQuestions();
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
+    return this.visibleQuestions().findIndex((q) => {
       const control = this.form.get(q.id);
-      const val = control?.value;
-      const isAnswered =
-        q.type === 'multi'
-          ? Array.isArray(val) && val.length > 0
-          : val !== null && val !== undefined && String(val).trim() !== '';
-
-      if (!isAnswered || control?.invalid) {
-        return i;
-      }
-    }
-    return -1;
+      if (!q.required) return control?.invalid ?? false;
+      return !isAnswered(q, control?.value) || (control?.invalid ?? false);
+    });
   }
 
   toggleMultiSelect(questionId: string, option: string) {
@@ -239,8 +178,10 @@ export class AiInterview implements OnInit {
       return { ...current, [questionId]: updated };
     });
 
-    this.form.get(questionId)?.setValue(this.selectedChannels()[questionId]);
-    this.form.get(questionId)?.markAsTouched();
+    const control = this.form.get(questionId);
+    control?.setValue(this.selectedChannels()[questionId]);
+    control?.markAsTouched();
+
     if (this.invalidQuestionId() === questionId) {
       this.invalidQuestionId.set(null);
     }
@@ -248,27 +189,21 @@ export class AiInterview implements OnInit {
 
   canSubmit(): boolean {
     if (!this.form.valid) return false;
-    return this.visibleQuestions().every((q) => {
-      const val = this.form.get(q.id)?.value;
-      if (q.type === 'multi') {
-        return Array.isArray(val) && val.length > 0;
-      }
-      return val !== null && val !== undefined && String(val).trim() !== '';
-    });
+    return this.visibleQuestions().every(
+      (q) => !q.required || isAnswered(q, this.form.get(q.id)?.value),
+    );
   }
 
   onNext() {
     const invalidIndex = this.findFirstInvalidQuestionIndex();
     if (invalidIndex !== -1) {
-      const invalidQ = this.visibleQuestions()[invalidIndex];
-      this.invalidQuestionId.set(invalidQ.id);
+      this.invalidQuestionId.set(this.visibleQuestions()[invalidIndex].id);
       this.form.markAllAsTouched();
 
-      if (this.stepper) {
-        this.stepper.selectedIndex = invalidIndex;
-      }
+      const stepper = this.stepper();
+      if (stepper) stepper.selectedIndex = invalidIndex;
       this.scrollToStep(invalidIndex);
-      toast.error('Please answer all required questions before submitting.');
+      toast.error(this._localeService.translate('toast_required_questions'));
       return;
     }
 
@@ -276,78 +211,42 @@ export class AiInterview implements OnInit {
 
     if (!this.canSubmit() || this.isSubmitting()) {
       this.form.markAllAsTouched();
-      toast.error('Please answer all questions before submitting.');
+      toast.error(this._localeService.translate('toast_required_questions'));
       return;
     }
 
     const raw = this.form.value as Record<string, string | string[]>;
-    const finalAnswers = { ...this.builderState.aiAnswers(), ...raw };
-    this.builderState.aiAnswers.set(finalAnswers);
+    this.builderState.aiAnswers.update((current) => ({ ...current, ...raw }));
 
     if (raw['q1']) {
       this.builderState.businessName.set(raw['q1'] as string);
     }
 
     this.isSubmitting.set(true);
+    const toastId = toast.loading(this._localeService.translate('toast_saving_answers'));
 
-    const questionsPayload = this.visibleQuestions().map((q) => {
-      const formVal = this.form.get(q.id)?.value;
-
-      if (q.type === 'text') {
-        const str = (formVal || '').toString().trim();
-        return { questionId: q.id, answer: str ? str : null };
-      }
-
-      if (q.type === 'single') {
-        if (formVal === null || formVal === undefined || formVal === '') {
-          return { questionId: q.id, answer: null };
-        }
-        if (typeof formVal === 'number') {
-          return { questionId: q.id, answer: formVal };
-        }
-        const str = String(formVal).trim();
-        if (str.toLowerCase() === 'let ai choose') {
-          return { questionId: q.id, answer: null };
-        }
-        const optIndex = (q.options || []).findIndex(
-          (opt) => opt.toLowerCase() === str.toLowerCase(),
-        );
-        return { questionId: q.id, answer: optIndex !== -1 ? optIndex : null };
-      }
-
-      if (q.type === 'multi') {
-        const arr = Array.isArray(formVal) ? formVal : [];
-        if (arr.length === 0) {
-          return { questionId: q.id, answer: null };
-        }
-        const indices = arr
-          .map((item) => {
-            if (typeof item === 'number') return item;
-            if (/^\d+$/.test(String(item).trim())) return parseInt(String(item).trim(), 10);
-            return (q.options || []).findIndex(
-              (opt) => opt.toLowerCase() === String(item).trim().toLowerCase(),
-            );
-          })
-          .filter((idx) => idx !== -1);
-
-        return { questionId: q.id, answer: indices.length > 0 ? indices : null };
-      }
-
-      return { questionId: q.id, answer: null };
-    });
-
-    const payload: SubmitAnswersPayload = { questions: questionsPayload };
+    const payload: SubmitAnswersPayload = {
+      questions: this.visibleQuestions().map((q) => ({
+        questionId: q.id,
+        answer: encodeAnswer(q, this.form.get(q.id)?.value),
+      })),
+    };
 
     this.aiInterviewApi.submitAnswers(payload).subscribe({
       next: (res) => {
-        console.log('Submit Answers API Response:', res);
         this.isSubmitting.set(false);
+
+        if (res?.isFallback) {
+          toast.warning(this._localeService.translate('toast_answers_fallback'), { id: toastId });
+        } else {
+          toast.success(this._localeService.translate('toast_answers_success'), { id: toastId });
+        }
+
         this.router.navigate(['/build/validation']);
       },
       error: (err) => {
         this.isSubmitting.set(false);
-        toast.error('Failed to submit answers. Please try again.');
-        console.error(err);
+        toastApiError(err, 'toast_answers_failed', this._localeService, toastId);
       },
     });
   }
@@ -356,7 +255,7 @@ export class AiInterview implements OnInit {
     const keyboardEvent = event as KeyboardEvent;
     if (!keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();
-      this.stepper?.next();
+      this.stepper()?.next();
     }
   }
 }

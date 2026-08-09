@@ -121,7 +121,7 @@
           <span>{{ 'btn_back' | translate }}</span>
         </button>
 
-        @if ((stepper?.selectedIndex ?? 0) < visibleQuestions().length - 1) {
+        @if (stepper.selectedIndex < visibleQuestions().length - 1) {
           <button
             hlmBtn
             variant="default"
@@ -139,12 +139,13 @@
             size="lg"
             [disabled]="!canSubmit() || isSubmitting()"
             (click)="onNext()"
-            class="disabled:opacity-50 font-bold dark:text-white uppercase cursor-pointer disabled:cursor-not-allowed"
+            class="flex justify-center items-center gap-2 disabled:opacity-50 font-bold dark:text-white uppercase cursor-pointer disabled:cursor-not-allowed"
           >
             @if (isSubmitting()) {
-              {{ 'loading_analyzing' | translate }}
+              <ng-icon name="lucideLoader2" class="animate-spin text-lg" />
+              <span>{{ 'loading_analyzing' | translate }}</span>
             } @else {
-              {{ 'validation_initialize' | translate }}
+              <span>{{ 'validation_initialize' | translate }}</span>
             }
           </button>
         }
