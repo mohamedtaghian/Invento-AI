@@ -12,5 +12,8 @@ export const previewGuard: CanActivateFn = () => {
   if (!builderState.isAiInterviewComplete()) {
     return router.parseUrl('/build/ai-interview');
   }
+  if (!builderState.isValidationComplete()) {
+    return router.parseUrl('/build/validation');
+  }
   return true;
 };

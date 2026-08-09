@@ -442,8 +442,7 @@ export class AiInterview {
 
     this.builderState.aiAnswers.set(raw);
     this.builderState.businessName.set(raw['business_name'] as string);
-    this.builderState.isNavigating.set(true);
-    this.router.navigate(['/build/preview']);
+    this.router.navigate(['/build/validation']);
   }
 
   onTextareaEnter(event: Event) {

@@ -47,14 +47,14 @@ export const routes: Routes = [
             canActivate: [aiInterviewGuard],
           },
           {
-            path: 'preview',
-            component: Preview,
-            canActivate: [previewGuard],
-          },
-          {
             path: 'validation',
             component: Validation,
             canActivate: [validationGuard],
+          },
+          {
+            path: 'preview',
+            component: Preview,
+            canActivate: [previewGuard],
           },
           { path: '**', redirectTo: 'brainstorm' },
         ],

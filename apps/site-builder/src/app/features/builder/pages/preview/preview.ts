@@ -294,7 +294,7 @@ export class Preview {
   confirmDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
     this.builderState.selectedTheme.set(this.selectedTheme().id);
-    this.router.navigate(['/build/validation']);
+    window.location.href = 'http://localhost:4200/dashboard';
   }
   cancelDeployment(ctx: { close: (result?: unknown) => void }): void {
     ctx.close();
