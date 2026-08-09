@@ -1,0 +1,32 @@
+<hlm-alert-dialog [state]="'open'" (stateChanged)="onStateChanged($event)">
+  <hlm-alert-dialog-content *brnAlertDialogContent="let ctx">
+    <hlm-alert-dialog-header>
+      <div class="flex items-start gap-3.5">
+        <div
+          class="flex flex-shrink-0 justify-center items-center bg-destructive/10 rounded-xl w-10 h-10 text-destructive"
+        >
+          <ng-icon name="lucideTrash2" size="1.1rem" />
+        </div>
+        <div class="space-y-1">
+          <h2 hlmAlertDialogTitle>Delete category</h2>
+          <p hlmAlertDialogDescription>
+            Are you sure you want to delete
+            <span class="font-semibold text-foreground">"{{ name }}"</span>? This action cannot be
+            undone.
+          </p>
+        </div>
+      </div>
+    </hlm-alert-dialog-header>
+
+    <hlm-alert-dialog-footer>
+      <button hlmAlertDialogCancel (click)="canceled.emit()">Cancel</button>
+      <button
+        hlmAlertDialogAction
+        class="bg-destructive hover:bg-destructive/90 text-destructive-foreground"
+        (click)="confirmed.emit()"
+      >
+        Delete
+      </button>
+    </hlm-alert-dialog-footer>
+  </hlm-alert-dialog-content>
+</hlm-alert-dialog>
