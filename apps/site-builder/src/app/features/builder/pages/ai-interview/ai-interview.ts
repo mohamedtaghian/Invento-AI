@@ -6,98 +6,26 @@ import {
   signal,
   inject,
   ViewChild,
+  OnInit,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { lucideChevronLeft, lucideChevronRight, lucideMessageSquare } from '@ng-icons/lucide';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmTextarea } from '@spartan/helm/textarea';
 import { HlmSeparator } from '@spartan/helm/separator';
 import { Router } from '@angular/router';
-import { CdkStepper } from '@angular/cdk/stepper';
+import { CdkStepper, StepperSelectionEvent } from '@angular/cdk/stepper';
 import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { hlmP } from '@spartan/helm/typography';
 import { HlmLabelImports } from '@spartan/helm/label';
 import { HlmInputImports } from '@spartan/helm/input';
 import { SpartanStepperImports } from '@/spartan/stepper';
-import { TranslatePipe } from '@invento/core';
-
-/* ── LEGACY IMPORTS ──────────────────────────────────────────────
-   Restore these if reverting to the GSAP card stepper:
-   import { computed, ElementRef, viewChild, viewChildren, effect } from '@angular/core';
-   import { gsap } from 'gsap';
-   import { HlmCardImports } from '@spartan/helm/card';
-   ────────────────────────────────────────────────────────────── */
-
-export interface BaseQuestion {
-  id: string;
-  label: string;
-  prompt: string;
-  aiPrefill?: string;
-}
-export interface ChoiceQuestion extends BaseQuestion {
-  type: 'select' | 'multiselect';
-  options: string[];
-}
-export interface TextQuestion extends BaseQuestion {
-  type: 'text';
-}
-export type InterviewQuestion = ChoiceQuestion | TextQuestion;
-
-import { LocaleService } from '@invento/core';
-
-const OTHER_OPTION = 'opt_other';
-const OTHER_MIN_LEN = 10;
-const OTHER_MAX_LEN = 25;
-
-const KEY_TO_ENGLISH: Record<string, string> = {
-  opt_ecommerce_physical: 'E-Commerce (Physical)',
-  opt_ecommerce_digital: 'E-Commerce (Digital)',
-  opt_saas: 'SaaS / Platform',
-  opt_service: 'Service Business',
-  opt_marketplace: 'Marketplace',
-  opt_content_media: 'Content / Media',
-  opt_fashion_apparel: 'Fashion & Apparel',
-  opt_beauty_wellness: 'Beauty & Wellness',
-  opt_food_beverage: 'Food & Beverage',
-  opt_tech_gadgets: 'Tech & Gadgets',
-  opt_home_living: 'Home & Living',
-  opt_sports_outdoors: 'Sports & Outdoors',
-  opt_jewelry_accessories: 'Jewelry & Accessories',
-  opt_gen_z: 'Gen Z (13–24)',
-  opt_millennials: 'Millennials (25–40)',
-  opt_gen_x: 'Gen X (41–56)',
-  opt_boomers: 'Baby Boomers (57+)',
-  opt_all_ages: 'All Ages',
-  opt_niche: 'Niche Enthusiasts',
-  opt_business: 'Business / Enterprise',
-  opt_budget: 'Budget (<$20)',
-  opt_mid_range: 'Mid-range ($20–$100)',
-  opt_premium: 'Premium ($100–$500)',
-  opt_luxury: 'Luxury ($500+)',
-  opt_dtc: 'DTC Website',
-  opt_mobile_app: 'Mobile App',
-  opt_wholesale: 'Wholesale / Retail',
-  opt_social: 'Social Commerce',
-  opt_subscription: 'Subscription Model',
-  opt_drops: 'Limited Drops',
-  opt_price: 'Price / Affordability',
-  opt_quality: 'Quality / Craftsmanship',
-  opt_innovation: 'Innovation / Technology',
-  opt_sustainability: 'Sustainability / Ethics',
-  opt_experience: 'Customer Experience',
-  opt_design: 'Design / Aesthetics',
-  opt_other: 'Other (specify)',
-};
+import { TranslatePipe, LocaleService } from '@invento/core';
+import { toast } from '@spartan/helm/sonner';
+import { INTERVIEW_QUESTIONS } from '../../constants/interview-questions';
+import { AiInterviewApi, SubmitAnswersPayload } from '../../services/ai-interview-api';
 
 @Component({
   selector: 'app-ai-interview',
@@ -118,14 +46,14 @@ const KEY_TO_ENGLISH: Record<string, string> = {
   styleUrl: './ai-interview.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AiInterview {
+export class AiInterview implements OnInit {
   private readonly builderState = inject(BuilderState);
   private readonly router = inject(Router);
   private readonly _localeService = inject(LocaleService);
+  private readonly aiInterviewApi = inject(AiInterviewApi);
   protected readonly hlmP = hlmP;
-  protected readonly OTHER_OPTION = OTHER_OPTION;
-  protected readonly OTHER_MIN_LEN = OTHER_MIN_LEN;
-  protected readonly OTHER_MAX_LEN = OTHER_MAX_LEN;
+
+  readonly isSubmitting = signal(false);
 
   protected readonly chevronBack = computed(() =>
     this._localeService.isRtl() ? 'lucideChevronRight' : 'lucideChevronLeft',
@@ -134,318 +62,297 @@ export class AiInterview {
     this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
   );
 
-  private resolveEnglish(key: string): string {
-    return KEY_TO_ENGLISH[key] ?? key;
-  }
-
-  private resolveEnglishArray(arr: string[]): string[] {
-    return arr.map((k) => this.resolveEnglish(k));
-  }
-
   @ViewChild('stepper') stepper?: CdkStepper;
 
-  form = new FormGroup({
-    business_name: new FormControl('', Validators.required),
-    business_type: new FormControl('', [
-      Validators.required,
-      this.otherTextValidator('business_type'),
-    ]),
-    industry: new FormControl('', [Validators.required, this.otherTextValidator('industry')]),
-    target: new FormControl('', [Validators.required, this.otherTextValidator('target')]),
-    pricing: new FormControl('', [Validators.required, this.otherTextValidator('pricing')]),
-    channels: new FormControl<string[]>(
-      [],
-      [Validators.required, this.otherTextValidator('channels')],
-    ),
-    differentiator: new FormControl('', [
-      Validators.required,
-      this.otherTextValidator('differentiator'),
-    ]),
+  visibleQuestions = computed(() => {
+    const hasLogo = this.builderState.hasLogo();
+    return INTERVIEW_QUESTIONS.filter((q) => {
+      if (q.showWhen === 'logoUploaded' && !hasLogo) return false;
+      return true;
+    });
   });
 
-  selectedChannels = signal<string[]>([]);
-  otherTextInputs = signal<Record<string, string>>({});
-
-  private otherTextValidator(questionId: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value;
-      const isOther =
-        value === OTHER_OPTION || (Array.isArray(value) && value.includes(OTHER_OPTION));
-      if (!isOther) return null;
-      const otherText = this.otherTextInputs()[questionId]?.trim() ?? '';
-      if (otherText.length < OTHER_MIN_LEN || otherText.length > OTHER_MAX_LEN) {
-        return { otherTextInvalid: true };
-      }
-      return null;
-    };
-  }
-
-  onOtherInput(questionId: string, value: string) {
-    this.otherTextInputs.update((current) => ({ ...current, [questionId]: value }));
-    this.form.get(questionId)?.updateValueAndValidity();
-  }
-
-  toggleChannel(option: string) {
-    this.selectedChannels.update((current) =>
-      current.includes(option) ? current.filter((c) => c !== option) : [...current, option],
-    );
-    this.form.get('channels')?.setValue(this.selectedChannels());
-    this.form.get('channels')?.markAsTouched();
-  }
-
-  /* ── LEGACY FIELDS ─────────────────────────────────────────────
-     Restore these if reverting to the GSAP card stepper:
-     questionContainer = viewChild<ElementRef<HTMLDivElement>>('questionContainer');
-     cards = viewChildren<ElementRef<HTMLDivElement>>('cardElement');
-     currentStep = signal<number>(0);
-     private prevStepIndex = 0;
-     ─────────────────────────────────────────────────────────── */
-
-  questions: InterviewQuestion[] = [
-    {
-      id: 'business_name',
-      label: 'BRAND_NAME',
-      prompt: 'question_business_name',
-      type: 'text',
-    },
-    {
-      id: 'business_type',
-      label: 'ENTITY_TYPE',
-      prompt: 'question_business_type',
-      type: 'select',
-      options: [
-        'opt_ecommerce_physical',
-        'opt_ecommerce_digital',
-        'opt_saas',
-        'opt_service',
-        'opt_marketplace',
-        'opt_content_media',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'opt_ecommerce_physical',
-    },
-    {
-      id: 'industry',
-      label: 'INDUSTRY_VERTICAL',
-      prompt: 'question_industry',
-      type: 'select',
-      options: [
-        'opt_fashion_apparel',
-        'opt_beauty_wellness',
-        'opt_food_beverage',
-        'opt_tech_gadgets',
-        'opt_home_living',
-        'opt_sports_outdoors',
-        'opt_jewelry_accessories',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'opt_fashion_apparel',
-    },
-    {
-      id: 'target',
-      label: 'TARGET_DEMOGRAPHIC',
-      prompt: 'question_target',
-      type: 'select',
-      options: [
-        'opt_gen_z',
-        'opt_millennials',
-        'opt_gen_x',
-        'opt_boomers',
-        'opt_all_ages',
-        'opt_niche',
-        'opt_business',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'opt_millennials',
-    },
-    {
-      id: 'pricing',
-      label: 'PRICING_TIER',
-      prompt: 'question_pricing',
-      type: 'select',
-      options: ['opt_budget', 'opt_mid_range', 'opt_premium', 'opt_luxury', OTHER_OPTION],
-      aiPrefill: 'opt_premium',
-    },
-    {
-      id: 'channels',
-      label: 'DISTRIBUTION_CHANNELS',
-      prompt: 'question_channels',
-      type: 'multiselect',
-      options: [
-        'opt_dtc',
-        'opt_mobile_app',
-        'opt_wholesale',
-        'opt_social',
-        'opt_subscription',
-        'opt_drops',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'opt_dtc, opt_drops, opt_social',
-    },
-    {
-      id: 'differentiator',
-      label: 'UNIQUE_VALUE_PROP',
-      prompt: 'question_differentiator',
-      type: 'select',
-      options: [
-        'opt_price',
-        'opt_quality',
-        'opt_innovation',
-        'opt_sustainability',
-        'opt_experience',
-        'opt_design',
-        OTHER_OPTION,
-      ],
-      aiPrefill: 'opt_design',
-    },
-  ];
-
-  /* ── LEGACY COMPUTED ────────────────────────────────────────────
-     progressWidth = computed(() => {
-       return `${((this.currentStep() + 1) / this.questions.length) * 100}%`;
-     });
-     ──────────────────────────────────────────────────────────── */
+  form = new FormGroup({});
+  selectedChannels = signal<Record<string, string[]>>({});
 
   constructor() {
     afterNextRender({
       read: () => {
         requestAnimationFrame(() => {
-          document.querySelector<HTMLTextAreaElement>('app-ai-interview textarea')?.focus();
+          document
+            .querySelector<
+              HTMLInputElement | HTMLTextAreaElement
+            >('app-ai-interview input, app-ai-interview textarea')
+            ?.focus();
         });
       },
     });
-
-    /* ── LEGACY GSAP STEP ANIMATION ──────────────────────────────
-       Restore this effect() if reverting to the GSAP card stepper:
-       effect(() => {
-         const step = this.currentStep();
-         const allCards = this.cards();
-         if (allCards.length === 0) return;
-
-         const oldCard = allCards[this.prevStepIndex]?.nativeElement;
-         const newCard = allCards[step]?.nativeElement;
-
-         if (oldCard && newCard && step !== this.prevStepIndex) {
-           const goingForward = step > this.prevStepIndex;
-
-           gsap.set(newCard, {
-             display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%',
-             x: goingForward ? '100%' : '-100%', opacity: 0,
-           });
-           gsap.set(oldCard, {
-             position: 'absolute', top: 0, left: 0, width: '100%',
-           });
-
-           const tl = gsap.timeline({
-             onComplete: () => {
-               gsap.set(newCard, { position: 'relative', clearProps: 'transform' });
-               gsap.set(oldCard, { display: 'none', position: 'relative' });
-             },
-           });
-           tl.to(oldCard, {
-             x: goingForward ? '-100%' : '100%', opacity: 0, duration: 0.4, ease: 'power2.inOut',
-           }).to(newCard, {
-             x: '0%', opacity: 1, duration: 0.4, ease: 'power2.inOut',
-           }, '<');
-         }
-         this.prevStepIndex = step;
-       });
-       ──────────────────────────────────────────────────────── */
   }
 
-  /* ── LEGACY METHODS ────────────────────────────────────────────
-     Restore these if reverting to the GSAP card stepper:
+  ngOnInit() {
+    const controls: Record<string, FormControl> = {};
+    const prefill = this.builderState.aiAnswers();
 
-     private get currentQuestion(): InterviewQuestion {
-       return this.questions[this.currentStep()];
-     }
+    this.visibleQuestions().forEach((q) => {
+      const validators = q.required ? [Validators.required] : [];
+      let initialValue: string | string[] = q.type === 'multi' ? [] : '';
 
-     private isOtherTextValid(questionId: string): boolean {
-       const raw = this.otherTextInputs()[questionId] ?? '';
-       const trimmed = raw.trim();
-       return trimmed.length >= OTHER_MIN_LEN && trimmed.length <= OTHER_MAX_LEN;
-     }
+      if (prefill[q.id] !== undefined && prefill[q.id] !== null) {
+        const rawVal = prefill[q.id];
 
-     private isOtherSelected(value: unknown): boolean {
-       return value === OTHER_OPTION || (Array.isArray(value) && value.includes(OTHER_OPTION));
-     }
+        if (q.type === 'multi') {
+          let matchedOptions: string[];
+          if (Array.isArray(rawVal)) {
+            matchedOptions = rawVal.map((v) => {
+              if (typeof v === 'number' && q.options?.[v]) return q.options[v];
+              if (/^\d+$/.test(String(v).trim()) && q.options?.[parseInt(String(v).trim(), 10)]) {
+                return q.options[parseInt(String(v).trim(), 10)];
+              }
+              return String(v);
+            });
+          } else {
+            const rawStr = String(rawVal).trim();
+            const parts = rawStr.split(',').map((s) => s.trim());
+            matchedOptions = parts.map((part) => {
+              if (/^\d+$/.test(part) && q.options?.[parseInt(part, 10)]) {
+                return q.options[parseInt(part, 10)];
+              }
+              const found = (q.options || []).find(
+                (opt) =>
+                  opt.toLowerCase().includes(part.toLowerCase()) ||
+                  part.toLowerCase().includes(opt.toLowerCase()),
+              );
+              return found || part;
+            });
+          }
 
-     canProceedCurrentStep(): boolean {
-       const q = this.currentQuestion;
-       const control = this.form.get(q.id);
-       if (!control || control.invalid) return false;
-       if (this.isOtherSelected(control.value)) {
-         return this.isOtherTextValid(q.id);
-       }
-       return true;
-     }
+          initialValue = matchedOptions;
+          this.selectedChannels.update((prev) => ({ ...prev, [q.id]: initialValue as string[] }));
+        } else if (q.type === 'single') {
+          const strVal = String(rawVal).trim();
+          let matchedOpt: string | undefined;
 
-     nextStep() {
-       if (!this.canProceedCurrentStep()) {
-         this.form.get(this.currentQuestion.id)?.markAsTouched();
-         return;
-       }
-       if (this.currentStep() < this.questions.length - 1) {
-         this.currentStep.update((prev) => prev + 1);
-         this.scrollToQuestionTop();
-       }
-     }
+          if (/^\d+$/.test(strVal) && q.options?.[parseInt(strVal, 10)]) {
+            matchedOpt = q.options[parseInt(strVal, 10)];
+          } else {
+            matchedOpt = (q.options || []).find(
+              (opt) =>
+                opt.toLowerCase() === strVal.toLowerCase() ||
+                strVal.toLowerCase().includes(opt.toLowerCase()) ||
+                opt.toLowerCase().includes(strVal.toLowerCase()),
+            );
+          }
+          initialValue = matchedOpt || strVal;
+        } else {
+          initialValue = String(rawVal);
+        }
+      }
 
-     prevStep() {
-       if (this.currentStep() > 0) {
-         this.currentStep.update((prev) => prev - 1);
-         this.scrollToQuestionTop();
-       }
-     }
+      controls[q.id] = new FormControl(initialValue, validators);
+    });
 
-     private scrollToQuestionTop() {
-       const container = this.questionContainer();
-       if (container) {
-         container.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-       }
-     }
+    this.form = new FormGroup(controls);
 
-     isOtherInputValid(): boolean {
-       return this.canSubmit();
-     }
-     ──────────────────────────────────────────────────────────── */
+    this.form.valueChanges.subscribe((val) => {
+      const current = this.builderState.aiAnswers();
+      this.builderState.aiAnswers.set({ ...current, ...val });
+    });
+  }
+
+  invalidQuestionId = signal<string | null>(null);
+
+  scrollToStep(index: number) {
+    setTimeout(() => {
+      const stepElements = document.querySelectorAll(
+        'spartan-step, [spartanstep], .spartan-step, cdk-step',
+      );
+      const activeEl =
+        stepElements[index] ||
+        document.querySelector('.spartan-step-active') ||
+        document.querySelector('spartan-step');
+      if (activeEl) {
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const focusable = activeEl.querySelector<HTMLElement>(
+          'input, textarea, button, [tabindex="0"]',
+        );
+        if (focusable) focusable.focus();
+      }
+    }, 100);
+  }
+
+  onSelectionChange(event: StepperSelectionEvent) {
+    this.scrollToStep(event.selectedIndex);
+  }
+
+  onPrevStep() {
+    if (this.stepper) {
+      this.stepper.previous();
+      this.scrollToStep(this.stepper.selectedIndex);
+    }
+  }
+
+  onNextStep() {
+    if (this.stepper) {
+      this.stepper.next();
+      this.scrollToStep(this.stepper.selectedIndex);
+    }
+  }
+
+  isQuestionInvalid(questionId: string): boolean {
+    if (this.invalidQuestionId() === questionId) return true;
+    const control = this.form.get(questionId);
+    if (!control || !control.touched) return false;
+    const val = control.value;
+    const q = INTERVIEW_QUESTIONS.find((item) => item.id === questionId);
+    if (!q) return false;
+    if (q.type === 'multi') {
+      return !Array.isArray(val) || val.length === 0;
+    }
+    return val === null || val === undefined || String(val).trim() === '';
+  }
+
+  findFirstInvalidQuestionIndex(): number {
+    const questions = this.visibleQuestions();
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const control = this.form.get(q.id);
+      const val = control?.value;
+      const isAnswered =
+        q.type === 'multi'
+          ? Array.isArray(val) && val.length > 0
+          : val !== null && val !== undefined && String(val).trim() !== '';
+
+      if (!isAnswered || control?.invalid) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  toggleMultiSelect(questionId: string, option: string) {
+    this.selectedChannels.update((current) => {
+      const selected = current[questionId] || [];
+      const updated = selected.includes(option)
+        ? selected.filter((c) => c !== option)
+        : [...selected, option];
+
+      return { ...current, [questionId]: updated };
+    });
+
+    this.form.get(questionId)?.setValue(this.selectedChannels()[questionId]);
+    this.form.get(questionId)?.markAsTouched();
+    if (this.invalidQuestionId() === questionId) {
+      this.invalidQuestionId.set(null);
+    }
+  }
 
   canSubmit(): boolean {
-    return this.form.valid;
+    if (!this.form.valid) return false;
+    return this.visibleQuestions().every((q) => {
+      const val = this.form.get(q.id)?.value;
+      if (q.type === 'multi') {
+        return Array.isArray(val) && val.length > 0;
+      }
+      return val !== null && val !== undefined && String(val).trim() !== '';
+    });
   }
 
   onNext() {
-    if (!this.canSubmit()) {
+    const invalidIndex = this.findFirstInvalidQuestionIndex();
+    if (invalidIndex !== -1) {
+      const invalidQ = this.visibleQuestions()[invalidIndex];
+      this.invalidQuestionId.set(invalidQ.id);
       this.form.markAllAsTouched();
+
+      if (this.stepper) {
+        this.stepper.selectedIndex = invalidIndex;
+      }
+      this.scrollToStep(invalidIndex);
+      toast.error('Please answer all required questions before submitting.');
+      return;
+    }
+
+    this.invalidQuestionId.set(null);
+
+    if (!this.canSubmit() || this.isSubmitting()) {
+      this.form.markAllAsTouched();
+      toast.error('Please answer all questions before submitting.');
       return;
     }
 
     const raw = this.form.value as Record<string, string | string[]>;
-    const other = this.otherTextInputs();
-    for (const key of Object.keys(raw)) {
-      let val = raw[key];
-      const trimmedOther = other[key]?.trim();
-      if (typeof val === 'string') {
-        if (val === OTHER_OPTION && trimmedOther) {
-          val = trimmedOther;
-        } else {
-          val = this.resolveEnglish(val);
-        }
-      } else if (Array.isArray(val)) {
-        val = this.resolveEnglishArray(val);
-        if (val.includes(this.resolveEnglish(OTHER_OPTION)) && trimmedOther) {
-          val = val.map((v) => (v === this.resolveEnglish(OTHER_OPTION) ? trimmedOther : v));
-        }
-      }
-      raw[key] = val;
+    const finalAnswers = { ...this.builderState.aiAnswers(), ...raw };
+    this.builderState.aiAnswers.set(finalAnswers);
+
+    if (raw['q1']) {
+      this.builderState.businessName.set(raw['q1'] as string);
     }
 
-    this.builderState.aiAnswers.set(raw);
-    this.builderState.businessName.set(raw['business_name'] as string);
-    this.router.navigate(['/build/validation']);
+    this.isSubmitting.set(true);
+
+    const questionsPayload = this.visibleQuestions().map((q) => {
+      const formVal = this.form.get(q.id)?.value;
+
+      if (q.type === 'text') {
+        const str = (formVal || '').toString().trim();
+        return { questionId: q.id, answer: str ? str : null };
+      }
+
+      if (q.type === 'single') {
+        if (formVal === null || formVal === undefined || formVal === '') {
+          return { questionId: q.id, answer: null };
+        }
+        if (typeof formVal === 'number') {
+          return { questionId: q.id, answer: formVal };
+        }
+        const str = String(formVal).trim();
+        if (str.toLowerCase() === 'let ai choose') {
+          return { questionId: q.id, answer: null };
+        }
+        const optIndex = (q.options || []).findIndex(
+          (opt) => opt.toLowerCase() === str.toLowerCase(),
+        );
+        return { questionId: q.id, answer: optIndex !== -1 ? optIndex : null };
+      }
+
+      if (q.type === 'multi') {
+        const arr = Array.isArray(formVal) ? formVal : [];
+        if (arr.length === 0) {
+          return { questionId: q.id, answer: null };
+        }
+        const indices = arr
+          .map((item) => {
+            if (typeof item === 'number') return item;
+            if (/^\d+$/.test(String(item).trim())) return parseInt(String(item).trim(), 10);
+            return (q.options || []).findIndex(
+              (opt) => opt.toLowerCase() === String(item).trim().toLowerCase(),
+            );
+          })
+          .filter((idx) => idx !== -1);
+
+        return { questionId: q.id, answer: indices.length > 0 ? indices : null };
+      }
+
+      return { questionId: q.id, answer: null };
+    });
+
+    const payload: SubmitAnswersPayload = { questions: questionsPayload };
+
+    this.aiInterviewApi.submitAnswers(payload).subscribe({
+      next: (res) => {
+        console.log('Submit Answers API Response:', res);
+        this.isSubmitting.set(false);
+        this.router.navigate(['/build/validation']);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        toast.error('Failed to submit answers. Please try again.');
+        console.error(err);
+      },
+    });
   }
 
-  onTextareaEnter(event: Event) {
+  onInputEnter(event: Event) {
     const keyboardEvent = event as KeyboardEvent;
     if (!keyboardEvent.shiftKey) {
       keyboardEvent.preventDefault();

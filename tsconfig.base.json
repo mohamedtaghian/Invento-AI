@@ -40,7 +40,8 @@
       "@spartan/helm/sidebar": ["./libs/ui/sidebar/src/index.ts"],
       "@spartan/helm/skeleton": ["./libs/ui/skeleton/src/index.ts"],
       "@spartan/helm/tooltip": ["./libs/ui/tooltip/src/index.ts"],
-      "@spartan/helm/select": ["./libs/ui/select/src/index.ts"]
+      "@spartan/helm/select": ["./libs/ui/select/src/index.ts"],
+      "@spartan/helm/sonner": ["./libs/ui/sonner/src/index.ts"]
     }
   }
 }

@@ -84,6 +84,21 @@ export class Validation {
   businessType = this.builderState.businessType() || 'Inventory Management';
   targetAudience = this.builderState.targetAudience() || 'Small Businesses';
 
+  onBusinessNameChange(val: string) {
+    this.businessName = val;
+    this.builderState.businessName.set(val);
+  }
+
+  onBusinessTypeChange(val: string) {
+    this.businessType = val;
+    this.builderState.businessType.set(val);
+  }
+
+  onTargetAudienceChange(val: string) {
+    this.targetAudience = val;
+    this.builderState.targetAudience.set(val);
+  }
+
   currentStep: WorkflowStep = 'INPUT';
   buildLogs: string[] = [];
 
