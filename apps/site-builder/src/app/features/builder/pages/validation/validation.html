@@ -44,7 +44,8 @@
                   hlmInput
                   id="bizName"
                   type="text"
-                  [(ngModel)]="businessName"
+                  [ngModel]="businessName"
+                  (ngModelChange)="onBusinessNameChange($event)"
                   maxLength="24"
                   placeholder="{{ 'validation_placeholder_name' | translate }}"
                   class="w-full pl-10 pr-16 font-medium font-mono"
@@ -389,7 +390,7 @@
           [disabled]="!businessName || !isFormatValid"
           (click)="startValidationPipeline()"
         >
-          {{ 'validation_initialize' | translate }}
+          {{ 'btn_preview_site' | translate }}
         </button>
       }
 

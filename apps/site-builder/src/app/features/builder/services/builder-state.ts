@@ -4,6 +4,7 @@ import { Injectable, computed, signal } from '@angular/core';
 export class BuilderState {
   readonly isNavigating = signal(false);
   readonly brainstorm = signal<string>('');
+  readonly hasLogo = signal<boolean>(false);
   readonly aiAnswers = signal<Record<string, string | string[]>>({});
   readonly selectedTheme = signal<string>('');
   readonly businessName = signal<string>('');

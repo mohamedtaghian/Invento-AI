@@ -4,6 +4,7 @@ import {
   computed,
   HostListener,
   inject,
+  OnInit,
   signal,
 } from '@angular/core';
 import { HlmBadgeImports } from '@spartan/helm/badge';
@@ -17,12 +18,19 @@ import {
   heroCheck,
 } from '@ng-icons/heroicons/outline';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { lucideDot } from '@ng-icons/lucide';
+import {
+  lucideDot,
+  lucideImagePlus,
+  lucideUploadCloud,
+  lucideAlertTriangle,
+  lucideInfo,
+} from '@ng-icons/lucide';
 import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { BrainstormApi } from '@/app/features/builder/services/brainstorm-api';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { toast } from '@spartan/helm/sonner';
 import { Router } from '@angular/router';
 import { TranslatePipe } from '@invento/core';
 import { LocaleService } from '@invento/core';
@@ -57,12 +65,20 @@ interface ContextChecklist {
       heroXMark,
       heroArrowsPointingOut,
       lucideDot,
+      lucideImagePlus,
+      lucideUploadCloud,
+      lucideAlertTriangle,
+      lucideInfo,
       heroCheck,
     }),
   ],
 })
-export class Brainstorm {
+export class Brainstorm implements OnInit {
   protected readonly MIN_DESCRIPTION_LENGTH = 25;
+
+  logoFile = signal<File | null>(null);
+  logoPreview = signal<string | null>(null);
+  isDragging = signal<boolean>(false);
 
   private readonly builderState = inject(BuilderState);
   private readonly brainstormApi = inject(BrainstormApi);
@@ -105,6 +121,35 @@ export class Brainstorm {
     validators: [Validators.required, Validators.minLength(this.MIN_DESCRIPTION_LENGTH)],
   });
 
+  ngOnInit() {
+    const saved = this.builderState.brainstorm();
+    if (saved) {
+      this.descriptionControl.setValue(saved, { emitEvent: false });
+    }
+    this.descriptionControl.valueChanges.subscribe((val) => {
+      this.builderState.brainstorm.set(val);
+    });
+  }
+
+  get validationStatus(): 'EMPTY' | 'TOO_SHORT' | 'MEANINGLESS' | 'VALID' {
+    const raw = this.descriptionControl.value || '';
+    const trimmed = raw.trim();
+    if (trimmed.length === 0) return 'EMPTY';
+    if (trimmed.length < this.MIN_DESCRIPTION_LENGTH) return 'TOO_SHORT';
+
+    const words = trimmed.split(/\s+/).filter((w) => w.length >= 2);
+    if (words.length < 3) return 'MEANINGLESS';
+
+    const uniqueChars = new Set(trimmed.replace(/\s+/g, '').toLowerCase());
+    if (uniqueChars.size < 4) return 'MEANINGLESS';
+
+    return 'VALID';
+  }
+
+  get isValidConcept(): boolean {
+    return this.validationStatus === 'VALID';
+  }
+
   @HostListener('document:keydown.escape')
   onEscape() {
     if (this.isFocused()) {
@@ -112,30 +157,72 @@ export class Brainstorm {
     }
   }
 
-  onNext() {
-    if (this.descriptionControl.invalid || this.isSubmitting()) return;
+  onDragOver(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging.set(true);
+  }
 
-    this.isSubmitting.set(true);
+  onDragLeave(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging.set(false);
+  }
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    this.isDragging.set(false);
+    const file = event.dataTransfer?.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      this.handleFile(file);
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.handleFile(file);
+    }
+  }
+
+  private handleFile(file: File) {
+    this.logoFile.set(file);
+    const reader = new FileReader();
+    reader.onload = (e) => this.logoPreview.set(e.target?.result as string);
+    reader.readAsDataURL(file);
+    this.builderState.hasLogo.set(true);
+  }
+
+  removeLogo() {
+    this.logoFile.set(null);
+    this.logoPreview.set(null);
+    this.builderState.hasLogo.set(false);
+  }
+
+  onNext() {
+    if (!this.isValidConcept || this.isSubmitting()) return;
+
     const text = this.descriptionControl.value;
     this.builderState.brainstorm.set(text);
 
-    this.brainstormApi.analyzePrompt(text).subscribe({
+    this.isSubmitting.set(true);
+
+    this.brainstormApi.analyzePrompt(text, this.logoFile() || undefined).subscribe({
       next: (response) => {
+        console.log('BrainStorm API Response:', response);
         const prefill: Record<string, string | string[]> = {};
-        if (response.business_name) prefill['business_name'] = response.business_name;
-        if (response.business_type) prefill['business_type'] = response.business_type;
-        if (response.industry) prefill['industry'] = response.industry;
-        if (response.target) prefill['target'] = response.target;
-        if (response.pricing) prefill['pricing'] = response.pricing;
-        if (response.channels) prefill['channels'] = response.channels;
-        if (response.differentiator) prefill['differentiator'] = response.differentiator;
+        response.questions.forEach((q) => {
+          if (q.answer) {
+            prefill[q.questionId] = q.answer;
+          }
+        });
+
         this.builderState.aiAnswers.set(prefill);
         this.isSubmitting.set(false);
         this.router.navigate(['/build/ai-interview']);
       },
-      error: () => {
+      error: (err) => {
         this.isSubmitting.set(false);
-        this.router.navigate(['/build/ai-interview']);
+        toast.error('Failed to analyze prompt. Please check your connection.');
+        console.error(err);
       },
     });
   }

@@ -14,14 +14,17 @@
     </div>
 
     <div class="mt-8">
-      <spartan-stepper orientation="vertical" [linear]="true" indicatorMode="number" #stepper>
-        @for (question of questions; track question.id) {
-          <spartan-step
-            [label]="question.prompt | translate"
-            [stepControl]="form.get(question.id)!"
-          >
+      <spartan-stepper
+        orientation="vertical"
+        [linear]="true"
+        indicatorMode="number"
+        (selectionChange)="onSelectionChange($event)"
+        #stepper
+      >
+        @for (question of visibleQuestions(); track question.id) {
+          <spartan-step [label]="question.label | translate" [stepControl]="form.get(question.id)!">
             <ng-template spartanStepContent>
-              @if (question.type === 'select') {
+              @if (question.type === 'single') {
                 <div
                   [class]="
                     (question.options?.length ?? 0) > 4
@@ -41,53 +44,34 @@
                       />
                       <div
                         class="flex items-center hover:bg-primary peer-checked:bg-primary px-2.5 md:px-5 py-2 md:py-4 border-2 border-primary/25 rounded-xl h-full peer-checked:text-white transition-all duration-200"
+                        [class.border-destructive]="isQuestionInvalid(question.id)"
+                        [class.ring-2]="isQuestionInvalid(question.id)"
+                        [class.ring-destructive]="isQuestionInvalid(question.id)"
                       >
                         <p class="text-sm md:text-base" [class]="hlmP">{{ option | translate }}</p>
                       </div>
                     </label>
                   }
                 </div>
-                @if (form.get(question.id)?.value === OTHER_OPTION) {
-                  <input
-                    hlmInput
-                    type="text"
-                    placeholder="{{ 'placeholder_specify' | translate }}"
-                    class="mt-3 w-full"
-                    [class.border-destructive]="
-                      form.get(question.id)?.errors?.['otherTextInvalid'] &&
-                      form.get(question.id)?.touched
-                    "
-                    [class.border-primary]="
-                      !form.get(question.id)?.errors?.['otherTextInvalid'] &&
-                      form.get(question.id)?.touched
-                    "
-                    (input)="onOtherInput(question.id, $any($event.target).value)"
-                  />
-                  @if (
-                    form.get(question.id)?.errors?.['otherTextInvalid'] &&
-                    form.get(question.id)?.touched
-                  ) {
-                    <p class="mt-1 text-destructive text-xs" [class]="hlmP">
-                      {{ 'error_min_chars' | translate }}
-                    </p>
-                  }
-                }
               }
 
               @if (question.type === 'text') {
                 <label hlmLabel class="flex flex-col flex-1 w-full">
                   <textarea
-                    class="flex-1 dark:border-primary/25 resize-none"
+                    class="flex-1 dark:border-primary/25 resize-none border-2 transition-all duration-200"
+                    [class.border-destructive]="isQuestionInvalid(question.id)"
+                    [class.ring-2]="isQuestionInvalid(question.id)"
+                    [class.ring-destructive]="isQuestionInvalid(question.id)"
                     hlmTextarea
                     placeholder="{{ 'placeholder_answer' | translate }}"
                     [name]="question.id"
                     [formControlName]="question.id"
-                    (keydown.enter)="onTextareaEnter($event)"
+                    (keydown.enter)="onInputEnter($event)"
                   ></textarea>
                 </label>
               }
 
-              @if (question.type === 'multiselect') {
+              @if (question.type === 'multi') {
                 <div
                   [class]="
                     (question.options?.length ?? 0) > 4
@@ -101,42 +85,20 @@
                         hlmInput
                         type="checkbox"
                         class="sr-only peer w-fit"
-                        [checked]="selectedChannels().includes(option)"
-                        (change)="toggleChannel(option)"
+                        [checked]="selectedChannels()[question.id]?.includes(option) || false"
+                        (change)="toggleMultiSelect(question.id, option)"
                       />
                       <div
                         class="flex items-center hover:bg-primary peer-checked:bg-primary px-5 py-4 border-2 border-primary/25 rounded-xl h-full peer-checked:text-white transition-all duration-200"
+                        [class.border-destructive]="isQuestionInvalid(question.id)"
+                        [class.ring-2]="isQuestionInvalid(question.id)"
+                        [class.ring-destructive]="isQuestionInvalid(question.id)"
                       >
                         <p class="text-sm md:text-base" [class]="hlmP">{{ option | translate }}</p>
                       </div>
                     </label>
                   }
                 </div>
-                @if (selectedChannels().includes(OTHER_OPTION)) {
-                  <input
-                    hlmInput
-                    type="text"
-                    placeholder="{{ 'placeholder_specify' | translate }}"
-                    class="mt-3 w-full"
-                    [class.border-destructive]="
-                      form.get('channels')?.errors?.['otherTextInvalid'] &&
-                      form.get('channels')?.touched
-                    "
-                    [class.border-primary]="
-                      !form.get('channels')?.errors?.['otherTextInvalid'] &&
-                      form.get('channels')?.touched
-                    "
-                    (input)="onOtherInput('channels', $any($event.target).value)"
-                  />
-                  @if (
-                    form.get('channels')?.errors?.['otherTextInvalid'] &&
-                    form.get('channels')?.touched
-                  ) {
-                    <p class="mt-1 text-destructive text-xs" [class]="hlmP">
-                      {{ 'error_min_chars' | translate }}
-                    </p>
-                  }
-                }
               }
             </ng-template>
           </spartan-step>
@@ -152,19 +114,19 @@
           hlmBtn
           variant="outline"
           size="lg"
-          (click)="stepper?.previous()"
+          (click)="onPrevStep()"
           class="flex justify-center items-center gap-1 dark:text-white cursor-pointer"
         >
           <ng-icon [name]="chevronBack()"></ng-icon>
           <span>{{ 'btn_back' | translate }}</span>
         </button>
 
-        @if ((stepper?.selectedIndex ?? 0) < questions.length - 1) {
+        @if ((stepper?.selectedIndex ?? 0) < visibleQuestions().length - 1) {
           <button
             hlmBtn
             variant="default"
             size="lg"
-            (click)="stepper?.next()"
+            (click)="onNextStep()"
             class="flex justify-center items-center gap-1 md:ms-auto dark:text-white cursor-pointer disabled:cursor-not-allowed"
           >
             <span>{{ 'btn_next' | translate }}</span>
@@ -175,11 +137,15 @@
             hlmBtn
             variant="default"
             size="lg"
-            [disabled]="!canSubmit()"
+            [disabled]="!canSubmit() || isSubmitting()"
             (click)="onNext()"
             class="disabled:opacity-50 font-bold dark:text-white uppercase cursor-pointer disabled:cursor-not-allowed"
           >
-            {{ 'btn_preview_site' | translate }}
+            @if (isSubmitting()) {
+              {{ 'loading_analyzing' | translate }}
+            } @else {
+              {{ 'validation_initialize' | translate }}
+            }
           </button>
         }
       </div>
