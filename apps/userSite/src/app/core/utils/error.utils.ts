@@ -1,4 +1,5 @@
-export function extractErrorMessage(err: unknown, fallback = 'An error occurred'): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function extractErrorMessage(err: any, fallback = 'An error occurred'): string {
   if (!err) return fallback;
 
   const rawMessage = err.error?.message ?? err.message ?? err.error;

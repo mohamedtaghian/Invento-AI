@@ -1,12 +1,11 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
 
-import { HlmInput } from '@spartan/helm/input';
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmButton } from '@spartan/helm/button';
 
@@ -15,7 +14,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterLink, HlmInput, HlmLabel, HlmButton],
+  imports: [ReactiveFormsModule, NgIf, HlmLabel, HlmButton],
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
 })
@@ -38,9 +37,10 @@ export class VerifyEmail implements OnInit {
 
   ngOnInit() {
     // Extract storeSlug from route params (parent route)
-    this.storeSlug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    this.storeSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
 
     // Read email from query params
     const emailFromQuery = this.route.snapshot.queryParamMap.get('email');
@@ -61,7 +61,7 @@ export class VerifyEmail implements OnInit {
     }
   }
 
-  onOtpInput(index: number, event: any, nextId?: string) {
+  onOtpInput(index: number, event: Event, nextId?: string) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
 
