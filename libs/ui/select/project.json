@@ -5,23 +5,5 @@
   "prefix": "hlm",
   "tags": [],
   "projectType": "library",
-  "targets": {
-    "build": {
-      "executor": "@nx/angular:ng-packagr-lite",
-      "outputs": [
-        "{workspaceRoot}/dist/{projectRoot}"
-      ],
-      "options": {
-        "project": "libs/ui/select/ng-package.json",
-        "tsConfig": "libs/ui/select/tsconfig.lib.json"
-      },
-      "configurations": {
-        "production": {
-          "tsConfig": "libs/ui/select/tsconfig.lib.prod.json"
-        },
-        "development": {}
-      },
-      "defaultConfiguration": "production"
-    }
-  }
+  "targets": {}
 }
