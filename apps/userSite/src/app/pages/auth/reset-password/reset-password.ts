@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../../core/service/auth.service';
@@ -15,14 +15,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, NgIf, HlmInput, HlmLabel, HlmButton],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
 })
@@ -33,24 +26,36 @@ export class ResetPassword implements OnInit {
   private route = inject(ActivatedRoute);
 
   isLoading = signal(false);
-  userEmail: string = '';
+  userEmail = '';
   storeSlug = '';
 
   currentStep = signal<'otp' | 'password'>('otp');
-  verifiedOtp: string = '';
+  verifiedOtp = '';
 
   otpForm = this.fb.group({
-    otp: ['', [Validators.required, Validators.minLength(6)]]
+    otp: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  passwordForm = this.fb.group({
-    newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
+  passwordForm = this.fb.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
+          ),
+        ],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   otpValues = ['', '', '', '', '', ''];
 
-  onOtpInput(index: number, event: any, nextId?: string) {
+  onOtpInput(index: number, event: Event, nextId?: string) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
 
@@ -76,15 +81,17 @@ export class ResetPassword implements OnInit {
     }
   }
 
-  passwordMatchValidator(g: any) {
-    return g.get('newPassword').value === g.get('confirmPassword').value
-      ? null : { 'mismatch': true };
+  passwordMatchValidator(g: AbstractControl) {
+    return g.get('newPassword')?.value === g.get('confirmPassword')?.value
+      ? null
+      : { mismatch: true };
   }
 
   ngOnInit() {
-    this.storeSlug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    this.storeSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
 
     const emailFromQuery = this.route.snapshot.queryParamMap.get('email');
     if (emailFromQuery) {
@@ -134,28 +141,34 @@ export class ResetPassword implements OnInit {
     const { newPassword, confirmPassword } = this.passwordForm.getRawValue();
 
     this.isLoading.set(true);
-    this.authService.resetPassword({
-      email: this.userEmail,
-      otp: this.verifiedOtp,
-      newPassword,
-      confirmPassword,
-      storeSlug: this.storeSlug
-    }).subscribe({
-      next: (res) => {
-        this.isLoading.set(false);
-        toast.success(res.message || 'Password reset successfully.');
-        this.router.navigate(['../login'], { relativeTo: this.route });
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        const errorMsg = extractErrorMessage(err, 'Failed to reset password.');
-        toast.error(errorMsg);
-        
-        if (err.status === 400 || errorMsg.toLowerCase().includes('otp') || errorMsg.toLowerCase().includes('code')) {
-          this.currentStep.set('otp');
-          this.verifiedOtp = '';
-        }
-      }
-    });
+    this.authService
+      .resetPassword({
+        email: this.userEmail,
+        otp: this.verifiedOtp,
+        newPassword,
+        confirmPassword,
+        storeSlug: this.storeSlug,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isLoading.set(false);
+          toast.success(res.message || 'Password reset successfully.');
+          this.router.navigate(['../login'], { relativeTo: this.route });
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          const errorMsg = extractErrorMessage(err, 'Failed to reset password.');
+          toast.error(errorMsg);
+
+          if (
+            err.status === 400 ||
+            errorMsg.toLowerCase().includes('otp') ||
+            errorMsg.toLowerCase().includes('code')
+          ) {
+            this.currentStep.set('otp');
+            this.verifiedOtp = '';
+          }
+        },
+      });
   }
 }
