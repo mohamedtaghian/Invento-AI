@@ -13,6 +13,13 @@ import { Preview } from './pages/preview/preview';
 import { Validation } from './pages/validation/validation';
 import { StyleTest } from './pages/style-test/style-test';
 
+// Auth Pages
+import { Login } from './pages/auth/login/login';
+import { Register } from './pages/auth/register/register';
+import { ForgotPassword } from './pages/auth/forgot-password/forgot-password';
+import { ResetPassword } from './pages/auth/reset-password/reset-password';
+import { VerifyEmail } from './pages/auth/verify-email/verify-email';
+
 // Guards
 import { brainstormGuard } from './core/guards/brainstorm-guard';
 import { aiInterviewGuard } from './core/guards/ai-interview-guard';
@@ -65,8 +72,12 @@ export const routes: Routes = [
     path: 'auth',
     component: AuthLayout,
     children: [
-      // Future auth routes go here (e.g., login, register)
-      // { path: 'login', component: LoginComponent }
+      { path: 'login', component: Login },
+      { path: 'register', component: Register },
+      { path: 'forgot-password', component: ForgotPassword },
+      { path: 'reset-password', component: ResetPassword },
+      { path: 'verify-email', component: VerifyEmail },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
 

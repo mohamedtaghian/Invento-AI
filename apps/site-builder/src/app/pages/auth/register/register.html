@@ -1,0 +1,101 @@
+<div class="flex flex-col h-full text-left">
+  
+
+
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-slate-900 dark:text-white tracking-tight mb-2">Create an account</h1>
+    <p class="text-sm text-slate-500 dark:text-zinc-400">
+      Already have an account? 
+      <a routerLink="/auth/login" class="font-bold text-blue-500 hover:underline">Sign in</a>
+    </p>
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5 flex-1">
+    
+    <div class="grid grid-cols-2 gap-4">
+      <div class="space-y-1.5">
+        <label hlmLabel for="firstName" class="text-sm font-semibold text-slate-700 dark:text-white">First Name</label>
+        <input hlmInput id="firstName" formControlName="firstName" (blur)="registerForm.get('firstName')?.markAsTouched()" placeholder="First Name" class="w-full !rounded-xl !border-slate-200" />
+        @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid) {
+          <div class="text-xs text-red-500 mt-1 space-y-0.5">
+            @if (registerForm.get('firstName')?.errors?.['required']) { <div>First name is required.</div> }
+            @if (registerForm.get('firstName')?.errors?.['minlength']) { <div>Must be at least 2 characters.</div> }
+            @if (registerForm.get('firstName')?.errors?.['pattern']) { <div>Only letters, spaces, hyphens and apostrophes are allowed.</div> }
+          </div>
+        }
+      </div>
+      <div class="space-y-1.5">
+        <label hlmLabel for="lastName" class="text-sm font-semibold text-slate-700 dark:text-white">Last Name</label>
+        <input hlmInput id="lastName" formControlName="lastName" (blur)="registerForm.get('lastName')?.markAsTouched()" placeholder="Last Name" class="w-full !rounded-xl !border-slate-200" />
+        @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid) {
+          <div class="text-xs text-red-500 mt-1 space-y-0.5">
+            @if (registerForm.get('lastName')?.errors?.['required']) { <div>Last name is required.</div> }
+            @if (registerForm.get('lastName')?.errors?.['minlength']) { <div>Must be at least 2 characters.</div> }
+            @if (registerForm.get('lastName')?.errors?.['pattern']) { <div>Only letters, spaces, hyphens and apostrophes are allowed.</div> }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="space-y-1.5">
+      <label hlmLabel for="email" class="text-sm font-semibold text-slate-700 dark:text-white">Email Address</label>
+      <input hlmInput id="email" type="email" formControlName="email" (blur)="registerForm.get('email')?.markAsTouched()" placeholder="Email Address" class="w-full !rounded-xl !border-slate-200" />
+      @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+        <div class="text-xs text-red-500 mt-1">
+          Please enter a valid email address.
+        </div>
+      }
+    </div>
+
+    <div class="space-y-1.5">
+      <label hlmLabel for="password" class="text-sm font-semibold text-slate-700 dark:text-white">Password</label>
+      <input hlmInput id="password" type="password" formControlName="password" (blur)="registerForm.get('password')?.markAsTouched()" placeholder="Password" class="w-full !rounded-xl !border-slate-200" />
+      @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+        <div class="text-xs text-red-500 mt-1 space-y-0.5">
+          @if (registerForm.get('password')?.errors?.['required']) { <div>Password is required.</div> }
+          @if (registerForm.get('password')?.errors?.['minlength']) { <div>Password must be at least 8 characters.</div> }
+          @if (registerForm.get('password')?.errors?.['pattern']) { <div>Password must include uppercase, lowercase, number, and special character.</div> }
+        </div>
+      }
+    </div>
+
+    <div class="space-y-1.5">
+      <label hlmLabel for="confirmPassword" class="text-sm font-semibold text-slate-700 dark:text-white" [class.opacity-50]="registerForm.get('confirmPassword')?.disabled">Confirm Password</label>
+      <input hlmInput id="confirmPassword" type="password" formControlName="confirmPassword" (blur)="registerForm.get('confirmPassword')?.markAsTouched()" placeholder="Confirm Password" class="w-full !rounded-xl !border-slate-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-slate-100 dark:disabled:bg-zinc-800" />
+      @if (registerForm.hasError('mismatch') && registerForm.get('confirmPassword')?.touched) {
+        <div class="text-xs text-red-500 mt-1">
+          Passwords do not match.
+        </div>
+      }
+    </div>
+
+    <button hlmBtn class="w-full mt-8 !rounded-full !bg-blue-600 hover:!bg-blue-700 !py-6 text-base" type="submit" [disabled]="isLoading()">
+      @if (!isLoading()) {
+        <span>Sign Up</span>
+      } @else {
+        <span>Creating account...</span>
+      }
+    </button>
+  </form>
+
+  <div class="relative my-8">
+    <div class="absolute inset-0 flex items-center">
+      <span class="w-full border-t border-slate-200 dark:border-zinc-700"></span>
+    </div>
+    <div class="relative flex justify-center text-xs uppercase font-medium">
+      <span class="bg-white dark:bg-zinc-950 px-3 text-slate-400">OR</span>
+    </div>
+  </div>
+
+  <div class="flex">
+    <button hlmBtn variant="outline" class="w-full flex items-center justify-center gap-2 !rounded-full !border-slate-200 text-sm font-medium" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+  </div>
+</div>

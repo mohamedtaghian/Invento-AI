@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayout } from '@invento/invento/layouts/main-layout/main-layout';
+import { AuthLayout } from '@invento/invento/layouts/auth-layout/auth-layout';
 
 export const appRoutes: Routes = [
   {
@@ -110,6 +111,44 @@ export const appRoutes: Routes = [
             (c) => c.BilingPlanComponent,
           ),
       },
+    ],
+  },
+  {
+    path: 'auth',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        loadComponent: () =>
+          import('@invento/invento/pages/auth/login/login').then((c) => c.Login),
+      },
+      {
+        path: 'register',
+        loadComponent: () =>
+          import('@invento/invento/pages/auth/register/register').then((c) => c.Register),
+      },
+      {
+        path: 'forgot-password',
+        loadComponent: () =>
+          import('@invento/invento/pages/auth/forgot-password/forgot-password').then(
+            (c) => c.ForgotPassword,
+          ),
+      },
+      {
+        path: 'reset-password',
+        loadComponent: () =>
+          import('@invento/invento/pages/auth/reset-password/reset-password').then(
+            (c) => c.ResetPassword,
+          ),
+      },
+      {
+        path: 'verify-email',
+        loadComponent: () =>
+          import('@invento/invento/pages/auth/verify-email/verify-email').then(
+            (c) => c.VerifyEmail,
+          ),
+      },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
     ],
   },
   {
