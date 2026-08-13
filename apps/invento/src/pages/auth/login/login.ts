@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
@@ -14,14 +14,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -34,7 +27,7 @@ export class Login {
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
   });
 
   onSubmit() {
@@ -55,7 +48,7 @@ export class Login {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Login failed. Please check your credentials.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 

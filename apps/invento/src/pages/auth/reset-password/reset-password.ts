@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { Router, ActivatedRoute } from '@angular/router';
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
@@ -14,14 +13,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, HlmInput, HlmLabel, HlmButton],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
 })
@@ -32,19 +24,31 @@ export class ResetPassword implements OnInit {
   private route = inject(ActivatedRoute);
 
   isLoading = signal(false);
-  userEmail: string = '';
+  userEmail = '';
 
   currentStep = signal<'otp' | 'password'>('otp');
-  verifiedOtp: string = '';
+  verifiedOtp = '';
 
   otpForm = this.fb.group({
-    otp: ['', [Validators.required, Validators.minLength(6)]]
+    otp: ['', [Validators.required, Validators.minLength(6)]],
   });
 
-  passwordForm = this.fb.group({
-    newPassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
+  passwordForm = this.fb.group(
+    {
+      newPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
+          ),
+        ],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   otpValues = ['', '', '', '', '', ''];
 
@@ -76,7 +80,8 @@ export class ResetPassword implements OnInit {
 
   passwordMatchValidator(g: AbstractControl) {
     return g.get('newPassword')?.value === g.get('confirmPassword')?.value
-      ? null : { 'mismatch': true };
+      ? null
+      : { mismatch: true };
   }
 
   ngOnInit() {
@@ -130,26 +135,32 @@ export class ResetPassword implements OnInit {
     const { newPassword, confirmPassword } = this.passwordForm.value;
 
     this.isLoading.set(true);
-    this.authService.resetPassword({
-      email: this.userEmail,
-      otp: this.verifiedOtp,
-      newPassword,
-      confirmPassword
-    }).subscribe({
-      next: (res) => {
-        this.isLoading.set(false);
-        toast.success(res.message || 'Password reset successfully.');
-        this.router.navigate(['/auth/login']);
-      },
-      error: (err) => {
-        this.isLoading.set(false);
-        const errorMsg = extractErrorMessage(err, 'Failed to reset password.');
-        toast.error(errorMsg);
-        if (err.status === 400 || errorMsg.toLowerCase().includes('otp') || errorMsg.toLowerCase().includes('code')) {
-          this.currentStep.set('otp');
-          this.verifiedOtp = '';
-        }
-      }
-    });
+    this.authService
+      .resetPassword({
+        email: this.userEmail,
+        otp: this.verifiedOtp,
+        newPassword,
+        confirmPassword,
+      })
+      .subscribe({
+        next: (res) => {
+          this.isLoading.set(false);
+          toast.success(res.message || 'Password reset successfully.');
+          this.router.navigate(['/auth/login']);
+        },
+        error: (err) => {
+          this.isLoading.set(false);
+          const errorMsg = extractErrorMessage(err, 'Failed to reset password.');
+          toast.error(errorMsg);
+          if (
+            err.status === 400 ||
+            errorMsg.toLowerCase().includes('otp') ||
+            errorMsg.toLowerCase().includes('code')
+          ) {
+            this.currentStep.set('otp');
+            this.verifiedOtp = '';
+          }
+        },
+      });
   }
 }
