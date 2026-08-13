@@ -1,0 +1,219 @@
+<div class="space-y-6 mx-auto max-w-7xl p-4 md:p-6 lg:p-8">
+  <!-- Header & Breadcrumbs -->
+  <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-4">
+    <div class="space-y-1">
+      <nav class="flex items-center gap-1.5 font-medium text-muted-foreground text-xs">
+        <span>Storefront</span>
+        <ng-icon name="lucideChevronRight" size="14" class="text-muted-foreground/60 rtl:rotate-180" />
+        <span class="font-semibold text-foreground">Attributes</span>
+      </nav>
+      <h1 class="font-bold text-foreground text-2xl sm:text-3xl tracking-tight">Attributes</h1>
+      <p class="text-muted-foreground text-sm">
+        Manage product attributes — {{ attributes().length }} attributes total
+      </p>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex items-center self-start sm:self-auto gap-2 sm:gap-3 flex-wrap">
+      <button hlmBtn class="flex items-center gap-2" (click)="openAddAttributeDrawer()">
+        <ng-icon name="lucidePlus" size="16" />
+        <span>Add Attribute</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+    <div class="relative w-full sm:w-72 md:w-96">
+      <ng-icon name="lucideSearch" size="16" class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none start-3" />
+      <input hlmInput type="text" [(ngModel)]="searchQuery" placeholder="Search attributes..." class="bg-card shadow-sm ps-9 border-border rounded-full focus:ring-2 focus:ring-primary/20 w-full h-9" />
+    </div>
+  </div>
+
+  <!-- Attributes Data Table Card -->
+  <div hlmCard class="bg-card shadow-sm border-border rounded-xl overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-start border-collapse min-w-[800px]">
+        <thead>
+          <tr class="bg-muted/30 border-border border-b font-semibold text-muted-foreground text-xs tracking-wider">
+            <th class="w-10"></th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Name</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Key</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Filterable</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Show on Product Page</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Display Style</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Values count</th>
+            <th class="px-2.5 sm:px-3 md:px-4 py-3 text-end whitespace-nowrap">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-border/60 text-sm" cdkDropList (cdkDropListDropped)="dropAttribute($event)">
+          @if (isLoading()) {
+            <tr>
+              <td colspan="8" class="p-12 text-center">
+                <div class="flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                  <ng-icon name="lucideLoader2" size="28" class="animate-spin text-primary" />
+                  <p class="font-medium text-sm">Loading attributes...</p>
+                </div>
+              </td>
+            </tr>
+          } @else {
+            @for (attr of (attributes() | attributeSearch:searchQuery()); track attr.id) {
+              <tr class="group hover:bg-muted/40 transition-colors bg-card" cdkDrag>
+                <td class="px-2 md:px-3 text-muted-foreground/40 align-middle w-10">
+                  <div cdkDragHandle class="cursor-grab active:cursor-grabbing hover:text-foreground inline-flex items-center justify-center p-1 rounded transition-colors">
+                    <ng-icon name="lucideGripVertical" size="18"></ng-icon>
+                  </div>
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 whitespace-nowrap">
+                  <p class="font-medium text-foreground">{{ attr.name }}</p>
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ attr.key }}
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ attr.isFilterable ? 'Yes' : 'No' }}
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ attr.showOnProductPage ? 'Yes' : 'No' }}
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full font-medium text-xs border bg-muted text-muted-foreground border-border">
+                    {{ attr.displayStyle }}
+                  </span>
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
+                  {{ attr.values?.length || 0 }}
+                </td>
+                <td class="px-2.5 sm:px-3 md:px-4 py-3 whitespace-nowrap text-end">
+                  <div class="flex items-center justify-end gap-2">
+                    <button hlmBtn variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground hover:text-foreground" (click)="openValuesDrawer(attr)" title="Manage Values">
+                      <ng-icon name="lucideSettings2" size="16" />
+                    </button>
+                    <button hlmBtn variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground hover:text-primary" (click)="openEditAttributeDrawer(attr)" title="Edit Attribute">
+                      <ng-icon name="lucideEdit" size="16" />
+                    </button>
+                    <button hlmBtn variant="ghost" size="icon" class="h-8 w-8 text-muted-foreground hover:text-destructive" (click)="deleteAttribute(attr.id)" title="Delete Attribute">
+                      <ng-icon name="lucideTrash2" size="16" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="8" class="p-8 text-center text-muted-foreground">
+                  No attributes found.
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ATTRIBUTE DRAWER -->
+@if (isAttributeDrawerOpen()) {
+  <div class="fixed inset-0 z-50 flex justify-end">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" (click)="closeAttributeDrawer()" (keydown.enter)="closeAttributeDrawer()" tabindex="0" role="button"></div>
+    <div class="relative w-full sm:w-[500px] h-full bg-card shadow-2xl border-l border-border flex flex-col animate-in slide-in-from-right duration-300">
+      <div class="p-6 border-b border-border flex justify-between items-center">
+        <h2 class="text-xl font-bold text-foreground tracking-tight">
+          {{ editingAttribute() ? 'Edit Attribute' : 'Add New Attribute' }}
+        </h2>
+        <button hlmBtn variant="ghost" size="icon" (click)="closeAttributeDrawer()" class="text-muted-foreground hover:text-foreground">
+          <ng-icon name="lucideX" size="20" />
+        </button>
+      </div>
+
+      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-6">
+        <div class="space-y-4">
+          <div>
+            <label for="attr-name" class="text-sm font-semibold mb-2 block text-foreground">Attribute Name</label>
+            <input id="attr-name" hlmInput type="text" [(ngModel)]="attrName" class="w-full placeholder:text-foreground/70" placeholder="e.g. Size, Color" />
+          </div>
+          <div>
+            <label for="attr-key" class="text-sm font-semibold mb-2 block text-foreground">Key (Optional)</label>
+            <input id="attr-key" hlmInput type="text" [(ngModel)]="attrKey" class="w-full placeholder:text-foreground/70" placeholder="e.g. size (auto-generated if empty)" />
+          </div>
+          <div>
+            <label for="attr-style" class="text-sm font-semibold mb-2 block text-foreground">Display Style</label>
+            <select id="attr-style" hlmInput [(ngModel)]="attrStyle" class="w-full bg-card">
+              <option value="list">List</option>
+              <option value="dropdown">Dropdown</option>
+              <option value="swatch">Swatch</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-4 border-t border-border">
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" [(ngModel)]="attrIsFilterable" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 cursor-pointer bg-card" />
+            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Is Filterable</span>
+          </label>
+          <label class="flex items-center gap-3 cursor-pointer group">
+            <input type="checkbox" [(ngModel)]="attrShowOnProductPage" class="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 cursor-pointer bg-card" />
+            <span class="text-sm font-medium text-foreground group-hover:text-primary transition-colors">Show on Product Page</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="p-6 border-t border-border flex justify-end gap-3 bg-muted/20">
+        <button hlmBtn variant="outline" (click)="closeAttributeDrawer()">Cancel</button>
+        <button hlmBtn (click)="saveAttribute()">{{ editingAttribute() ? 'Update' : 'Save' }}</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- VALUES DRAWER -->
+@if (isValuesDrawerOpen() && activeAttributeForValues()) {
+  <div class="fixed inset-0 z-50 flex justify-end">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200" (click)="closeValuesDrawer()" (keydown.enter)="closeValuesDrawer()" tabindex="0" role="button"></div>
+    <div class="relative w-full sm:w-[500px] h-full bg-card shadow-2xl border-l border-border flex flex-col animate-in slide-in-from-right duration-300">
+      <div class="p-6 border-b border-border flex justify-between items-center">
+        <h2 class="text-xl font-bold text-foreground tracking-tight">Manage {{ activeAttributeForValues()?.name }} Values</h2>
+        <button hlmBtn variant="ghost" size="icon" (click)="closeValuesDrawer()" class="text-muted-foreground hover:text-foreground">
+          <ng-icon name="lucideX" size="20" />
+        </button>
+      </div>
+
+      <!-- Values List -->
+      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-4" cdkDropList (cdkDropListDropped)="dropValue($event)">
+        @for (val of activeAttributeForValues()?.values; track val.id) {
+          <div class="flex items-center gap-3 p-3 border border-border rounded-lg bg-card shadow-sm hover:shadow-md transition-shadow group" cdkDrag>
+            <div cdkDragHandle class="cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-foreground p-1 transition-colors">
+              <ng-icon name="lucideGripVertical" size="18"></ng-icon>
+            </div>
+            <div class="flex flex-col flex-1">
+              <span class="font-medium text-foreground">{{ val.value }}</span>
+              <span class="text-xs text-muted-foreground font-mono">{{ val.slug }}</span>
+            </div>
+            <button hlmBtn variant="ghost" size="icon" class="text-muted-foreground hover:text-destructive shrink-0" (click)="deleteValue(val.id)">
+              <ng-icon name="lucideTrash2" size="16" />
+            </button>
+          </div>
+        } @empty {
+          <div class="text-center p-8 text-muted-foreground border border-dashed border-border rounded-xl">
+            No values yet. Add one below.
+          </div>
+        }
+      </div>
+
+      <!-- Add New Value Form -->
+      <div class="p-6 border-t border-border flex flex-col gap-3 bg-muted/20">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label for="val-name" class="text-xs font-semibold mb-1 block">Value</label>
+            <input id="val-name" hlmInput type="text" [(ngModel)]="newValueName" placeholder="e.g. Extra Large" class="w-full text-sm h-9" />
+          </div>
+          <div>
+            <label for="val-slug" class="text-xs font-semibold mb-1 block">Slug (Optional)</label>
+            <input id="val-slug" hlmInput type="text" [(ngModel)]="newValueSlug" placeholder="e.g. xl" class="w-full text-sm h-9" />
+          </div>
+        </div>
+        <button hlmBtn class="w-full" (click)="addValue()" [disabled]="!newValueName()">Add Value</button>
+      </div>
+    </div>
+  </div>
+}

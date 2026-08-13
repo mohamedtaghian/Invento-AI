@@ -19,6 +19,11 @@ export const appRoutes: Routes = [
           import('@invento/invento/pages/products/products').then((c) => c.Products),
       },
       {
+        path: 'attributes',
+        loadComponent: () =>
+          import('@invento/invento/pages/attributes/attributes').then((c) => c.AttributesComponent),
+      },
+      {
         path: 'users',
         loadComponent: () => import('@invento/invento/pages/users/users').then((c) => c.Users),
       },
