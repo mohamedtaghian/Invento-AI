@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
+
 import { toast } from 'ngx-sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
@@ -14,14 +14,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })
@@ -33,7 +26,7 @@ export class ForgotPassword {
   isLoading = signal(false);
 
   forgotPasswordForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required, Validators.email]],
   });
 
   onSubmit() {
@@ -51,14 +44,14 @@ export class ForgotPassword {
         this.isLoading.set(false);
         toast.success(res.message || 'Reset code sent to your email.');
         this.router.navigate(['/auth/reset-password'], {
-          queryParams: { email }
+          queryParams: { email },
         });
       },
       error: (err) => {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Failed to send reset code.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }
