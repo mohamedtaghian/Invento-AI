@@ -1,16 +1,14 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { appRoutes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideSpartanHlm } from '@spartan/helm/utils';
 import { TRANSLATION_LOADER } from '@invento/core';
 import type { Locale } from '@invento/core';
 import { authInterceptor } from '../core/interceptors/auth.interceptor';
 import en from '@invento/invento/assets/i18n/en.json';
 import ar from '@invento/invento/assets/i18n/ar.json';
-import { authInterceptor } from './auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +16,6 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
     provideRouter(appRoutes),
-    provideHttpClient(withInterceptors([authInterceptor])),
     provideSpartanHlm(),
     {
       provide: TRANSLATION_LOADER,
