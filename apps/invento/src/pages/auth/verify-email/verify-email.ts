@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { toast } from 'ngx-sonner';
+import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
 import { HlmLabel } from '@spartan/helm/label';

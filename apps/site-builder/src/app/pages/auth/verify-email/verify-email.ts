@@ -1,11 +1,9 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
-import { toast } from 'ngx-sonner';
+import { Router, ActivatedRoute } from '@angular/router';
+import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
-import { HlmInput } from '@spartan/helm/input';
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmButton } from '@spartan/helm/button';
 
@@ -14,7 +12,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, RouterLink, HlmInput, HlmLabel, HlmButton],
+  imports: [ReactiveFormsModule, HlmLabel, HlmButton],
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
 })

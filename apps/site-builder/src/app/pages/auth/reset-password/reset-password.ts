@@ -1,8 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
-import { toast } from 'ngx-sonner';
+import { Router, ActivatedRoute } from '@angular/router';
+import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
 import { HlmInput } from '@spartan/helm/input';
@@ -16,8 +15,6 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
-    RouterLink,
     HlmInput,
     HlmLabel,
     HlmButton
