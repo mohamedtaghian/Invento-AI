@@ -2,7 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { toast } from 'ngx-sonner';
+import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
 
