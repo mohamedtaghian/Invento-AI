@@ -1,0 +1,21 @@
+.bg-card {
+  background: white;
+}
+.text-card-foreground {
+  color: #0f172a;
+}
+.border-border {
+  border-color: #e5e7eb;
+}
+.rounded-2xl {
+  border-radius: 1rem;
+}
+.p-6 {
+  padding: 1.5rem;
+}
+.max-w-lg {
+  max-width: 32rem;
+}
+.h-24 {
+  height: 6rem;
+}

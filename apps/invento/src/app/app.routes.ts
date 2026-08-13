@@ -24,6 +24,11 @@ export const appRoutes: Routes = [
           import('@invento/invento/pages/attributes/attributes').then((c) => c.AttributesComponent),
       },
       {
+        path: 'categories',
+        loadComponent: () =>
+          import('@invento/invento/pages/categories/categories').then((c) => c.Categories),
+      },
+      {
         path: 'users',
         loadComponent: () => import('@invento/invento/pages/users/users').then((c) => c.Users),
       },
@@ -124,8 +129,7 @@ export const appRoutes: Routes = [
     children: [
       {
         path: 'login',
-        loadComponent: () =>
-          import('@invento/invento/pages/auth/login/login').then((c) => c.Login),
+        loadComponent: () => import('@invento/invento/pages/auth/login/login').then((c) => c.Login),
       },
       {
         path: 'register',
