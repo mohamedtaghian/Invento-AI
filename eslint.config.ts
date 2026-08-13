@@ -6,11 +6,7 @@ import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   {
-    ignores: [
-      'libs/ui/**',
-      'libs/stepper/**',
-      'libs/stepper-shared/**',
-    ],
+    ignores: ['libs/stepper/**', 'libs/stepper-shared/**'],
   },
   {
     files: ['apps/**/*.ts', 'libs/**/*.ts'],
