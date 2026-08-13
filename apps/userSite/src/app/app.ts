@@ -3,10 +3,10 @@ import { RouterModule } from '@angular/router';
 import { Footer } from '@invento/user-site/app/shared/components/footer/footer';
 import { Navbar } from '@invento/user-site/app/shared/components/navbar/navbar';
 import { Chatbot } from '@invento/user-site/app/features/chatbot/chatbot';
-import { NgxSonnerToaster } from 'ngx-sonner';
+import { HlmToasterImports } from '@spartan/helm/sonner';
 
 @Component({
-  imports: [RouterModule, Chatbot, Navbar, Footer, NgxSonnerToaster],
+  imports: [RouterModule, Chatbot, Navbar, Footer, HlmToasterImports],
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.css',

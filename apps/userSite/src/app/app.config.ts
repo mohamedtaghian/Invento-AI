@@ -4,6 +4,7 @@ import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { provideRouter, withViewTransitions, withRouterConfig } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { provideSpartanHlm } from '@spartan/helm/utils';
 import { TRANSLATION_LOADER } from '@invento/core';
 import type { Locale } from '@invento/core';
 import en from '@invento/user-site/assets/i18n/en.json';
@@ -14,11 +15,12 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
     provideRouter(
-      routes, 
-      withViewTransitions(), 
-      withRouterConfig({ paramsInheritanceStrategy: 'always' })
+      routes,
+      withViewTransitions(),
+      withRouterConfig({ paramsInheritanceStrategy: 'always' }),
     ),
     provideHttpClient(withInterceptors([authInterceptor])),
+    provideSpartanHlm(),
     {
       provide: TRANSLATION_LOADER,
       useValue: (locale: Locale) => (locale === 'ar' ? ar : en),
