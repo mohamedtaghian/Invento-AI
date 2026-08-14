@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { StepsBar } from '../../components/steps-bar/steps-bar';
+import { StepsBar } from '../../features/builder/components/steps-bar/steps-bar';
 import { RouterOutlet } from '@angular/router';
-import { AiLoader } from '@/app/components/ai-loader/ai-loader';
+import { AiLoader } from '@/app/features/builder/components/ai-loader/ai-loader';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 
 @Component({
