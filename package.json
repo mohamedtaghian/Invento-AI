@@ -5,7 +5,7 @@
     "ng": "nx",
     "start": "nx serve site-builder",
     "start:user": "nx serve userSite",
-    "start:invento": "nx serve invento --port 5030",
+    "start:invento": "nx serve invento",
     "build": "nx build site-builder",
     "build:all": "nx run-many -t build",
     "test": "nx test site-builder",

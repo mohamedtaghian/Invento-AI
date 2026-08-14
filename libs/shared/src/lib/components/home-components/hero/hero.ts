@@ -10,8 +10,8 @@ import {
 } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
-import { TypingText } from '@/app/components/home-components/typing-text/typing-text';
-import { PageHeader } from '@/app/components/page-header/page-header';
+import { TypingText } from '../typing-text/typing-text';
+import { PageHeader } from '../../page-header/page-header';
 import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
 import { hlmH1, hlmP } from '@spartan/helm/typography';
 
