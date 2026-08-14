@@ -5,7 +5,7 @@
     "changeOrigin": true
   },
   "/site-builder": {
-    "target": "http://localhost:3005",
+    "target": "http://localhost:3000",
     "secure": false,
     "changeOrigin": true
   }
