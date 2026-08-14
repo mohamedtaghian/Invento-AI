@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { HlmCard, HlmCardHeader, HlmCardTitle, HlmCardDescription } from '@spartan/helm/card';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
-import { PageHeader } from '@/app/components/page-header/page-header';
+import { PageHeader } from '../../page-header/page-header';
 import { hlmH3, hlmP } from '@spartan/helm/typography';
 
 interface PipelineStep {
