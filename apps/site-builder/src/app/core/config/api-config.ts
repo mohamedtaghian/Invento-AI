@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@/environments/environment';
+import { environment } from '@/environments/environment.example';
 
 declare const process: { env?: Record<string, string | undefined> };
 
@@ -17,7 +17,7 @@ declare const process: { env?: Record<string, string | undefined> };
 export class ApiConfig {
   /** Base URL with any trailing slashes stripped. Empty string means "use relative paths". */
   readonly baseUrl = this.resolveBaseUrl();
-  readonly apiKey = this.resolve('API_KEY', 'INVENTO_API_KEY', environment.apiKey);
+  // readonly apiKey = this.resolve('API_KEY', 'INVENTO_API_KEY', environment.apiKey);
   readonly dashboardUrl = this.resolveDashboardUrl();
 
   /**

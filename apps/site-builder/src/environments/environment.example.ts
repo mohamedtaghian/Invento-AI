@@ -7,7 +7,7 @@
  */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3005',
+  apiUrl: 'http://localhost:3000',
   apiKey: '',
   inventoDashboardUrl: 'http://localhost:4200/home',
 };
