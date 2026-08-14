@@ -1,5 +1,6 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideImage,
@@ -19,7 +20,14 @@ import {
   lucideShoppingCart,
   lucideTrash2,
   lucidePlus,
+  lucideRefreshCw,
+  lucideAlertTriangle,
 } from '@ng-icons/lucide';
+import {
+  StoreService,
+  HeroSectionResponse,
+  StoreResponse,
+} from '../../features/store/store.service';
 
 interface Category {
   id: string;
@@ -60,15 +68,25 @@ interface Product {
       lucideShoppingCart,
       lucideTrash2,
       lucidePlus,
+      lucideRefreshCw,
+      lucideAlertTriangle,
     }),
   ],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  private readonly storeService = inject(StoreService);
+  private readonly route = inject(ActivatedRoute);
+
   // View mode & UI States -> categoryPickerOpen is now false by default
   viewMode = signal<'desktop' | 'mobile'>('desktop');
   categoryPickerOpen = signal<boolean>(false);
   productPickerOpen = signal<boolean>(false);
-  isSaved = signal<boolean>(false);
+  isSaved = signal<boolean>(true);
+
+  // Store Hydration State Signals
+  isLoadingStore = signal<boolean>(true);
+  storeLoadError = signal<string | null>(null);
+  storeData = signal<StoreResponse | null>(null);
 
   // Hero Section State
   heroImageUrl = signal<string>(
@@ -78,6 +96,30 @@ export class HomeComponent {
   heroSubtitle = signal<string>(
     'Discover premium accessories designed for minimalist productivity & peak performance.',
   );
+  heroCtaLabel = signal<string>('Shop Now');
+  heroCtaHref = signal<string>('');
+  heroImageFile = signal<File | null>(null);
+
+  // Hero Save & Loading State
+  isSavingHero = signal<boolean>(false);
+  heroSaveError = signal<string | null>(null);
+
+  // Last Saved Snapshot for Discard
+  private heroSnapshot = signal<{
+    imageUrl: string;
+    title: string;
+    subtitle: string;
+    ctaLabel: string;
+    ctaHref: string;
+  }>({
+    imageUrl:
+      'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=1000&auto=format&fit=crop',
+    title: 'Elevate Your Daily Tech Setup',
+    subtitle:
+      'Discover premium accessories designed for minimalist productivity & peak performance.',
+    ctaLabel: 'Shop Now',
+    ctaHref: '',
+  });
 
   // Categories Section State
   categoriesTitle = signal<string>('Categories');
@@ -126,6 +168,120 @@ export class HomeComponent {
   // Computed Properties
   selectedProducts = computed(() => this.products().filter((product) => product.selected));
 
+  ngOnInit(): void {
+    // Initialize snapshot with default values
+    this.updateHeroSnapshot({
+      imageUrl: this.heroImageUrl(),
+      title: this.heroTitle(),
+      subtitle: this.heroSubtitle(),
+      ctaLabel: this.heroCtaLabel(),
+      ctaHref: this.heroCtaHref(),
+    });
+
+    // Resolve store slug (from query param -> localStorage -> fallback 'layali')
+    const slug =
+      this.route.snapshot.queryParamMap.get('slug') ||
+      (typeof localStorage !== 'undefined'
+        ? localStorage.getItem('current_store_slug') || localStorage.getItem('store_slug')
+        : null) ||
+      'layali';
+
+    this.isLoadingStore.set(true);
+    this.storeLoadError.set(null);
+
+    // Hydrate store data from public GET /site/{slug} endpoint
+    this.storeService.getStore(slug).subscribe({
+      next: (data: StoreResponse) => {
+        this.storeData.set(data);
+        this.isLoadingStore.set(false);
+
+        // Guard against clobbering in-progress edits
+        const isClean = this.isSaved();
+
+        if (data.hero) {
+          const heroData = {
+            imageUrl: data.hero.imageUrl || this.heroImageUrl(),
+            headline: data.hero.headline || this.heroTitle(),
+            subtitle: data.hero.subtitle || this.heroSubtitle(),
+            ctaLabel: data.hero.ctaLabel || this.heroCtaLabel(),
+            ctaHref: data.hero.ctaHref || '',
+          };
+
+          // Update hero snapshot so Discard reverts to real saved state
+          this.updateHeroSnapshot({
+            imageUrl: heroData.imageUrl,
+            title: heroData.headline,
+            subtitle: heroData.subtitle,
+            ctaLabel: heroData.ctaLabel,
+            ctaHref: heroData.ctaHref,
+          });
+
+          // Only update live signals if user hasn't made unpersisted edits
+          if (isClean) {
+            this.heroImageUrl.set(heroData.imageUrl);
+            this.heroTitle.set(heroData.headline);
+            this.heroSubtitle.set(heroData.subtitle);
+            this.heroCtaLabel.set(heroData.ctaLabel);
+            this.heroCtaHref.set(heroData.ctaHref);
+          }
+        }
+
+        // Hydrate featured categories if available and user hasn't edited categories locally
+        if (isClean && data.featuredCategories && data.featuredCategories.length > 0) {
+          // TODO: API featuredCategories provides imageUrl, which needs reconciling with local emoji-icon Category model once a categories write endpoint exists.
+          const hydratedCategories: Category[] = data.featuredCategories.map((fc, idx) => ({
+            id: fc.slug || `cat-${idx}`,
+            name: fc.name,
+            icon: '📦',
+          }));
+          this.categories.set(hydratedCategories);
+        }
+
+        if (isClean) {
+          this.isSaved.set(true);
+        }
+      },
+      error: (err) => {
+        this.isLoadingStore.set(false);
+        const errMsg =
+          err.status === 404
+            ? `Store "${slug}" was not found.`
+            : err.error?.message || err.message || 'Failed to load store data.';
+        this.storeLoadError.set(errMsg);
+        console.warn(
+          `Hydration: GET /site/${slug} failed. Keeping default placeholder state.`,
+          err,
+        );
+      },
+    });
+  }
+
+  private applyHeroResponse(res: HeroSectionResponse): void {
+    if (res.imageUrl) this.heroImageUrl.set(res.imageUrl);
+    if (res.headline) this.heroTitle.set(res.headline);
+    if (res.subtitle) this.heroSubtitle.set(res.subtitle);
+    if (res.ctaLabel) this.heroCtaLabel.set(res.ctaLabel);
+    this.heroCtaHref.set(res.ctaHref || '');
+
+    this.updateHeroSnapshot({
+      imageUrl: this.heroImageUrl(),
+      title: this.heroTitle(),
+      subtitle: this.heroSubtitle(),
+      ctaLabel: this.heroCtaLabel(),
+      ctaHref: this.heroCtaHref(),
+    });
+  }
+
+  private updateHeroSnapshot(data: {
+    imageUrl: string;
+    title: string;
+    subtitle: string;
+    ctaLabel: string;
+    ctaHref: string;
+  }): void {
+    this.heroSnapshot.set({ ...data });
+  }
+
   // View Mode Handler
   setViewMode(mode: 'desktop' | 'mobile') {
     this.viewMode.set(mode);
@@ -142,10 +298,28 @@ export class HomeComponent {
     this.isSaved.set(false);
   }
 
+  onHeroCtaLabelChange(label: string) {
+    this.heroCtaLabel.set(label);
+    this.isSaved.set(false);
+  }
+
+  onHeroCtaHrefChange(href: string) {
+    this.heroCtaHref.set(href);
+    this.isSaved.set(false);
+  }
+
+  openHeroCta() {
+    const href = this.heroCtaHref().trim();
+    if (href) {
+      window.open(href, '_blank');
+    }
+  }
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const file = input.files[0];
+      this.heroImageFile.set(file);
       const reader = new FileReader();
       reader.onload = () => {
         this.heroImageUrl.set(reader.result as string);
@@ -206,6 +380,14 @@ export class HomeComponent {
   }
 
   discard() {
+    const snapshot = this.heroSnapshot();
+    this.heroImageUrl.set(snapshot.imageUrl);
+    this.heroTitle.set(snapshot.title);
+    this.heroSubtitle.set(snapshot.subtitle);
+    this.heroCtaLabel.set(snapshot.ctaLabel);
+    this.heroCtaHref.set(snapshot.ctaHref);
+    this.heroImageFile.set(null);
+    this.heroSaveError.set(null);
     this.isSaved.set(true);
   }
 
@@ -214,6 +396,33 @@ export class HomeComponent {
   }
 
   saveChanges() {
-    this.isSaved.set(true);
+    this.isSavingHero.set(true);
+    this.heroSaveError.set(null);
+
+    const formData = new FormData();
+    formData.append('headline', this.heroTitle());
+    formData.append('subtitle', this.heroSubtitle());
+    formData.append('ctaLabel', this.heroCtaLabel());
+    formData.append('ctaHref', this.heroCtaHref());
+
+    const file = this.heroImageFile();
+    if (file) {
+      formData.append('image', file);
+    }
+
+    this.storeService.updateHero(formData).subscribe({
+      next: (res) => {
+        this.applyHeroResponse(res);
+        this.heroImageFile.set(null);
+        this.isSaved.set(true);
+        this.isSavingHero.set(false);
+      },
+      error: (err) => {
+        const message =
+          err.error?.message || err.message || 'Failed to update hero section. Please try again.';
+        this.heroSaveError.set(message);
+        this.isSavingHero.set(false);
+      },
+    });
   }
 }
