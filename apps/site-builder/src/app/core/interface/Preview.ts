@@ -49,6 +49,18 @@ export interface ThemeSuggestion {
     border: string;
     ring: string;
   };
+  darkColors?: {
+    background: string;
+    foreground: string;
+    primary: string;
+    primaryForeground: string;
+    secondary: string;
+    secondaryForeground: string;
+    accent: string;
+    destructive: string;
+    border: string;
+    ring: string;
+  };
   radius: string;
 }
 
@@ -59,5 +71,6 @@ export interface Viewport {
   readonly id: PreviewViewport;
   readonly icon: string;
   readonly label: string;
-  readonly width: string;
+  /** Simulated device width in CSS pixels, used to scale the preview frame. */
+  readonly width: number;
 }

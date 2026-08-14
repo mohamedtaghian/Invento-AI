@@ -1,0 +1,261 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  afterNextRender,
+  computed,
+  signal,
+  inject,
+  viewChild,
+  OnInit,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideMessageSquare,
+  lucideLoader2,
+} from '@ng-icons/lucide';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { HlmButton } from '@spartan/helm/button';
+import { HlmTextarea } from '@spartan/helm/textarea';
+import { HlmSeparator } from '@spartan/helm/separator';
+import { Router } from '@angular/router';
+import { CdkStepper, StepperSelectionEvent } from '@angular/cdk/stepper';
+import { PageHeader } from '@/app/shared/components/page-header/page-header';
+import { BuilderState } from '@/app/features/builder/services/builder-state';
+import { hlmP } from '@spartan/helm/typography';
+import { HlmLabelImports } from '@spartan/helm/label';
+import { HlmInputImports } from '@spartan/helm/input';
+import { SpartanStepperImports } from '@/spartan/stepper';
+import { TranslatePipe, LocaleService } from '@invento/core';
+import { toast } from '@spartan/helm/sonner';
+import { INTERVIEW_QUESTIONS } from '../../constants/interview-questions';
+import { AiInterviewApi, SubmitAnswersPayload } from '../../services/ai-interview-api';
+import { decodeAnswer, encodeAnswer, isAnswered } from '../../utils/answer-codec';
+import { toastApiError } from '@/app/shared/utils/toast-api-error';
+
+@Component({
+  selector: 'app-ai-interview',
+  imports: [
+    NgIconComponent,
+    HlmButton,
+    HlmTextarea,
+    HlmLabelImports,
+    HlmInputImports,
+    HlmSeparator,
+    ReactiveFormsModule,
+    PageHeader,
+    SpartanStepperImports,
+    TranslatePipe,
+  ],
+  providers: [
+    provideIcons({
+      lucideMessageSquare,
+      lucideChevronLeft,
+      lucideChevronRight,
+      lucideLoader2,
+    }),
+  ],
+  templateUrl: './ai-interview.html',
+  styleUrl: './ai-interview.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AiInterview implements OnInit {
+  private readonly builderState = inject(BuilderState);
+  private readonly router = inject(Router);
+  private readonly _localeService = inject(LocaleService);
+  private readonly aiInterviewApi = inject(AiInterviewApi);
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly hlmP = hlmP;
+
+  readonly isSubmitting = signal(false);
+  readonly invalidQuestionId = signal<string | null>(null);
+
+  protected readonly chevronBack = computed(() =>
+    this._localeService.isRtl() ? 'lucideChevronRight' : 'lucideChevronLeft',
+  );
+  protected readonly chevronNext = computed(() =>
+    this._localeService.isRtl() ? 'lucideChevronLeft' : 'lucideChevronRight',
+  );
+
+  readonly stepper = viewChild<CdkStepper>('stepper');
+
+  readonly visibleQuestions = computed(() => {
+    const hasLogo = this.builderState.hasLogo();
+    return INTERVIEW_QUESTIONS.filter((q) => q.showWhen !== 'logoUploaded' || hasLogo);
+  });
+
+  form = new FormGroup({});
+  selectedChannels = signal<Record<string, string[]>>({});
+
+  constructor() {
+    afterNextRender({
+      read: () => {
+        document
+          .querySelector<
+            HTMLInputElement | HTMLTextAreaElement
+          >('app-ai-interview input, app-ai-interview textarea')
+          ?.focus();
+      },
+    });
+  }
+
+  ngOnInit() {
+    const controls: Record<string, FormControl> = {};
+    const prefill = this.builderState.aiAnswers();
+
+    this.visibleQuestions().forEach((q) => {
+      const initialValue = decodeAnswer(q, prefill[q.id]);
+
+      if (q.type === 'multi') {
+        this.selectedChannels.update((prev) => ({ ...prev, [q.id]: initialValue as string[] }));
+      }
+
+      controls[q.id] = new FormControl(initialValue, q.required ? [Validators.required] : []);
+    });
+
+    this.form = new FormGroup(controls);
+
+    this.form.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((val) => {
+      this.builderState.aiAnswers.update((current) => ({ ...current, ...val }));
+    });
+  }
+
+  scrollToStep(index: number) {
+    const step = document.querySelectorAll('[cdkstepcontent], cdk-step')[index];
+    if (!step) return;
+
+    step.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    step.querySelector<HTMLElement>('input, textarea, button, [tabindex="0"]')?.focus();
+  }
+
+  onSelectionChange(event: StepperSelectionEvent) {
+    this.scrollToStep(event.selectedIndex);
+  }
+
+  onPrevStep() {
+    const stepper = this.stepper();
+    if (!stepper) return;
+    stepper.previous();
+    this.scrollToStep(stepper.selectedIndex);
+  }
+
+  onNextStep() {
+    const stepper = this.stepper();
+    if (!stepper) return;
+    stepper.next();
+    this.scrollToStep(stepper.selectedIndex);
+  }
+
+  isQuestionInvalid(questionId: string): boolean {
+    if (this.invalidQuestionId() === questionId) return true;
+
+    const control = this.form.get(questionId);
+    if (!control?.touched) return false;
+
+    const question = this.visibleQuestions().find((item) => item.id === questionId);
+    return question ? !isAnswered(question, control.value) : false;
+  }
+
+  /** Index of the first visible question still missing a required answer, or -1. */
+  findFirstInvalidQuestionIndex(): number {
+    return this.visibleQuestions().findIndex((q) => {
+      const control = this.form.get(q.id);
+      if (!q.required) return control?.invalid ?? false;
+      return !isAnswered(q, control?.value) || (control?.invalid ?? false);
+    });
+  }
+
+  toggleMultiSelect(questionId: string, option: string) {
+    this.selectedChannels.update((current) => {
+      const selected = current[questionId] || [];
+      const updated = selected.includes(option)
+        ? selected.filter((c) => c !== option)
+        : [...selected, option];
+
+      return { ...current, [questionId]: updated };
+    });
+
+    const control = this.form.get(questionId);
+    control?.setValue(this.selectedChannels()[questionId]);
+    control?.markAsTouched();
+
+    if (this.invalidQuestionId() === questionId) {
+      this.invalidQuestionId.set(null);
+    }
+  }
+
+  canSubmit(): boolean {
+    if (!this.form.valid) return false;
+    return this.visibleQuestions().every(
+      (q) => !q.required || isAnswered(q, this.form.get(q.id)?.value),
+    );
+  }
+
+  onNext() {
+    const invalidIndex = this.findFirstInvalidQuestionIndex();
+    if (invalidIndex !== -1) {
+      this.invalidQuestionId.set(this.visibleQuestions()[invalidIndex].id);
+      this.form.markAllAsTouched();
+
+      const stepper = this.stepper();
+      if (stepper) stepper.selectedIndex = invalidIndex;
+      this.scrollToStep(invalidIndex);
+      toast.error(this._localeService.translate('toast_required_questions'));
+      return;
+    }
+
+    this.invalidQuestionId.set(null);
+
+    if (!this.canSubmit() || this.isSubmitting()) {
+      this.form.markAllAsTouched();
+      toast.error(this._localeService.translate('toast_required_questions'));
+      return;
+    }
+
+    const raw = this.form.value as Record<string, string | string[]>;
+    this.builderState.aiAnswers.update((current) => ({ ...current, ...raw }));
+
+    if (raw['q1']) {
+      this.builderState.businessName.set(raw['q1'] as string);
+    }
+
+    this.isSubmitting.set(true);
+    const toastId = toast.loading(this._localeService.translate('toast_saving_answers'));
+
+    const payload: SubmitAnswersPayload = {
+      questions: this.visibleQuestions().map((q) => ({
+        questionId: q.id,
+        answer: encodeAnswer(q, this.form.get(q.id)?.value),
+      })),
+    };
+
+    this.aiInterviewApi.submitAnswers(payload).subscribe({
+      next: (res) => {
+        this.isSubmitting.set(false);
+
+        if (res?.isFallback) {
+          toast.warning(this._localeService.translate('toast_answers_fallback'), { id: toastId });
+        } else {
+          toast.success(this._localeService.translate('toast_answers_success'), { id: toastId });
+        }
+
+        this.router.navigate(['/build/validation']);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        toastApiError(err, 'toast_answers_failed', this._localeService, toastId);
+      },
+    });
+  }
+
+  onInputEnter(event: Event) {
+    const keyboardEvent = event as KeyboardEvent;
+    if (!keyboardEvent.shiftKey) {
+      keyboardEvent.preventDefault();
+      this.stepper()?.next();
+    }
+  }
+}

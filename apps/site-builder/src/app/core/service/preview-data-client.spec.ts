@@ -10,6 +10,9 @@ describe('PreviewDataClient', () => {
   let builderState: BuilderState;
 
   beforeEach(() => {
+    // BuilderState persists to sessionStorage; keep tests isolated from each other.
+    sessionStorage.clear();
+
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
       providers: [PreviewDataClient, BuilderState],

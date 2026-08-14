@@ -12,12 +12,4 @@ import { HlmToasterImports } from '@spartan/helm/sonner';
 })
 export class App {
   protected readonly title = signal('invento-AI');
-
-  protected readonly isLoading = signal<boolean>(true);
-
-  constructor() {
-    setTimeout(() => {
-      this.isLoading.set(false);
-    }, 3000);
-  }
 }

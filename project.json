@@ -5,7 +5,13 @@
   "generators": {},
   "sourceRoot": "apps/site-builder/src",
   "prefix": "app",
-  "implicitDependencies": ["spartan-ui", "spartan-stepper", "spartan-stepper-shared", "core", "shared"],
+  "implicitDependencies": [
+    "spartan-ui",
+    "spartan-stepper",
+    "spartan-stepper-shared",
+    "core",
+    "shared"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
@@ -18,9 +24,7 @@
             "input": "apps/site-builder/public"
           }
         ],
-        "styles": [
-          "apps/site-builder/src/styles.css"
-        ],
+        "styles": ["apps/site-builder/src/styles.css"],
         "server": "apps/site-builder/src/main.server.ts",
         "outputMode": "server",
         "ssr": {
@@ -30,12 +34,18 @@
       },
       "configurations": {
         "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/site-builder/src/environments/environment.ts",
+              "with": "apps/site-builder/src/environments/environment.prod.ts"
+            }
+          ],
           "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "1MB",
-                  "maximumError": "2MB"
-                },
+            {
+              "type": "initial",
+              "maximumWarning": "1MB",
+              "maximumError": "2MB"
+            },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "4kB",
@@ -51,9 +61,7 @@
         }
       },
       "defaultConfiguration": "production",
-      "outputs": [
-        "{options.outputPath}"
-      ]
+      "outputs": ["{options.outputPath}"]
     },
     "serve": {
       "executor": "@angular/build:dev-server",
@@ -79,14 +87,9 @@
     "lint": {
       "executor": "@angular-eslint/builder:lint",
       "options": {
-        "lintFilePatterns": [
-          "apps/site-builder/src/**/*.ts",
-          "apps/site-builder/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/site-builder/src/**/*.ts", "apps/site-builder/src/**/*.html"]
       },
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     }
   }
 }
