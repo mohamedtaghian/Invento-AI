@@ -1,9 +1,11 @@
-import { Component, afterNextRender, inject } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import gsap from 'gsap';
 
 // Spartan UI Imports
 import { HlmBadge } from '@spartan/helm/badge';
+import { HlmButton } from '@spartan/helm/button';
 
 // Icons
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
@@ -15,16 +17,23 @@ import {
   lucideCreditCard,
   lucideShield,
   lucideHeadphones,
+  lucideSearch,
+  lucideX,
+  lucideRefreshCw,
+  lucideAlertCircle,
+  lucideSparkles,
+  lucideMessageCircleQuestion,
 } from '@ng-icons/lucide';
 
 // Feature
 import { FaqDataService } from './service/faq-data.service';
+import { environment } from '../../../environments/environment';
 import type { FaqCategory, FaqItem } from './types/faq';
 
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [CommonModule, HlmBadge, NgIconComponent],
+  imports: [CommonModule, HlmBadge, HlmButton, NgIconComponent],
   providers: [
     provideIcons({
       lucideChevronDown,
@@ -34,6 +43,12 @@ import type { FaqCategory, FaqItem } from './types/faq';
       lucideCreditCard,
       lucideShield,
       lucideHeadphones,
+      lucideSearch,
+      lucideX,
+      lucideRefreshCw,
+      lucideAlertCircle,
+      lucideSparkles,
+      lucideMessageCircleQuestion,
     }),
   ],
   templateUrl: './faq.html',
@@ -41,85 +56,137 @@ import type { FaqCategory, FaqItem } from './types/faq';
 })
 export class FaqComponent {
   private readonly faqDataService = inject(FaqDataService);
+  private readonly route = inject(ActivatedRoute);
 
-  protected activeCategory = 'general';
-  protected searchQuery = '';
+  readonly activeCategory = signal<string>('general');
+  readonly searchQuery = signal<string>('');
 
-  protected get faqCategories(): readonly FaqCategory[] {
-    return this.faqDataService.categories();
-  }
+  readonly faqs = this.faqDataService.faqs;
+  readonly isLoading = this.faqDataService.isLoading;
+  readonly error = this.faqDataService.error;
+  readonly totalQuestions = this.faqDataService.totalQuestions;
 
-  protected get filteredCategories(): FaqCategory[] {
-    if (!this.searchQuery.trim()) {
-      return [...this.faqCategories];
+  /**
+   * Group FAQ items into categories.
+   * If items contain a category from backend, they are grouped by that category.
+   * Otherwise, all items are displayed under the default "General" category until backend categorization is ready.
+   */
+  readonly categories = computed<readonly FaqCategory[]>(() => {
+    const allItems = this.faqs();
+    if (allItems.length === 0) {
+      return [];
     }
 
-    const query = this.searchQuery.toLowerCase();
-    return this.faqCategories
-      .map((category) => ({
-        ...category,
-        items: category.items.filter(
+    const categoryMap = new Map<string, FaqItem[]>();
+
+    for (const item of allItems) {
+      const catKey = item.category?.trim().toLowerCase() || 'general';
+      if (!categoryMap.has(catKey)) {
+        categoryMap.set(catKey, []);
+      }
+      categoryMap.get(catKey)!.push(item);
+    }
+
+    const iconMap: Record<string, string> = {
+      general: 'lucideHelpCircle',
+      orders: 'lucidePackage',
+      shipping: 'lucideTruck',
+      payments: 'lucideCreditCard',
+      returns: 'lucideShield',
+      support: 'lucideHeadphones',
+    };
+
+    return Array.from(categoryMap.entries()).map(([key, items]) => ({
+      id: key,
+      title: key.charAt(0).toUpperCase() + key.slice(1),
+      icon: iconMap[key] || 'lucideHelpCircle',
+      items,
+    }));
+  });
+
+  /**
+   * Categories filtered by the active search query (matches question or answer).
+   */
+  readonly filteredCategories = computed<readonly FaqCategory[]>(() => {
+    const query = this.searchQuery().trim().toLowerCase();
+    const cats = this.categories();
+
+    if (!query) {
+      return cats;
+    }
+
+    return cats
+      .map((cat) => ({
+        ...cat,
+        items: cat.items.filter(
           (item) =>
             item.question.toLowerCase().includes(query) ||
             item.answer.toLowerCase().includes(query),
         ),
       }))
-      .filter((category) => category.items.length > 0);
-  }
+      .filter((cat) => cat.items.length > 0);
+  });
 
-  protected get activeFaqItems(): readonly FaqItem[] {
-    const category = this.filteredCategories.find((c) => c.id === this.activeCategory);
-    return category?.items ?? this.filteredCategories[0]?.items ?? [];
-  }
+  /**
+   * Active category details.
+   */
+  readonly activeCategoryData = computed<FaqCategory | undefined>(() => {
+    const cats = this.filteredCategories();
+    return cats.find((c) => c.id === this.activeCategory()) ?? cats[0];
+  });
 
-  protected get activeCategoryData(): FaqCategory | undefined {
-    return (
-      this.filteredCategories.find((c) => c.id === this.activeCategory) ??
-      this.filteredCategories[0]
-    );
-  }
+  /**
+   * Items inside the currently active category.
+   */
+  readonly activeFaqItems = computed<readonly FaqItem[]>(() => {
+    return this.activeCategoryData()?.items ?? [];
+  });
 
-  protected onSearch(event: Event): void {
-    this.searchQuery = (event.target as HTMLInputElement).value;
-    // Reset to first matching category on search
-    if (this.filteredCategories.length > 0) {
-      const currentStillExists = this.filteredCategories.find((c) => c.id === this.activeCategory);
-      if (!currentStillExists) {
-        this.activeCategory = this.filteredCategories[0].id;
-      }
-    }
-  }
-
-  protected setCategory(categoryId: string): void {
-    this.activeCategory = categoryId;
-  }
-
-  protected get totalQuestions(): number {
-    return this.faqCategories.reduce((sum, cat) => sum + cat.items.length, 0);
-  }
+  private currentStoreSlug = '';
 
   constructor() {
-    // Load FAQ data from service
-    this.faqDataService.loadFaqs();
+    this.currentStoreSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
+
+    this.faqDataService.loadFaqs(this.currentStoreSlug);
 
     afterNextRender(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
 
       tl.from('.faq-hero-anim', {
-        y: 30,
+        y: 25,
         opacity: 0,
-        duration: 0.7,
-        stagger: 0.12,
-      }).from(
-        '.faq-item',
-        {
-          y: 20,
-          opacity: 0,
-          duration: 0.5,
-          stagger: 0.08,
-        },
-        '-=0.3',
-      );
+        duration: 0.6,
+        stagger: 0.1,
+      });
     });
+  }
+
+  setCategory(categoryId: string): void {
+    this.activeCategory.set(categoryId);
+  }
+
+  onSearch(event: Event): void {
+    const value = (event.target as HTMLInputElement).value;
+    this.searchQuery.set(value);
+
+    // If current category has no matches, auto-switch to first matching category
+    const cats = this.filteredCategories();
+    if (cats.length > 0) {
+      const currentStillExists = cats.some((c) => c.id === this.activeCategory());
+      if (!currentStillExists) {
+        this.activeCategory.set(cats[0].id);
+      }
+    }
+  }
+
+  clearSearch(): void {
+    this.searchQuery.set('');
+  }
+
+  onRetry(): void {
+    this.faqDataService.loadFaqs(this.currentStoreSlug);
   }
 }

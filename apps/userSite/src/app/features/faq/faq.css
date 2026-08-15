@@ -1,8 +1,8 @@
-/* FAQ Details open/close animation */
+/* FAQ Details open/close animation with CSS Grid interpolation */
 .faq-details .faq-answer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s ease;
+  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq-details[open] .faq-answer {
@@ -13,16 +13,28 @@
   overflow: hidden;
 }
 
+/* Ensure meaningful line breaks are preserved in plain text answers per OpenAPI spec */
+.faq-answer-text {
+  white-space: pre-line;
+  word-break: break-word;
+}
+
 /* Remove default summary marker across browsers */
 .faq-details summary::-webkit-details-marker {
   display: none;
 }
 
-/* Sidebar tab entrance animation (CSS-based for SSR reliability) */
+/* Details summary focus ring */
+.faq-details summary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Category tab slide-in animation */
 @keyframes faqTabSlideIn {
   from {
     opacity: 0;
-    transform: translateX(-20px);
+    transform: translateX(-15px);
   }
   to {
     opacity: 1;
@@ -31,7 +43,7 @@
 }
 
 .faq-category-tab {
-  animation: faqTabSlideIn 0.4s ease-out both;
+  animation: faqTabSlideIn 0.35s ease-out both;
 }
 
 .faq-category-tab:nth-child(1) {
@@ -53,15 +65,15 @@
   animation-delay: 0.3s;
 }
 
-/* Horizontal custom scrollbar for category navigation */
+/* Custom scrollbar for category tabs on mobile */
 .custom-scrollbar {
   scrollbar-color: var(--primary) transparent;
   scrollbar-width: thin;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
+  height: 4px;
+  width: 4px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
@@ -72,9 +84,4 @@
   background: var(--primary);
   border-radius: 9999px;
   opacity: 0.4;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
-  opacity: 0.8;
 }
