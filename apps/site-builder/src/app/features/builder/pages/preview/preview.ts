@@ -100,7 +100,7 @@ export class Preview {
       .toLowerCase()
       .trim()
       .replace(/[^a-z0-9-]/g, '');
-    return `https://invento-${cleanDomain || 'my-site'}.example`;
+    return `https://localhost/${cleanDomain || 'my-site'}.com`;
   });
 
   readonly skeletonThemes = Array(4);
