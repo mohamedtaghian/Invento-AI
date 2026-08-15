@@ -12,6 +12,9 @@ export interface ConfirmDomainPayload {
 export interface ConfirmDomainResponse {
   success?: boolean;
   isFallback?: boolean;
+  slug?: string;
+  storeUrl?: string;
+  hint?: string | null;
 }
 
 export interface ConfirmDomainErrorResponse {

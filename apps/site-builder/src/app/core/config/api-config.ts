@@ -47,7 +47,7 @@ export class ApiConfig {
     if (configured) return configured;
     return environment.production
       ? 'https://invento-ai.vercel.app/home'
-      : 'http://localhost:4200/home';
+      : 'http://localhost:4300/home';
   }
 
   private isLocalhost(): boolean {

@@ -135,11 +135,16 @@ export class Validation {
     this.builderState.domain.set(value);
   }
 
+  readonly domainSuggestions = signal<string[]>([]);
+  readonly hintMessage = signal<string | null>(null);
+
   finish(): void {
     if (this.isSubmitting()) return;
     this.isSubmitting.set(true);
     this.builderState.isNavigating.set(true);
     this.currentStep.set('AI_ANALYSIS');
+    this.domainSuggestions.set([]);
+    this.hintMessage.set(null);
 
     this.domainApi
       .confirmDomain({ businessName: this.businessName(), domain: this.domain() })
@@ -148,7 +153,12 @@ export class Validation {
           if (res?.isFallback) {
             toast.warning(this._localeService.translate('toast_domain_fallback'));
           } else {
-            toast.success(this._localeService.translate('validation_domain_confirmed'));
+            if (res.hint) {
+              this.hintMessage.set(res.hint);
+              toast.warning(res.hint);
+            } else {
+              toast.success(this._localeService.translate('validation_domain_confirmed'));
+            }
           }
         }),
         // Theme generation is best-effort: both calls already degrade to an
@@ -170,6 +180,9 @@ export class Validation {
         },
         error: (err) => {
           this.currentStep.set('INPUT');
+          if (err?.error?.suggestions) {
+            this.domainSuggestions.set(err.error.suggestions);
+          }
           toastApiError(err, 'validation_domain_failed', this._localeService);
         },
       });

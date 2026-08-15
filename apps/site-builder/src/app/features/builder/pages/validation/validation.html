@@ -123,6 +123,27 @@
                   class="w-full font-mono"
                 />
               </div>
+              @if (domainSuggestions().length > 0) {
+                <div class="mt-3 p-4 bg-destructive/10 border border-destructive/20 rounded-md">
+                  <p class="text-sm text-destructive font-medium mb-2 flex items-center gap-2">
+                    <ng-icon name="lucideAlertTriangle" />
+                    {{ 'validation_domain_taken' | translate }}
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    @for (suggestion of domainSuggestions(); track suggestion) {
+                      <button
+                        hlmBtn
+                        variant="outline"
+                        size="sm"
+                        class="text-xs font-mono"
+                        (click)="onDomainChange(suggestion)"
+                      >
+                        {{ suggestion }}
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>
