@@ -21,6 +21,30 @@
             </div>
           }
         </div>
+      } @else if (ordersService.isUnauthorized()) {
+        <!-- Unauthorized / Not Logged In State -->
+        <div
+          class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-border rounded-3xl text-center"
+        >
+          <div
+            class="flex justify-center items-center bg-amber-500/10 mb-4 rounded-full w-16 h-16 text-amber-500"
+          >
+            <ng-icon name="lucideLock" class="text-2xl"></ng-icon>
+          </div>
+          <h3 class="mb-2 font-bold text-foreground text-xl">Sign in to view your orders</h3>
+          <p class="mb-6 max-w-md text-muted-foreground text-sm">
+            Please log in to your account to view your past purchases, track active shipments, and
+            manage your orders.
+          </p>
+          <button
+            hlmBtn
+            (click)="goToLogin()"
+            class="px-8 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer shadow-sm"
+          >
+            <ng-icon name="lucideLogIn" class="text-base"></ng-icon>
+            <span>Log In</span>
+          </button>
+        </div>
       } @else if (ordersService.error()) {
         <!-- Backend Error State -->
         <div
@@ -36,8 +60,8 @@
           <button
             hlmBtn
             variant="outline"
-            (click)="ordersService.loadOrders()"
-            class="px-6 rounded-xl"
+            (click)="reload()"
+            class="px-6 rounded-xl cursor-pointer"
           >
             Try Again
           </button>
@@ -59,22 +83,72 @@
           </p>
           <div class="flex items-center gap-3">
             @if (ordersService.searchQuery() || ordersService.selectedFilter() !== 'all') {
-              <button hlmBtn variant="outline" (click)="resetFilters()" class="px-5 rounded-xl">
+              <button
+                hlmBtn
+                variant="outline"
+                (click)="resetFilters()"
+                class="px-5 rounded-xl cursor-pointer"
+              >
                 Reset Filters
               </button>
             }
-            <a hlmBtn routerLink="/products" class="px-6 rounded-xl"> Browse Store </a>
+            <a
+              hlmBtn
+              [routerLink]="['/', storeSlug, 'products']"
+              class="px-6 rounded-xl inline-flex items-center gap-2 cursor-pointer"
+            >
+              <ng-icon name="lucideShoppingBag" class="text-base"></ng-icon>
+              <span>Browse Store</span>
+            </a>
           </div>
         </div>
       } @else {
-        <!-- Order Cards Scrollable Container -->
-        <div
-          class="flex flex-col space-y-6 pr-1 sm:pr-2.5 max-h-[650px] md:max-h-[720px] overflow-y-auto orders-list-scroller"
-        >
+        <!-- Order Cards List -->
+        <div class="flex flex-col space-y-6">
           @for (order of ordersService.filteredOrders(); track order.id) {
             <app-order-card [order]="order" />
           }
         </div>
+
+        <!-- Pagination Bar (if multiple pages) -->
+        @if (ordersService.totalPages() > 1) {
+          <div
+            class="flex justify-between items-center bg-card p-4 border border-border rounded-2xl"
+          >
+            <div class="text-muted-foreground text-xs font-medium">
+              Showing page {{ ordersService.currentPage() }} of {{ ordersService.totalPages() }} ({{
+                ordersService.totalCount()
+              }}
+              orders)
+            </div>
+
+            <div class="flex items-center gap-2">
+              <button
+                hlmBtn
+                variant="outline"
+                size="sm"
+                [disabled]="ordersService.currentPage() <= 1"
+                (click)="onPageChange(ordersService.currentPage() - 1)"
+                class="rounded-xl px-3 text-xs inline-flex items-center gap-1 cursor-pointer"
+              >
+                <ng-icon name="lucideChevronLeft" class="text-sm"></ng-icon>
+                <span>Previous</span>
+              </button>
+
+              <button
+                hlmBtn
+                variant="outline"
+                size="sm"
+                [disabled]="ordersService.currentPage() >= ordersService.totalPages()"
+                (click)="onPageChange(ordersService.currentPage() + 1)"
+                class="rounded-xl px-3 text-xs inline-flex items-center gap-1 cursor-pointer"
+              >
+                <span>Next</span>
+                <ng-icon name="lucideChevronRight" class="text-sm"></ng-icon>
+              </button>
+            </div>
+          </div>
+        }
       }
     </section>
   </div>
