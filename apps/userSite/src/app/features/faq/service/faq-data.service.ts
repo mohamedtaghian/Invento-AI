@@ -1,51 +1,67 @@
-import { Injectable, signal } from '@angular/core';
-import { FAQ_CATEGORIES } from '../mock/faq-data';
-import type { FaqCategory } from '../types/faq';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap, catchError, throwError } from 'rxjs';
+import { environment } from '../../../../environments/environment';
+import { extractErrorMessage } from '../../../core/utils/error.utils';
+import type { FaqItem } from '../types/faq';
 
 /**
- * Service that provides FAQ data for the current userSite.
- *
- * Each userSite deployment will have its own FAQ data.
- * Currently loads from local mock data — swap the data source
- * (e.g. HttpClient call) when the API is ready.
+ * Service that manages fetching FAQ entries for a store from the backend endpoint:
+ * GET /site/{slug}/faqs
  */
 @Injectable({ providedIn: 'root' })
 export class FaqDataService {
-  private readonly _categories = signal<FaqCategory[]>(FAQ_CATEGORIES);
-  private readonly _isLoading = signal(false);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = environment.apiUrl;
+
+  private readonly _faqs = signal<FaqItem[]>([]);
+  private readonly _isLoading = signal<boolean>(false);
   private readonly _error = signal<string | null>(null);
 
-  readonly categories = this._categories.asReadonly();
+  readonly faqs = this._faqs.asReadonly();
   readonly isLoading = this._isLoading.asReadonly();
   readonly error = this._error.asReadonly();
 
-  readonly totalQuestions = () => {
-    // Wrap in a computed-like getter backed by the signal
-    return this._categories().reduce((sum, cat) => sum + cat.items.length, 0);
-  };
+  readonly totalQuestions = computed(() => this._faqs().length);
 
   /**
-   * Load FAQ categories for the current site.
-   * Replace the body with an HTTP call when the backend is ready:
-   *
-   * ```ts
-   * loadFaqs(siteId: string): void {
-   *   this._isLoading.set(true);
-   *   this.http.get<FaqCategory[]>(`/api/sites/${siteId}/faqs`)
-   *     .pipe(takeUntilDestroyed(this.destroyRef))
-   *     .subscribe({
-   *       next: (data) => { this._categories.set(data); this._isLoading.set(false); },
-   *       error: (err) => { this._error.set(err.message); this._isLoading.set(false); },
-   *     });
-   * }
-   * ```
+   * Fetch FAQs for the given store slug as an Observable.
    */
-  loadFaqs(): void {
+  getFaqs(slug: string): Observable<FaqItem[]> {
+    const storeSlug = slug || environment.storeSlug;
+    return this.http.get<FaqItem[]>(`${this.apiUrl}/site/${storeSlug}/faqs`);
+  }
+
+  /**
+   * Load FAQ data for the store into reactive signals.
+   */
+  loadFaqs(slug?: string): void {
+    const storeSlug = slug || environment.storeSlug;
+
     this._isLoading.set(true);
     this._error.set(null);
 
-    // Simulate async load — replace with real HTTP call per site
-    this._categories.set(FAQ_CATEGORIES);
-    this._isLoading.set(false);
+    this.getFaqs(storeSlug)
+      .pipe(
+        tap((data) => {
+          this._faqs.set(Array.isArray(data) ? data : []);
+          this._isLoading.set(false);
+        }),
+        catchError((err) => {
+          const errorMessage = extractErrorMessage(
+            err,
+            'Failed to load FAQ items. Please try again later.',
+          );
+          this._error.set(errorMessage);
+          this._faqs.set([]);
+          this._isLoading.set(false);
+          return throwError(() => err);
+        }),
+      )
+      .subscribe({
+        error: () => {
+          // Handled in catchError
+        },
+      });
   }
 }
