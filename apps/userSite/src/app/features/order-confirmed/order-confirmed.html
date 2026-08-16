@@ -47,7 +47,7 @@
         <hr class="border-border mb-4 sm:mb-6" />
 
         <!-- Dynamic Order Items -->
-        @for (item of order.items; track item.product.id) {
+        @for (item of order.items; track item.product.name) {
           <div class="flex items-start gap-3 sm:gap-4 mb-5 sm:mb-6">
             <!-- Shrunk image slightly on mobile -->
             <div class="w-16 h-16 sm:w-20 sm:h-20 bg-muted rounded-lg overflow-hidden shrink-0">

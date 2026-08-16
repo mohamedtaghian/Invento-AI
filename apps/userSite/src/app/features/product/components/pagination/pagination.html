@@ -1,37 +1,39 @@
 @if (totalPages() > 1) {
-  <div class="flex items-center justify-center gap-2 py-4">
-    <button
-      type="button"
-      (click)="goTo(currentPage() - 1)"
-      [disabled]="currentPage() === 1"
-      class="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-    >
-      <ng-icon name="lucideChevronLeft" />
-    </button>
+  <nav hlmPagination class="mt-8">
+    <ul hlmPaginationContent>
+      <!-- Previous Button -->
+      <li hlmPaginationItem>
+        <a hlmPaginationPrevious 
+           (click)="$event.preventDefault(); goTo(currentPage() - 1)"
+           [attr.disabled]="currentPage() === 1 ? true : null"
+           [class.pointer-events-none]="currentPage() === 1"
+           [class.opacity-50]="currentPage() === 1"
+           href="#">
+        </a>
+      </li>
 
-    @for (page of pages(); track page) {
-      <button
-        type="button"
-        (click)="goTo(page)"
-        class="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold transition-colors"
-        [class.bg-primary]="page === currentPage()"
-        [class.text-primary-foreground]="page === currentPage()"
-        [class.border]="page !== currentPage()"
-        [class.border-border]="page !== currentPage()"
-        [class.text-muted-foreground]="page !== currentPage()"
-        [class.hover:bg-muted]="page !== currentPage()"
-      >
-        {{ page }}
-      </button>
-    }
+      <!-- Page Numbers -->
+      @for (page of pages(); track page) {
+        <li hlmPaginationItem>
+          <a hlmPaginationLink 
+             [isActive]="page === currentPage()"
+             (click)="$event.preventDefault(); goTo(page)"
+             href="#">
+            {{ page }}
+          </a>
+        </li>
+      }
 
-    <button
-      type="button"
-      (click)="goTo(currentPage() + 1)"
-      [disabled]="currentPage() === totalPages()"
-      class="flex h-10 w-10 items-center justify-center rounded-lg border border-border text-muted-foreground hover:bg-muted hover:text-foreground transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-    >
-      <ng-icon name="lucideChevronRight" />
-    </button>
-  </div>
+      <!-- Next Button -->
+      <li hlmPaginationItem>
+        <a hlmPaginationNext 
+           (click)="$event.preventDefault(); goTo(currentPage() + 1)"
+           [attr.disabled]="currentPage() === totalPages() ? true : null"
+           [class.pointer-events-none]="currentPage() === totalPages()"
+           [class.opacity-50]="currentPage() === totalPages()"
+           href="#">
+        </a>
+      </li>
+    </ul>
+  </nav>
 }

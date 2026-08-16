@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ProductCard } from '../product-card/product-card';
-import { Product } from '../../types/product';
+import { ProductListItem } from '../../types/product';
 
 @Component({
   selector: 'app-products-grid',
@@ -9,5 +9,5 @@ import { Product } from '../../types/product';
   imports: [ProductCard],
 })
 export class ProductsGrid {
-  public readonly products = input.required<Product[]>();
+  public readonly products = input.required<ProductListItem[]>();
 }

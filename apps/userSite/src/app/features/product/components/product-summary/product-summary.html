@@ -1,23 +1,27 @@
 @let p = store.product()!;
 
 <div class="mb-2 flex items-center gap-2">
-  @if (p.badge) {
-    <span hlmBadge>{{ p.badge }}</span>
-  }
   <span class="flex items-center text-sm text-muted-foreground">
-    <ng-icon name="lucideStar" class="text-yellow-500 me-1" size="sm" />
-    {{ p.rating }} ({{ p.reviewCount }} Reviews)
+    <!-- Categories as breadcrumbs or badges -->
+    @for (cat of p.categories; track cat.slug) {
+      <span hlmBadge variant="outline">{{ cat.name }}</span>
+    }
   </span>
 </div>
 
-<h1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">{{ p.name }}</h1>
-<p class="mb-4 text-base text-muted-foreground">{{ p.tagline }}</p>
+<h1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">{{ p.title }}</h1>
+<p class="mb-4 text-base text-muted-foreground">{{ p.shortDescription }}</p>
 
 <div class="flex items-end gap-2 text-3xl font-bold text-primary">
-  {{ p.price | currency }}
-  @if (p.compareAtPrice) {
-    <span class="text-lg font-normal text-muted-foreground line-through">{{
-      p.compareAtPrice | currency
-    }}</span>
+  {{ (store.currentVariant()?.priceAmount || p.minPriceAmount) / 100 | currency }}
+  
+  @if (store.currentVariant()?.compareAtAmount) {
+    <span class="text-lg font-normal text-muted-foreground line-through">
+      {{ store.currentVariant()!.compareAtAmount! / 100 | currency }}
+    </span>
+  } @else if (p.maxPriceAmount > p.minPriceAmount && !store.currentVariant()) {
+    <span class="text-lg font-normal text-muted-foreground">
+      - {{ p.maxPriceAmount / 100 | currency }}
+    </span>
   }
 </div>

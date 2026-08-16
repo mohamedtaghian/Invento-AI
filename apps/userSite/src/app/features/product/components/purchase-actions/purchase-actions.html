@@ -1,10 +1,13 @@
-@let p = store.product()!;
 
 <div class="mb-6 space-y-3">
-  @if (p.inStock) {
+  @if (store.canAddToCart()) {
     <p class="flex items-center text-sm font-medium text-green-700">
       <ng-icon name="lucideCircleCheck" class="me-1" size="sm" />
-      In Stock — {{ p.shippingNote }}
+      In Stock
+    </p>
+  } @else {
+    <p class="flex items-center text-sm font-medium text-red-700">
+      Out of Stock
     </p>
   }
 
