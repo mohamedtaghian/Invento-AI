@@ -24,8 +24,9 @@ export class OrdersFilterBarComponent {
 
   protected readonly filterTabs: { id: OrderFilter; label: string }[] = [
     { id: 'all', label: 'All Orders' },
-    { id: 'processing', label: 'Processing' },
-    { id: 'in-transit', label: 'In Transit' },
+    { id: 'pending', label: 'Pending' },
+    { id: 'confirmed', label: 'Confirmed' },
+    { id: 'shipped', label: 'Shipped' },
     { id: 'delivered', label: 'Delivered' },
     { id: 'cancelled', label: 'Cancelled' },
   ];
