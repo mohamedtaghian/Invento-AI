@@ -1,13 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { HlmPaginationImports } from '@spartan/helm/pagination';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon],
-  providers: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+  imports: [HlmPaginationImports],
 })
 export class Pagination {
   public readonly currentPage = input.required<number>();

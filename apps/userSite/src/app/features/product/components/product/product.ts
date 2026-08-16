@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { ProductsData } from '../../service/products-data';
-import { SortOption } from '../../types/product';
-import { FiltersSidebar, CategoryFilter, ColorFilter } from '../filters-sidebar/filters-sidebar';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductApiService } from '../../service/product-api.service';
+import { SortOption, ProductListResponse, FilterResponse, ProductQueryParams } from '../../types/product';
+import { FiltersSidebar } from '../filters-sidebar/filters-sidebar';
 import { ProductsToolbar } from '../products-toolbar/products-toolbar';
 import { ProductsGrid } from '../products-grid/products-grid';
 import { Pagination } from '../pagination/pagination';
-
-const PAGE_SIZE = 6;
+import { parseAttributes, stringifyAttributes, SelectedAttributes } from '../../utils/filter-parser';
+import { environment } from '../../../../../environments/environment';
+import { switchMap, catchError, combineLatest, tap } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-products',
@@ -15,157 +18,113 @@ const PAGE_SIZE = 6;
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [FiltersSidebar, ProductsToolbar, ProductsGrid, Pagination],
 })
-export class Products {
-  private readonly _productsData = inject(ProductsData);
-  private readonly _allProducts = this._productsData.products;
+export class Products implements OnInit, OnDestroy {
+  private readonly apiService = inject(ProductApiService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
 
-  protected readonly categories = signal<CategoryFilter[]>([
-    { label: 'Smartphones', value: 'smartphones', checked: false },
-    { label: 'Laptops & PCs', value: 'laptops', checked: false },
-    { label: 'Audio', value: 'audio', checked: false },
-    { label: 'Wearables', value: 'wearables', checked: false },
-  ]);
+  // State
+  public readonly isLoading = signal<boolean>(true);
+  public readonly productsResponse = signal<ProductListResponse | null>(null);
+  public readonly filterResponse = signal<FilterResponse | null>(null);
 
-  protected readonly colors: ColorFilter[] = [
-    { value: 'black', hex: '#111827' },
-    { value: 'white', hex: '#ffffff' },
-    { value: 'silver', hex: '#9ca3af' },
-    { value: 'blue', hex: '#3b82f6' },
-    { value: 'red', hex: '#ef4444' },
-  ];
+  // Computed properties for the UI
+  public readonly currentSort = signal<SortOption>('relevance');
+  public readonly currentSearch = signal<string>('');
+  
+  public readonly didYouMean = computed(() => this.productsResponse()?.didYouMean ?? null);
+  public readonly searchMode = computed(() => this.productsResponse()?.searchMode ?? null);
 
-  protected readonly selectedColor = signal<string | null>(null);
-  protected readonly maxPrice = signal<number>(5000);
-  protected readonly sort = signal<SortOption>('recommended');
-  protected readonly currentPage = signal<number>(1);
-  protected readonly inStock = signal<boolean>(false);
-  protected readonly onlyDiscount = signal<boolean>(false);
-  protected readonly searchQuery = signal<string>('');
+  private sub?: Subscription;
 
-  protected readonly filteredProducts = computed(() => {
-    const activeCategories = this.categories()
-      .filter((c) => c.checked)
-      .map((c) => c.value);
-    const color = this.selectedColor();
-    const price = this.maxPrice();
-    const sortOption = this.sort();
-    const stockOnly = this.inStock();
-    const discountOnly = this.onlyDiscount();
-    const query = this.searchQuery().toLowerCase();
+  ngOnInit(): void {
+    this.sub = this.route.queryParams.pipe(
+      tap(() => this.isLoading.set(true)),
+      switchMap(params => {
+        const queryParams: ProductQueryParams = {
+          page: params['page'] ? Number(params['page']) : 1,
+          limit: params['limit'] ? Number(params['limit']) : 12,
+          search: params['search'] || undefined,
+          category: params['category'] || undefined,
+          minPrice: params['minPrice'] ? Number(params['minPrice']) : undefined,
+          maxPrice: params['maxPrice'] ? Number(params['maxPrice']) : undefined,
+          inStock: params['inStock'] === 'true',
+          attributes: params['attributes'] || undefined,
+          sort: params['sort'] as SortOption || 'relevance'
+        };
+        
+        this.currentSort.set(queryParams.sort || 'relevance');
+        this.currentSearch.set(queryParams.search || '');
 
-    let result = this._allProducts().filter((product) => {
-      const matchesCategory =
-        activeCategories.length === 0 || activeCategories.includes(product.category);
-      const matchesColor = !color || product.color === color;
-      const matchesPrice = product.price <= price;
-      const matchesStock = !stockOnly || product.inStock;
-      const matchesDiscount = !discountOnly || !!product.discount;
-      const matchesSearch =
-        !query ||
-        product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query);
-
-      return (
-        matchesCategory &&
-        matchesColor &&
-        matchesPrice &&
-        matchesStock &&
-        matchesDiscount &&
-        matchesSearch
-      );
+        return combineLatest([
+          this.apiService.getProducts(environment.storeSlug, queryParams).pipe(catchError(() => of(null))),
+          this.apiService.getFilters(environment.storeSlug, queryParams).pipe(catchError(() => of(null)))
+        ]);
+      })
+    ).subscribe(([products, filters]) => {
+      this.productsResponse.set(products);
+      this.filterResponse.set(filters);
+      this.isLoading.set(false);
     });
+  }
 
-    if (sortOption === 'best-seller') {
-      return result.filter((p) => p.badge?.toLowerCase().includes('best'));
-    }
-
-    result = [...result].sort((a, b) => {
-      switch (sortOption) {
-        case 'price-asc':
-          return a.price - b.price;
-        case 'price-desc':
-          return b.price - a.price;
-        case 'newest':
-          return b.id.localeCompare(a.id);
-        default:
-          return 0;
-      }
+  // --- Handlers that update URL --- //
+  private updateUrl(updates: Record<string, any>): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: updates,
+      queryParamsHandling: 'merge'
     });
-
-    return result;
-  });
-
-  protected readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.filteredProducts().length / PAGE_SIZE)),
-  );
-
-  protected readonly pagedProducts = computed(() => {
-    const page = this.currentPage();
-    const start = (page - 1) * PAGE_SIZE;
-    return this.filteredProducts().slice(start, start + PAGE_SIZE);
-  });
-
-  protected onCategoryToggle(value: string): void {
-    this.categories.update((cats) =>
-      cats.map((c) => (c.value === value ? { ...c, checked: !c.checked } : c)),
-    );
-    this.currentPage.set(1);
   }
 
-  protected onColorSelect(value: string): void {
-    this.selectedColor.update((current) => (current === value ? null : value));
-    this.currentPage.set(1);
+  protected onSortChange(sort: SortOption): void {
+    this.updateUrl({ sort, page: 1 });
   }
 
-  protected onPriceChange(value: number): void {
-    this.maxPrice.set(value);
-    this.currentPage.set(1);
-  }
-
-  protected onSortChange(value: SortOption): void {
-    this.sort.set(value);
-    this.currentPage.set(1);
-  }
-
-  protected onInStockChange(value: boolean): void {
-    this.inStock.set(value);
-    this.currentPage.set(1);
-  }
-
-  protected onDiscountChange(value: boolean): void {
-    this.onlyDiscount.set(value);
-    this.currentPage.set(1);
-  }
-
-  protected onSearchChange(value: string): void {
-    this.searchQuery.set(value);
-    this.currentPage.set(1);
-  }
-
-  protected onClearAll(): void {
-    this.categories.update((cats) => cats.map((c) => ({ ...c, checked: false })));
-    this.selectedColor.set(null);
-    this.maxPrice.set(5000);
-    this.sort.set('recommended');
-    this.inStock.set(false);
-    this.onlyDiscount.set(false);
-    this.searchQuery.set('');
-    this.currentPage.set(1);
+  protected onSearchSubmit(search: string): void {
+    this.updateUrl({ search: search || null, page: 1 });
   }
 
   protected onPageChange(page: number): void {
-    const direction = page > this.currentPage() ? 'right' : 'left';
-    this.currentPage.set(page);
+    this.updateUrl({ page });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 
-    setTimeout(() => {
-      const wrapper = document.querySelector('.products-grid-wrapper') as HTMLElement;
-      if (!wrapper) return;
-      wrapper.style.animation = 'none';
-      void wrapper.offsetHeight;
-      wrapper.style.animation =
-        direction === 'right'
-          ? 'slideInFromRight 0.35s ease-out'
-          : 'slideInFromLeft 0.35s ease-out';
-    }, 0);
+  protected onCategoryChange(categorySlug: string): void {
+    this.updateUrl({ category: categorySlug, page: 1 });
+  }
+
+  protected onPriceChange(range: { min?: number, max?: number }): void {
+    this.updateUrl({ minPrice: range.min, maxPrice: range.max, page: 1 });
+  }
+
+  protected onInStockChange(inStock: boolean): void {
+    this.updateUrl({ inStock: inStock ? 'true' : null, page: 1 });
+  }
+
+  protected onAttributeChange(event: { key: string, values: string[] }): void {
+    const currentParams = this.route.snapshot.queryParams;
+    const attrs = parseAttributes(currentParams['attributes']);
+    
+    if (event.values.length > 0) {
+      attrs[event.key] = event.values;
+    } else {
+      delete attrs[event.key];
+    }
+    
+    const attributesString = stringifyAttributes(attrs);
+    this.updateUrl({ attributes: attributesString || null, page: 1 });
+  }
+
+  protected onClearAll(): void {
+    // Clear everything except maybe category if we're on a category page, but for now clear all filters
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {}
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 }

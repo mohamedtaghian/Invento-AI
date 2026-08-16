@@ -1,9 +1,9 @@
 @let images = store.product()?.images ?? []; @let activeIdx = activeIndex();
-@let active = activeImage(); @let name = store.product()?.name ?? '';
+@let active = activeImage(); @let name = store.product()?.title ?? '';
 
 <div class="flex flex-col-reverse gap-3 md:flex-row">
   <div class="flex gap-3 overflow-x-auto pb-1 md:w-24 md:flex-col md:overflow-y-auto md:pb-0">
-    @for (img of images; track img.id; let i = $index) {
+    @for (img of images; track img.url || $index; let i = $index) {
       <button
         type="button"
         (click)="selectImage(i)"
@@ -13,7 +13,7 @@
         [class.border-primary]="i === activeIdx"
         [class.border-border]="i !== activeIdx"
       >
-        <img [src]="img.src" [alt]="img.alt" class="h-full w-full object-cover" />
+        <img [src]="img.url" [alt]="img.altText || ''" class="h-full w-full object-cover" />
       </button>
     }
   </div>
@@ -22,7 +22,7 @@
     class="group relative aspect-square flex-grow overflow-hidden rounded-xl border border-border bg-card shadow-sm"
   >
     @if (active) {
-      <img [src]="active.src" [alt]="active.alt" class="h-full w-full object-cover" />
+      <img [src]="active.url" [alt]="active.altText || ''" class="h-full w-full object-cover" />
     }
 
     <button

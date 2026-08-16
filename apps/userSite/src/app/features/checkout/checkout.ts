@@ -11,8 +11,6 @@ import { HlmButton } from '@spartan/helm/button';
 import { HlmCard } from '@spartan/helm/card';
 
 // Import your data service (adjust the path based on your folder structure)
-import { ProductsData } from '../product/service/products-data';
-
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -22,12 +20,11 @@ import { ProductsData } from '../product/service/products-data';
 export class CheckoutComponent implements OnInit {
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  private productsData = inject(ProductsData);
 
-  // 1. Mocking a cart using signals and your real data service
+  // 1. Mocking a cart using signals
   cartItems = signal([
-    { product: this.productsData.products()[0], quantity: 1, color: 'Matte Black' },
-    { product: this.productsData.products()[1], quantity: 2, color: 'Silver' },
+    { product: { name: 'Aura Sync Watch', price: 199.99, image: 'assets/images/watch-1.jpg' }, quantity: 1, color: 'Matte Black' },
+    { product: { name: 'Nova Pro Earbuds', price: 129.99, image: 'assets/images/earbuds.jpg' }, quantity: 2, color: 'Silver' },
   ]);
 
   // 2. Automatically calculated totals

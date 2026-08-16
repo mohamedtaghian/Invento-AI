@@ -7,99 +7,163 @@
   </div>
 
   <div hlmCardContent class="flex flex-col gap-6 p-0">
-    <!-- Categories -->
-    <div class="flex flex-col gap-3">
-      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Categories</h3>
-      <div class="flex flex-col gap-2">
-        @for (cat of categories(); track cat.value) {
-          <label class="group flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              [checked]="cat.checked"
-              (change)="categoryToggle.emit(cat.value)"
-              class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
-            />
-            <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors">
-              {{ cat.label }}
-            </span>
-          </label>
-        }
+    
+    @if (filters()) {
+      <!-- Categories -->
+      @if (filters()!.categories.length > 0) {
+        <div class="flex flex-col gap-3">
+          <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Categories</h3>
+          <div class="flex flex-col gap-2">
+            @for (cat of filters()!.categories; track cat.slug) {
+              <label class="group flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  [checked]="activeCategory === cat.slug"
+                  (change)="onCategoryClick(cat.slug)"
+                  class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
+                />
+                <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1">
+                  {{ cat.name }}
+                </span>
+                <span class="text-xs text-muted-foreground">({{ cat.count }})</span>
+              </label>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Custom Attributes (Facets) -->
+      @for (attr of filters()!.attributes; track attr.key) {
+        <div class="flex flex-col gap-3 pt-4 border-border border-t">
+          <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">{{ attr.name }}</h3>
+          
+          @if (attr.displayStyle === 'swatch') {
+            <div class="flex flex-wrap gap-2">
+              @for (val of attr.values; track val.slug) {
+                <button
+                  type="button"
+                  (click)="onAttributeToggle(attr.key, val.slug)"
+                  [style.background]="val.swatchHex"
+                  class="border border-border rounded-full ring-2 w-6 h-6 transition-all relative group"
+                  [class.ring-primary]="isAttributeSelected(attr.key, val.slug)"
+                  [class.ring-transparent]="!isAttributeSelected(attr.key, val.slug)"
+                  [class.opacity-50]="val.count === 0"
+                  [disabled]="val.count === 0"
+                >
+                  <span class="sr-only">{{ val.value }}</span>
+                  <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                    {{ val.value }} ({{ val.count }})
+                  </div>
+                </button>
+              }
+            </div>
+          } @else if (attr.displayStyle === 'chip') {
+            <div class="flex flex-wrap gap-2">
+              @for (val of attr.values; track val.slug) {
+                <button
+                  type="button"
+                  (click)="onAttributeToggle(attr.key, val.slug)"
+                  class="px-3 py-1 border border-border rounded-full text-sm transition-all"
+                  [class.bg-primary]="isAttributeSelected(attr.key, val.slug)"
+                  [class.text-primary-foreground]="isAttributeSelected(attr.key, val.slug)"
+                  [class.hover:bg-secondary]="!isAttributeSelected(attr.key, val.slug)"
+                  [class.opacity-50]="val.count === 0"
+                  [disabled]="val.count === 0"
+                >
+                  {{ val.value }}
+                </button>
+              }
+            </div>
+          } @else if (attr.displayStyle === 'dropdown') {
+            <select
+              (change)="onAttributeToggle(attr.key, $any($event.target).value)"
+              class="bg-background py-1.5 pr-8 pl-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-foreground text-sm cursor-pointer w-full"
+            >
+              <option value="" class="bg-background text-foreground">All {{ attr.name }}</option>
+              @for (val of attr.values; track val.slug) {
+                <option [value]="val.slug" [selected]="isAttributeSelected(attr.key, val.slug)" [disabled]="val.count === 0" class="bg-background text-foreground">
+                  {{ val.value }} ({{ val.count }})
+                </option>
+              }
+            </select>
+          } @else {
+            <!-- list format (checkboxes) -->
+            <div class="flex flex-col gap-2">
+              @for (val of attr.values; track val.slug) {
+                <label class="group flex items-center gap-2 cursor-pointer" [class.opacity-50]="val.count === 0">
+                  <input
+                    type="checkbox"
+                    [checked]="isAttributeSelected(attr.key, val.slug)"
+                    (change)="onAttributeToggle(attr.key, val.slug)"
+                    [disabled]="val.count === 0"
+                    class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
+                  />
+                  <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1">
+                    {{ val.value }}
+                  </span>
+                  <span class="text-xs text-muted-foreground">({{ val.count }})</span>
+                </label>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Price -->
+      <div class="flex flex-col gap-3 pt-4 border-border border-t">
+        <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Price Range</h3>
+        <!-- Note: Max slider assumes upper bound is max provided by API if not set in URL -->
+        <input
+          type="range"
+          [min]="filters()!.price.min"
+          [max]="filters()!.price.max < currentMaxPrice ? currentMaxPrice : filters()!.price.max"
+          step="1"
+          [value]="currentMaxPrice"
+          (change)="onPriceInput($event)"
+          class="bg-border rounded-lg w-full h-1 accent-primary cursor-pointer"
+        />
+        <div class="flex justify-between text-muted-foreground text-xs">
+          <span>{{ filters()!.price.min / 100 | currency }}</span>
+          <span class="font-semibold text-primary">{{ currentMaxPrice / 100 | currency }}</span>
+          <span>{{ (filters()!.price.max < currentMaxPrice ? currentMaxPrice : filters()!.price.max) / 100 | currency }}</span>
+        </div>
       </div>
-    </div>
 
-    <!-- Colors -->
-    <!-- Colors -->
-    <div class="flex flex-col gap-3 pt-4 border-border border-t">
-      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Color</h3>
-      <div class="flex flex-wrap gap-2">
-        @for (color of colors(); track color.value) {
-          <button
-            type="button"
-            (click)="colorSelect.emit(color.value)"
-            [style.background]="color.hex"
-            class="border border-border rounded-full ring-2 w-6 h-6 transition-all"
-            [class.ring-primary]="selectedColor() === color.value"
-            [class.ring-transparent]="selectedColor() !== color.value"
-          >
-            <span class="sr-only">{{ color.value }}</span>
-          </button>
-        }
+      <!-- In Stock -->
+      <div class="flex justify-between items-center pt-4 border-border border-t">
+        <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">In Stock Only</h3>
+        <button
+          type="button"
+          (click)="inStockChange.emit(!isInStockOnly)"
+          class="inline-flex relative items-center rounded-full w-9 h-5 transition-colors duration-200"
+          [class.bg-primary]="isInStockOnly"
+          [class.bg-border]="!isInStockOnly"
+        >
+          <span
+            class="inline-block bg-white shadow rounded-full w-4 h-4 transition-transform duration-200 transform"
+            [class.translate-x-4]="isInStockOnly"
+            [class.translate-x-0.5]="!isInStockOnly"
+          ></span>
+        </button>
       </div>
-    </div>
-
-    <!-- Price -->
-    <div class="flex flex-col gap-3 pt-4 border-border border-t">
-      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Price Range</h3>
-      <input
-        type="range"
-        min="0"
-        max="5000"
-        step="50"
-        [value]="maxPrice()"
-        (input)="onPriceInput($event)"
-        class="bg-border rounded-lg w-full h-1 accent-primary cursor-pointer"
-      />
-      <div class="flex justify-between text-muted-foreground text-xs">
-        <span>$0</span>
-        <span class="font-semibold text-primary">${{ maxPrice() | number }}</span>
-        <span>$5k+</span>
+      
+    } @else {
+      <!-- Loading Skeleton for Filters -->
+      <div class="animate-pulse flex flex-col gap-6">
+        <div class="h-4 bg-muted rounded w-1/3"></div>
+        <div class="space-y-2">
+          <div class="h-3 bg-muted rounded w-3/4"></div>
+          <div class="h-3 bg-muted rounded w-2/3"></div>
+          <div class="h-3 bg-muted rounded w-5/6"></div>
+        </div>
+        <div class="h-4 bg-muted rounded w-1/4 mt-4"></div>
+        <div class="flex gap-2">
+          <div class="h-6 w-6 rounded-full bg-muted"></div>
+          <div class="h-6 w-6 rounded-full bg-muted"></div>
+          <div class="h-6 w-6 rounded-full bg-muted"></div>
+        </div>
       </div>
-    </div>
+    }
 
-    <!-- In Stock -->
-    <div class="flex justify-between items-center pt-4 border-border border-t">
-      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">In Stock Only</h3>
-      <button
-        type="button"
-        (click)="inStockChange.emit(!inStock())"
-        class="inline-flex relative items-center rounded-full w-9 h-5 transition-colors duration-200"
-        [class.bg-primary]="inStock()"
-        [class.bg-border]="!inStock()"
-      >
-        <span
-          class="inline-block bg-white shadow rounded-full w-4 h-4 transition-transform duration-200 transform"
-          [class.translate-x-4]="inStock()"
-          [class.translate-x-0.5]="!inStock()"
-        ></span>
-      </button>
-    </div>
-
-    <!-- Discount -->
-    <div class="flex justify-between items-center pt-4 border-border border-t">
-      <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">On Sale</h3>
-      <button
-        type="button"
-        (click)="discountChange.emit(!onlyDiscount())"
-        class="inline-flex relative items-center rounded-full w-9 h-5 transition-colors duration-200"
-        [class.bg-primary]="onlyDiscount()"
-        [class.bg-border]="!onlyDiscount()"
-      >
-        <span
-          class="inline-block bg-white shadow rounded-full w-4 h-4 transition-transform duration-200 transform"
-          [class.translate-x-4]="onlyDiscount()"
-          [class.translate-x-0.5]="!onlyDiscount()"
-        ></span>
-      </button>
-    </div>
   </div>
 </div>

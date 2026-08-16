@@ -1,74 +1,55 @@
 <div
   hlmCard
-  [routerLink]="['/product-details', product().id]"
+  [routerLink]="['/', storeSlug, 'product-details', product().slug]"
   class="group relative flex flex-col hover:shadow-lg p-0 h-full overflow-hidden transition-shadow duration-300 cursor-pointer"
 >
-  <!-- Badge (Best Seller / New) -->
-  @if (product().badge) {
-    <span hlmBadge class="top-3 left-3 z-10 absolute text-[10px] uppercase tracking-wide">
-      {{ product().badge }}
-    </span>
-  }
-
-  <!-- Discount Badge -->
-  @if (product().discount) {
-    <span
-      class="top-3 z-10 absolute bg-red-500 px-2 py-0.5 rounded-full font-bold text-[10px] text-white uppercase tracking-wide"
-      [class.left-3]="!product().badge"
-      [class.left-20]="!!product().badge"
-    >
-      -{{ product().discount }}%
-    </span>
-  }
-
-  <!-- Wishlist Button -->
-  <button
-    type="button"
-    (click)="toggleFavorite($event)"
-    class="top-3 right-3 z-10 absolute flex justify-center items-center bg-card shadow rounded-full w-8 h-8 transition-all duration-200"
-    [class.text-red-500]="isFavorited()"
-    [class.text-muted-foreground]="!isFavorited()"
-    [class.scale-125]="isFavorited()"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      [attr.fill]="isFavorited() ? 'currentColor' : 'none'"
-    >
-      <path
-        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-      />
-    </svg>
-  </button>
 
   <!-- Image -->
   <div class="flex justify-center items-center bg-muted h-48 overflow-hidden">
-    <img
-      [src]="product().image"
-      [alt]="product().name"
-      class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-    />
+    @if (product().imageUrl) {
+      <img
+        [src]="product().imageUrl"
+        [alt]="product().imageAltText || product().title"
+        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      />
+    } @else {
+      <div class="w-full h-full flex items-center justify-center text-muted-foreground/50 bg-secondary group-hover:scale-105 transition-transform duration-500">
+        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+      </div>
+    }
   </div>
 
   <div hlmCardContent class="flex flex-col flex-1 gap-3 p-4">
     <div hlmCardHeader class="gap-1 p-0">
-      <h3 hlmCardTitle class="text-base line-clamp-2 leading-tight">{{ product().name }}</h3>
-      <p hlmCardDescription class="text-sm line-clamp-2">{{ product().description }}</p>
+      <h3 hlmCardTitle class="text-base line-clamp-2 leading-tight">{{ product().title }}</h3>
+      @if (product().shortDescription) {
+        <p hlmCardDescription class="text-sm line-clamp-2">{{ product().shortDescription }}</p>
+      }
     </div>
+
+    <!-- Swatches preview (if any) -->
+    @if (product().swatches.length > 0) {
+      <div class="flex flex-wrap gap-1 mt-1">
+        @for (swatch of product().swatches | slice:0:5; track swatch.slug) {
+          <div 
+            [style.background]="swatch.swatchHex" 
+            class="w-4 h-4 rounded-full border border-border shadow-sm"
+            [title]="swatch.value"
+          ></div>
+        }
+        @if (product().swatches.length > 5) {
+          <span class="text-xs text-muted-foreground ml-1">+{{ product().swatches.length - 5 }}</span>
+        }
+      </div>
+    }
 
     <div class="flex justify-between items-center mt-auto pt-2">
       <!-- Price -->
       <div class="flex flex-col">
-        <span class="font-semibold text-primary text-lg">${{ product().price | number }}</span>
-        @if (product().originalPrice) {
-          <span class="text-muted-foreground text-xs line-through">
-            ${{ product().originalPrice | number }}
+        <span class="font-semibold text-primary text-lg">{{ product().minPriceAmount / 100 | currency }}</span>
+        @if (product().maxPriceAmount > product().minPriceAmount) {
+          <span class="text-muted-foreground text-xs">
+            - {{ product().maxPriceAmount / 100 | currency }}
           </span>
         }
       </div>

@@ -1,4 +1,4 @@
-import { Component, afterNextRender } from '@angular/core';
+import { Component, afterNextRender, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -21,8 +21,11 @@ import {
   lucideArrowRight,
 } from '@ng-icons/lucide';
 
-import { PRODUCTS } from '../product/mock/products';
 import { ProductCard } from '../product/components/product-card/product-card';
+import { ProductListItem } from '../product/types/product';
+
+import { environment } from '../../../environments/environment';
+import { ProductApiService } from '../product/service/product-api.service';
 
 @Component({
   selector: 'app-home',
@@ -42,6 +45,8 @@ import { ProductCard } from '../product/components/product-card/product-card';
   templateUrl: './home.html',
 })
 export class HomeComponent {
+  private readonly apiService = inject(ProductApiService);
+
   categories = [
     { name: 'Laptops', icon: 'lucideLaptop' },
     { name: 'Audio', icon: 'lucideHeadphones' },
@@ -51,7 +56,13 @@ export class HomeComponent {
     { name: 'Networking', icon: 'lucideWifi' },
   ];
 
-  featuredProducts = PRODUCTS.slice(0, 4);
+  featuredProducts = signal<ProductListItem[]>([]);
+
+  ngOnInit() {
+    this.apiService.getProducts(environment.storeSlug, { sort: 'newest', limit: 4 }).subscribe(res => {
+      this.featuredProducts.set(res.items);
+    });
+  }
 
   constructor() {
     afterNextRender(() => {

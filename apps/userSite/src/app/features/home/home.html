@@ -104,7 +104,7 @@
       <div
         class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 justify-items-center sm:justify-items-stretch"
       >
-        @for (product of featuredProducts; track product.id) {
+        @for (product of featuredProducts(); track product.slug) {
           <!-- Added w-full and max-w-[340px] to prevent massive stretching on large phones -->
           <div class="product-card h-full w-full max-w-[340px] sm:max-w-none">
             <app-product-card [product]="product"></app-product-card>
