@@ -42,6 +42,13 @@ export const appRoutes: Routes = [
         loadComponent: () => import('@invento/invento/pages/orders/orders').then((c) => c.Orders),
       },
       {
+        path: 'faq',
+        loadComponent: () =>
+          import('@invento/invento/pages/faq-management/faq-management.page').then(
+            (c) => c.FaqManagementPageComponent,
+          ),
+      },
+      {
         path: 'suppliers',
         loadComponent: () =>
           import('@invento/invento/pages/suppliers/suppliers').then((c) => c.Suppliers),
