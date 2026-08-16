@@ -49,7 +49,7 @@ export class StoreService {
   private readonly tokenHeader = {
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNTQ5MDFlYi02MTYwLTRlYzAtYTY1Mi1iNGJhZTc1ZTg3NmUiLCJlbWFpbCI6Im93bmVyLmxheWFsaUBpbnZlbnRvYWkudGVzdCIsInJvbGUiOiJPV05FUiIsInN0b3JlSWQiOm51bGwsImlhdCI6MTc4NjIwMTUxOCwiZXhwIjoxNzg2MjQ0NzE4fQ.gi2NMmGZutsDzV3Rw8uXNkr9C0mW-5R_K8FeUgXSqZk',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJiZWRhNjRhMC1lZTVlLTQ0NGUtODFiNC1jNjlmOTY0NjRmNmUiLCJlbWFpbCI6Im93bmVyLmxheWFsaUBpbnZlbnRvYWkudGVzdCIsInJvbGUiOiJPV05FUiIsInN0b3JlSWQiOm51bGwsImlhdCI6MTc4Njg4NDUzNiwiZXhwIjoxNzg2OTI3NzM2fQ.uOf9gaIMA5h81eElSQLhD9FVIxX2iKGV2ZixGFpRE4I',
     },
   };
   private readonly http = inject(HttpClient);
