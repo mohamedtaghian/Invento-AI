@@ -11,12 +11,33 @@
       aria-label="INVENTO Home Page"
     >
       <img src="light-logo.png" class="h-13 w-auto dark:hidden block" alt="INVENTO Logo" />
-
       <img src="logo.png" class="h-13 w-auto hidden dark:block" alt="INVENTO Logo" />
     </a>
 
     <div class="flex items-center gap-4">
       <app-lang-selector></app-lang-selector>
+
+      <button hlmBtn variant="ghost" size="icon" (click)="toggleTheme()" aria-label="Toggle Theme">
+        @if (isDark()) {
+          <ng-icon name="lucideSun" class="text-lg"></ng-icon>
+        } @else {
+          <ng-icon name="lucideMoon" class="text-lg"></ng-icon>
+        }
+      </button>
+
+      @if (isAuthenticated()) {
+        <a [href]="dashboardUrl" hlmBtn variant="outline" class="gap-2">
+          <ng-icon name="lucideLayoutDashboard" class="text-sm"></ng-icon>
+          Dashboard
+        </a>
+        <button hlmBtn variant="ghost" class="gap-2" (click)="signOut()">
+          <ng-icon name="lucideLogOut" class="text-sm"></ng-icon>
+          Sign Out
+        </button>
+      } @else {
+        <a routerLink="/auth/login" hlmBtn variant="ghost">Login</a>
+        <a routerLink="/auth/register" hlmBtn>Sign Up</a>
+      }
     </div>
   </div>
 </nav>
