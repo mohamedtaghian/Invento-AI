@@ -1,0 +1,33 @@
+<div class="flex flex-col gap-6 p-6">
+  <div class="flex justify-between items-center">
+    <div>
+      <h1 class="font-semibold text-foreground text-xl">FAQ</h1>
+      <p class="text-muted-foreground text-sm">
+        Drag to reorder. {{ store.entries().length }}/100 entries.
+      </p>
+    </div>
+
+    <hlm-sheet side="right">
+      <button hlmSheetTrigger hlmBtn type="button" [disabled]="store.isFull()">Add FAQ</button>
+      <hlm-sheet-content *hlmSheetPortal="let ctx" class="p-5 sm:max-w-lg">
+        <app-faq-form (saved)="ctx.close()" (canceled)="ctx.close()" />
+      </hlm-sheet-content>
+    </hlm-sheet>
+  </div>
+
+  @if (store.isFull()) {
+    <div class="bg-amber-50 px-3 py-2 border border-amber-300/50 rounded-md text-amber-800 text-sm">
+      This store has 100 entries, the maximum. Delete one to add another.
+    </div>
+  }
+
+  @if (store.error()) {
+    <div
+      class="bg-destructive/10 px-3 py-2 border border-destructive/30 rounded-md text-destructive text-sm"
+    >
+      {{ store.error() }}
+    </div>
+  }
+
+  <app-faq-list />
+</div>

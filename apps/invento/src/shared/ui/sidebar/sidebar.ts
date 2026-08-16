@@ -12,6 +12,7 @@ import {
   lucideBot,
   lucideFolderTree,
   lucideTags,
+  lucideMessageCircleQuestionMark,
 } from '@ng-icons/lucide';
 import { TranslatePipe, LocaleService } from '@invento/core';
 import { BrandLogo } from '@invento/shared';
@@ -36,6 +37,7 @@ interface NavItem {
       lucideBot,
       lucideFolderTree,
       lucideTags,
+      lucideMessageCircleQuestionMark,
     }),
   ],
   templateUrl: './sidebar.html',
@@ -54,6 +56,7 @@ export class Sidebar {
     { label: 'nav_categories', icon: 'lucideFolderTree', route: '/categories' },
     { label: 'nav_users', icon: 'lucideUsers', route: '/users' },
     { label: 'nav_orders', icon: 'lucideShoppingCart', route: '/orders' },
+    { label: 'nav_faq', icon: 'lucideMessageCircleQuestionMark', route: '/faq' },
     { label: 'nav_suppliers', icon: 'lucideTruck', route: '/suppliers' },
     { label: 'nav_analytics', icon: 'lucideBarChart3', route: '/analytics' },
     { label: 'nav_ai_advisor', icon: 'lucideBot', route: '/ai-advisor' },
