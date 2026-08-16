@@ -22,6 +22,7 @@ import { VerifyEmail } from './pages/auth/verify-email/verify-email';
 
 // Guards
 import { stepGuard } from './core/guards/step-guard';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -38,6 +39,7 @@ export const routes: Routes = [
       {
         path: 'build',
         component: BuilderLayout,
+        canActivate: [authGuard],
         children: [
           { path: '', redirectTo: 'brainstorm', pathMatch: 'full' },
           {
