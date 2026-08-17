@@ -1,7 +1,12 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -15,7 +20,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, HlmInput, HlmLabel, HlmButton],
+  imports: [ReactiveFormsModule, HlmInput, HlmLabel, HlmButton],
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
 })
@@ -81,7 +86,7 @@ export class ResetPassword implements OnInit {
     }
   }
 
-  passwordMatchValidator(g: AbstractControl) {
+  passwordMatchValidator(g: AbstractControl): ValidationErrors | null {
     return g.get('newPassword')?.value === g.get('confirmPassword')?.value
       ? null
       : { mismatch: true };
@@ -92,6 +97,14 @@ export class ResetPassword implements OnInit {
       this.route.snapshot.paramMap.get('storeSlug') ??
       this.route.parent?.snapshot.paramMap.get('storeSlug') ??
       environment.storeSlug;
+
+    // Cache returnUrl if present
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get('returnUrl') ||
+      this.route.snapshot.queryParamMap.get('redirectUrl');
+    if (returnUrl && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('invento_auth_return_url', returnUrl);
+    }
 
     const emailFromQuery = this.route.snapshot.queryParamMap.get('email');
     if (emailFromQuery) {
@@ -145,15 +158,29 @@ export class ResetPassword implements OnInit {
       .resetPassword({
         email: this.userEmail,
         otp: this.verifiedOtp,
-        newPassword,
-        confirmPassword,
+        newPassword: newPassword || '',
+        confirmPassword: confirmPassword || '',
         storeSlug: this.storeSlug,
       })
       .subscribe({
         next: (res) => {
           this.isLoading.set(false);
           toast.success(res.message || 'Password reset successfully.');
-          this.router.navigate(['../login'], { relativeTo: this.route });
+
+          const returnUrl =
+            this.route.snapshot.queryParamMap.get('returnUrl') ||
+            this.route.snapshot.queryParamMap.get('redirectUrl') ||
+            (typeof sessionStorage !== 'undefined'
+              ? sessionStorage.getItem('invento_auth_return_url')
+              : null);
+
+          this.router.navigate(['../login'], {
+            relativeTo: this.route,
+            queryParams: {
+              email: this.userEmail,
+              ...(returnUrl ? { returnUrl } : {}),
+            },
+          });
         },
         error: (err) => {
           this.isLoading.set(false);
