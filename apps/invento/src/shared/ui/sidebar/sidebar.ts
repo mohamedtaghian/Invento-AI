@@ -13,7 +13,15 @@ import {
   lucideFolderTree,
   lucideTags,
   lucideMessageCircleQuestionMark,
+  lucideChevronUp,
+  lucideSparkles,
+  lucideBadgeCheck,
+  lucideCreditCard,
+  lucideBell,
+  lucideLogOut,
 } from '@ng-icons/lucide';
+import { HlmDropdownMenuImports } from '@spartan/helm/dropdown-menu';
+import { HlmAvatar, HlmAvatarImage, HlmAvatarFallback } from '@spartan/helm/avatar';
 import { TranslatePipe, LocaleService } from '@invento/core';
 import { BrandLogo } from '@invento/shared';
 
@@ -25,7 +33,18 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, NgIcon, HlmSidebarImports, TranslatePipe, BrandLogo],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    NgIcon,
+    HlmSidebarImports,
+    TranslatePipe,
+    BrandLogo,
+    HlmDropdownMenuImports,
+    HlmAvatar,
+    HlmAvatarImage,
+    HlmAvatarFallback,
+  ],
   providers: [
     provideIcons({
       lucideLayoutDashboard,
@@ -38,6 +57,12 @@ interface NavItem {
       lucideFolderTree,
       lucideTags,
       lucideMessageCircleQuestionMark,
+      lucideChevronUp,
+      lucideSparkles,
+      lucideBadgeCheck,
+      lucideCreditCard,
+      lucideBell,
+      lucideLogOut,
     }),
   ],
   templateUrl: './sidebar.html',
