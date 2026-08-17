@@ -54,7 +54,6 @@ export class Sidebar {
     { label: 'nav_products', icon: 'lucidePackage', route: '/products' },
     { label: 'nav_attributes', icon: 'lucideTags', route: '/attributes' },
     { label: 'nav_categories', icon: 'lucideFolderTree', route: '/categories' },
-    { label: 'nav_users', icon: 'lucideUsers', route: '/users' },
     { label: 'nav_orders', icon: 'lucideShoppingCart', route: '/orders' },
     { label: 'nav_faq', icon: 'lucideMessageCircleQuestionMark', route: '/faq' },
     { label: 'nav_suppliers', icon: 'lucideTruck', route: '/suppliers' },

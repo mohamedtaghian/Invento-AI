@@ -1,4 +1,4 @@
-<div class="relative flex flex-col w-full min-h-full overflow-x-hidden">
+<div class="space-y-6 w-full p-4 md:p-6 lg:p-8">
   <!-- ══════════════════════════════════════════════════════════
        ADD SUPPLIER MODAL
   ══════════════════════════════════════════════════════════ -->
@@ -468,24 +468,28 @@
   <!-- ══════════════════════════════════════════════════════════
        PAGE HEADER
   ══════════════════════════════════════════════════════════ -->
-  <div
-    class="flex sm:flex-row flex-col justify-between items-start sm:items-center gap-4 px-4 sm:px-6 py-4 sm:py-5"
-  >
-    <div class="min-w-0">
-      <div class="flex items-center gap-1 mb-1 text-muted-foreground text-xs">
+  <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-4">
+    <div class="space-y-1">
+      <nav class="flex items-center gap-1.5 font-medium text-muted-foreground text-xs">
         <span>Operations</span>
-        <ng-icon name="lucideChevronRight" size="12" />
-        <span>Suppliers</span>
-      </div>
-      <h1 class="font-bold text-xl sm:text-2xl tracking-tight">Suppliers</h1>
-      <p class="mt-0.5 text-muted-foreground text-xs sm:text-sm">
+        <ng-icon
+          name="lucideChevronRight"
+          size="14"
+          class="text-muted-foreground/60 rtl:rotate-180"
+        />
+        <span class="font-semibold text-foreground">Suppliers</span>
+      </nav>
+      <h1 class="font-bold text-foreground text-2xl sm:text-3xl tracking-tight">Suppliers</h1>
+      <p class="text-muted-foreground text-sm">
         Manage supplier relationships and AI-assisted outreach
       </p>
     </div>
-    <div class="w-full sm:w-auto">
-      <button hlmBtn class="justify-center gap-2 w-full sm:w-auto" (click)="openAdd()">
-        <ng-icon name="lucidePlus" size="15" />
-        Add Supplier
+
+    <!-- Action Buttons -->
+    <div class="flex items-center self-start sm:self-auto gap-2 sm:gap-3 flex-wrap">
+      <button hlmBtn class="flex items-center gap-2" (click)="openAdd()">
+        <ng-icon name="lucidePlus" size="16" />
+        <span>Add Supplier</span>
       </button>
     </div>
   </div>
@@ -493,7 +497,7 @@
   <!-- ══════════════════════════════════════════════════════════
        KPI CARDS — Responsive (Vertical stack on mobile)
   ══════════════════════════════════════════════════════════ -->
-  <div class="gap-3 sm:gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-4 px-4 sm:px-6">
+  <div class="gap-3 sm:gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
     <!-- Total Suppliers -->
     <div
       hlmCard
@@ -594,34 +598,35 @@
   <!-- ══════════════════════════════════════════════════════════
        SEARCH & FILTERS
   ══════════════════════════════════════════════════════════ -->
-  <div class="flex sm:flex-row flex-col items-stretch sm:items-center gap-3 mb-4 px-4 sm:px-6">
-    <!-- Search -->
-    <div class="relative flex-1 w-full">
+  <div class="flex sm:flex-row flex-col justify-between sm:items-center gap-4">
+    <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 w-full sm:w-auto">
+      <!-- Search -->
+      <div class="relative w-full sm:w-72 md:w-96">
       <ng-icon
         name="lucideSearch"
         size="15"
         class="top-1/2 absolute text-muted-foreground -translate-y-1/2 pointer-events-none start-3"
       />
-      <input
-        hlmInput
-        class="ps-9 w-full"
-        placeholder="Search by company, contact, or category..."
-        aria-label="Search suppliers"
-        [value]="searchQuery()"
-        (input)="searchQuery.set($any($event.target).value)"
-      />
-    </div>
+        <input
+          hlmInput
+          class="bg-card shadow-sm ps-9 border-border rounded-full focus:ring-2 focus:ring-primary/20 w-full h-9"
+          placeholder="Search by company, contact, or category..."
+          aria-label="Search suppliers"
+          [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+        />
+      </div>
 
-    <!-- Dropdowns Row -->
-    <div class="sm:flex items-center gap-2 grid grid-cols-2 w-full sm:w-auto">
+      <!-- Dropdowns Row -->
+      <div class="sm:flex items-center gap-2 grid grid-cols-2 w-full sm:w-auto">
       <!-- Rating dropdown -->
       <div class="relative w-full sm:w-auto">
-        <button
-          hlmBtn
-          variant="outline"
-          class="justify-between gap-2 w-full sm:w-[130px]"
-          (click)="ratingsOpen.set(!ratingsOpen())"
-        >
+          <button
+            hlmBtn
+            variant="outline"
+            class="justify-between gap-2 w-full sm:w-[130px] bg-card h-9"
+            (click)="ratingsOpen.set(!ratingsOpen())"
+          >
           <span class="truncate">{{ getRatingFilterLabel() }}</span>
           <ng-icon name="lucideChevronDown" size="14" class="flex-shrink-0 text-muted-foreground" />
         </button>
@@ -653,12 +658,12 @@
 
       <!-- Category dropdown -->
       <div class="relative w-full sm:w-auto">
-        <button
-          hlmBtn
-          variant="outline"
-          class="justify-between gap-2 w-full sm:w-[148px]"
-          (click)="categoriesOpen.set(!categoriesOpen())"
-        >
+          <button
+            hlmBtn
+            variant="outline"
+            class="justify-between gap-2 w-full sm:w-[148px] bg-card h-9"
+            (click)="categoriesOpen.set(!categoriesOpen())"
+          >
           <span class="truncate">{{ getCategoryFilterLabel() }}</span>
           <ng-icon name="lucideChevronDown" size="14" class="flex-shrink-0 text-muted-foreground" />
         </button>
@@ -686,17 +691,18 @@
         }
       </div>
     </div>
+    </div>
 
-    <span class="sm:ms-auto text-muted-foreground text-xs sm:text-sm text-end"
-      >{{ filteredSuppliers().length }} suppliers</span
-    >
+    <div class="self-end sm:self-auto font-medium text-muted-foreground text-sm shrink-0">
+      {{ filteredSuppliers().length }} suppliers
+    </div>
   </div>
 
   <!-- ══════════════════════════════════════════════════════════
        SUPPLIER LIST
   ══════════════════════════════════════════════════════════ -->
-  <div class="px-4 sm:px-6 pb-6">
-    <div hlmCard class="divide-y divide-border overflow-hidden">
+  <div>
+    <div hlmCard class="bg-card shadow-sm border-border rounded-xl divide-y divide-border overflow-hidden">
       @for (supplier of filteredSuppliers(); track supplier.id) {
         <div class="group relative hover:bg-muted/30 transition-colors duration-200">
           <!-- Main row -->

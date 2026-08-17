@@ -4,22 +4,6 @@
     <app-header />
     <div class="relative flex-1 p-6 min-w-0 overflow-auto">
       <router-outlet />
-
-      @if (isChatOpen()) {
-        <div class="bottom-4 z-50 fixed inset-e-4 w-80 h-96">
-          <app-chat-panel (closePanel)="toggleChat()" />
-        </div>
-      }
-
-      <button
-        hlmBtn
-        size="icon"
-        class="bottom-4 z-50 fixed inset-e-4 shadow-lg"
-        (click)="toggleChat()"
-        [attr.aria-label]="'header_toggle_ai' | translate"
-      >
-        <ng-icon name="lucideBot" size="20" />
-      </button>
     </div>
   </main>
 </hlm-sidebar-wrapper>

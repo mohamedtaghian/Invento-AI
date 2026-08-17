@@ -11,7 +11,9 @@ import { CustomerGrowth } from './components/customer-growth/customer-growth';
 import { AnalyticsService, AnalyticsRange, AnalyticsResponse } from './services/analytics-service';
 import { OrdersDonut } from './components/orders-donut/orders-donut';
 import { AiAdvisorPanel } from '@invento/invento/features/ai-advisor';
-
+import { NgIcon } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
 @Component({
   standalone: true,
   selector: 'app-analytics',
@@ -26,7 +28,9 @@ import { AiAdvisorPanel } from '@invento/invento/features/ai-advisor';
     HlmCardImports,
     HlmButtonImports,
     AiAdvisorPanel,
+    NgIcon,
   ],
+  providers: [provideIcons({ lucideChevronRight })],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
