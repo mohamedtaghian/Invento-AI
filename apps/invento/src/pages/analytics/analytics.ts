@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { HlmCardImports } from '@spartan/helm/card';
 import { HlmButtonImports } from '@spartan/helm/button';
 import { HlmSelectImports } from '@spartan/helm/select';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSparkles } from '@ng-icons/lucide';
 
 import { StatCard } from './components/stat-card/stat-card';
 import { RevenueChart } from './components/revenue-chart/revenue-chart';
@@ -10,12 +13,13 @@ import { SalesCategory } from './components/sales-category/sales-category';
 import { CustomerGrowth } from './components/customer-growth/customer-growth';
 import { AnalyticsService, AnalyticsRange, AnalyticsResponse } from './services/analytics-service';
 import { OrdersDonut } from './components/orders-donut/orders-donut';
-import { AiAdvisorPanel } from '@invento/invento/features/ai-advisor';
 
 @Component({
   standalone: true,
   selector: 'app-analytics',
   imports: [
+    RouterLink,
+    NgIcon,
     HlmSelectImports,
     StatCard,
     RevenueChart,
@@ -25,8 +29,8 @@ import { AiAdvisorPanel } from '@invento/invento/features/ai-advisor';
     CustomerGrowth,
     HlmCardImports,
     HlmButtonImports,
-    AiAdvisorPanel,
   ],
+  providers: [provideIcons({ lucideSparkles })],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
