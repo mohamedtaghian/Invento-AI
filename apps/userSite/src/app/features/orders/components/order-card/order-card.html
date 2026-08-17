@@ -26,8 +26,7 @@
         <div class="flex flex-wrap items-center gap-2 mt-1.5 text-muted-foreground text-xs">
           <span class="inline-flex items-center gap-1">
             <ng-icon name="lucideCalendar" class="text-xs"></ng-icon>
-            {{ order().createdAt | date: 'mediumDate' }} at
-            {{ order().createdAt | date: 'shortTime' }}
+            {{ order().createdAt | formatOrderDate: true }}
           </span>
           <span>•</span>
           <span>{{ order().itemCount }} {{ order().itemCount === 1 ? 'item' : 'items' }}</span>
@@ -50,6 +49,24 @@
 
       <!-- Quick Action Buttons -->
       <div class="flex items-center gap-2">
+        <button
+          hlmBtn
+          variant="outline"
+          size="sm"
+          (click)="reorder()"
+          [disabled]="isReordering()"
+          class="rounded-xl h-9 px-3.5 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer shadow-2xs hover:bg-primary/10 hover:text-primary hover:border-primary/40 transition-colors"
+          title="Reorder items from this order"
+        >
+          @if (isReordering()) {
+            <ng-icon name="lucideLoader2" class="text-sm animate-spin"></ng-icon>
+            <span>Reordering...</span>
+          } @else {
+            <ng-icon name="lucideRotateCcw" class="text-sm"></ng-icon>
+            <span>Reorder</span>
+          }
+        </button>
+
         <button
           hlmBtn
           variant="ghost"
@@ -175,7 +192,8 @@
         >
         <span>•</span>
         <span
-          >Recipient: <strong>{{ order().contactName }}</strong></span
+          >Recipient:
+          <strong>{{ orderDetails()?.contactName || order().contactName }}</strong></span
         >
       </div>
     }
@@ -188,9 +206,11 @@
     <div class="flex items-center gap-2 text-muted-foreground">
       <ng-icon name="lucideMapPin" class="text-sm shrink-0"></ng-icon>
       <span
-        >Placed by <strong class="text-foreground">{{ order().contactName }}</strong> ({{
-          order().contactEmail
-        }})</span
+        >Placed by
+        <strong class="text-foreground">{{
+          orderDetails()?.contactName || order().contactName
+        }}</strong>
+        ({{ order().contactEmail }})</span
       >
     </div>
 
@@ -300,7 +320,7 @@
                   </span>
                   @if (step.date) {
                     <span class="mt-1 text-[11px] text-muted-foreground">
-                      {{ step.date | date: 'mediumDate' }}
+                      {{ step.date | formatOrderDate }}
                     </span>
                   }
                   @if (step.subtitle) {
