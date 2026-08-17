@@ -65,40 +65,52 @@ export class OrderConfirmedComponent implements OnInit {
   constructor() {
     afterNextRender(() => {
       // Animated Checkmark Pop
-      gsap.from('.success-circle', {
-        scale: 0,
-        rotation: -45,
-        duration: 0.6,
-        ease: 'back.out(2)',
-      });
+      const successCircle = document.querySelectorAll('.success-circle');
+      if (successCircle.length > 0) {
+        gsap.from(successCircle, {
+          scale: 0,
+          rotation: -45,
+          duration: 0.6,
+          ease: 'back.out(2)',
+        });
+      }
 
       // Draw SVG Checkmark Path
-      gsap.fromTo(
-        '.checkmark-path',
-        { strokeDasharray: 100, strokeDashoffset: 100 },
-        {
-          strokeDashoffset: 0,
-          duration: 0.8,
-          delay: 0.8,
-          ease: 'power2.inOut',
-        },
-      );
+      const checkmarkPath = document.querySelectorAll('.checkmark-path');
+      if (checkmarkPath.length > 0) {
+        gsap.fromTo(
+          checkmarkPath,
+          { strokeDasharray: 100, strokeDashoffset: 100 },
+          {
+            strokeDashoffset: 0,
+            duration: 0.8,
+            delay: 0.8,
+            ease: 'power2.inOut',
+          },
+        );
+      }
 
       // Sequenced Entrance Animation for Cards
-      gsap.from('.confirm-anim', {
-        y: 20,
-        opacity: 0,
-        stagger: 0.2,
-        delay: 0.4,
-      });
+      const confirmCards = document.querySelectorAll('.confirm-anim');
+      if (confirmCards.length > 0) {
+        gsap.from(confirmCards, {
+          y: 20,
+          opacity: 0,
+          stagger: 0.2,
+          delay: 0.4,
+        });
+      }
 
       // Stagger Timeline Steps
-      gsap.from('.border-l-2 > div', {
-        x: -10,
-        opacity: 0,
-        stagger: 0.15,
-        delay: 0.8,
-      });
+      const timelineSteps = document.querySelectorAll('.border-l-2 > div');
+      if (timelineSteps.length > 0) {
+        gsap.from(timelineSteps, {
+          x: -10,
+          opacity: 0,
+          stagger: 0.15,
+          delay: 0.8,
+        });
+      }
     });
   }
 
