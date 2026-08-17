@@ -258,13 +258,15 @@
                   for="checkout-email"
                   class="font-bold text-[10px] text-foreground md:text-xs uppercase tracking-wider"
                 >
-                  Email Address
+                  Email Address *
                 </label>
-                <span
-                  class="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-md"
-                >
-                  Account Email
-                </span>
+                @if (authService.isAuthenticated()) {
+                  <span
+                    class="text-[10px] font-medium text-muted-foreground bg-muted px-2 py-0.5 rounded-md"
+                  >
+                    Account Email
+                  </span>
+                }
               </div>
               <input
                 hlmInput
@@ -272,8 +274,18 @@
                 type="email"
                 formControlName="email"
                 placeholder="name@example.com"
-                class="bg-muted/60 text-muted-foreground border-border/70 cursor-not-allowed rounded-xl p-2.5 w-full text-sm outline-none"
+                class="border-border rounded-xl p-2.5 w-full text-sm outline-none transition-colors"
+                [class.bg-muted/60]="authService.isAuthenticated()"
+                [class.text-muted-foreground]="authService.isAuthenticated()"
+                [class.cursor-not-allowed]="authService.isAuthenticated()"
+                [class.bg-input-background]="!authService.isAuthenticated()"
+                [class.border-destructive]="
+                  checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched
+                "
               />
+              @if (checkoutForm.get('email')?.invalid && checkoutForm.get('email')?.touched) {
+                <span class="block mt-1 text-destructive text-xs">Valid email is required.</span>
+              }
             </div>
 
             <div>
@@ -475,23 +487,48 @@
           </div>
         </div>
 
-        <!-- Submit Button -->
-        <button
-          hlmBtn
-          type="submit"
-          [disabled]="isSubmitting() || cartItems().length === 0"
-          class="flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 py-3.5 rounded-xl w-full h-auto font-bold text-primary-foreground text-sm md:text-base transition-colors cursor-pointer shadow-md shadow-primary/20"
-        >
-          @if (isSubmitting()) {
-            <ng-icon name="lucideLoader2" class="text-lg animate-spin"></ng-icon>
-            <span>Placing Order...</span>
-          } @else {
-            <ng-icon name="lucideCheckCircle" class="text-lg"></ng-icon>
-            <span
-              >Place Order ({{ (totalAmount() || 0) / 100 | currency: currency() || 'EGP' }})</span
+        <!-- Submit Button / Sign in prompt for guests -->
+        @if (authService.isAuthenticated()) {
+          <button
+            hlmBtn
+            type="submit"
+            [disabled]="isSubmitting() || cartItems().length === 0"
+            class="flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 py-3.5 rounded-xl w-full h-auto font-bold text-primary-foreground text-sm md:text-base transition-colors cursor-pointer shadow-md shadow-primary/20"
+          >
+            @if (isSubmitting()) {
+              <ng-icon name="lucideLoader2" class="text-lg animate-spin"></ng-icon>
+              <span>Placing Order...</span>
+            } @else {
+              <ng-icon name="lucideCheckCircle" class="text-lg"></ng-icon>
+              <span
+                >Place Order ({{
+                  (totalAmount() || 0) / 100 | currency: currency() || 'EGP'
+                }})</span
+              >
+            }
+          </button>
+        } @else {
+          <div class="space-y-2.5">
+            <button
+              hlmBtn
+              type="button"
+              (click)="onGuestProceedToLogin()"
+              [disabled]="cartItems().length === 0"
+              class="flex justify-center items-center gap-2 bg-primary hover:bg-primary/90 py-3.5 rounded-xl w-full h-auto font-bold text-primary-foreground text-sm md:text-base transition-colors cursor-pointer shadow-md shadow-primary/20"
             >
-          }
-        </button>
+              <ng-icon name="lucideShieldCheck" class="text-lg"></ng-icon>
+              <span
+                >Sign in to Place Order ({{
+                  (totalAmount() || 0) / 100 | currency: currency() || 'EGP'
+                }})</span
+              >
+            </button>
+            <p class="text-[11px] text-center text-muted-foreground">
+              Please sign in to place your order. Your cart items and delivery details will be
+              preserved.
+            </p>
+          </div>
+        }
       </form>
     </div>
   </div>
