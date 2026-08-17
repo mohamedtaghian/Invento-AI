@@ -1,21 +1,33 @@
-<div class="w-1/4 mx-auto rounded-full p-1 my-6 text-center">
-  <nav hlmBreadcrumb aria-label="Breadcrumb" class="">
-    <ul hlmBreadcrumbList [class]="hlmUl">
-      <li hlmBreadcrumbItem>
-        <a hlmBreadcrumbLink [link]="'/products'">Catalog</a>
-        <span hlmBreadcrumbSeparator></span>
-      </li>
-      @if (store.product(); as product) {
-        @if (product.categories.length > 0) {
-          <li hlmBreadcrumbItem>
-            <span>{{ product.categories[0].name }}</span>
-            <span hlmBreadcrumbSeparator></span>
-          </li>
-        }
-        <li hlmBreadcrumbItem>
-          <span hlmBreadcrumbPage>{{ product.title }}</span>
+<nav hlmBreadcrumb aria-label="Breadcrumb" class="mb-4">
+  <ul
+    hlmBreadcrumbList
+    class="flex items-center gap-1.5 break-words text-sm text-muted-foreground sm:gap-2.5"
+  >
+    <li hlmBreadcrumbItem class="inline-flex items-center gap-1.5">
+      <a hlmBreadcrumbLink [routerLink]="['/', storeSlug, 'products']">
+        {{ 'product.breadcrumb.shop' | translate }}
+      </a>
+      <span hlmBreadcrumbSeparator class="flex items-center"></span>
+    </li>
+    @if (store.product(); as product) {
+      @if (product.categories && product.categories.length > 0) {
+        <li hlmBreadcrumbItem class="hidden md:inline-flex items-center gap-1.5">
+          <a
+            hlmBreadcrumbLink
+            [routerLink]="['/', storeSlug, 'products']"
+            [queryParams]="{ category: product.categories[0].slug }"
+          >
+            {{ product.categories[0]?.name }}
+          </a>
         </li>
+        <li hlmBreadcrumbItem class="md:hidden inline-flex items-center gap-1.5">
+          <span hlmBreadcrumbEllipsis></span>
+        </li>
+        <span hlmBreadcrumbSeparator class="flex items-center"></span>
       }
-    </ul>
-  </nav>
-</div>
+      <li hlmBreadcrumbItem class="inline-flex items-center gap-1.5">
+        <span hlmBreadcrumbPage class="text-foreground font-semibold">{{ product.title }}</span>
+      </li>
+    }
+  </ul>
+</nav>

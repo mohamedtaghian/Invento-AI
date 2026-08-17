@@ -15,14 +15,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, NgIf, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -36,7 +29,7 @@ export class Login {
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
   });
 
   onSubmit() {
@@ -46,13 +39,14 @@ export class Login {
       return;
     }
 
-    const storeSlug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    const storeSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
 
     const loginPayload = {
       ...this.loginForm.value,
-      storeSlug
+      storeSlug,
     };
 
     this.isLoading.set(true);
@@ -66,7 +60,7 @@ export class Login {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Login failed. Please check your credentials.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }

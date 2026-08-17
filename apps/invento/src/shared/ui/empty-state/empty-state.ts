@@ -4,7 +4,6 @@ import { HlmCard, HlmCardContent } from '@spartan/helm/card';
 import { HlmButton } from '@spartan/helm/button';
 import { lucideInbox } from '@ng-icons/lucide';
 
-
 @Component({
   selector: 'app-empty-state',
   imports: [NgIcon, HlmCard, HlmCardContent, HlmButton],

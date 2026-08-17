@@ -1,0 +1,29 @@
+<div class="relative w-full h-full flex items-center">
+  <ng-icon
+    name="lucideSearch"
+    class="absolute left-3 text-muted-foreground z-10 w-4 h-4 pointer-events-none"
+  />
+  <input
+    hlmInput
+    type="text"
+    [placeholder]="placeholder()"
+    [formControl]="control()"
+    (keyup.enter)="enterPressed.emit()"
+    class="w-full pl-9 pr-9"
+    [class.border-destructive]="isInvalid()"
+  />
+  
+  @if (control().value) {
+    <button
+      hlmBtn
+      variant="ghost"
+      size="icon"
+      type="button"
+      class="absolute right-1 h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive focus:outline-none transition-colors"
+      (click)="clearSearch()"
+    >
+      <span class="sr-only">Clear search</span>
+      <ng-icon name="lucideX" class="w-4 h-4" />
+    </button>
+  }
+</div>

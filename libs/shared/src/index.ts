@@ -19,3 +19,7 @@ export * from './lib/components/brand-logo/brand-logo';
 export * from './lib/components/chatbot/chat-ui';
 export * from './lib/components/chatbot/chat-popup';
 export * from './lib/components/chatbot/chat-panel';
+export * from './lib/components/generic-select/generic-select';
+export * from './lib/components/search-input/search-input';
+export * from './lib/components/color-swatch/color-swatch';
+export * from './lib/components/empty-state/empty-state';

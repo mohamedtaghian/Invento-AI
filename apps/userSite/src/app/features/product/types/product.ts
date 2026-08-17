@@ -123,14 +123,7 @@ export interface FilterResponse {
   readonly attributes: readonly FilterAttribute[];
 }
 
-export type SortOption =
-  | 'relevance'
-  | 'newest'
-  | 'price_asc'
-  | 'price_desc'
-  | 'title'
-  | 'recommended'
-  | 'best-seller'; // Retained old ones just in case
+export type SortOption = 'relevance' | 'newest' | 'price_asc' | 'price_desc' | 'title';
 
 // Query params payload for listing & filters
 export interface ProductQueryParams {

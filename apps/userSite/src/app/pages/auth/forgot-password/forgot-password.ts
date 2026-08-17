@@ -15,14 +15,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, NgIf, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })
@@ -36,13 +29,14 @@ export class ForgotPassword {
   storeSlug = '';
 
   forgotPasswordForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required, Validators.email]],
   });
 
   ngOnInit() {
-    this.storeSlug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    this.storeSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
   }
 
   onSubmit() {
@@ -61,14 +55,14 @@ export class ForgotPassword {
         toast.success(res.message || 'Reset code sent to your email.');
         this.router.navigate(['../reset-password'], {
           relativeTo: this.route,
-          queryParams: { email }
+          queryParams: { email },
         });
       },
       error: (err) => {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Failed to send reset code.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }

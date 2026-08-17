@@ -25,7 +25,7 @@ import { ProductCard } from '@invento/user-site/app/features/product';
 import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
 
 import { environment } from '../../../environments/environment';
-import { ProductApiService } from '@invento/user-site/app/features/product/service/product-api.service';
+import { ProductApiService } from '@invento/user-site/app/features/product';
 
 @Component({
   selector: 'app-home',

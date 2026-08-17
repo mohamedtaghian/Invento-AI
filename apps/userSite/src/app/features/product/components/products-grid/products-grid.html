@@ -1,14 +1,7 @@
-@if (products().length > 0) {
-  <div class="items-stretch gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-    @for (product of products(); track product.slug) {
-      <div class="h-full">
-        <app-product-card [product]="product" />
-      </div>
-    }
-  </div>
-} @else {
-  <div class="flex flex-col justify-center items-center gap-2 py-20 text-center">
-    <p hlmP class="font-semibold text-foreground">No products match your filters</p>
-    <p hlmP class="text-muted-foreground text-sm">Try clearing some filters to see more results.</p>
-  </div>
-}
+<div class="items-stretch gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+  @for (product of products(); track product.slug) {
+    <div class="h-full">
+      <app-product-card [product]="product" />
+    </div>
+  }
+</div>

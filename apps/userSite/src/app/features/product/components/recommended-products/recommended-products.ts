@@ -6,20 +6,21 @@ import {
   signal,
   OnDestroy,
 } from '@angular/core';
-import { HlmScrollAreaImports } from '@spartan/helm/scroll-area';
-import { NgScrollbar } from 'ngx-scrollbar';
+import { HlmCarouselImports } from '@spartan/helm/carousel';
 import { ProductCard } from '../product-card/product-card';
-import { ProductApiService } from '@invento/user-site/app/features/product/service/product-api.service';
+import { ProductApiService } from '@invento/user-site/app/features/product';
 import { environment } from '../../../../../environments/environment';
 import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
 import { Subscription } from 'rxjs';
 import { HlmTypographyImports } from '@spartan/helm/typography';
 
+import { TranslatePipe } from '@invento/core';
+
 @Component({
   selector: 'app-recommended-products',
   templateUrl: './recommended-products.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [HlmScrollAreaImports, NgScrollbar, ProductCard, HlmTypographyImports],
+  imports: [...HlmCarouselImports, ProductCard, ...HlmTypographyImports, TranslatePipe],
 })
 export class RecommendedProducts implements OnInit, OnDestroy {
   private readonly apiService = inject(ProductApiService);
@@ -28,10 +29,12 @@ export class RecommendedProducts implements OnInit, OnDestroy {
   private sub?: Subscription;
 
   ngOnInit(): void {
-    // Fetch top 4 rated or default products to show as recommended
-    this.sub = this.apiService.getProducts(environment.storeSlug, { limit: 4 }).subscribe((res) => {
-      this.products.set(res.items);
-    });
+    // Fetch top 10 rated or default products to show as recommended
+    this.sub = this.apiService
+      .getProducts(environment.storeSlug, { limit: 10 })
+      .subscribe((res) => {
+        this.products.set(res.items);
+      });
   }
 
   ngOnDestroy(): void {
