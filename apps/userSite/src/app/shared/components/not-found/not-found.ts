@@ -14,24 +14,30 @@ import { HlmButton } from '@spartan/helm/button';
 export class NotFoundComponent {
   constructor() {
     afterNextRender(() => {
-      gsap.to('.floating-shape', {
-        y: 'random(-40, 40)',
-        x: 'random(-40, 40)',
-        rotation: 'random(-25, 25)',
-        duration: 'random(3, 6)',
-        ease: 'sine.inOut',
-        yoyo: true,
-        repeat: -1,
-        stagger: 0.2,
-      });
+      const shapes = document.querySelectorAll('.floating-shape');
+      if (shapes.length > 0) {
+        gsap.to(shapes, {
+          y: 'random(-40, 40)',
+          x: 'random(-40, 40)',
+          rotation: 'random(-25, 25)',
+          duration: 'random(3, 6)',
+          ease: 'sine.inOut',
+          yoyo: true,
+          repeat: -1,
+          stagger: 0.2,
+        });
+      }
 
-      gsap.from('.content-reveal', {
-        y: 60,
-        opacity: 0,
-        duration: 0.8,
-        stagger: 0.15,
-        ease: 'back.out(1.2)',
-      });
+      const content = document.querySelectorAll('.content-reveal');
+      if (content.length > 0) {
+        gsap.from(content, {
+          y: 60,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'back.out(1.2)',
+        });
+      }
     });
   }
 }

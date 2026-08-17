@@ -29,7 +29,7 @@
           <h3 hlmSheetTitle class="text-lg">Menu</h3>
         </hlm-sheet-header>
         <div class="flex flex-col gap-1 px-4">
-          @for (link of links; track link.path) {
+          @for (link of links(); track link.path) {
             <button
               hlmBtn
               hlmSheetClose
@@ -46,7 +46,7 @@
           <button
             hlmBtn
             hlmSheetClose
-            routerLink="/account-settings"
+            [routerLink]="['/', activeStoreSlug(), 'account-settings']"
             variant="ghost"
             class="py-2 w-fit"
             routerLinkActive="bg-secondary"
@@ -56,14 +56,14 @@
         </div>
       </hlm-sheet-content>
     </hlm-sheet>
-    <a routerLink="/" class="flex items-center gap-2 w-fit font-semibold">
+    <a [routerLink]="['/', activeStoreSlug()]" class="flex items-center gap-2 w-fit font-semibold">
       <img src="/logo.svg" alt="Logo" class="w-8 h-8" />
       <span>YourBrand</span>
     </a>
   </div>
   <nav hlmNavigationMenu class="hidden md:flex md:w-2/6">
     <ul hlmNavigationMenuList>
-      @for (link of links; track link.path) {
+      @for (link of links(); track link.path) {
         <li hlmNavigationMenuItem>
           <a hlmNavigationMenuLink [routerLink]="link.path" [active]="currentUrl() === link.path">{{
             link.label
@@ -74,7 +74,7 @@
   </nav>
   <div class="flex justify-end items-center gap-2 w-1/2 md:w-2/6">
     <a
-      routerLink="/account-settings"
+      [routerLink]="['/', activeStoreSlug(), 'account-settings']"
       routerLinkActive="bg-secondary text-foreground"
       class="flex justify-center items-center hover:bg-secondary rounded-full w-10 h-10 text-muted-foreground hover:text-foreground transition-colors"
       aria-label="Account settings"
@@ -95,9 +95,10 @@
       </svg>
     </a>
     <a
-      routerLink="/checkout"
+      [routerLink]="['/', activeStoreSlug(), 'checkout']"
       id="cart-icon"
-      class="relative flex justify-center items-center bg-primary shadow-xl rounded-full w-12 h-12 text-primary-foreground"
+      class="relative flex justify-center items-center bg-primary hover:bg-primary/90 shadow-xl rounded-full w-12 h-12 text-primary-foreground transition-transform hover:scale-105"
+      aria-label="Shopping Cart"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -116,11 +117,14 @@
           d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"
         />
       </svg>
-      <span
-        id="cart-count"
-        class="hidden -top-1 -right-1 absolute flex justify-center items-center bg-red-500 px-1 rounded-full min-w-[20px] h-5 font-bold text-white text-xs"
-        >0</span
-      >
+      @if (cartService.itemCount() > 0) {
+        <span
+          id="cart-count"
+          class="-top-1 -right-1 absolute flex justify-center items-center bg-rose-500 px-1 rounded-full min-w-[20px] h-5 font-bold text-white text-[11px] shadow-sm animate-in zoom-in-75 duration-150"
+        >
+          {{ cartService.itemCount() > 99 ? '99+' : cartService.itemCount() }}
+        </span>
+      }
     </a>
   </div>
 </header>

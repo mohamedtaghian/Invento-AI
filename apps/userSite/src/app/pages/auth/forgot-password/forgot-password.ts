@@ -1,7 +1,6 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -15,18 +14,11 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './forgot-password.html',
   styleUrl: './forgot-password.css',
 })
-export class ForgotPassword {
+export class ForgotPassword implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -36,13 +28,22 @@ export class ForgotPassword {
   storeSlug = '';
 
   forgotPasswordForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]]
+    email: ['', [Validators.required, Validators.email]],
   });
 
   ngOnInit() {
-    this.storeSlug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    this.storeSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
+
+    // Cache returnUrl if present
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get('returnUrl') ||
+      this.route.snapshot.queryParamMap.get('redirectUrl');
+    if (returnUrl && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('invento_auth_return_url', returnUrl);
+    }
   }
 
   onSubmit() {
@@ -59,16 +60,27 @@ export class ForgotPassword {
       next: (res) => {
         this.isLoading.set(false);
         toast.success(res.message || 'Reset code sent to your email.');
+
+        const returnUrl =
+          this.route.snapshot.queryParamMap.get('returnUrl') ||
+          this.route.snapshot.queryParamMap.get('redirectUrl') ||
+          (typeof sessionStorage !== 'undefined'
+            ? sessionStorage.getItem('invento_auth_return_url')
+            : null);
+
         this.router.navigate(['../reset-password'], {
           relativeTo: this.route,
-          queryParams: { email }
+          queryParams: {
+            email,
+            ...(returnUrl ? { returnUrl } : {}),
+          },
         });
       },
       error: (err) => {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Failed to send reset code.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }
