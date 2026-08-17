@@ -1,6 +1,6 @@
 /**
  * Safely parse any date string or Date object from backend APIs.
- * Handles ISO strings with or without timezone 'Z', SQL timestamps ('YYYY-MM-DD HH:mm:ss'), and Unix timestamps.
+ * Handles standard ISO strings, SQL timestamps ('YYYY-MM-DD HH:mm:ss'), and Unix timestamps.
  */
 export function parseApiDate(dateInput: string | number | Date | null | undefined): Date | null {
   if (!dateInput) return null;
@@ -22,18 +22,13 @@ export function parseApiDate(dateInput: string | number | Date | null | undefine
     str = str.replace(' ', 'T');
   }
 
-  // If string has no timezone offset (no 'Z' and no '+/-HH:MM'), treat as UTC ISO
-  if (!str.endsWith('Z') && !/[+-]\d{2}(:\d{2})?$/.test(str)) {
-    str += 'Z';
-  }
-
   const d = new Date(str);
   return isNaN(d.getTime()) ? null : d;
 }
 
 /**
- * Formats a date into a human-friendly format in the store's local timezone (Egypt / Africa/Cairo by default).
- * e.g. "Aug 17, 2026, 3:50 AM"
+ * Formats a date into a human-friendly format in the user's local timezone.
+ * e.g. "Aug 17, 2026, 8:30 AM"
  */
 export function formatOrderDate(
   dateInput: string | number | Date | null | undefined,
@@ -42,31 +37,16 @@ export function formatOrderDate(
   const d = parseApiDate(dateInput);
   if (!d) return '';
 
-  // Determine timezone: use user's local timezone if non-UTC, otherwise fallback to 'Africa/Cairo' (Egypt UTC+3)
-  let timeZone = 'Africa/Cairo';
-  try {
-    if (typeof Intl !== 'undefined' && Intl.DateTimeFormat) {
-      const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      if (detected && detected !== 'UTC') {
-        timeZone = detected;
-      }
-    }
-  } catch {
-    timeZone = 'Africa/Cairo';
-  }
-
   const datePart = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
-    timeZone,
   }).format(d);
 
   const timePart = new Intl.DateTimeFormat('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
-    timeZone,
   }).format(d);
 
   const formatted = `${datePart}, ${timePart}`;
