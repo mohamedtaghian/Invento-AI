@@ -1,10 +1,13 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { HlmNavigationMenuImports } from '@spartan/helm/navigation-menu';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
 import { HlmSheetImports } from '@spartan/helm/sheet';
 import { HlmButtonImports } from '@spartan/helm/button';
+import { CartService } from '../../../core/service/cart.service';
+import { AuthService } from '../../../core/service/auth.service';
+import { environment } from '../../../../environments/environment';
 
 interface NavLink {
   label: string;
@@ -24,13 +27,8 @@ interface NavLink {
 })
 export class Navbar {
   private readonly router = inject(Router);
-
-  protected readonly links: NavLink[] = [
-    { label: 'Home', path: '/' },
-    { label: 'Shop', path: '/products' },
-    { label: 'Orders', path: '/orders' },
-    { label: 'FAQ', path: '/faq' },
-  ];
+  protected readonly cartService = inject(CartService);
+  protected readonly authService = inject(AuthService);
 
   protected readonly currentUrl = toSignal(
     this.router.events.pipe(
@@ -40,4 +38,21 @@ export class Navbar {
     ),
     { initialValue: this.router.url },
   );
+
+  protected readonly activeStoreSlug = computed(() => {
+    const url = this.currentUrl();
+    const clean = url.split('?')[0].split('#')[0];
+    const segments = clean.split('/').filter(Boolean);
+    return segments[0] || environment.storeSlug;
+  });
+
+  protected readonly links = computed<NavLink[]>(() => {
+    const slug = this.activeStoreSlug();
+    return [
+      { label: 'Home', path: `/${slug}` },
+      { label: 'Shop', path: `/${slug}/products` },
+      { label: 'Orders', path: `/${slug}/orders` },
+      { label: 'FAQ', path: `/${slug}/faq` },
+    ];
+  });
 }

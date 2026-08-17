@@ -1,7 +1,12 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -15,14 +20,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    NgIf,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -35,20 +33,55 @@ export class Register implements OnInit {
   isLoading = signal(false);
   storeSlug = '';
 
-  registerForm = this.fb.group({
-    firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'\-]+$/)]],
-    lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'\-]+$/)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
+  registerForm = this.fb.group(
+    {
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/),
+        ],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
+          ),
+        ],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   ngOnInit() {
-    // Extract storeSlug from the URL path (e.g. /store/anfasyy/auth/register)
-    const slug = this.route.snapshot.paramMap.get('storeSlug')
-      ?? this.route.parent?.snapshot.paramMap.get('storeSlug')
-      ?? environment.storeSlug;
+    // Extract storeSlug from URL
+    const slug =
+      this.route.snapshot.paramMap.get('storeSlug') ??
+      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
+      environment.storeSlug;
     this.storeSlug = slug;
+
+    // Cache returnUrl if present
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get('returnUrl') ||
+      this.route.snapshot.queryParamMap.get('redirectUrl');
+    if (returnUrl && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('invento_auth_return_url', returnUrl);
+    }
 
     const passwordControl = this.registerForm.get('password');
     const confirmControl = this.registerForm.get('confirmPassword');
@@ -65,9 +98,8 @@ export class Register implements OnInit {
     }
   }
 
-  passwordMatchValidator(g: any) {
-    return g.get('password').value === g.get('confirmPassword').value
-      ? null : { 'mismatch': true };
+  passwordMatchValidator(g: AbstractControl): ValidationErrors | null {
+    return g.get('password')?.value === g.get('confirmPassword')?.value ? null : { mismatch: true };
   }
 
   onSubmit() {
@@ -77,9 +109,10 @@ export class Register implements OnInit {
       return;
     }
 
+    const formVal = this.registerForm.getRawValue();
     const registerPayload = {
-      ...this.registerForm.getRawValue(),
-      storeSlug: this.storeSlug
+      ...formVal,
+      storeSlug: this.storeSlug,
     };
 
     this.isLoading.set(true);
@@ -87,16 +120,27 @@ export class Register implements OnInit {
       next: (res) => {
         this.isLoading.set(false);
         toast.success(res.message || 'Registration successful. Please verify your email.');
+
+        const returnUrl =
+          this.route.snapshot.queryParamMap.get('returnUrl') ||
+          this.route.snapshot.queryParamMap.get('redirectUrl') ||
+          (typeof sessionStorage !== 'undefined'
+            ? sessionStorage.getItem('invento_auth_return_url')
+            : null);
+
         this.router.navigate(['../verify-email'], {
           relativeTo: this.route,
-          queryParams: { email: registerPayload.email }
+          queryParams: {
+            email: registerPayload.email,
+            ...(returnUrl ? { returnUrl } : {}),
+          },
         });
       },
       error: (err) => {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Registration failed.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }

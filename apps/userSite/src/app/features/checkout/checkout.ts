@@ -1,106 +1,410 @@
-import { Component, afterNextRender, inject, signal, computed, OnInit } from '@angular/core';
+import { Component, afterNextRender, inject, signal, effect, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { CurrencyPipe } from '@angular/common';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import gsap from 'gsap';
 
-// Spartan UI Imports
+// Spartan UI & Icons
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmInput } from '@spartan/helm/input';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmCard } from '@spartan/helm/card';
+import { provideIcons, NgIconComponent } from '@ng-icons/core';
+import {
+  lucideShoppingCart,
+  lucideShieldCheck,
+  lucideTruck,
+  lucideArrowLeft,
+  lucideTrash2,
+  lucideLoader2,
+  lucideInfo,
+  lucideCheckCircle,
+  lucideAlertTriangle,
+} from '@ng-icons/lucide';
+import { toast } from '@spartan/helm/sonner';
 
-// Import your data service (adjust the path based on your folder structure)
+import { CartService } from '../../core/service/cart.service';
+import { AuthService } from '../../core/service/auth.service';
+import { OrdersDataService } from '../orders/service/orders-data.service';
+import { extractErrorMessage } from '../../core/utils/error.utils';
+import { environment } from '../../../environments/environment';
+import type { CreateOrderPayload } from '../../core/interface/cart.interface';
+import type { OrderDetail } from '../orders/types/orders';
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe, HlmLabel, HlmInput, HlmButton, HlmCard],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    CurrencyPipe,
+    RouterLink,
+    HlmLabel,
+    HlmInput,
+    HlmButton,
+    HlmCard,
+    NgIconComponent,
+  ],
+  providers: [
+    provideIcons({
+      lucideShoppingCart,
+      lucideShieldCheck,
+      lucideTruck,
+      lucideArrowLeft,
+      lucideTrash2,
+      lucideLoader2,
+      lucideInfo,
+      lucideCheckCircle,
+      lucideAlertTriangle,
+    }),
+  ],
   templateUrl: './checkout.html',
 })
 export class CheckoutComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  protected readonly cartService = inject(CartService);
+  protected readonly authService = inject(AuthService);
+  protected readonly ordersService = inject(OrdersDataService);
 
-  // 1. Mocking a cart using signals
-  cartItems = signal([
-    { product: { name: 'Aura Sync Watch', price: 199.99, image: 'assets/images/watch-1.jpg' }, quantity: 1, color: 'Matte Black' },
-    { product: { name: 'Nova Pro Earbuds', price: 129.99, image: 'assets/images/earbuds.jpg' }, quantity: 2, color: 'Silver' },
-  ]);
+  // Cart signals
+  readonly cartItems = this.cartService.items;
+  readonly currency = this.cartService.currency;
+  readonly subtotalAmount = this.cartService.subtotalAmount;
+  readonly shippingFee = this.cartService.shippingFee;
+  readonly totalAmount = this.cartService.totalAmount;
 
-  // 2. Automatically calculated totals
-  subtotal = computed(() =>
-    this.cartItems().reduce((total, item) => total + item.product.price * item.quantity, 0),
-  );
-  tax = computed(() => this.subtotal() * 0.08); // 8% tax rate
-  total = computed(() => this.subtotal() + this.tax());
+  // UI state
+  readonly isSubmitting = signal<boolean>(false);
+  readonly isClearCartModalOpen = signal<boolean>(false);
+  readonly activeStoreSlug = signal<string>(environment.storeSlug);
 
-  checkoutForm = this.fb.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    address: ['', Validators.required],
-    city: ['', Validators.required],
-    paymentMethod: ['card', Validators.required],
-    cardNumber: ['', [Validators.required, Validators.minLength(16)]],
-    expiry: ['', Validators.required],
-    cvc: ['', Validators.required],
+  readonly checkoutForm = this.fb.group({
+    firstName: ['', [Validators.required, Validators.maxLength(50)]],
+    lastName: ['', [Validators.required, Validators.maxLength(50)]],
+    email: [{ value: '', disabled: true }, [Validators.required, Validators.email]],
+    contactPhone: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(32)]],
+    line1: ['', [Validators.required, Validators.maxLength(200)]],
+    line2: ['', [Validators.maxLength(200)]],
+    city: ['', [Validators.required, Validators.maxLength(100)]],
+    governorate: ['', [Validators.maxLength(100)]],
+    postalCode: ['', [Validators.maxLength(20)]],
+    country: ['EG', [Validators.required, Validators.maxLength(2)]],
+    customerNote: ['', [Validators.maxLength(500)]],
+    paymentMethod: ['cod', [Validators.required]],
   });
 
   constructor() {
-    afterNextRender(() => {
-      const tl = gsap.timeline();
-      tl.from('.fade-in-left', {
-        x: -30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-      }).from('.fade-in-right', { x: 30, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4');
-    });
-  }
+    effect(() => {
+      const user = this.authService.currentUser();
+      const isAuth = this.authService.isAuthenticated();
 
-  ngOnInit() {
-    // 3. Dynamically manage validators based on the selected payment method
-    this.checkoutForm.get('paymentMethod')?.valueChanges.subscribe((method) => {
-      const cardControls = ['cardNumber', 'expiry', 'cvc'];
-
-      if (method === 'cod') {
-        cardControls.forEach((ctrl) => {
-          this.checkoutForm.get(ctrl)?.clearValidators();
-          this.checkoutForm.get(ctrl)?.updateValueAndValidity();
-        });
+      if (isAuth) {
+        this.checkoutForm.get('email')?.disable();
       } else {
-        this.checkoutForm
-          .get('cardNumber')
-          ?.setValidators([Validators.required, Validators.minLength(16)]);
-        this.checkoutForm.get('expiry')?.setValidators([Validators.required]);
-        this.checkoutForm.get('cvc')?.setValidators([Validators.required]);
+        this.checkoutForm.get('email')?.enable();
+      }
 
-        cardControls.forEach((ctrl) => {
-          this.checkoutForm.get(ctrl)?.updateValueAndValidity();
-        });
+      if (user) {
+        const patch: Record<string, string> = {};
+        if (
+          !this.checkoutForm.get('firstName')?.dirty &&
+          !this.checkoutForm.get('firstName')?.value &&
+          user.firstName
+        ) {
+          patch['firstName'] = user.firstName;
+        }
+        if (
+          !this.checkoutForm.get('lastName')?.dirty &&
+          !this.checkoutForm.get('lastName')?.value &&
+          user.lastName
+        ) {
+          patch['lastName'] = user.lastName;
+        }
+        if (user.email) {
+          patch['email'] = user.email;
+        }
+        if (Object.keys(patch).length > 0) {
+          this.checkoutForm.patchValue(patch);
+        }
+      }
+    });
+
+    afterNextRender(() => {
+      const leftElements = document.querySelectorAll('.fade-in-left');
+      const rightElements = document.querySelectorAll('.fade-in-right');
+
+      if (leftElements.length > 0 || rightElements.length > 0) {
+        const tl = gsap.timeline();
+        if (leftElements.length > 0) {
+          tl.from(leftElements, {
+            x: -30,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out',
+          });
+        }
+        if (rightElements.length > 0) {
+          tl.from(
+            rightElements,
+            { x: 30, opacity: 0, duration: 0.6, ease: 'power3.out' },
+            leftElements.length > 0 ? '-=0.4' : 0,
+          );
+        }
       }
     });
   }
 
-  // 4. Logic to handle the + and - buttons
-  updateQuantity(index: number, delta: number) {
-    this.cartItems.update((items) => {
-      const updated = [...items];
-      const newQuantity = updated[index].quantity + delta;
-
-      // Prevent quantity from going below 1
-      if (newQuantity > 0) {
-        updated[index].quantity = newQuantity;
-      }
-      return updated;
-    });
-  }
-
-  onSubmit() {
-    if (this.checkoutForm.valid) {
-      this.router.navigate(['/order-confirmed']);
-    } else {
-      this.checkoutForm.markAllAsTouched();
+  ngOnInit(): void {
+    // Resolve store slug
+    const paramSlug =
+      this.route.snapshot.paramMap.get('storeSlug') ||
+      this.route.parent?.snapshot.paramMap.get('storeSlug');
+    if (paramSlug) {
+      this.activeStoreSlug.set(paramSlug);
     }
+
+    const storeSlug = this.activeStoreSlug();
+
+    // Prefill customer & shipping details
+    this.prefillForm();
+
+    // If authenticated, fetch previous orders to auto-populate phone and address if not already set
+    if (this.authService.isAuthenticated()) {
+      this.ordersService.getMyOrders(storeSlug, 1, 5).subscribe({
+        next: (res) => {
+          if (res.items && res.items.length > 0) {
+            const first = res.items[0];
+            this.ordersService.getMyOrder(storeSlug, first.orderNumber).subscribe({
+              next: (detail) => {
+                this.applyOrderFallback(detail);
+              },
+            });
+          }
+        },
+      });
+    }
+  }
+
+  private applyOrderFallback(detail: OrderDetail): void {
+    const patch: Record<string, string> = {};
+    const currentVal = this.checkoutForm.getRawValue();
+
+    if (!currentVal.firstName && !currentVal.lastName && detail.contactName) {
+      const parts = detail.contactName.trim().split(' ');
+      patch['firstName'] = parts[0] || '';
+      patch['lastName'] = parts.slice(1).join(' ') || '';
+    }
+    if (!currentVal.contactPhone && detail.contactPhone) {
+      patch['contactPhone'] = detail.contactPhone;
+    }
+    if (!currentVal.line1 && detail.shippingAddress?.line1) {
+      patch['line1'] = detail.shippingAddress.line1;
+    }
+    if (!currentVal.line2 && detail.shippingAddress?.line2) {
+      patch['line2'] = detail.shippingAddress.line2;
+    }
+    if (!currentVal.city && detail.shippingAddress?.city) {
+      patch['city'] = detail.shippingAddress.city;
+    }
+    if (!currentVal.governorate && detail.shippingAddress?.governorate) {
+      patch['governorate'] = detail.shippingAddress.governorate;
+    }
+    if (!currentVal.postalCode && detail.shippingAddress?.postalCode) {
+      patch['postalCode'] = detail.shippingAddress.postalCode;
+    }
+    if (detail.shippingAddress?.country) {
+      patch['country'] = detail.shippingAddress.country.toUpperCase();
+    }
+    if (!currentVal.email && detail.contactEmail) {
+      patch['email'] = detail.contactEmail;
+    }
+
+    if (Object.keys(patch).length > 0) {
+      this.checkoutForm.patchValue(patch);
+    }
+  }
+
+  private prefillForm(): void {
+    const isAuth = this.authService.isAuthenticated();
+    const prefill = this.cartService.prefilledCustomer();
+    const currentUser = this.authService.currentUser();
+
+    let firstName = prefill?.firstName || '';
+    let lastName = prefill?.lastName || '';
+
+    if (!firstName && !lastName && prefill?.contactName) {
+      const parts = prefill.contactName.trim().split(' ');
+      firstName = parts[0] || '';
+      lastName = parts.slice(1).join(' ') || '';
+    }
+
+    if (!firstName && currentUser?.firstName) {
+      firstName = currentUser.firstName;
+    }
+    if (!lastName && currentUser?.lastName) {
+      lastName = currentUser.lastName;
+    }
+
+    const email = prefill?.contactEmail || currentUser?.email || '';
+    let phone = prefill?.contactPhone || '';
+    let address = prefill?.shippingAddress;
+
+    // If address or phone is not yet present in prefill, check last placed order
+    const lastOrder = this.cartService.lastPlacedOrder();
+    if (!phone && lastOrder?.contactPhone) {
+      phone = lastOrder.contactPhone;
+    }
+    if (!address && lastOrder?.shippingAddress) {
+      address = lastOrder.shippingAddress;
+    }
+
+    if (isAuth) {
+      this.checkoutForm.get('email')?.disable();
+    } else {
+      this.checkoutForm.get('email')?.enable();
+    }
+
+    this.checkoutForm.patchValue({
+      firstName,
+      lastName,
+      email,
+      contactPhone: phone,
+      line1: address?.line1 || '',
+      line2: address?.line2 || '',
+      city: address?.city || '',
+      governorate: address?.governorate || '',
+      postalCode: address?.postalCode || '',
+      country: (address?.country || 'EG').toUpperCase(),
+      customerNote: prefill?.customerNote || '',
+      paymentMethod: 'cod',
+    });
+  }
+
+  updateQuantity(index: number, delta: number): void {
+    this.cartService.updateQuantity(index, delta);
+  }
+
+  removeItem(index: number): void {
+    this.cartService.removeItem(index);
+  }
+
+  openClearCartModal(): void {
+    this.isClearCartModalOpen.set(true);
+  }
+
+  closeClearCartModal(): void {
+    this.isClearCartModalOpen.set(false);
+  }
+
+  confirmClearCart(): void {
+    this.cartService.clearCart();
+    this.closeClearCartModal();
+    toast.info('Your cart has been cleared.');
+  }
+
+  onGuestProceedToLogin(): void {
+    if (this.cartItems().length === 0) {
+      toast.warning('Your cart is empty. Please add items to checkout.');
+      return;
+    }
+
+    const formVal = this.checkoutForm.getRawValue();
+    this.cartService.setPrefilledCustomer({
+      firstName: formVal.firstName || undefined,
+      lastName: formVal.lastName || undefined,
+      contactName: `${formVal.firstName || ''} ${formVal.lastName || ''}`.trim() || undefined,
+      contactEmail: formVal.email || undefined,
+      contactPhone: formVal.contactPhone || undefined,
+      shippingAddress: {
+        line1: formVal.line1 || undefined,
+        line2: formVal.line2 || undefined,
+        city: formVal.city || undefined,
+        governorate: formVal.governorate || undefined,
+        postalCode: formVal.postalCode || undefined,
+        country: formVal.country || 'EG',
+      },
+      customerNote: formVal.customerNote || undefined,
+    });
+
+    const storeSlug = this.activeStoreSlug();
+    toast.info('Please sign in to place your order. Your entered details have been saved.');
+    this.router.navigate(['/', storeSlug, 'auth', 'login'], {
+      queryParams: { returnUrl: `/${storeSlug}/checkout` },
+    });
+  }
+
+  onSubmit(): void {
+    if (this.cartItems().length === 0) {
+      toast.warning('Your cart is empty. Please add items to checkout.');
+      return;
+    }
+
+    if (!this.authService.isAuthenticated()) {
+      this.onGuestProceedToLogin();
+      return;
+    }
+
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      toast.error('Please complete all required delivery details.');
+      return;
+    }
+
+    this.isSubmitting.set(true);
+    const formVal = this.checkoutForm.getRawValue();
+
+    const payload: CreateOrderPayload = {
+      items: this.cartItems().map((item) => ({
+        variantId: item.variantId,
+        quantity: item.quantity,
+      })),
+      shippingAddress: {
+        line1: formVal.line1?.trim() || '',
+        line2: formVal.line2?.trim() || undefined,
+        city: formVal.city?.trim() || '',
+        governorate: formVal.governorate?.trim() || undefined,
+        postalCode: formVal.postalCode?.trim() || undefined,
+        country: (formVal.country?.trim() || 'EG').toUpperCase(),
+      },
+      contactPhone: formVal.contactPhone?.trim() || '',
+      customerNote: formVal.customerNote?.trim() || undefined,
+      paymentMethod: 'cod',
+    };
+
+    const storeSlug = this.activeStoreSlug();
+
+    this.cartService.placeOrder(storeSlug, payload).subscribe({
+      next: (placedOrder) => {
+        this.isSubmitting.set(false);
+        const enteredName = `${formVal.firstName || ''} ${formVal.lastName || ''}`.trim();
+        if (enteredName && placedOrder.orderNumber != null) {
+          this.ordersService.saveRecipientOverride(placedOrder.orderNumber, enteredName);
+        }
+        const finalOrder = {
+          ...placedOrder,
+          createdAt: placedOrder.createdAt || new Date().toISOString(),
+          contactName: enteredName || placedOrder.contactName,
+        };
+        this.cartService.setLastPlacedOrder(finalOrder);
+        this.cartService.clearCart();
+        this.cartService.clearPrefill();
+
+        toast.success(`Order #${placedOrder.orderNumber} placed successfully!`);
+        this.router.navigate(['/', storeSlug, 'order-confirmed'], {
+          queryParams: { orderNumber: placedOrder.orderNumber },
+        });
+      },
+      error: (err: unknown) => {
+        this.isSubmitting.set(false);
+        const errorMsg = extractErrorMessage(
+          err,
+          'Failed to place your order. Please check your details and try again.',
+        );
+        toast.error(errorMsg);
+      },
+    });
   }
 }

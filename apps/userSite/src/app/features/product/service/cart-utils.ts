@@ -1,9 +1,37 @@
-export function flyToCart(event: MouseEvent, cartIconId = 'cart-icon'): void {
-  const cartIcon = document.getElementById(cartIconId);
+export function flyToCart(
+  source?: MouseEvent | HTMLElement | DOMRect | null,
+  cartIconId = 'cart-icon',
+): void {
+  if (typeof document === 'undefined') return;
+
+  const cartIcon =
+    document.getElementById(cartIconId) ||
+    document.querySelector('[id*="cart-icon"]') ||
+    document.querySelector('a[href*="/checkout"]');
+
   if (!cartIcon) return;
 
-  const btn = event.currentTarget as HTMLElement;
-  const startRect = btn.getBoundingClientRect();
+  let startRect: DOMRect | null = null;
+
+  if (source instanceof DOMRect) {
+    startRect = source;
+  } else if (source instanceof HTMLElement) {
+    startRect = source.getBoundingClientRect();
+  } else if (source && typeof source === 'object') {
+    if ('currentTarget' in source && source.currentTarget instanceof HTMLElement) {
+      startRect = source.currentTarget.getBoundingClientRect();
+    } else if ('target' in source && source.target instanceof HTMLElement) {
+      startRect = source.target.getBoundingClientRect();
+    } else if ('clientX' in source && typeof source.clientX === 'number') {
+      startRect = new DOMRect(source.clientX - 18, source.clientY - 18, 36, 36);
+    }
+  }
+
+  if (!startRect) {
+    updateCartBadge(cartIconId);
+    return;
+  }
+
   const endRect = cartIcon.getBoundingClientRect();
 
   const startX = startRect.left + startRect.width / 2;
@@ -63,25 +91,33 @@ export function flyToCart(event: MouseEvent, cartIconId = 'cart-icon'): void {
 }
 
 export function updateCartBadge(cartIconId = 'cart-icon'): void {
-  const cartIcon = document.getElementById(cartIconId);
+  if (typeof document === 'undefined') return;
+
+  const cartIcon =
+    document.getElementById(cartIconId) ||
+    document.querySelector('[id*="cart-icon"]') ||
+    document.querySelector('a[href*="/checkout"]');
+
   if (!cartIcon) return;
 
-  cartIcon.style.transition = 'transform 0.15s ease';
-  cartIcon.style.transform = 'scale(1.4)';
+  (cartIcon as HTMLElement).style.transition = 'transform 0.15s ease';
+  (cartIcon as HTMLElement).style.transform = 'scale(1.4)';
   setTimeout(() => {
-    cartIcon.style.transform = 'scale(1)';
+    (cartIcon as HTMLElement).style.transform = 'scale(1)';
   }, 200);
 
-  const countEl = document.getElementById('cart-count');
+  const countEl =
+    document.getElementById('cart-count') || document.querySelector('[id*="cart-count"]');
+
   if (countEl) {
     const current = parseInt(countEl.textContent || '0', 10);
     const newCount = current + 1;
     countEl.textContent = String(newCount);
     countEl.classList.remove('hidden');
-    countEl.style.transition = 'transform 0.15s ease';
-    countEl.style.transform = 'scale(1.5)';
+    (countEl as HTMLElement).style.transition = 'transform 0.15s ease';
+    (countEl as HTMLElement).style.transform = 'scale(1.5)';
     setTimeout(() => {
-      countEl.style.transform = 'scale(1)';
+      (countEl as HTMLElement).style.transform = 'scale(1)';
     }, 150);
   }
 }

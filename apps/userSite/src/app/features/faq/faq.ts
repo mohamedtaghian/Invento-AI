@@ -153,14 +153,16 @@ export class FaqComponent {
     this.faqDataService.loadFaqs(this.currentStoreSlug);
 
     afterNextRender(() => {
-      const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-      tl.from('.faq-hero-anim', {
-        y: 25,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-      });
+      const heroAnim = document.querySelectorAll('.faq-hero-anim');
+      if (heroAnim.length > 0) {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+        tl.from(heroAnim, {
+          y: 25,
+          opacity: 0,
+          duration: 0.6,
+          stagger: 0.1,
+        });
+      }
     });
   }
 

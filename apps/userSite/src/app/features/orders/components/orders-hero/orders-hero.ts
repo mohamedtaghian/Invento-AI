@@ -26,22 +26,28 @@ export class OrdersHeroComponent {
 
   constructor() {
     afterNextRender(() => {
-      gsap.from('.orders-hero-anim', {
-        y: 20,
-        opacity: 0,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'power2.out',
-      });
+      const heroAnim = document.querySelectorAll('.orders-hero-anim');
+      if (heroAnim.length > 0) {
+        gsap.from(heroAnim, {
+          y: 20,
+          opacity: 0,
+          stagger: 0.1,
+          duration: 0.6,
+          ease: 'power2.out',
+        });
+      }
 
-      gsap.from('.orders-stat-card', {
-        scale: 0.95,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.5,
-        delay: 0.2,
-        ease: 'back.out(1.5)',
-      });
+      const statCards = document.querySelectorAll('.orders-stat-card');
+      if (statCards.length > 0) {
+        gsap.from(statCards, {
+          scale: 0.95,
+          opacity: 0,
+          stagger: 0.08,
+          duration: 0.5,
+          delay: 0.2,
+          ease: 'back.out(1.5)',
+        });
+      }
     });
   }
 }
