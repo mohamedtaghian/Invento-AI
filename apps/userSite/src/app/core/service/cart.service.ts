@@ -119,6 +119,14 @@ export class CartService {
   }
 
   /**
+   * Set prefill customer details
+   */
+  setPrefilledCustomer(info: PrefillCustomerInfo): void {
+    this.prefilledCustomer.set(info);
+    this.saveStoredPrefill(info);
+  }
+
+  /**
    * Clear prefill state
    */
   clearPrefill(): void {
