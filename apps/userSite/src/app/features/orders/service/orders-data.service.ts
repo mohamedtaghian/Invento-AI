@@ -13,6 +13,8 @@ import type {
   OrderSummaryItem,
 } from '../types/orders';
 
+const RECIPIENT_OVERRIDES_KEY = 'invento_order_recipients';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -132,6 +134,30 @@ export class OrdersDataService {
     );
   }
 
+  saveRecipientOverride(orderNumber: number, contactName: string): void {
+    if (typeof localStorage === 'undefined' || !orderNumber || !contactName) return;
+    try {
+      const raw = localStorage.getItem(RECIPIENT_OVERRIDES_KEY);
+      const map: Record<number, string> = raw ? JSON.parse(raw) : {};
+      map[orderNumber] = contactName;
+      localStorage.setItem(RECIPIENT_OVERRIDES_KEY, JSON.stringify(map));
+    } catch {
+      // Ignore storage write errors
+    }
+  }
+
+  getRecipientOverride(orderNumber: number): string | null {
+    if (typeof localStorage === 'undefined' || !orderNumber) return null;
+    try {
+      const raw = localStorage.getItem(RECIPIENT_OVERRIDES_KEY);
+      if (!raw) return null;
+      const map: Record<number, string> = JSON.parse(raw);
+      return map[orderNumber] || null;
+    } catch {
+      return null;
+    }
+  }
+
   // --- Reactive State Management ---
 
   loadOrders(slug?: string, page = 1, limit = 20): void {
@@ -144,7 +170,12 @@ export class OrdersDataService {
     this.getMyOrders(storeSlug, page, limit)
       .pipe(
         tap((res) => {
-          const items = res.items || [];
+          const rawItems = res.items || [];
+          const items = rawItems.map((item) => {
+            const override = this.getRecipientOverride(item.orderNumber);
+            return override ? { ...item, contactName: override } : item;
+          });
+
           this._orders.set(items);
           this._currentPage.set(res.page || 1);
           this._limit.set(res.limit || 20);
@@ -201,12 +232,15 @@ export class OrdersDataService {
 
     try {
       const detail = await firstValueFrom(this.getMyOrder(storeSlug, orderNumber));
+      const override = this.getRecipientOverride(orderNumber);
+      const enrichedDetail = override ? { ...detail, contactName: override } : detail;
+
       this._orderDetailsMap.update((map) => {
         const next = new Map(map);
-        next.set(orderNumber, detail);
+        next.set(orderNumber, enrichedDetail);
         return next;
       });
-      return detail;
+      return enrichedDetail;
     } catch (err) {
       console.error(`Failed to load details for order #${orderNumber}`, err);
       return null;

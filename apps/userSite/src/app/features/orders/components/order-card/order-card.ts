@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { CommonModule, CurrencyPipe } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+
 import { HlmButtonImports } from '@spartan/helm/button';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import {
@@ -21,9 +22,14 @@ import {
   lucidePackage,
   lucideInfo,
   lucideLoader2,
+  lucideShoppingCart,
 } from '@ng-icons/lucide';
 import { toast } from '@spartan/helm/sonner';
 import { OrdersDataService } from '../../service/orders-data.service';
+import { CartService } from '../../../../core/service/cart.service';
+import { FormatOrderDatePipe } from '../../../../core/pipes/format-date.pipe';
+import { formatOrderDate } from '../../../../core/utils/date.utils';
+import type { CartItem, PrefillCustomerInfo } from '../../../../core/interface/cart.interface';
 import type {
   OrderDetail,
   OrderStatus,
@@ -36,7 +42,15 @@ import type {
   selector: 'app-order-card',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CurrencyPipe, DatePipe, RouterLink, HlmButtonImports, NgIconComponent],
+  imports: [
+    CommonModule,
+    CurrencyPipe,
+    RouterLink,
+    HlmButtonImports,
+    NgIconComponent,
+    FormatOrderDatePipe,
+  ],
+
   providers: [
     provideIcons({
       lucideCircleCheck,
@@ -56,6 +70,7 @@ import type {
       lucidePackage,
       lucideInfo,
       lucideLoader2,
+      lucideShoppingCart,
     }),
   ],
   templateUrl: './order-card.html',
@@ -65,10 +80,13 @@ export class OrderCardComponent {
   readonly order = input.required<OrderSummaryItem>();
 
   protected readonly ordersService = inject(OrdersDataService);
+  protected readonly cartService = inject(CartService);
+  protected readonly router = inject(Router);
 
   // Local UI states
   protected readonly isExpanded = signal<boolean>(false);
   protected readonly isCancelModalOpen = signal<boolean>(false);
+  protected readonly isReordering = signal<boolean>(false);
   protected readonly selectedPreset = signal<string | null>(null);
   protected readonly cancelReason = signal<string>('');
   protected readonly copiedField = signal<string | null>(null);
@@ -217,6 +235,58 @@ export class OrderCardComponent {
     }
   }
 
+  protected async reorder(): Promise<void> {
+    this.isReordering.set(true);
+    try {
+      let details: OrderDetail | null | undefined = this.orderDetails();
+      if (!details) {
+        details = await this.ordersService.loadOrderDetails(this.order().orderNumber);
+      }
+
+      if (!details || !details.items || details.items.length === 0) {
+        toast.error('Unable to load items for this order.');
+        return;
+      }
+
+      const cartItems: CartItem[] = details.items
+        .filter((item) => !!item.variantId)
+        .map((item) => ({
+          variantId: item.variantId!,
+          productId: item.productId,
+          productSlug: item.productSlug,
+          productTitle: item.productTitle,
+          productImageUrl: item.productImageUrl,
+          variantOptions: item.variantOptions,
+          sku: item.sku,
+          unitAmount: item.unitAmount,
+          quantity: item.quantity,
+          lineTotalAmount: item.lineTotalAmount,
+        }));
+
+      if (cartItems.length === 0) {
+        toast.warning('No available variant items found to reorder.');
+        return;
+      }
+
+      const prefill: PrefillCustomerInfo = {
+        contactName: details.contactName || this.order().contactName,
+        contactEmail: details.contactEmail || this.order().contactEmail,
+        contactPhone: details.contactPhone,
+        shippingAddress: details.shippingAddress,
+        customerNote: details.customerNote || undefined,
+      };
+
+      this.cartService.setReorder(cartItems, prefill, this.order().currency);
+      toast.success('Order items added to checkout!');
+      this.router.navigate(['/', this.ordersService.activeStoreSlug(), 'checkout']);
+    } catch (err: unknown) {
+      console.error('[OrderCardComponent] Reorder failed:', err);
+      toast.error('Failed to prepare reorder. Please try again.');
+    } finally {
+      this.isReordering.set(false);
+    }
+  }
+
   protected printReceipt(): void {
     const orderNumber = this.order().orderNumber;
     const details = this.orderDetails();
@@ -278,7 +348,7 @@ export class OrderCardComponent {
           <div class="header">
             <div>
               <h1 style="margin: 0 0 6px 0; font-size: 24px;">Order Receipt</h1>
-              <div style="font-size: 14px; color: #6b7280;">Order #${orderNumber} • ${new Date(this.order().createdAt).toLocaleDateString()}</div>
+              <div style="font-size: 14px; color: #6b7280;">Order #${orderNumber} • ${formatOrderDate(this.order().createdAt)}</div>
             </div>
             <div style="text-align: right;">
               <span class="badge">${this.order().status}</span>
