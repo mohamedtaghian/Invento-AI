@@ -7,7 +7,7 @@ export const appRoutes: Routes = [
     path: '',
     component: MainLayout,
     children: [
-      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: '', redirectTo: '/auth', pathMatch: 'full' },
       {
         path: 'home',
         loadComponent: () =>
