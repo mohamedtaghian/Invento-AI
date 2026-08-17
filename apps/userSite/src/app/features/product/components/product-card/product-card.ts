@@ -50,6 +50,9 @@ export class ProductCard {
     if (this.isAdding()) return;
     this.isAdding.set(true);
 
+    const targetEl = (event.currentTarget || event.target) as HTMLElement;
+    const startRect = targetEl?.getBoundingClientRect ? targetEl.getBoundingClientRect() : null;
+
     const p = this.product();
 
     this.productApi.getProductBySlug(this.storeSlug, p.slug).subscribe({
@@ -79,7 +82,7 @@ export class ProductCard {
         });
 
         toast.success(`Added "${p.title}" to cart!`);
-        flyToCart(event);
+        flyToCart(startRect);
       },
       error: () => {
         this.isAdding.set(false);
