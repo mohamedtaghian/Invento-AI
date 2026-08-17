@@ -66,7 +66,7 @@ export class AttributesComponent implements OnInit {
   // Attribute Drawer State
   readonly isAttributeDrawerOpen = signal(false);
   readonly editingAttribute = signal<ProductAttribute | null>(null);
-  
+
   // Attribute Form Models
   attrName = signal('');
   attrKey = signal('');
@@ -77,7 +77,7 @@ export class AttributesComponent implements OnInit {
   // Values Drawer State
   readonly isValuesDrawerOpen = signal(false);
   readonly activeAttributeForValues = signal<ProductAttribute | null>(null);
-  
+
   // Value Form Models
   newValueName = signal('');
   newValueSlug = signal('');
@@ -129,36 +129,40 @@ export class AttributesComponent implements OnInit {
 
   saveAttribute(): void {
     const isEdit = this.editingAttribute();
-    
+
     if (isEdit) {
-      this.attributeService.updateAttribute(isEdit.id, {
-        name: this.attrName(),
-        key: this.attrKey(),
-        displayStyle: this.attrStyle(),
-        isFilterable: this.attrIsFilterable(),
-        showOnProductPage: this.attrShowOnProductPage(),
-      }).subscribe({
-        next: () => {
-          this.fetchAttributes();
-          this.closeAttributeDrawer();
-        },
-        error: (err) => console.error('Failed to update attribute', err)
-      });
+      this.attributeService
+        .updateAttribute(isEdit.id, {
+          name: this.attrName(),
+          key: this.attrKey(),
+          displayStyle: this.attrStyle(),
+          isFilterable: this.attrIsFilterable(),
+          showOnProductPage: this.attrShowOnProductPage(),
+        })
+        .subscribe({
+          next: () => {
+            this.fetchAttributes();
+            this.closeAttributeDrawer();
+          },
+          error: (err) => console.error('Failed to update attribute', err),
+        });
     } else {
-      this.attributeService.createAttribute({
-        name: this.attrName(),
-        key: this.attrKey() || undefined,
-        displayStyle: this.attrStyle(),
-        isFilterable: this.attrIsFilterable(),
-        showOnProductPage: this.attrShowOnProductPage(),
-        isVariantAxis: false,
-      }).subscribe({
-        next: () => {
-          this.fetchAttributes();
-          this.closeAttributeDrawer();
-        },
-        error: (err) => console.error('Failed to create attribute', err)
-      });
+      this.attributeService
+        .createAttribute({
+          name: this.attrName(),
+          key: this.attrKey() || undefined,
+          displayStyle: this.attrStyle(),
+          isFilterable: this.attrIsFilterable(),
+          showOnProductPage: this.attrShowOnProductPage(),
+          isVariantAxis: false,
+        })
+        .subscribe({
+          next: () => {
+            this.fetchAttributes();
+            this.closeAttributeDrawer();
+          },
+          error: (err) => console.error('Failed to create attribute', err),
+        });
     }
   }
 
@@ -166,7 +170,7 @@ export class AttributesComponent implements OnInit {
     if (confirm('Are you sure you want to delete this attribute?')) {
       this.attributeService.deleteAttribute(id).subscribe({
         next: () => this.fetchAttributes(),
-        error: (err) => console.error('Failed to delete attribute', err)
+        error: (err) => console.error('Failed to delete attribute', err),
       });
     }
   }
@@ -189,18 +193,20 @@ export class AttributesComponent implements OnInit {
     const attr = this.activeAttributeForValues();
     if (!attr) return;
 
-    this.attributeService.addAttributeValue(attr.id, {
-      value: this.newValueName(),
-      slug: this.newValueSlug() || undefined,
-    }).subscribe({
-      next: (updatedAttr) => {
-        this.activeAttributeForValues.set(updatedAttr);
-        this.newValueName.set('');
-        this.newValueSlug.set('');
-        this.fetchAttributes();
-      },
-      error: (err) => console.error('Failed to add value', err)
-    });
+    this.attributeService
+      .addAttributeValue(attr.id, {
+        value: this.newValueName(),
+        slug: this.newValueSlug() || undefined,
+      })
+      .subscribe({
+        next: (updatedAttr) => {
+          this.activeAttributeForValues.set(updatedAttr);
+          this.newValueName.set('');
+          this.newValueSlug.set('');
+          this.fetchAttributes();
+        },
+        error: (err) => console.error('Failed to add value', err),
+      });
   }
 
   deleteValue(valueId: string): void {
@@ -209,13 +215,13 @@ export class AttributesComponent implements OnInit {
 
     this.attributeService.deleteAttributeValue(attr.id, valueId).subscribe({
       next: () => {
-        this.attributeService.getAttributes().subscribe(attrs => {
+        this.attributeService.getAttributes().subscribe((attrs) => {
           this.attributes.set(attrs);
-          const updatedAttr = attrs.find(a => a.id === attr.id) || null;
+          const updatedAttr = attrs.find((a) => a.id === attr.id) || null;
           this.activeAttributeForValues.set(updatedAttr);
         });
       },
-      error: (err) => console.error('Failed to delete value', err)
+      error: (err) => console.error('Failed to delete value', err),
     });
   }
 
@@ -227,7 +233,7 @@ export class AttributesComponent implements OnInit {
     const reorderItems = currentList.map((attr, index) => ({ id: attr.id, position: index }));
     this.attributeService.reorderAttributes({ items: reorderItems }).subscribe({
       next: (updatedAttrs) => this.attributes.set(updatedAttrs),
-      error: (err) => console.error('Failed to reorder attributes', err)
+      error: (err) => console.error('Failed to reorder attributes', err),
     });
   }
 
@@ -246,7 +252,7 @@ export class AttributesComponent implements OnInit {
         this.activeAttributeForValues.set(updatedAttr);
         this.fetchAttributes();
       },
-      error: (err) => console.error('Failed to reorder values', err)
+      error: (err) => console.error('Failed to reorder values', err),
     });
   }
 }

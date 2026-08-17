@@ -1,24 +1,52 @@
 import { ChangeDetectionStrategy, Component, input, output, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { HlmButton } from '@spartan/helm/button';
-import { HlmCard, HlmCardContent, HlmCardHeader, HlmCardTitle } from '@spartan/helm/card';
-import { FilterResponse } from '../../types/product';
+import { FilterResponse } from '@invento/user-site/app/features/product/types/product';
 import { ActivatedRoute } from '@angular/router';
-import { parseAttributes } from '../../utils/filter-parser';
+import { parseAttributes } from '@invento/user-site/app/features/product/utils/filter-parser';
+import { HlmTypographyImports } from '@spartan/helm/typography';
+import { GenericSelectImports, GenericSelectOption } from '@invento/shared';
+import { HlmCheckboxImports } from '@spartan/helm/checkbox';
+import { HlmSwitchImports } from '@spartan/helm/switch';
+import { FilterAttribute } from '@invento/user-site/app/features/product/types/product';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideRotateCcw, lucideFilterX } from '@ng-icons/lucide';
+import { ColorSwatch, EmptyState } from '@invento/shared';
+import { HlmSlider } from '@spartan/helm/slider';
+
+import { HlmAccordionImports } from '@spartan/helm/accordion';
+import { TranslatePipe, LocaleService } from '@invento/core';
 
 @Component({
   selector: 'app-filters-sidebar',
   templateUrl: './filters-sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CurrencyPipe, HlmButton, HlmCard, HlmCardContent, HlmCardHeader, HlmCardTitle],
+  imports: [
+    CurrencyPipe,
+    HlmButton,
+    HlmTypographyImports,
+    GenericSelectImports,
+    HlmCheckboxImports,
+    HlmSwitchImports,
+    NgIcon,
+    ColorSwatch,
+    HlmSlider,
+    EmptyState,
+    HlmAccordionImports,
+    TranslatePipe,
+  ],
+  providers: [provideIcons({ lucideRotateCcw, lucideFilterX })],
 })
 export class FiltersSidebar {
+  private readonly localeService = inject(LocaleService);
   public readonly filters = input<FilterResponse | null>(null);
+  public readonly isLoading = input<boolean>(false);
 
   public readonly categoryChange = output<string>();
-  public readonly priceChange = output<{min?: number, max?: number}>();
+  public readonly priceChange = output<{ min?: number; max?: number }>();
   public readonly inStockChange = output<boolean>();
-  public readonly attributeChange = output<{key: string, values: string[]}>();
+  public readonly attributeChange = output<{ key: string; values: string[] }>();
   public readonly clearAll = output<void>();
 
   private readonly route = inject(ActivatedRoute);
@@ -28,14 +56,26 @@ export class FiltersSidebar {
     return this.route.snapshot.queryParams['category'] || null;
   }
 
+  get hasActiveFilters(): boolean {
+    const qp = this.route.snapshot.queryParams;
+    return !!(
+      qp['category'] ||
+      qp['minPrice'] ||
+      qp['maxPrice'] ||
+      qp['inStock'] ||
+      qp['attributes'] ||
+      qp['search']
+    );
+  }
+
   get currentMinPrice(): number {
     const val = this.route.snapshot.queryParams['minPrice'];
-    return val ? Number(val) : (this.filters()?.price?.min || 0);
+    return val ? Number(val) : this.filters()?.price?.min || 0;
   }
 
   get currentMaxPrice(): number {
     const val = this.route.snapshot.queryParams['maxPrice'];
-    return val ? Number(val) : (this.filters()?.price?.max || 5000); // 5000 is fallback
+    return val ? Number(val) : this.filters()?.price?.max || 5000; // 5000 is fallback
   }
 
   get isInStockOnly(): boolean {
@@ -56,9 +96,10 @@ export class FiltersSidebar {
     }
   }
 
-  protected onPriceInput(event: Event): void {
-    const maxVal = Number((event.target as HTMLInputElement).value);
-    this.priceChange.emit({ max: maxVal });
+  protected onPriceSliderChange(values: number[]): void {
+    if (values && values.length > 0) {
+      this.priceChange.emit({ max: values[0] });
+    }
   }
 
   protected onAttributeToggle(key: string, value: string): void {
@@ -66,11 +107,40 @@ export class FiltersSidebar {
     let currentValues = attrs[key] || [];
 
     if (currentValues.includes(value)) {
-      currentValues = currentValues.filter(v => v !== value);
+      currentValues = currentValues.filter((v) => v !== value);
     } else {
       currentValues = [...currentValues, value];
     }
 
     this.attributeChange.emit({ key, values: currentValues });
+  }
+
+  protected onDropdownChange(key: string, value: string): void {
+    if (value === '__all__') {
+      this.attributeChange.emit({ key, values: [] });
+    } else {
+      this.attributeChange.emit({ key, values: [value] });
+    }
+  }
+
+  getSelectOptions(attr: FilterAttribute): GenericSelectOption[] {
+    const opts = attr.values.map((v) => ({
+      label: v.value,
+      value: v.slug,
+      disabled: v.count === 0,
+      suffix: v.count === 0 ? '0' : String(v.count),
+    }));
+    return [
+      {
+        label: this.localeService.translate('product.filters.all', { name: attr.name }),
+        value: '',
+      },
+      ...opts,
+    ];
+  }
+
+  getSingleSelectedValue(key: string): string | null {
+    const attrs = parseAttributes(this.route.snapshot.queryParams['attributes']);
+    return attrs[key]?.[0] || null;
   }
 }

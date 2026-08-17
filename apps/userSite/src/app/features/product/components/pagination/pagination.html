@@ -3,36 +3,33 @@
     <ul hlmPaginationContent>
       <!-- Previous Button -->
       <li hlmPaginationItem>
-        <a hlmPaginationPrevious 
-           (click)="$event.preventDefault(); goTo(currentPage() - 1)"
-           [attr.disabled]="currentPage() === 1 ? true : null"
-           [class.pointer-events-none]="currentPage() === 1"
-           [class.opacity-50]="currentPage() === 1"
-           href="#">
-        </a>
+        <hlm-pagination-previous
+          (click)="goTo(currentPage() - 1)"
+          [class.pointer-events-none]="currentPage() === 1"
+          [class.opacity-50]="currentPage() === 1"
+        />
       </li>
 
-      <!-- Page Numbers -->
-      @for (page of pages(); track page) {
+      <!-- Page Numbers & Ellipses -->
+      @for (page of pages(); track $index) {
         <li hlmPaginationItem>
-          <a hlmPaginationLink 
-             [isActive]="page === currentPage()"
-             (click)="$event.preventDefault(); goTo(page)"
-             href="#">
-            {{ page }}
-          </a>
+          @if (page === '...') {
+            <hlm-pagination-ellipsis />
+          } @else {
+            <a hlmPaginationLink [isActive]="page === currentPage()" (click)="goTo($any(page))">
+              {{ page }}
+            </a>
+          }
         </li>
       }
 
       <!-- Next Button -->
       <li hlmPaginationItem>
-        <a hlmPaginationNext 
-           (click)="$event.preventDefault(); goTo(currentPage() + 1)"
-           [attr.disabled]="currentPage() === totalPages() ? true : null"
-           [class.pointer-events-none]="currentPage() === totalPages()"
-           [class.opacity-50]="currentPage() === totalPages()"
-           href="#">
-        </a>
+        <hlm-pagination-next
+          (click)="goTo(currentPage() + 1)"
+          [class.pointer-events-none]="currentPage() === totalPages()"
+          [class.opacity-50]="currentPage() === totalPages()"
+        />
       </li>
     </ul>
   </nav>

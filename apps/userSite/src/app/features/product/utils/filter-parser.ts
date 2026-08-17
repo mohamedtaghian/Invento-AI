@@ -8,10 +8,10 @@ export function parseAttributes(attributesString: string | null | undefined): Se
   if (!attributesString) {
     return {};
   }
-  
+
   const result: SelectedAttributes = {};
   const facets = attributesString.split(';');
-  
+
   for (const facet of facets) {
     if (!facet) continue;
     const [key, valuesStr] = facet.split(':');
@@ -19,7 +19,7 @@ export function parseAttributes(attributesString: string | null | undefined): Se
       result[key] = valuesStr.split(',').filter(Boolean);
     }
   }
-  
+
   return result;
 }
 
@@ -29,12 +29,12 @@ export function parseAttributes(attributesString: string | null | undefined): Se
  */
 export function stringifyAttributes(attributes: SelectedAttributes): string {
   const facets: string[] = [];
-  
+
   for (const [key, values] of Object.entries(attributes)) {
     if (values && values.length > 0) {
       facets.push(`${key}:${values.join(',')}`);
     }
   }
-  
+
   return facets.join(';');
 }

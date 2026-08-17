@@ -1,73 +1,109 @@
-<div class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 bg-card p-4 border border-border rounded-xl">
+<div
+  class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 bg-card p-4 border border-border rounded-xl"
+>
   <!-- Title -->
   <div class="flex items-center gap-2 shrink-0">
-    <span class="font-semibold text-foreground text-xl">{{ title() }}</span>
-    <span hlmBadge variant="secondary" class="text-xs">{{ count() }} Items</span>
+    <h4 hlmH4 class="m-0 font-semibold text-foreground text-xl">{{ title() }}</h4>
+    <span hlmBadge variant="secondary" class="text-xs"
+      >{{ count() }} {{ 'product.toolbar.items' | translate }}</span
+    >
   </div>
 
   <!-- Search -->
   <div class="relative flex-1 sm:max-w-sm">
-    <svg
-      class="top-1/2 left-3 absolute w-4 h-4 text-muted-foreground -translate-y-1/2 pointer-events-none"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-    <input
-      type="search"
-      placeholder="Search products..."
-      (input)="onSearchInput($event)"
-      (keyup.enter)="onSearchEnter($event)"
-      class="bg-background py-1.5 pr-4 pl-9 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring w-full text-foreground text-sm"
+    <app-search-input
+      [control]="searchControl"
+      [isInvalid]="searchControl.invalid && searchControl.value?.length === 1"
+      [placeholder]="'product.toolbar.search_placeholder' | translate"
+      (enterPressed)="onSearchEnter()"
+      (clearPressed)="clearSearch()"
     />
 
-    <!-- Suggestions Dropdown -->
     @if (showSuggestions()) {
-      <div class="absolute top-full left-0 z-50 w-full mt-1 bg-card border border-border shadow-lg rounded-lg overflow-hidden">
-        @if (isLoadingSuggestions()) {
-          <div class="p-3 text-sm text-muted-foreground text-center animate-pulse">Searching...</div>
+      <div
+        class="absolute top-full inset-s-0 z-50 w-full mt-2 bg-card border border-border shadow-lg rounded-xl overflow-hidden flex flex-col"
+      >
+        @if (searchControl.invalid && searchTerm().length === 1) {
+          <!-- Validation State -->
+          <div class="p-4 flex items-start gap-3 text-muted-foreground bg-muted/30">
+            <ng-icon name="lucideInfo" size="16" class="mt-0.5 shrink-0 text-primary" />
+            <span hlmSmall class="text-sm">
+              {{ 'product.toolbar.search_validation' | translate }}
+            </span>
+          </div>
+        } @else if (isLoadingSuggestions()) {
+          <!-- Premium Skeleton Loading State -->
+          <div class="flex flex-col">
+            <div
+              hlmSmall
+              class="px-4 py-3 bg-muted/30 border-b border-border text-xs text-muted-foreground font-medium uppercase tracking-wider"
+            >
+              {{ 'product.toolbar.searching_for' | translate: { term: searchTerm() } }}
+            </div>
+            @for (i of [1, 2, 3]; track i) {
+              <div
+                class="px-4 py-3 flex justify-between items-center border-b border-border/50 last:border-0"
+              >
+                <div class="h-4 bg-muted rounded w-2/3 animate-pulse"></div>
+                <div class="h-4 bg-muted rounded w-12 animate-pulse"></div>
+              </div>
+            }
+          </div>
         } @else if (suggestions().length > 0) {
-          <ul class="max-h-60 overflow-auto flex flex-col">
+          <!-- Results State -->
+          <div
+            hlmSmall
+            class="px-4 py-2 bg-muted/50 border-b border-border text-xs text-muted-foreground font-medium uppercase tracking-wider"
+          >
+            {{ 'product.toolbar.products' | translate }}
+          </div>
+          <ul class="max-h-80 overflow-auto flex flex-col">
             @for (suggestion of suggestions(); track suggestion.slug) {
               <li>
-                <button 
+                <button
+                  hlmBtn
+                  variant="ghost"
                   (click)="onSuggestionClick(suggestion)"
-                  class="w-full text-left px-4 py-2 hover:bg-secondary flex items-center justify-between text-sm transition-colors"
+                  class="w-full text-left px-4 py-6 rounded-none flex items-center justify-between transition-colors border-b border-border/50 last:border-0"
                 >
-                  <span class="truncate font-medium text-foreground">{{ suggestion.title }}</span>
-                  <span class="text-muted-foreground shrink-0 ml-2 whitespace-nowrap">{{ suggestion.minPriceAmount / 100 | currency }}</span>
+                  <span hlmP class="truncate font-medium m-0">{{ suggestion.title }}</span>
+                  <span hlmSmall class="text-primary shrink-0 ms-3 font-semibold">{{
+                    suggestion.minPriceAmount / 100 | currency
+                  }}</span>
                 </button>
               </li>
             }
           </ul>
         } @else {
-          <div class="p-3 text-sm text-muted-foreground text-center">No products found</div>
+          <!-- Empty State -->
+          <div class="p-8 flex flex-col items-center justify-center text-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-muted flex items-center justify-center">
+              <ng-icon name="lucideSearchX" size="24" class="text-muted-foreground" />
+            </div>
+            <div>
+              <p hlmP class="text-sm font-semibold m-0">
+                {{ 'product.toolbar.no_products_found' | translate }}
+              </p>
+              <p hlmSmall class="text-xs text-muted-foreground mt-1">
+                {{ 'product.toolbar.search_empty_desc' | translate: { term: searchTerm() } }}
+              </p>
+            </div>
+          </div>
         }
       </div>
     }
   </div>
 
   <!-- Sort -->
-  <div class="flex items-center gap-2 shrink-0">
-    <span class="text-muted-foreground text-sm">Sort by:</span>
-    <select
+  <div class="flex items-center gap-2 shrink-0 z-50">
+    <span hlmSmall class="text-muted-foreground text-sm">{{
+      'product.toolbar.sort_by' | translate
+    }}</span>
+    <app-generic-select
+      [options]="sortOptions"
       [value]="sort()"
-      (change)="onSortChange($event)"
-      class="bg-background py-1.5 pr-8 pl-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-foreground text-sm cursor-pointer"
-    >
-      <option value="relevance" class="bg-background text-foreground">Relevance</option>
-      <option value="best-seller" class="bg-background text-foreground">Best Seller</option>
-      <option value="price_asc" class="bg-background text-foreground">Price: Low to High</option>
-      <option value="price_desc" class="bg-background text-foreground">Price: High to Low</option>
-      <option value="newest" class="bg-background text-foreground">Newest Arrivals</option>
-      <option value="title" class="bg-background text-foreground">Title A-Z</option>
-    </select>
+      triggerWidth="w-[180px]"
+      (valueChange)="onSortChange($event)"
+    />
   </div>
 </div>

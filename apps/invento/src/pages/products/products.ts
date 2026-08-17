@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+} from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -94,7 +101,7 @@ export class Products implements OnInit {
   readonly attributes = signal<ProductAttribute[]>([]);
   readonly variantAttributes = computed(() => this.attributes().filter(a => a.isVariantAxis));
   readonly productAttributes = computed(() => this.attributes().filter(a => !a.isVariantAxis));
-  
+
   readonly categories = signal<Category[]>([]);
 
   // New product form model
@@ -145,7 +152,7 @@ export class Products implements OnInit {
     this.attributeService.getAttributes().subscribe({
       next: (attrs) => {
         this.attributes.set(attrs);
-        
+
         const prodAttrs = { ...this.newProduct.productAttributeValues };
         this.productAttributes().forEach(a => {
           if (prodAttrs[a.id] === undefined) prodAttrs[a.id] = '';
@@ -231,7 +238,7 @@ export class Products implements OnInit {
       toast.error('At least one variant is required.');
       return;
     }
-    
+
     const isValid = this.newProduct.variants.every(v => v.price != null && v.price >= 0);
     if (!isValid) {
       toast.error('All variants must have a valid non-negative price.');
@@ -239,7 +246,7 @@ export class Products implements OnInit {
     }
 
     this.isSubmitting.set(true);
-    
+
     const apiVariants: CreateProductVariantDto[] = this.newProduct.variants.map(v => {
       const attributeValueIds = Object.values(v.variantAttributeValues).filter(val => !!val);
 
@@ -260,7 +267,6 @@ export class Products implements OnInit {
       slug: this.newProduct.slug || undefined,
       description: this.newProduct.description || undefined,
       shortDescription: this.newProduct.shortDescription || undefined,
-      searchKeywords: this.newProduct.searchKeywords || undefined,
       status: this.newProduct.status,
       isFeatured: this.newProduct.isFeatured,
       weightGrams: this.newProduct.weightGrams || undefined,
@@ -268,9 +274,6 @@ export class Products implements OnInit {
       attributeValueIds: rootAttributeValueIds.length > 0 ? rootAttributeValueIds : undefined,
       variants: apiVariants
     };
-
-    this.productService.createProduct(payload).subscribe({
-      next: () => {
         toast.success('Product created successfully');
         this.isSubmitting.set(false);
         this.toggleDrawer();
@@ -280,7 +283,7 @@ export class Products implements OnInit {
         console.error('Failed to create product', err);
         toast.error('Failed to create product');
         this.isSubmitting.set(false);
-      }
+      },
     });
   }
 
@@ -295,7 +298,7 @@ export class Products implements OnInit {
       error: (err) => {
         console.error('Failed to save order', err);
         this.fetchProducts(); // revert on error
-      }
+      },
     });
   }
 
@@ -332,7 +335,7 @@ export class Products implements OnInit {
 
     this.isBulkActing.set(true);
     const requests = selected.map(id => this.productService.deleteProduct(id));
-    
+
     forkJoin(requests).subscribe({
       next: () => {
         toast.success(`Deleted ${selected.length} products successfully.`);
