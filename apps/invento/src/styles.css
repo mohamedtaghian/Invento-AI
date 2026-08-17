@@ -321,3 +321,10 @@
     filter: blur(2px);
   }
 }
+
+/* Make account settings header stay perfectly still */
+::view-transition-group(account-tabs),
+::view-transition-old(account-tabs),
+::view-transition-new(account-tabs) {
+  animation: none;
+}
