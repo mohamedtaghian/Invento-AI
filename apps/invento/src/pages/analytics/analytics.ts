@@ -28,7 +28,6 @@ import { lucideChevronRight } from '@ng-icons/lucide';
     HlmCardImports,
     HlmButtonImports,
     AiAdvisorPanel,
-    NgIcon,
   ],
   providers: [provideIcons({ lucideChevronRight })],
   templateUrl: './analytics.html',
