@@ -197,7 +197,7 @@
               </div>
               <h4 class="pt-0.5 font-bold text-foreground text-sm leading-none">Order Placed</h4>
               <p class="mt-1.5 sm:mt-1 text-[11px] text-muted-foreground">
-                {{ (order()?.createdAt | formatOrderDate: true) || 'Just now' }}
+                {{ (order()?.createdAt | formatOrderDate) || 'Just now' }}
               </p>
             </div>
 
