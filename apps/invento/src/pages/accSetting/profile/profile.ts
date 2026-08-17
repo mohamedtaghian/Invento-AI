@@ -17,11 +17,12 @@ import {
 import { HlmCard } from '@spartan/helm/card';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmInput } from '@spartan/helm/input';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgIcon, HlmCard, HlmButton, HlmInput],
+  imports: [CommonModule, FormsModule, RouterLink, NgIcon, HlmCard, HlmButton, HlmInput],
   providers: [
     provideIcons({
       lucideUpload,

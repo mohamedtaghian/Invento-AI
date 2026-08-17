@@ -42,7 +42,7 @@ export class Login {
       next: () => {
         this.isLoading.set(false);
         toast.success('Logged in successfully');
-        this.router.navigate(['/']);
+        this.router.navigate(['/home']);
       },
       error: (err) => {
         this.isLoading.set(false);

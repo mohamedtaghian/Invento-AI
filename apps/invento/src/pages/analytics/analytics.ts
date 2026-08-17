@@ -14,6 +14,7 @@ import { CustomerGrowth } from './components/customer-growth/customer-growth';
 import { AnalyticsService, AnalyticsRange, AnalyticsResponse } from './services/analytics-service';
 import { OrdersDonut } from './components/orders-donut/orders-donut';
 
+import { lucideChevronRight } from '@ng-icons/lucide';
 @Component({
   standalone: true,
   selector: 'app-analytics',
@@ -30,7 +31,7 @@ import { OrdersDonut } from './components/orders-donut/orders-donut';
     HlmCardImports,
     HlmButtonImports,
   ],
-  providers: [provideIcons({ lucideSparkles })],
+  providers: [provideIcons({ lucideSparkles, lucideChevronRight })],
   templateUrl: './analytics.html',
   styleUrl: './analytics.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
