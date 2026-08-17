@@ -1,0 +1,31 @@
+name: Daily SpartanUI Docs Sync
+
+on:
+  schedule:
+    # Runs at 00:00 UTC on the 15th of every month
+    - cron: '0 0 15 * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub UI
+
+jobs:
+  sync-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Run Sync Script
+        run: node scripts/sync-spartan-docs.js
+
+      - name: Commit and Push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/spartan-inventory.md
+
+          # Only commit if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(docs): daily sync of SpartanUI inventory" && git push)

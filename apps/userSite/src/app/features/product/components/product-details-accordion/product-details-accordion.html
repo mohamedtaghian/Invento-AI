@@ -1,47 +1,51 @@
 @let p = store.product()!;
 
-<div class="border-t border-border pt-4 space-y-2">
-  <details class="group bg-card rounded-lg border border-border overflow-hidden" open>
-    <summary
-      class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-muted/50 transition-colors text-foreground"
-    >
-      Product Details
-      <ng-icon
-        name="lucideChevronDown"
-        class="transition-transform group-open:rotate-180 text-muted-foreground"
-      />
-    </summary>
-    <div class="text-muted-foreground mt-3 text-sm p-4 pt-0 border-t border-border/50">
-      <!-- Description -->
-      <div [innerHTML]="p.description"></div>
-    </div>
-  </details>
-
-  @if (p.specs && p.specs.length > 0) {
-    <details class="group bg-card rounded-lg border border-border overflow-hidden">
-      <summary
-        class="flex justify-between items-center font-semibold cursor-pointer list-none p-4 hover:bg-muted/50 transition-colors text-foreground"
+<div class="border-t border-border pt-4">
+  <hlm-accordion type="multiple" class="space-y-2">
+    @if (p.description) {
+      <hlm-accordion-item
+        class="bg-card rounded-lg border border-border px-4 border-b-0 overflow-hidden"
+        [isOpened]="true"
       >
-        Specifications
-        <ng-icon
-          name="lucideChevronDown"
-          class="transition-transform group-open:rotate-180 text-muted-foreground"
-        />
-      </summary>
-      <div class="text-muted-foreground mt-3 text-sm p-4 pt-0 border-t border-border/50">
-        <dl class="divide-y divide-border">
-          @for (spec of p.specs; track spec.key) {
-            <div class="px-1 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-              <dt class="text-sm font-medium leading-6 text-foreground">{{ spec.key }}</dt>
-              <dd class="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
-                @for (val of spec.values; track val.slug) {
-                  <span>{{ val.value }}{{ $last ? '' : ', ' }}</span>
-                }
-              </dd>
-            </div>
-          }
-        </dl>
-      </div>
-    </details>
-  }
+        <hlm-accordion-trigger
+          class="hover:no-underline hover:text-foreground text-foreground py-4"
+        >
+          {{ 'product.accordion.details' | translate }}
+        </hlm-accordion-trigger>
+        <hlm-accordion-content class="text-muted-foreground text-sm">
+          <!-- Description -->
+          <div [innerHTML]="p.description"></div>
+        </hlm-accordion-content>
+      </hlm-accordion-item>
+    }
+
+    @if (p.specs && p.specs.length > 0) {
+      <hlm-accordion-item
+        class="bg-card rounded-lg border border-border px-4 border-b-0 overflow-hidden"
+        [isOpened]="!p.description"
+      >
+        <hlm-accordion-trigger
+          class="hover:no-underline hover:text-foreground text-foreground py-4"
+        >
+          {{ 'product.accordion.specifications' | translate }}
+        </hlm-accordion-trigger>
+        <hlm-accordion-content class="text-muted-foreground text-sm">
+          <dl class="divide-y divide-border">
+            @for (spec of p.specs; track spec.key) {
+              <div class="px-1 py-3 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <dt class="text-sm font-medium leading-6 text-foreground">
+                  {{ spec.name || spec.key }}
+                </dt>
+                <dd class="mt-1 text-sm leading-6 text-muted-foreground sm:col-span-2 sm:mt-0">
+                  @for (val of spec.values; track val.slug) {
+                    <span>{{ val.value }}{{ $last ? '' : ', ' }}</span>
+                  }
+                </dd>
+              </div>
+            }
+          </dl>
+        </hlm-accordion-content>
+      </hlm-accordion-item>
+    }
+  </hlm-accordion>
 </div>

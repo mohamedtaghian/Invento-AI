@@ -2,17 +2,17 @@ import { Injectable, inject } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
   private cookieService = inject(CookieService);
-  
+
   private readonly ACCESS_TOKEN_KEY = 'invento_access_token';
   private readonly REFRESH_TOKEN_KEY = 'invento_refresh_token';
 
   // In a real scenario, you might want to set secure: true, sameSite: 'Strict' for cookies
   // when deploying to production. For now, default options are sufficient for dev.
-  
+
   setTokens(accessToken: string, refreshToken: string): void {
     // 15 days expiry for both as a default fallback, adapt as necessary.
     this.cookieService.set(this.ACCESS_TOKEN_KEY, accessToken, 15, '/');

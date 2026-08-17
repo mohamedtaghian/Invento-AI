@@ -47,7 +47,11 @@ export class AttributeService {
     return this.http.post<ProductAttribute>(`${this.apiUrl}/${id}/values`, dto);
   }
 
-  updateAttributeValue(id: string, valueId: string, dto: UpdateAttributeValueDto): Observable<ProductAttribute> {
+  updateAttributeValue(
+    id: string,
+    valueId: string,
+    dto: UpdateAttributeValueDto,
+  ): Observable<ProductAttribute> {
     return this.http.patch<ProductAttribute>(`${this.apiUrl}/${id}/values/${valueId}`, dto);
   }
 

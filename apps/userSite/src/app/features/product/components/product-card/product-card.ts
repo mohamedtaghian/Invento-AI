@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideShoppingCart, lucideLoader2 } from '@ng-icons/lucide';
+import { lucideShoppingCart, lucideImage, lucidePlus, lucideMinus } from '@ng-icons/lucide';
 import {
   HlmCard,
   HlmCardHeader,
@@ -11,11 +11,15 @@ import {
   HlmCardContent,
 } from '@spartan/helm/card';
 import { toast } from '@spartan/helm/sonner';
-import { ProductListItem } from '../../types/product';
-import { flyToCart } from '../../service/cart-utils';
-import { CartService } from '../../../../core/service/cart.service';
-import { ProductApiService } from '../../service/product-api.service';
-import { environment } from '../../../../../environments/environment';
+import { TranslatePipe } from '@invento/core';
+import { flyToCart } from '@invento/user-site/app/features/product';
+import { CartService } from '@invento/user-site/core/service/cart.service';
+
+import { HlmButton } from '@spartan/helm/button';
+import { HlmTypographyImports } from '@spartan/helm/typography';
+import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
+import { PageBadge, ColorSwatch } from '@invento/shared';
+import { environment } from '@invento/user-site/environments/environment';
 
 @Component({
   selector: 'app-product-card',
@@ -26,14 +30,19 @@ import { environment } from '../../../../../environments/environment';
     RouterLink,
     CurrencyPipe,
     SlicePipe,
+    TranslatePipe,
     NgIcon,
     HlmCard,
     HlmCardHeader,
     HlmCardTitle,
     HlmCardDescription,
     HlmCardContent,
+    HlmButton,
+    HlmTypographyImports,
+    PageBadge,
+    ColorSwatch,
   ],
-  providers: [provideIcons({ lucideShoppingCart, lucideLoader2 })],
+  providers: [provideIcons({ lucideShoppingCart, lucideImage, lucidePlus, lucideMinus })],
 })
 export class ProductCard {
   public readonly product = input.required<ProductListItem>();

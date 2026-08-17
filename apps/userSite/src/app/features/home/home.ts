@@ -21,11 +21,11 @@ import {
   lucideArrowRight,
 } from '@ng-icons/lucide';
 
-import { ProductCard } from '../product/components/product-card/product-card';
-import { ProductListItem } from '../product/types/product';
+import { ProductCard } from '@invento/user-site/app/features/product';
+import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
 
 import { environment } from '../../../environments/environment';
-import { ProductApiService } from '../product/service/product-api.service';
+import { ProductApiService } from '@invento/user-site/app/features/product';
 
 @Component({
   selector: 'app-home',
@@ -57,6 +57,14 @@ export class HomeComponent implements OnInit {
   ];
 
   featuredProducts = signal<ProductListItem[]>([]);
+
+  ngOnInit() {
+    this.apiService
+      .getProducts(environment.storeSlug, { sort: 'newest', limit: 4 })
+      .subscribe((res) => {
+        this.featuredProducts.set(res.items);
+      });
+  }
 
   constructor() {
     // Animate products when they become available in DOM
@@ -127,13 +135,5 @@ export class HomeComponent implements OnInit {
         );
       }
     });
-  }
-
-  ngOnInit() {
-    this.apiService
-      .getProducts(environment.storeSlug, { sort: 'newest', limit: 4 })
-      .subscribe((res) => {
-        this.featuredProducts.set(res.items);
-      });
   }
 }

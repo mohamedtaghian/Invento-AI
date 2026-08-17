@@ -3,23 +3,23 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { TokenService } from './token.service';
-import { 
-  AuthResponse, 
-  MessageResponse, 
-  RefreshTokenResponse, 
-  RegisterResponse, 
-  User 
+import {
+  AuthResponse,
+  MessageResponse,
+  RefreshTokenResponse,
+  RegisterResponse,
+  User,
 } from '../interface/auth.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
   private tokenService = inject(TokenService);
-  
+
   private apiUrl = environment.apiUrl;
-  
+
   currentUser = signal<User | null>(null);
 
   register(data: Record<string, unknown>): Observable<RegisterResponse> {
@@ -31,16 +31,21 @@ export class AuthService {
       tap((response) => {
         this.tokenService.setTokens(response.accessToken, response.refreshToken);
         this.currentUser.set(response.user);
-      })
+      }),
     );
   }
 
   verifyEmail(email: string, otp: string): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.apiUrl}/users/verify-email/owner`, { email, otp });
+    return this.http.post<MessageResponse>(`${this.apiUrl}/users/verify-email/owner`, {
+      email,
+      otp,
+    });
   }
 
   resendVerification(email: string): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.apiUrl}/users/resend-verification/owner`, { email });
+    return this.http.post<MessageResponse>(`${this.apiUrl}/users/resend-verification/owner`, {
+      email,
+    });
   }
 
   forgotPassword(email: string): Observable<MessageResponse> {
@@ -56,11 +61,13 @@ export class AuthService {
   }
 
   refreshToken(refreshToken: string): Observable<RefreshTokenResponse> {
-    return this.http.post<RefreshTokenResponse>(`${this.apiUrl}/users/refresh-token`, { refreshToken }).pipe(
-      tap((response) => {
-        this.tokenService.setTokens(response.accessToken, response.refreshToken);
-      })
-    );
+    return this.http
+      .post<RefreshTokenResponse>(`${this.apiUrl}/users/refresh-token`, { refreshToken })
+      .pipe(
+        tap((response) => {
+          this.tokenService.setTokens(response.accessToken, response.refreshToken);
+        }),
+      );
   }
 
   logout(): void {

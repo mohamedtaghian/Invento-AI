@@ -13,13 +13,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -27,13 +21,12 @@ export class Login {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  
 
   isLoading = signal(false);
 
   loginForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
   });
 
   onSubmit() {
@@ -54,7 +47,7 @@ export class Login {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Login failed. Please check your credentials.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 

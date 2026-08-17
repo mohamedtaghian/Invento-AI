@@ -17,7 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   if (token) {
     authReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`)
+      headers: req.headers.set('Authorization', `Bearer ${token}`),
     });
   }
 
@@ -39,15 +39,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
               switchMap((res) => {
                 isRefreshing = false;
                 refreshTokenSubject.next(res.accessToken);
-                return next(req.clone({
-                  headers: req.headers.set('Authorization', `Bearer ${res.accessToken}`)
-                }));
+                return next(
+                  req.clone({
+                    headers: req.headers.set('Authorization', `Bearer ${res.accessToken}`),
+                  }),
+                );
               }),
               catchError((err) => {
                 isRefreshing = false;
                 authService.logout();
                 return throwError(() => err);
-              })
+              }),
             );
           } else {
             isRefreshing = false;
@@ -56,17 +58,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
           }
         } else {
           return refreshTokenSubject.pipe(
-            filter(token => token !== null),
+            filter((token) => token !== null),
             take(1),
-            switchMap(jwt => {
-              return next(req.clone({
-                headers: req.headers.set('Authorization', `Bearer ${jwt}`)
-              }));
-            })
+            switchMap((jwt) => {
+              return next(
+                req.clone({
+                  headers: req.headers.set('Authorization', `Bearer ${jwt}`),
+                }),
+              );
+            }),
           );
         }
       }
       return throwError(() => error);
-    })
+    }),
   );
 };

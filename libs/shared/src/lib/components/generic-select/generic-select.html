@@ -1,0 +1,18 @@
+<hlm-select [value]="value()" (valueChange)="onValueChange($event)">
+  <hlm-select-trigger [class]="triggerWidth()">
+    <span data-slot="select-value" class="truncate flex items-center gap-1.5 line-clamp-1">
+      @if (selectedLabel()) {
+        {{ selectedLabel() }}
+      } @else {
+        <span class="text-muted-foreground">{{ placeholder() }}</span>
+      }
+    </span>
+  </hlm-select-trigger>
+  <hlm-select-content *hlmSelectPortal>
+    @for (opt of options(); track opt.value) {
+      <hlm-select-item [value]="opt.value" [disabled]="opt.disabled === true">
+        {{ opt.label }} {{ opt.suffix ? '(' + opt.suffix + ')' : '' }}
+      </hlm-select-item>
+    }
+  </hlm-select-content>
+</hlm-select>

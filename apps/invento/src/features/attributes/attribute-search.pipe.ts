@@ -3,18 +3,17 @@ import { ProductAttribute } from './attribute.model';
 
 @Pipe({
   name: 'attributeSearch',
-  standalone: true
+  standalone: true,
 })
 export class AttributeSearchPipe implements PipeTransform {
   transform(attributes: ProductAttribute[], searchQuery: string): ProductAttribute[] {
     if (!attributes || !searchQuery) {
       return attributes;
     }
-    
+
     const query = searchQuery.toLowerCase().trim();
-    return attributes.filter(attr => 
-      attr.name.toLowerCase().includes(query) || 
-      attr.key.toLowerCase().includes(query)
+    return attributes.filter(
+      (attr) => attr.name.toLowerCase().includes(query) || attr.key.toLowerCase().includes(query),
     );
   }
 }

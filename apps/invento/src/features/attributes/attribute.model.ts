@@ -1,7 +1,7 @@
 export enum AttributeDisplayStyle {
   List = 'list',
   Dropdown = 'dropdown',
-  Swatch = 'swatch'
+  Swatch = 'swatch',
 }
 
 export interface ProductAttributeValue {

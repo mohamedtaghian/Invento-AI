@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { Products } from '@invento/user-site/app/features/product/components/product/product';
-import { ProductDetails } from '@invento/user-site/app/features/product/components/product-details/product-details';
+import { Products } from '@invento/user-site/app/pages/products/product';
+import { ProductDetails } from '@invento/user-site/app/pages/product-details/product-details';
 import { CheckoutComponent } from '@invento/user-site/app/features/checkout/checkout';
 import { NotFoundComponent } from '@invento/user-site/app/shared/components/not-found/not-found';
 import { OrderConfirmedComponent } from '@invento/user-site/app/features/order-confirmed/order-confirmed';
@@ -20,7 +20,7 @@ import { environment } from '../environments/environment';
 export const routes: Routes = [
   // Redirect root to fallback store slug for local testing
   { path: '', redirectTo: environment.storeSlug, pathMatch: 'full' },
-  
+
   // Multi-tenant route wrapper
   {
     path: ':storeSlug',
@@ -51,7 +51,7 @@ export const routes: Routes = [
           { path: '', redirectTo: 'login', pathMatch: 'full' },
         ],
       },
-    ]
+    ],
   },
 
   // The wild component (404) MUST go at the very bottom
