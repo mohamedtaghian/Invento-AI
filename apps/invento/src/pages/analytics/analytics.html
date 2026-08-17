@@ -9,7 +9,14 @@
     </div>
 
     <div class="flex items-center gap-2">
-      <app-ai-advisor-panel />
+      <a
+        routerLink="/ai-advisor"
+        hlmBtn
+        class="bg-primary hover:bg-primary/90 px-4 rounded-full text-primary-foreground inline-flex items-center gap-1.5"
+      >
+        <ng-icon name="lucideSparkles" size="16" />
+        AI Advisor
+      </a>
 
       <hlm-select [value]="range()" (valueChange)="onRangeChange($event)">
         <hlm-select-trigger class="w-40">
