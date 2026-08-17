@@ -77,7 +77,11 @@
             <th class="px-2.5 sm:px-3 md:px-4 py-3 text-start whitespace-nowrap">Date Added</th>
           </tr>
         </thead>
-        <tbody cdkDropList (cdkDropListDropped)="drop($event)" class="divide-y divide-border/60 text-sm">
+        <tbody
+          cdkDropList
+          (cdkDropListDropped)="drop($event)"
+          class="divide-y divide-border/60 text-sm"
+        >
           <!-- Loading State -->
           @if (isLoading()) {
             <tr>
@@ -112,7 +116,7 @@
                       />
                     </div>
                     <div>
-                      <p 
+                      <p
                         class="font-medium text-primary hover:underline cursor-pointer"
                         (click)="viewProductDetails(product.id)"
                       >
@@ -131,9 +135,9 @@
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3 whitespace-nowrap">
                   <p class="font-medium text-foreground">
-                    ${{ (product.minPriceAmount / 100) | number: '1.2-2' }}
+                    ${{ product.minPriceAmount / 100 | number: '1.2-2' }}
                     @if (product.minPriceAmount !== product.maxPriceAmount) {
-                      - ${{ (product.maxPriceAmount / 100) | number: '1.2-2' }}
+                      - ${{ product.maxPriceAmount / 100 | number: '1.2-2' }}
                     }
                   </p>
                 </td>
@@ -241,7 +245,14 @@
         <div class="flex flex-col gap-4 mt-2">
           <div class="flex items-center justify-between">
             <h3 class="text-sm font-semibold text-foreground">Variants</h3>
-            <button hlmBtn variant="outline" size="sm" (click)="addVariant()" type="button" class="h-8 px-3">
+            <button
+              hlmBtn
+              variant="outline"
+              size="sm"
+              (click)="addVariant()"
+              type="button"
+              class="h-8 px-3"
+            >
               <ng-icon name="lucidePlus" size="14" class="mr-1.5" />
               Add Variant
             </button>
@@ -263,7 +274,9 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 @if (colorAttribute()) {
                   <div>
-                    <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{ colorAttribute()?.name }}</label>
+                    <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{
+                      colorAttribute()?.name
+                    }}</label>
                     <select
                       class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       [(ngModel)]="variant.colorValueId"
@@ -278,7 +291,9 @@
                 }
                 @if (sizeAttribute()) {
                   <div>
-                    <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{ sizeAttribute()?.name }}</label>
+                    <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{
+                      sizeAttribute()?.name
+                    }}</label>
                     <select
                       class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
                       [(ngModel)]="variant.sizeValueId"
@@ -295,7 +310,9 @@
 
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">SKU</label>
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >SKU</label
+                  >
                   <input
                     hlmInput
                     type="text"
@@ -306,7 +323,9 @@
                   />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Price</label>
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Price</label
+                  >
                   <input
                     hlmInput
                     type="number"
@@ -317,7 +336,9 @@
                   />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Stock</label>
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Stock</label
+                  >
                   <input
                     hlmInput
                     type="number"

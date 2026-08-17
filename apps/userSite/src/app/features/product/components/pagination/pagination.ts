@@ -13,12 +13,33 @@ export class Pagination {
 
   public readonly pageChange = output<number>();
 
-  protected readonly pages = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, i) => i + 1),
-  );
+  protected readonly pages = computed(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
 
-  protected goTo(page: number): void {
-    if (page < 1 || page > this.totalPages() || page === this.currentPage()) return;
+    if (total <= 5) {
+      return Array.from({ length: total }, (_, i) => i + 1);
+    }
+
+    if (current <= 3) {
+      return [1, 2, 3, 4, '...', total];
+    }
+
+    if (current >= total - 2) {
+      return [1, '...', total - 3, total - 2, total - 1, total];
+    }
+
+    return [1, '...', current - 1, current, current + 1, '...', total];
+  });
+
+  protected goTo(page: number | string): void {
+    if (
+      typeof page === 'string' ||
+      page < 1 ||
+      page > this.totalPages() ||
+      page === this.currentPage()
+    )
+      return;
     this.pageChange.emit(page);
   }
 }

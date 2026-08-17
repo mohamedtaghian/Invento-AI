@@ -1,16 +1,40 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+} from '@angular/core';
 import { CommonModule, CurrencyPipe, DatePipe, DecimalPipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray, CdkDropList, CdkDrag } from '@angular/cdk/drag-drop';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowLeft, lucidePackage, lucideTag, lucideLoader2, lucideTrash2, lucideEdit, lucideX, lucideUpload, lucideImage, lucideGripVertical, lucideCheck, lucidePlus } from '@ng-icons/lucide';
+import {
+  lucideArrowLeft,
+  lucidePackage,
+  lucideTag,
+  lucideLoader2,
+  lucideTrash2,
+  lucideEdit,
+  lucideX,
+  lucideUpload,
+  lucideImage,
+  lucideGripVertical,
+  lucideCheck,
+  lucidePlus,
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmCardImports } from '@spartan/helm/card';
 import { HlmBadgeImports } from '@spartan/helm/badge';
 import { HlmInputImports } from '@spartan/helm/input';
 
-import { ApiProductDetail, UpdateProductDto, ApiProductVariant } from '../../../features/products/product.model';
+import {
+  ApiProductDetail,
+  UpdateProductDto,
+  ApiProductVariant,
+} from '../../../features/products/product.model';
 import { ProductService } from '../../../features/products/product.service';
 import { AttributeService } from '../../../features/attributes/attribute.service';
 import { ProductAttribute } from '../../../features/attributes/attribute.model';
@@ -30,7 +54,7 @@ import { ProductAttribute } from '../../../features/attributes/attribute.model';
     HlmBadgeImports,
     HlmInputImports,
     CdkDropList,
-    CdkDrag
+    CdkDrag,
   ],
   providers: [
     provideIcons({
@@ -45,7 +69,7 @@ import { ProductAttribute } from '../../../features/attributes/attribute.model';
       lucideImage,
       lucideGripVertical,
       lucideCheck,
-      lucidePlus
+      lucidePlus,
     }),
   ],
   templateUrl: './product-details.html',
@@ -62,13 +86,13 @@ export class ProductDetails implements OnInit {
   readonly error = signal<string | null>(null);
 
   readonly isDeleting = signal(false);
-  
+
   readonly isEditDrawerOpen = signal(false);
   readonly isSaving = signal(false);
   editProductForm = {
     title: '',
     description: '',
-    status: 'draft' as 'draft' | 'active' | 'archived'
+    status: 'draft' as 'draft' | 'active' | 'archived',
   };
 
   // Image Management
@@ -78,24 +102,24 @@ export class ProductDetails implements OnInit {
 
   // Global Attributes
   readonly globalAttributes = signal<ProductAttribute[]>([]);
-  readonly variantAxes = computed(() => this.globalAttributes().filter(a => a.isVariantAxis));
-  
+  readonly variantAxes = computed(() => this.globalAttributes().filter((a) => a.isVariantAxis));
+
   readonly activeVariantAxes = computed(() => {
     const p = this.product();
     const allAxes = this.variantAxes();
-    
+
     if (!p || !p.variants || p.variants.length === 0) {
       return allAxes;
     }
-    
+
     // If the product has only ONE variant and it has NO attribute values (the default variant)
     // then the product is essentially "new" in terms of variant axes, so all axes are allowed.
     if (p.variants.length === 1 && p.variants[0].attributeValues.length === 0) {
       return allAxes;
     }
-    
-    const usedAttributeIds = p.variants[0].attributeValues.map(attr => attr.attributeId);
-    return allAxes.filter(axis => usedAttributeIds.includes(axis.id));
+
+    const usedAttributeIds = p.variants[0].attributeValues.map((attr) => attr.attributeId);
+    return allAxes.filter((axis) => usedAttributeIds.includes(axis.id));
   });
 
   // Variants Management
@@ -104,9 +128,7 @@ export class ProductDetails implements OnInit {
   generateVariantsForm = {
     priceAmount: 0,
     stockQuantity: 0,
-    axes: [
-      { attributeId: '', valueIds: [] as string[] }
-    ]
+    axes: [{ attributeId: '', valueIds: [] as string[] }],
   };
 
   readonly isAddingVariant = signal(false);
@@ -117,7 +139,7 @@ export class ProductDetails implements OnInit {
     compareAtAmount: null as number | null,
     stockQuantity: 0,
     lowStockThreshold: 0,
-    attributeValueIds: [] as string[]
+    attributeValueIds: [] as string[],
   };
 
   readonly isEditVariantDrawerOpen = signal(false);
@@ -144,7 +166,7 @@ export class ProductDetails implements OnInit {
   loadGlobalAttributes(): void {
     this.attributeService.getAttributes().subscribe({
       next: (attrs) => this.globalAttributes.set(attrs),
-      error: (err) => console.error('Failed to load attributes', err)
+      error: (err) => console.error('Failed to load attributes', err),
     });
   }
 
@@ -159,14 +181,14 @@ export class ProductDetails implements OnInit {
         console.error('Failed to load product details', err);
         this.error.set('Failed to load product details');
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
   deleteProduct(): void {
     const p = this.product();
     if (!p) return;
-    
+
     if (confirm('Are you sure you want to delete this product?')) {
       this.isDeleting.set(true);
       this.productService.deleteProduct(p.id).subscribe({
@@ -176,7 +198,7 @@ export class ProductDetails implements OnInit {
         error: (err) => {
           console.error('Failed to delete product', err);
           this.isDeleting.set(false);
-        }
+        },
       });
     }
   }
@@ -189,7 +211,7 @@ export class ProductDetails implements OnInit {
         this.editProductForm = {
           title: p.title,
           description: p.description || '',
-          status: p.status
+          status: p.status,
         };
       }
     }
@@ -199,12 +221,12 @@ export class ProductDetails implements OnInit {
   saveProductChanges(): void {
     const p = this.product();
     if (!p) return;
-    
+
     this.isSaving.set(true);
     const payload: UpdateProductDto = {
       title: this.editProductForm.title,
       description: this.editProductForm.description,
-      status: this.editProductForm.status
+      status: this.editProductForm.status,
     };
 
     this.productService.updateProduct(p.id, payload).subscribe({
@@ -216,7 +238,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to update product', err);
         this.isSaving.set(false);
-      }
+      },
     });
   }
 
@@ -225,7 +247,7 @@ export class ProductDetails implements OnInit {
   onImagesSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
-    
+
     const p = this.product();
     if (!p) return;
 
@@ -247,7 +269,7 @@ export class ProductDetails implements OnInit {
         console.error('Failed to upload images', err);
         this.isUploadingImages.set(false);
         input.value = '';
-      }
+      },
     });
   }
 
@@ -269,7 +291,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to reorder images', err);
         this.loadProduct(p.id); // Rollback on error
-      }
+      },
     });
   }
 
@@ -283,9 +305,11 @@ export class ProductDetails implements OnInit {
     if (!p) return;
 
     const newAlt = this.editImageAltText().trim() || null;
-    
+
     // Optimistic update
-    const updatedImages = p.images.map(img => img.id === imageId ? { ...img, altText: newAlt } : img);
+    const updatedImages = p.images.map((img) =>
+      img.id === imageId ? { ...img, altText: newAlt } : img,
+    );
     this.product.set({ ...p, images: updatedImages });
     this.editingImageAltId.set(null);
 
@@ -296,7 +320,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to update image alt text', err);
         this.loadProduct(p.id);
-      }
+      },
     });
   }
 
@@ -314,7 +338,7 @@ export class ProductDetails implements OnInit {
       },
       error: (err) => {
         console.error('Failed to delete image', err);
-      }
+      },
     });
   }
 
@@ -326,7 +350,7 @@ export class ProductDetails implements OnInit {
       this.generateVariantsForm = {
         priceAmount: 0,
         stockQuantity: 0,
-        axes: [{ attributeId: '', valueIds: [] }]
+        axes: [{ attributeId: '', valueIds: [] }],
       };
     }
     this.isGenerateDrawerOpen.set(!currentOpen);
@@ -360,7 +384,7 @@ export class ProductDetails implements OnInit {
     const payload = {
       priceAmount: this.generateVariantsForm.priceAmount,
       stockQuantity: this.generateVariantsForm.stockQuantity,
-      axes: this.generateVariantsForm.axes.filter(a => a.attributeId && a.valueIds.length > 0)
+      axes: this.generateVariantsForm.axes.filter((a) => a.attributeId && a.valueIds.length > 0),
     };
 
     this.productService.generateVariants(p.id, payload).subscribe({
@@ -372,7 +396,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to generate variants', err);
         this.isGenerating.set(false);
-      }
+      },
     });
   }
 
@@ -385,7 +409,7 @@ export class ProductDetails implements OnInit {
         compareAtAmount: null,
         stockQuantity: 0,
         lowStockThreshold: 0,
-        attributeValueIds: []
+        attributeValueIds: [],
       };
     }
     this.isAddVariantDrawerOpen.set(!currentOpen);
@@ -424,7 +448,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to add variant', err);
         this.isAddingVariant.set(false);
-      }
+      },
     });
   }
 
@@ -435,7 +459,7 @@ export class ProductDetails implements OnInit {
       priceAmount: variant.priceAmount,
       compareAtAmount: variant.compareAtAmount,
       stockQuantity: variant.stockQuantity,
-      lowStockThreshold: variant.lowStockThreshold
+      lowStockThreshold: variant.lowStockThreshold,
     };
     this.isEditVariantDrawerOpen.set(true);
   }
@@ -463,7 +487,7 @@ export class ProductDetails implements OnInit {
       error: (err) => {
         console.error('Failed to update variant', err);
         this.isSaving.set(false);
-      }
+      },
     });
   }
 
@@ -479,7 +503,7 @@ export class ProductDetails implements OnInit {
       },
       error: (err) => {
         console.error('Failed to delete variant', err);
-      }
+      },
     });
   }
 

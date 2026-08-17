@@ -7,8 +7,14 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideSpartanHlm } from '@spartan/helm/utils';
 import { TRANSLATION_LOADER } from '@invento/core';
 import type { Locale } from '@invento/core';
-import en from '@invento/user-site/assets/i18n/en.json';
-import ar from '@invento/user-site/assets/i18n/ar.json';
+import globalEn from '@invento/user-site/assets/i18n/en.json';
+import globalAr from '@invento/user-site/assets/i18n/ar.json';
+
+import productEn from '../locales/product/en.json';
+import productAr from '../locales/product/ar.json';
+
+const en = { ...globalEn, product: productEn };
+const ar = { ...globalAr, product: productAr };
 
 export const appConfig: ApplicationConfig = {
   providers: [

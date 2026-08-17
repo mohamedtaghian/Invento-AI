@@ -1,29 +1,46 @@
 @let p = store.product()!;
+@let cv = store.currentVariant();
+@let price = cv?.priceAmount ?? p.minPriceAmount;
+@let compare =
+  cv?.compareAtAmount ?? (p.maxPriceAmount > p.minPriceAmount && !cv ? p.maxPriceAmount : null);
+@let savings = compare ? ((compare - price) / compare) * 100 : 0;
 
-<div class="mb-2 flex items-center gap-2">
-  <span class="flex items-center text-sm text-muted-foreground">
-    <!-- Categories as breadcrumbs or badges -->
-    @for (cat of p.categories; track cat.slug) {
-      <span hlmBadge variant="outline">{{ cat.name }}</span>
-    }
-  </span>
-</div>
+@if (p.categories && p.categories.length > 0) {
+  <div class="mb-3 flex items-center gap-2">
+    <div class="flex flex-wrap items-center gap-2">
+      @for (cat of p.categories; track cat.slug) {
+        <span
+          hlmBadge
+          class="bg-primary/10 text-primary hover:bg-primary/20 border-transparent shadow-none"
+          >{{ cat.name }}</span
+        >
+      }
+    </div>
+  </div>
+}
 
 <h1 hlmH1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
   {{ p.title }}
 </h1>
-<p hlmP class="mb-4 text-base text-muted-foreground">{{ p.shortDescription }}</p>
+@if (p.shortDescription) {
+  <p hlmP class="mb-5 text-base text-muted-foreground">{{ p.shortDescription }}</p>
+}
 
-<div class="flex items-end gap-2 text-3xl font-bold text-primary">
-  {{ (store.currentVariant()?.priceAmount || p.minPriceAmount) / 100 | currency }}
+<div class="flex items-center gap-3">
+  <span class="text-3xl font-bold text-primary">
+    {{ price / 100 | currency }}
+  </span>
 
-  @if (store.currentVariant()?.compareAtAmount) {
-    <span class="text-lg font-normal text-muted-foreground line-through">
-      {{ store.currentVariant()!.compareAtAmount! / 100 | currency }}
+  @if (compare) {
+    <span
+      class="text-xl font-medium text-muted-foreground line-through decoration-muted-foreground/50"
+    >
+      {{ compare / 100 | currency }}
     </span>
-  } @else if (p.maxPriceAmount > p.minPriceAmount && !store.currentVariant()) {
-    <span class="text-lg font-normal text-muted-foreground">
-      - {{ p.maxPriceAmount / 100 | currency }}
-    </span>
+    @if (savings > 0) {
+      <span hlmBadge class="bg-destructive/10 text-destructive border-transparent shadow-none ms-1">
+        {{ 'product.summary.save' | translate: { percentage: (savings | number: '1.0-0') ?? '0' } }}
+      </span>
+    }
   }
 </div>

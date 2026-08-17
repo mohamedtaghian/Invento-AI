@@ -8,11 +8,11 @@ import {
   MessageResponse,
   RefreshTokenResponse,
   RegisterResponse,
-  User
+  User,
 } from '../interface/auth.interface';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private http = inject(HttpClient);
@@ -32,12 +32,16 @@ export class AuthService {
       tap((response) => {
         this.tokenService.setTokens(response.accessToken, response.refreshToken);
         this.currentUser.set(response.user);
-      })
+      }),
     );
   }
 
   verifyEmail(email: string, otp: string, storeSlug: string): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.apiUrl}/users/verify-email/`, { email, otp, storeSlug });
+    return this.http.post<MessageResponse>(`${this.apiUrl}/users/verify-email/`, {
+      email,
+      otp,
+      storeSlug,
+    });
   }
 
   resendVerification(email: string, storeSlug: string): Observable<any> {
@@ -45,7 +49,10 @@ export class AuthService {
   }
 
   forgotPassword(email: string, storeSlug: string): Observable<MessageResponse> {
-    return this.http.post<MessageResponse>(`${this.apiUrl}/users/forgot-password/`, { email, storeSlug });
+    return this.http.post<MessageResponse>(`${this.apiUrl}/users/forgot-password/`, {
+      email,
+      storeSlug,
+    });
   }
 
   resetPassword(data: any): Observable<MessageResponse> {
@@ -57,11 +64,13 @@ export class AuthService {
   }
 
   refreshToken(refreshToken: string): Observable<RefreshTokenResponse> {
-    return this.http.post<RefreshTokenResponse>(`${this.apiUrl}/users/refresh-token`, { refreshToken }).pipe(
-      tap((response) => {
-        this.tokenService.setTokens(response.accessToken, response.refreshToken);
-      })
-    );
+    return this.http
+      .post<RefreshTokenResponse>(`${this.apiUrl}/users/refresh-token`, { refreshToken })
+      .pipe(
+        tap((response) => {
+          this.tokenService.setTokens(response.accessToken, response.refreshToken);
+        }),
+      );
   }
 
   logout(): void {

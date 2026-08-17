@@ -11,7 +11,16 @@ import { TranslatePipe } from '@invento/core';
 
 @Component({
   selector: 'app-main-layout',
-  imports: [RouterOutlet, NgIcon, HlmButton, HlmSidebarImports, Sidebar, Header, ChatPanel, TranslatePipe],
+  imports: [
+    RouterOutlet,
+    NgIcon,
+    HlmButton,
+    HlmSidebarImports,
+    Sidebar,
+    Header,
+    ChatPanel,
+    TranslatePipe,
+  ],
   providers: [provideIcons({ lucideBot })],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css',

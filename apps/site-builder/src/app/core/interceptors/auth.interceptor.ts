@@ -15,10 +15,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   // Add auth header if token exists
   const token = tokenService.getAccessToken();
   let authReq = req;
-  
+
   if (token) {
     authReq = req.clone({
-      headers: req.headers.set('Authorization', `Bearer ${token}`)
+      headers: req.headers.set('Authorization', `Bearer ${token}`),
     });
   }
 
@@ -26,7 +26,6 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       // If error is 401 (Unauthorized) and we are not already trying to refresh token
       if (error.status === 401 && token) {
-        
         // Don't intercept the refresh token request itself to avoid infinite loops
         if (req.url.includes('/users/refresh-token')) {
           authService.logout();
@@ -44,15 +43,17 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
                 isRefreshing = false;
                 refreshTokenSubject.next(res.accessToken);
                 // Retry the original request with the new token
-                return next(req.clone({
-                  headers: req.headers.set('Authorization', `Bearer ${res.accessToken}`)
-                }));
+                return next(
+                  req.clone({
+                    headers: req.headers.set('Authorization', `Bearer ${res.accessToken}`),
+                  }),
+                );
               }),
               catchError((err) => {
                 isRefreshing = false;
                 authService.logout();
                 return throwError(() => err);
-              })
+              }),
             );
           } else {
             isRefreshing = false;
@@ -62,17 +63,19 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         } else {
           // Wait while token is refreshing, then retry
           return refreshTokenSubject.pipe(
-            filter(token => token !== null),
+            filter((token) => token !== null),
             take(1),
-            switchMap(jwt => {
-              return next(req.clone({
-                headers: req.headers.set('Authorization', `Bearer ${jwt}`)
-              }));
-            })
+            switchMap((jwt) => {
+              return next(
+                req.clone({
+                  headers: req.headers.set('Authorization', `Bearer ${jwt}`),
+                }),
+              );
+            }),
           );
         }
       }
       return throwError(() => error);
-    })
+    }),
   );
 };

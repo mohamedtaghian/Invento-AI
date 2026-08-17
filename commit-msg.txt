@@ -1,10 +1,8 @@
-feat(product): integrate live backend APIs, remove mocks, and implement Spartan pagination
+refactor(user-site): upgrade product feature architecture and styling
 
-- Implemented ProductApiService and ProductStore for fetching products, filters, search suggestions, and product details from the live backend.
-- Replaced all legacy mock data with real API bindings across the Home, Products Grid, Product Details, and Checkout pages.
-- Built a robust Variant Selection Matrix in the ProductStore to accurately calculate and display available option combinations and prevent out-of-stock selections.
-- Resolved strict compiler errors and cleaned up unused template imports.
-- Installed and integrated @spartan/helm/pagination UI primitives, refactoring the custom pagination component.
-- Removed legacy wishlist logic, unused heart icons, and deleted legacy mock services.
-- Fixed Angular @for loops to safely track by slug instead of the deprecated id property.
-- Added API logging interceptors via tap to view raw backend responses in the browser console.
+- Created public barrel file index.ts for the product feature
+- Migrated all internal relative imports to use absolute path aliases
+- Removed all wishlist state and UI components as it's no longer needed
+- Enforced SpartanUI typography directives across all templates
+- Replaced hardcoded Tailwind colors with semantic theme variables
+- Eliminated forbidden 'any' types in filters and components

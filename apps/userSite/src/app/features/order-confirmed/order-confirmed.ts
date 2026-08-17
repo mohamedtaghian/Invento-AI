@@ -20,8 +20,16 @@ export class OrderConfirmedComponent {
     id: `AC-${Math.floor(1000 + Math.random() * 9000)}`,
     date: new Date(),
     items: [
-      { product: { name: 'Aura Sync Watch', price: 199.99, image: 'assets/images/watch-1.jpg' }, quantity: 1, color: 'Matte Black' },
-      { product: { name: 'Nova Pro Earbuds', price: 129.99, image: 'assets/images/earbuds.jpg' }, quantity: 2, color: 'Silver' },
+      {
+        product: { name: 'Aura Sync Watch', price: 199.99, image: 'assets/images/watch-1.jpg' },
+        quantity: 1,
+        color: 'Matte Black',
+      },
+      {
+        product: { name: 'Nova Pro Earbuds', price: 129.99, image: 'assets/images/earbuds.jpg' },
+        quantity: 2,
+        color: 'Silver',
+      },
     ],
     shipping: {
       firstName: 'Jane',

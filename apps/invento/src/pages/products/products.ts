@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal, computed } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+  computed,
+} from '@angular/core';
 import { CurrencyPipe, DatePipe, DecimalPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -17,7 +24,12 @@ import { HlmCardImports } from '@spartan/helm/card';
 import { HlmInputImports } from '@spartan/helm/input';
 import { CdkDragDrop, CdkDropList, CdkDrag, moveItemInArray } from '@angular/cdk/drag-drop';
 
-import { ApiProductListItem, PaginatedResponse, CreateProductDto, CreateProductVariantDto } from '../../features/products/product.model';
+import {
+  ApiProductListItem,
+  PaginatedResponse,
+  CreateProductDto,
+  CreateProductVariantDto,
+} from '../../features/products/product.model';
 import { ProductService } from '../../features/products/product.service';
 import { AttributeService } from '../../features/attributes/attribute.service';
 import { ProductAttribute } from '../../features/attributes/attribute.model';
@@ -44,7 +56,7 @@ interface FormVariant {
     HlmCardImports,
     HlmInputImports,
     CdkDropList,
-    CdkDrag
+    CdkDrag,
   ],
   providers: [
     provideIcons({
@@ -72,15 +84,23 @@ export class Products implements OnInit {
   readonly totalProducts = signal<number>(0);
 
   readonly attributes = signal<ProductAttribute[]>([]);
-  readonly colorAttribute = computed(() => this.attributes().find(a => a.name.toLowerCase() === 'color' || a.key.toLowerCase() === 'color'));
-  readonly sizeAttribute = computed(() => this.attributes().find(a => a.name.toLowerCase() === 'size' || a.key.toLowerCase() === 'size'));
+  readonly colorAttribute = computed(() =>
+    this.attributes().find(
+      (a) => a.name.toLowerCase() === 'color' || a.key.toLowerCase() === 'color',
+    ),
+  );
+  readonly sizeAttribute = computed(() =>
+    this.attributes().find(
+      (a) => a.name.toLowerCase() === 'size' || a.key.toLowerCase() === 'size',
+    ),
+  );
 
   // New product form model
   newProduct = {
     title: '',
     variants: [
-      { colorValueId: '', sizeValueId: '', sku: '', price: null, stock: null } as FormVariant
-    ]
+      { colorValueId: '', sizeValueId: '', sku: '', price: null, stock: null } as FormVariant,
+    ],
   };
   isSubmitting = signal(false);
 
@@ -120,14 +140,20 @@ export class Products implements OnInit {
   }
 
   resetForm(): void {
-    this.newProduct = { 
-      title: '', 
-      variants: [{ colorValueId: '', sizeValueId: '', sku: '', price: null, stock: null }]
+    this.newProduct = {
+      title: '',
+      variants: [{ colorValueId: '', sizeValueId: '', sku: '', price: null, stock: null }],
     };
   }
 
   addVariant(): void {
-    this.newProduct.variants.push({ colorValueId: '', sizeValueId: '', sku: '', price: null, stock: null });
+    this.newProduct.variants.push({
+      colorValueId: '',
+      sizeValueId: '',
+      sku: '',
+      price: null,
+      stock: null,
+    });
   }
 
   removeVariant(index: number): void {
@@ -138,14 +164,14 @@ export class Products implements OnInit {
 
   submitProduct(): void {
     if (!this.newProduct.title || this.newProduct.variants.length === 0) return;
-    
+
     // Ensure all variants have sku and price
-    const isValid = this.newProduct.variants.every(v => v.sku && v.price != null);
+    const isValid = this.newProduct.variants.every((v) => v.sku && v.price != null);
     if (!isValid) return;
 
     this.isSubmitting.set(true);
-    
-    const apiVariants: CreateProductVariantDto[] = this.newProduct.variants.map(v => {
+
+    const apiVariants: CreateProductVariantDto[] = this.newProduct.variants.map((v) => {
       const attributeValueIds = [];
       if (v.colorValueId) attributeValueIds.push(v.colorValueId);
       if (v.sizeValueId) attributeValueIds.push(v.sizeValueId);
@@ -154,13 +180,13 @@ export class Products implements OnInit {
         sku: v.sku,
         priceAmount: Math.round((v.price || 0) * 100), // convert to minor units
         stockQuantity: v.stock || 0,
-        attributeValueIds: attributeValueIds.length > 0 ? attributeValueIds : undefined
+        attributeValueIds: attributeValueIds.length > 0 ? attributeValueIds : undefined,
       };
     });
 
     const payload: CreateProductDto = {
       title: this.newProduct.title,
-      variants: apiVariants
+      variants: apiVariants,
     };
 
     this.productService.createProduct(payload).subscribe({
@@ -172,7 +198,7 @@ export class Products implements OnInit {
       error: (err) => {
         console.error('Failed to create product', err);
         this.isSubmitting.set(false);
-      }
+      },
     });
   }
 
@@ -187,7 +213,7 @@ export class Products implements OnInit {
       error: (err) => {
         console.error('Failed to save order', err);
         this.fetchProducts(); // revert on error
-      }
+      },
     });
   }
 

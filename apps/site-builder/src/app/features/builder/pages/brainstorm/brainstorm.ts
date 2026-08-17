@@ -32,7 +32,7 @@ import { PageHeader } from '@/app/shared/components/page-header/page-header';
 import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { BrainstormApi } from '@/app/features/builder/services/brainstorm-api';
 import { hlmH2, hlmP } from '@spartan/helm/typography';
-import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { DoubleSlash } from '@invento/shared';
 import { toast } from '@spartan/helm/sonner';
 import { Router } from '@angular/router';
 import { TranslatePipe, LocaleService } from '@invento/core';

@@ -8,13 +8,13 @@ const LOCALE_STORAGE_KEY = 'invento_locale';
 @Injectable({ providedIn: 'root' })
 export class LocaleService {
   private readonly _locale: WritableSignal<Locale> = signal<Locale>('en');
-  private readonly _translations: WritableSignal<Record<string, string>> = signal({});
+  private readonly _translations: WritableSignal<Record<string, any>> = signal({});
   private readonly _loader: TranslationLoader | null = inject(TRANSLATION_LOADER, { optional: true });
   private readonly _platformId = inject(PLATFORM_ID);
 
   readonly locale: Signal<Locale> = this._locale.asReadonly();
   readonly isRtl: Signal<boolean> = computed(() => this._locale() === 'ar');
-  readonly translations: Signal<Record<string, string>> = this._translations.asReadonly();
+  readonly translations: Signal<Record<string, any>> = this._translations.asReadonly();
 
   constructor() {
     const saved = isPlatformBrowser(this._platformId)
@@ -40,7 +40,20 @@ export class LocaleService {
   }
 
   translate(key: string, params?: Record<string, string | number>): string {
-    let value = this._translations()[key] ?? key;
+    let resolvedValue: any = this._translations();
+    const parts = key.split('.');
+    
+    for (const part of parts) {
+      if (resolvedValue && typeof resolvedValue === 'object') {
+        resolvedValue = resolvedValue[part];
+      } else {
+        resolvedValue = undefined;
+        break;
+      }
+    }
+
+    let value = typeof resolvedValue === 'string' ? resolvedValue : key;
+
     if (params) {
       for (const [k, v] of Object.entries(params)) {
         value = value.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), String(v));

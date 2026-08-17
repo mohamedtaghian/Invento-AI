@@ -12,7 +12,7 @@ import { HlmButton } from '@spartan/helm/button';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
 import { TypingText } from '@/app/features/home/components/home-components/typing-text/typing-text';
 import { PageHeader } from '@/app/shared/components/page-header/page-header';
-import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { DoubleSlash } from '@invento/shared';
 import { hlmH1, hlmP } from '@spartan/helm/typography';
 import { TranslatePipe } from '@invento/core';
 
