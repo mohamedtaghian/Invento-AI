@@ -1,7 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 import { environment } from '../../../../environments/environment';
@@ -14,7 +13,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-verify-email',
   standalone: true,
-  imports: [ReactiveFormsModule, NgIf, HlmLabel, HlmButton],
+  imports: [ReactiveFormsModule, HlmLabel, HlmButton],
   templateUrl: './verify-email.html',
   styleUrl: './verify-email.css',
 })
@@ -41,6 +40,14 @@ export class VerifyEmail implements OnInit {
       this.route.snapshot.paramMap.get('storeSlug') ??
       this.route.parent?.snapshot.paramMap.get('storeSlug') ??
       environment.storeSlug;
+
+    // Cache returnUrl if present
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get('returnUrl') ||
+      this.route.snapshot.queryParamMap.get('redirectUrl');
+    if (returnUrl && typeof sessionStorage !== 'undefined') {
+      sessionStorage.setItem('invento_auth_return_url', returnUrl);
+    }
 
     // Read email from query params
     const emailFromQuery = this.route.snapshot.queryParamMap.get('email');
@@ -101,7 +108,21 @@ export class VerifyEmail implements OnInit {
       next: (res) => {
         this.isLoading.set(false);
         toast.success(res.message || 'Email verified successfully.');
-        this.router.navigate(['../login'], { relativeTo: this.route });
+
+        const returnUrl =
+          this.route.snapshot.queryParamMap.get('returnUrl') ||
+          this.route.snapshot.queryParamMap.get('redirectUrl') ||
+          (typeof sessionStorage !== 'undefined'
+            ? sessionStorage.getItem('invento_auth_return_url')
+            : null);
+
+        this.router.navigate(['../login'], {
+          relativeTo: this.route,
+          queryParams: {
+            email: this.userEmail,
+            ...(returnUrl ? { returnUrl } : {}),
+          },
+        });
       },
       error: (err) => {
         this.isLoading.set(false);
