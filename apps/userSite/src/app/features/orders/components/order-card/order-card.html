@@ -26,7 +26,7 @@
         <div class="flex flex-wrap items-center gap-2 mt-1.5 text-muted-foreground text-xs">
           <span class="inline-flex items-center gap-1">
             <ng-icon name="lucideCalendar" class="text-xs"></ng-icon>
-            {{ order().createdAt | formatOrderDate: true }}
+            {{ order().createdAt | formatOrderDate }}
           </span>
           <span>•</span>
           <span>{{ order().itemCount }} {{ order().itemCount === 1 ? 'item' : 'items' }}</span>

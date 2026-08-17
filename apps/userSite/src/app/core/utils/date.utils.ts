@@ -22,8 +22,8 @@ export function parseApiDate(dateInput: string | number | Date | null | undefine
     str = str.replace(' ', 'T');
   }
 
-  // If ISO string does not specify timezone offset (+HH:MM or -HH:MM or Z), default to UTC ('Z')
-  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?$/.test(str)) {
+  // If string has no timezone offset (no 'Z' and no '+/-HH:MM'), treat as UTC ISO
+  if (!str.endsWith('Z') && !/[+-]\d{2}(:\d{2})?$/.test(str)) {
     str += 'Z';
   }
 
@@ -32,8 +32,8 @@ export function parseApiDate(dateInput: string | number | Date | null | undefine
 }
 
 /**
- * Formats a date into a human-friendly format in the user's local timezone.
- * e.g. "Aug 17, 2026 at 3:24 AM"
+ * Formats a date into a human-friendly format in the store's local timezone (Egypt / Africa/Cairo by default).
+ * e.g. "Aug 17, 2026, 3:50 AM"
  */
 export function formatOrderDate(
   dateInput: string | number | Date | null | undefined,
@@ -42,19 +42,34 @@ export function formatOrderDate(
   const d = parseApiDate(dateInput);
   if (!d) return '';
 
+  // Determine timezone: use user's local timezone if non-UTC, otherwise fallback to 'Africa/Cairo' (Egypt UTC+3)
+  let timeZone = 'Africa/Cairo';
+  try {
+    if (typeof Intl !== 'undefined' && Intl.DateTimeFormat) {
+      const detected = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (detected && detected !== 'UTC') {
+        timeZone = detected;
+      }
+    }
+  } catch {
+    timeZone = 'Africa/Cairo';
+  }
+
   const datePart = new Intl.DateTimeFormat('en-US', {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
+    timeZone,
   }).format(d);
 
   const timePart = new Intl.DateTimeFormat('en-US', {
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
+    timeZone,
   }).format(d);
 
-  const formatted = `${datePart} at ${timePart}`;
+  const formatted = `${datePart}, ${timePart}`;
 
   if (!includeRelative) {
     return formatted;
@@ -67,7 +82,7 @@ export function formatOrderDate(
   const diffDays = Math.floor(diffHours / 24);
 
   let relative = '';
-  if (diffSec < 45 && diffSec >= -10) {
+  if (diffSec < 60 && diffSec >= -10) {
     relative = 'Just now';
   } else if (diffMin < 60 && diffMin >= 0) {
     relative = `${Math.max(1, diffMin)}m ago`;
