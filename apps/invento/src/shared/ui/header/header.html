@@ -1,6 +1,26 @@
 <header
-  class="flex items-center justify-end h-20 px-8 border-b border-border/40 bg-card/80 backdrop-blur-xl"
+  class="flex items-center justify-between h-20 px-8 border-b border-border/40 bg-card/80 backdrop-blur-xl"
 >
+  <div class="flex items-center gap-2 text-sm text-muted-foreground">
+    <nav hlmBreadcrumb>
+      <ol hlmBreadcrumbList>
+        @for (bc of breadcrumbs(); track bc.route; let last = $last) {
+          <li hlmBreadcrumbItem>
+            @if (last) {
+              <span hlmBreadcrumbPage class="font-semibold text-foreground">{{ bc.label | translate }}</span>
+            } @else {
+              <a hlmBreadcrumbLink [routerLink]="bc.route">{{ bc.label | translate }}</a>
+            }
+          </li>
+          @if (!last) {
+            <li hlmBreadcrumbSeparator>
+              <ng-icon name="lucideChevronRight" size="14" class="rtl:rotate-180" />
+            </li>
+          }
+        }
+      </ol>
+    </nav>
+  </div>
   <!-- <app-brand-logo
     logoSrc="light-logo.png"
     logoSrcDark="logo.png"
@@ -47,14 +67,5 @@
     >
       <ng-icon name="lucideGlobe" size="18" />
     </button>
-
-    <hlm-avatar
-      class="ms-4 cursor-pointer transition-all duration-300 hover:scale-110 shadow-sm ring-2 ring-transparent hover:ring-primary/50"
-      routerLink="/profile"
-      title="Account Settings Profile"
-    >
-      <img src="https://i.pravatar.cc/40?u=admin" alt="Avatar" hlmAvatarImage />
-      <span hlmAvatarFallback>AD</span>
-    </hlm-avatar>
   </div>
 </header>
