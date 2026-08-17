@@ -42,7 +42,6 @@ interface FormVariant {
   standalone: true,
   imports: [
     CurrencyPipe,
-    DecimalPipe,
     DatePipe,
     NgClass,
     FormsModule,

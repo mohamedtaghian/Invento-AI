@@ -18,7 +18,6 @@ import { BrandLogo } from '@invento/shared';
     HlmButton,
     HlmBadge,
     TranslatePipe,
-    BrandLogo,
     HlmBreadcrumbImports,
   ],
   providers: [

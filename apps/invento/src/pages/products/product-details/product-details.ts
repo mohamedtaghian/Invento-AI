@@ -24,7 +24,6 @@ import { DeleteConfirmDialog } from '../../categories/delete-confirm-dialog';
   standalone: true,
   imports: [
     CommonModule,
-    CurrencyPipe,
     DatePipe,
     DecimalPipe,
     FormsModule,
