@@ -128,6 +128,9 @@
       ],
       "@spartan/helm/pagination": [
         "./libs/ui/pagination/src/index.ts"
+      ],
+      "@spartan/helm/dropdown-menu": [
+        "./libs/ui/dropdown-menu/src/index.ts"
       ]
     }
   }

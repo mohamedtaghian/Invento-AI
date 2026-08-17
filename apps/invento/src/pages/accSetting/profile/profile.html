@@ -1,12 +1,7 @@
 <div class="relative space-y-6 w-full min-h-full">
   <!-- Page Header & Navigation Tabs -->
-  <div class="space-y-4 bg-background px-4 sm:px-6 pt-4 sm:pt-6 pb-0 border-border border-b">
+  <div style="view-transition-name: account-tabs;" class="space-y-4 bg-background px-4 sm:px-6 pt-4 sm:pt-6 pb-0 border-border border-b">
     <div class="min-w-0">
-      <div class="flex items-center gap-1 mb-1 text-muted-foreground text-xs">
-        <span>Account Settings</span>
-        <ng-icon name="lucideChevronRight" size="12" />
-        <span class="font-medium text-foreground">Profile</span>
-      </div>
       <h1 class="font-bold text-xl sm:text-2xl tracking-tight">Account Settings</h1>
       <p class="mt-0.5 text-muted-foreground text-xs sm:text-sm">
         Manage your profile details, photo, and preferences used across Invento.
@@ -15,45 +10,40 @@
 
     <!-- Navigation Tabs -->
     <div class="flex items-center gap-1 sm:gap-2 border-border border-b overflow-x-auto">
-      <button
-        type="button"
+      <a routerLink="/profile"
         class="inline-flex items-center gap-2 px-3 sm:px-4 py-2.5 border-b-2 font-semibold text-xs sm:text-sm transition-colors cursor-pointer border-primary text-primary"
       >
         <ng-icon name="lucideUser" size="16" />
         <span>Profile</span>
-      </button>
-      <button
-        type="button"
+      </a>
+      <a routerLink="/security"
         class="inline-flex items-center gap-2 border-b-2 border-transparent hover:border-border px-3 sm:px-4 py-2.5 font-medium text-xs text-muted-foreground hover:text-foreground sm:text-sm transition-colors cursor-pointer"
-        (click)="activeTab.set('security')"
+        
       >
         <ng-icon name="lucideShield" size="16" />
         <span>Security</span>
-      </button>
-      <button
-        type="button"
+      </a>
+      <a routerLink="/notifications"
         class="inline-flex items-center gap-2 border-b-2 border-transparent hover:border-border px-3 sm:px-4 py-2.5 font-medium text-xs text-muted-foreground hover:text-foreground sm:text-sm transition-colors cursor-pointer"
-        (click)="activeTab.set('notifications')"
+        
       >
         <ng-icon name="lucideBell" size="16" />
         <span>Notifications</span>
-      </button>
-      <button
-        type="button"
+      </a>
+      <a routerLink="/billing"
         class="inline-flex items-center gap-2 border-b-2 border-transparent hover:border-border px-3 sm:px-4 py-2.5 font-medium text-xs text-muted-foreground hover:text-foreground sm:text-sm transition-colors cursor-pointer"
-        (click)="activeTab.set('billing')"
+        
       >
         <ng-icon name="lucideCreditCard" size="16" />
         <span>Billing & Plan</span>
-      </button>
-      <button
-        type="button"
+      </a>
+      <a routerLink="/my-stores"
         class="inline-flex items-center gap-2 border-b-2 border-transparent hover:border-border px-3 sm:px-4 py-2.5 font-medium text-xs text-muted-foreground hover:text-foreground sm:text-sm transition-colors cursor-pointer"
-        (click)="activeTab.set('stores')"
+        
       >
         <ng-icon name="lucideStore" size="16" />
         <span>My Stores</span>
-      </button>
+      </a>
     </div>
   </div>
 

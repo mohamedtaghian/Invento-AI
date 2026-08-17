@@ -13,7 +13,15 @@ import {
   lucideFolderTree,
   lucideTags,
   lucideMessageCircleQuestionMark,
+  lucideChevronUp,
+  lucideSparkles,
+  lucideBadgeCheck,
+  lucideCreditCard,
+  lucideBell,
+  lucideLogOut,
 } from '@ng-icons/lucide';
+import { HlmDropdownMenuImports } from '@spartan/helm/dropdown-menu';
+import { HlmAvatar, HlmAvatarImage, HlmAvatarFallback } from '@spartan/helm/avatar';
 import { TranslatePipe, LocaleService } from '@invento/core';
 import { BrandLogo } from '@invento/shared';
 
@@ -25,7 +33,18 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-  imports: [RouterLink, RouterLinkActive, NgIcon, HlmSidebarImports, TranslatePipe, BrandLogo],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    NgIcon,
+    HlmSidebarImports,
+    TranslatePipe,
+    BrandLogo,
+    HlmDropdownMenuImports,
+    HlmAvatar,
+    HlmAvatarImage,
+    HlmAvatarFallback,
+  ],
   providers: [
     provideIcons({
       lucideLayoutDashboard,
@@ -38,6 +57,12 @@ interface NavItem {
       lucideFolderTree,
       lucideTags,
       lucideMessageCircleQuestionMark,
+      lucideChevronUp,
+      lucideSparkles,
+      lucideBadgeCheck,
+      lucideCreditCard,
+      lucideBell,
+      lucideLogOut,
     }),
   ],
   templateUrl: './sidebar.html',
@@ -54,7 +79,6 @@ export class Sidebar {
     { label: 'nav_products', icon: 'lucidePackage', route: '/products' },
     { label: 'nav_attributes', icon: 'lucideTags', route: '/attributes' },
     { label: 'nav_categories', icon: 'lucideFolderTree', route: '/categories' },
-    { label: 'nav_users', icon: 'lucideUsers', route: '/users' },
     { label: 'nav_orders', icon: 'lucideShoppingCart', route: '/orders' },
     { label: 'nav_faq', icon: 'lucideMessageCircleQuestionMark', route: '/faq' },
     { label: 'nav_suppliers', icon: 'lucideTruck', route: '/suppliers' },
