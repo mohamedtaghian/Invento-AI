@@ -2,9 +2,11 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCircleCheck, lucideShoppingCart } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
+import { toast } from '@spartan/helm/sonner';
 import { ProductStore } from '../../service/product-store';
 import { QuantityStepper } from '../quantity-stepper/quantity-stepper';
 import { flyToCart } from '../../service/cart-utils';
+import { CartService } from '../../../../core/service/cart.service';
 
 @Component({
   selector: 'app-purchase-actions',
@@ -15,8 +17,38 @@ import { flyToCart } from '../../service/cart-utils';
 })
 export class PurchaseActions {
   protected readonly store = inject(ProductStore);
+  private readonly cartService = inject(CartService);
 
   protected addToCart(event: MouseEvent): void {
+    const product = this.store.product();
+    const variant = this.store.currentVariant();
+    const quantity = this.store.quantity();
+
+    if (!product || !variant) {
+      toast.warning('Please select an available product variant.');
+      return;
+    }
+
+    const variantOptionsMap: Record<string, string> = {};
+    if (variant.options) {
+      for (const opt of variant.options) {
+        variantOptionsMap[opt.attributeName || opt.attributeKey] = opt.value || opt.slug;
+      }
+    }
+
+    this.cartService.addItem({
+      variantId: variant.id,
+      productId: product.slug,
+      productTitle: product.title,
+      productSlug: product.slug,
+      productImageUrl: product.images?.[0]?.url || null,
+      variantOptions: variantOptionsMap,
+      sku: variant.id,
+      unitAmount: variant.priceAmount,
+      quantity,
+    });
+
+    toast.success(`Added ${quantity} × "${product.title}" to cart!`);
     flyToCart(event);
   }
 
