@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
-import { ProductStore } from '../../service/product-store';
+import { ProductStore } from '@invento/user-site/app/features/product/service/product-store';
 
 @Component({
   selector: 'app-product-details-accordion',

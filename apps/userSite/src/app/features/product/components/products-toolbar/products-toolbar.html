@@ -1,4 +1,6 @@
-<div class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 bg-card p-4 border border-border rounded-xl">
+<div
+  class="flex sm:flex-row flex-col justify-between sm:items-center gap-3 bg-card p-4 border border-border rounded-xl"
+>
   <!-- Title -->
   <div class="flex items-center gap-2 shrink-0">
     <span class="font-semibold text-foreground text-xl">{{ title() }}</span>
@@ -30,19 +32,25 @@
 
     <!-- Suggestions Dropdown -->
     @if (showSuggestions()) {
-      <div class="absolute top-full left-0 z-50 w-full mt-1 bg-card border border-border shadow-lg rounded-lg overflow-hidden">
+      <div
+        class="absolute top-full left-0 z-50 w-full mt-1 bg-card border border-border shadow-lg rounded-lg overflow-hidden"
+      >
         @if (isLoadingSuggestions()) {
-          <div class="p-3 text-sm text-muted-foreground text-center animate-pulse">Searching...</div>
+          <div class="p-3 text-sm text-muted-foreground text-center animate-pulse">
+            Searching...
+          </div>
         } @else if (suggestions().length > 0) {
           <ul class="max-h-60 overflow-auto flex flex-col">
             @for (suggestion of suggestions(); track suggestion.slug) {
               <li>
-                <button 
+                <button
                   (click)="onSuggestionClick(suggestion)"
                   class="w-full text-left px-4 py-2 hover:bg-secondary flex items-center justify-between text-sm transition-colors"
                 >
                   <span class="truncate font-medium text-foreground">{{ suggestion.title }}</span>
-                  <span class="text-muted-foreground shrink-0 ml-2 whitespace-nowrap">{{ suggestion.minPriceAmount / 100 | currency }}</span>
+                  <span class="text-muted-foreground shrink-0 ml-2 whitespace-nowrap">{{
+                    suggestion.minPriceAmount / 100 | currency
+                  }}</span>
                 </button>
               </li>
             }

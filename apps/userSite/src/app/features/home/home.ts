@@ -1,4 +1,4 @@
-import { Component, afterNextRender, inject, signal } from '@angular/core';
+import { Component, afterNextRender, inject, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -21,11 +21,11 @@ import {
   lucideArrowRight,
 } from '@ng-icons/lucide';
 
-import { ProductCard } from '../product/components/product-card/product-card';
-import { ProductListItem } from '../product/types/product';
+import { ProductCard } from '@invento/user-site/app/features/product';
+import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
 
 import { environment } from '../../../environments/environment';
-import { ProductApiService } from '../product/service/product-api.service';
+import { ProductApiService } from '@invento/user-site/app/features/product/service/product-api.service';
 
 @Component({
   selector: 'app-home',
@@ -44,7 +44,7 @@ import { ProductApiService } from '../product/service/product-api.service';
   ],
   templateUrl: './home.html',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private readonly apiService = inject(ProductApiService);
 
   categories = [
@@ -59,9 +59,11 @@ export class HomeComponent {
   featuredProducts = signal<ProductListItem[]>([]);
 
   ngOnInit() {
-    this.apiService.getProducts(environment.storeSlug, { sort: 'newest', limit: 4 }).subscribe(res => {
-      this.featuredProducts.set(res.items);
-    });
+    this.apiService
+      .getProducts(environment.storeSlug, { sort: 'newest', limit: 4 })
+      .subscribe((res) => {
+        this.featuredProducts.set(res.items);
+      });
   }
 
   constructor() {
