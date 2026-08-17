@@ -132,14 +132,28 @@ export class CheckoutComponent implements OnInit {
     });
 
     afterNextRender(() => {
-      const tl = gsap.timeline();
-      tl.from('.fade-in-left', {
-        x: -30,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.1,
-        ease: 'power3.out',
-      }).from('.fade-in-right', { x: 30, opacity: 0, duration: 0.6, ease: 'power3.out' }, '-=0.4');
+      const leftElements = document.querySelectorAll('.fade-in-left');
+      const rightElements = document.querySelectorAll('.fade-in-right');
+
+      if (leftElements.length > 0 || rightElements.length > 0) {
+        const tl = gsap.timeline();
+        if (leftElements.length > 0) {
+          tl.from(leftElements, {
+            x: -30,
+            opacity: 0,
+            duration: 0.6,
+            stagger: 0.1,
+            ease: 'power3.out',
+          });
+        }
+        if (rightElements.length > 0) {
+          tl.from(
+            rightElements,
+            { x: 30, opacity: 0, duration: 0.6, ease: 'power3.out' },
+            leftElements.length > 0 ? '-=0.4' : 0,
+          );
+        }
+      }
     });
   }
 
