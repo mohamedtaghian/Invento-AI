@@ -1,16 +1,17 @@
 import { Injectable, computed, signal } from '@angular/core';
-import type { ProductDetail, ProductVariant, ProductVariantOption } from '../types/product';
+import type {
+  ProductDetail,
+  ProductVariant,
+  ProductVariantOption,
+} from '@invento/user-site/app/features/product/types/product';
 
 @Injectable()
 export class ProductStore {
   private readonly _product = signal<ProductDetail | null>(null);
   private readonly _selectedOptions = signal<Record<string, string>>({});
   private readonly _quantity = signal(1);
-  private readonly _isWishlisted = signal(false);
-
   readonly product = this._product.asReadonly();
   readonly quantity = this._quantity.asReadonly();
-  readonly isWishlisted = this._isWishlisted.asReadonly();
   readonly selectedOptions = this._selectedOptions.asReadonly();
 
   // Extract all unique axes (e.g. Size, Color) from all variants
@@ -18,7 +19,10 @@ export class ProductStore {
     const p = this._product();
     if (!p || !p.variants) return [];
 
-    const axesMap = new Map<string, { key: string, name: string, options: ProductVariantOption[] }>();
+    const axesMap = new Map<
+      string,
+      { key: string; name: string; options: ProductVariantOption[] }
+    >();
 
     for (const variant of p.variants) {
       for (const opt of variant.options) {
@@ -26,12 +30,12 @@ export class ProductStore {
           axesMap.set(opt.attributeKey, {
             key: opt.attributeKey,
             name: opt.attributeName,
-            options: []
+            options: [],
           });
         }
-        
+
         const axis = axesMap.get(opt.attributeKey)!;
-        if (!axis.options.find(o => o.slug === opt.slug)) {
+        if (!axis.options.find((o) => o.slug === opt.slug)) {
           axis.options.push(opt);
         }
       }
@@ -52,12 +56,14 @@ export class ProductStore {
       for (const opt of axis.options) {
         // Create a test selection where we pretend to select this option
         const testSelection = { ...selected, [axis.key]: opt.slug };
-        
+
         // Is there any variant that satisfies this test selection?
-        const isValid = p.variants.some(variant => {
+        const isValid = p.variants.some((variant) => {
           // A variant is valid if it matches all keys in the testSelection
           return Object.entries(testSelection).every(([testKey, testSlug]) => {
-            return variant.options.some(vo => vo.attributeKey === testKey && vo.slug === testSlug);
+            return variant.options.some(
+              (vo) => vo.attributeKey === testKey && vo.slug === testSlug,
+            );
           });
         });
 
@@ -76,14 +82,14 @@ export class ProductStore {
     if (!p) return undefined;
 
     const selected = this._selectedOptions();
-    const axesKeys = this.variantAxes().map(a => a.key);
+    const axesKeys = this.variantAxes().map((a) => a.key);
 
     // Need to have all axes selected
     if (Object.keys(selected).length !== axesKeys.length) return undefined;
 
-    return p.variants.find(variant => {
+    return p.variants.find((variant) => {
       return Object.entries(selected).every(([key, slug]) => {
-        return variant.options.some(vo => vo.attributeKey === key && vo.slug === slug);
+        return variant.options.some((vo) => vo.attributeKey === key && vo.slug === slug);
       });
     });
   });
@@ -101,17 +107,17 @@ export class ProductStore {
 
   loadProduct(product: ProductDetail): void {
     this._product.set(product);
-    
+
     // Auto-select first available options
     const initialSelection: Record<string, string> = {};
     if (product.variants && product.variants.length > 0) {
       // Find first in-stock variant if possible, else just first
-      const defaultVariant = product.variants.find(v => v.inStock) || product.variants[0];
+      const defaultVariant = product.variants.find((v) => v.inStock) || product.variants[0];
       for (const opt of defaultVariant.options) {
         initialSelection[opt.attributeKey] = opt.slug;
       }
     }
-    
+
     this._selectedOptions.set(initialSelection);
     this._quantity.set(1);
   }
@@ -119,21 +125,21 @@ export class ProductStore {
   selectOption(attributeKey: string, slug: string): void {
     const current = { ...this._selectedOptions() };
     current[attributeKey] = slug;
-    
+
     // Check if the new selection makes current variant invalid. If so, attempt to correct.
     // E.g., if you switch from Large to Small, but Red isn't available in Small.
     const p = this._product();
     if (p) {
-      const isValid = p.variants.some(variant => {
+      const isValid = p.variants.some((variant) => {
         return Object.entries(current).every(([k, s]) => {
-          return variant.options.some(vo => vo.attributeKey === k && vo.slug === s);
+          return variant.options.some((vo) => vo.attributeKey === k && vo.slug === s);
         });
       });
 
       if (!isValid) {
         // Fallback: pick the first variant that matches the newly selected option
-        const fallbackVariant = p.variants.find(variant => {
-          return variant.options.some(vo => vo.attributeKey === attributeKey && vo.slug === slug);
+        const fallbackVariant = p.variants.find((variant) => {
+          return variant.options.some((vo) => vo.attributeKey === attributeKey && vo.slug === slug);
         });
 
         if (fallbackVariant) {
@@ -153,9 +159,5 @@ export class ProductStore {
 
   decrement(): void {
     this._quantity.update((q) => Math.max(1, q - 1));
-  }
-
-  toggleWishlist(): void {
-    this._isWishlisted.update((w) => !w);
   }
 }

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ProductStore } from '../../service/product-store';
+import { ProductStore } from '@invento/user-site/app/features/product/service/product-store';
 import { HlmBreadcrumbImports } from '@spartan/helm/breadcrumb';
 import { hlmUl } from '@spartan/helm/typography';
 

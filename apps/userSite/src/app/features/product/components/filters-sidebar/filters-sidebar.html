@@ -7,12 +7,13 @@
   </div>
 
   <div hlmCardContent class="flex flex-col gap-6 p-0">
-    
     @if (filters()) {
       <!-- Categories -->
       @if (filters()!.categories.length > 0) {
         <div class="flex flex-col gap-3">
-          <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Categories</h3>
+          <h3 hlmH3 class="font-semibold text-foreground text-xs uppercase tracking-wider">
+            Categories
+          </h3>
           <div class="flex flex-col gap-2">
             @for (cat of filters()!.categories; track cat.slug) {
               <label class="group flex items-center gap-2 cursor-pointer">
@@ -22,7 +23,9 @@
                   (change)="onCategoryClick(cat.slug)"
                   class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
                 />
-                <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1">
+                <span
+                  class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1"
+                >
                   {{ cat.name }}
                 </span>
                 <span class="text-xs text-muted-foreground">({{ cat.count }})</span>
@@ -35,8 +38,10 @@
       <!-- Custom Attributes (Facets) -->
       @for (attr of filters()!.attributes; track attr.key) {
         <div class="flex flex-col gap-3 pt-4 border-border border-t">
-          <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">{{ attr.name }}</h3>
-          
+          <h3 hlmH3 class="font-semibold text-foreground text-xs uppercase tracking-wider">
+            {{ attr.name }}
+          </h3>
+
           @if (attr.displayStyle === 'swatch') {
             <div class="flex flex-wrap gap-2">
               @for (val of attr.values; track val.slug) {
@@ -51,7 +56,9 @@
                   [disabled]="val.count === 0"
                 >
                   <span class="sr-only">{{ val.value }}</span>
-                  <div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10">
+                  <div
+                    class="absolute -top-8 left-1/2 -translate-x-1/2 bg-foreground text-background text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap z-10"
+                  >
                     {{ val.value }} ({{ val.count }})
                   </div>
                 </button>
@@ -76,12 +83,18 @@
             </div>
           } @else if (attr.displayStyle === 'dropdown') {
             <select
-              (change)="onAttributeToggle(attr.key, $any($event.target).value)"
+              #dropdown
+              (change)="onAttributeToggle(attr.key, dropdown.value)"
               class="bg-background py-1.5 pr-8 pl-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring text-foreground text-sm cursor-pointer w-full"
             >
               <option value="" class="bg-background text-foreground">All {{ attr.name }}</option>
               @for (val of attr.values; track val.slug) {
-                <option [value]="val.slug" [selected]="isAttributeSelected(attr.key, val.slug)" [disabled]="val.count === 0" class="bg-background text-foreground">
+                <option
+                  [value]="val.slug"
+                  [selected]="isAttributeSelected(attr.key, val.slug)"
+                  [disabled]="val.count === 0"
+                  class="bg-background text-foreground"
+                >
                   {{ val.value }} ({{ val.count }})
                 </option>
               }
@@ -90,7 +103,10 @@
             <!-- list format (checkboxes) -->
             <div class="flex flex-col gap-2">
               @for (val of attr.values; track val.slug) {
-                <label class="group flex items-center gap-2 cursor-pointer" [class.opacity-50]="val.count === 0">
+                <label
+                  class="group flex items-center gap-2 cursor-pointer"
+                  [class.opacity-50]="val.count === 0"
+                >
                   <input
                     type="checkbox"
                     [checked]="isAttributeSelected(attr.key, val.slug)"
@@ -98,7 +114,9 @@
                     [disabled]="val.count === 0"
                     class="border-border rounded w-4 h-4 accent-primary cursor-pointer"
                   />
-                  <span class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1">
+                  <span
+                    class="text-muted-foreground group-hover:text-primary text-sm transition-colors flex-1"
+                  >
                     {{ val.value }}
                   </span>
                   <span class="text-xs text-muted-foreground">({{ val.count }})</span>
@@ -111,7 +129,9 @@
 
       <!-- Price -->
       <div class="flex flex-col gap-3 pt-4 border-border border-t">
-        <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">Price Range</h3>
+        <h3 hlmH3 class="font-semibold text-foreground text-xs uppercase tracking-wider">
+          Price Range
+        </h3>
         <!-- Note: Max slider assumes upper bound is max provided by API if not set in URL -->
         <input
           type="range"
@@ -125,13 +145,18 @@
         <div class="flex justify-between text-muted-foreground text-xs">
           <span>{{ filters()!.price.min / 100 | currency }}</span>
           <span class="font-semibold text-primary">{{ currentMaxPrice / 100 | currency }}</span>
-          <span>{{ (filters()!.price.max < currentMaxPrice ? currentMaxPrice : filters()!.price.max) / 100 | currency }}</span>
+          <span>{{
+            (filters()!.price.max < currentMaxPrice ? currentMaxPrice : filters()!.price.max) / 100
+              | currency
+          }}</span>
         </div>
       </div>
 
       <!-- In Stock -->
       <div class="flex justify-between items-center pt-4 border-border border-t">
-        <h3 class="font-semibold text-foreground text-xs uppercase tracking-wider">In Stock Only</h3>
+        <h3 hlmH3 class="font-semibold text-foreground text-xs uppercase tracking-wider">
+          In Stock Only
+        </h3>
         <button
           type="button"
           (click)="inStockChange.emit(!isInStockOnly)"
@@ -146,7 +171,6 @@
           ></span>
         </button>
       </div>
-      
     } @else {
       <!-- Loading Skeleton for Filters -->
       <div class="animate-pulse flex flex-col gap-6">
@@ -164,6 +188,5 @@
         </div>
       </div>
     }
-
   </div>
 </div>

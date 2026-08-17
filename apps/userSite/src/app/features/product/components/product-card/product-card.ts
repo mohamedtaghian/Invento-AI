@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -10,8 +10,8 @@ import {
   HlmCardDescription,
   HlmCardContent,
 } from '@spartan/helm/card';
-import { ProductListItem } from '../../types/product';
-import { flyToCart } from '../../service/cart-utils';
+import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
+import { flyToCart } from '@invento/user-site/app/features/product/service/cart-utils';
 import { environment } from '../../../../../environments/environment';
 
 @Component({

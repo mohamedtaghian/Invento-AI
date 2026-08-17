@@ -9,12 +9,14 @@
   </span>
 </div>
 
-<h1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">{{ p.title }}</h1>
-<p class="mb-4 text-base text-muted-foreground">{{ p.shortDescription }}</p>
+<h1 hlmH1 class="mb-2 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+  {{ p.title }}
+</h1>
+<p hlmP class="mb-4 text-base text-muted-foreground">{{ p.shortDescription }}</p>
 
 <div class="flex items-end gap-2 text-3xl font-bold text-primary">
   {{ (store.currentVariant()?.priceAmount || p.minPriceAmount) / 100 | currency }}
-  
+
   @if (store.currentVariant()?.compareAtAmount) {
     <span class="text-lg font-normal text-muted-foreground line-through">
       {{ store.currentVariant()!.compareAtAmount! / 100 | currency }}

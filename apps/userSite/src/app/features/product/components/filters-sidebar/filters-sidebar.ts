@@ -2,23 +2,32 @@ import { ChangeDetectionStrategy, Component, input, output, inject } from '@angu
 import { CurrencyPipe } from '@angular/common';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmCard, HlmCardContent, HlmCardHeader, HlmCardTitle } from '@spartan/helm/card';
-import { FilterResponse } from '../../types/product';
+import { FilterResponse } from '@invento/user-site/app/features/product/types/product';
 import { ActivatedRoute } from '@angular/router';
-import { parseAttributes } from '../../utils/filter-parser';
+import { parseAttributes } from '@invento/user-site/app/features/product/utils/filter-parser';
+import { HlmTypographyImports } from '@spartan/helm/typography';
 
 @Component({
   selector: 'app-filters-sidebar',
   templateUrl: './filters-sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CurrencyPipe, HlmButton, HlmCard, HlmCardContent, HlmCardHeader, HlmCardTitle],
+  imports: [
+    CurrencyPipe,
+    HlmButton,
+    HlmCard,
+    HlmCardContent,
+    HlmCardHeader,
+    HlmCardTitle,
+    HlmTypographyImports,
+  ],
 })
 export class FiltersSidebar {
   public readonly filters = input<FilterResponse | null>(null);
 
   public readonly categoryChange = output<string>();
-  public readonly priceChange = output<{min?: number, max?: number}>();
+  public readonly priceChange = output<{ min?: number; max?: number }>();
   public readonly inStockChange = output<boolean>();
-  public readonly attributeChange = output<{key: string, values: string[]}>();
+  public readonly attributeChange = output<{ key: string; values: string[] }>();
   public readonly clearAll = output<void>();
 
   private readonly route = inject(ActivatedRoute);
@@ -30,12 +39,12 @@ export class FiltersSidebar {
 
   get currentMinPrice(): number {
     const val = this.route.snapshot.queryParams['minPrice'];
-    return val ? Number(val) : (this.filters()?.price?.min || 0);
+    return val ? Number(val) : this.filters()?.price?.min || 0;
   }
 
   get currentMaxPrice(): number {
     const val = this.route.snapshot.queryParams['maxPrice'];
-    return val ? Number(val) : (this.filters()?.price?.max || 5000); // 5000 is fallback
+    return val ? Number(val) : this.filters()?.price?.max || 5000; // 5000 is fallback
   }
 
   get isInStockOnly(): boolean {
@@ -66,7 +75,7 @@ export class FiltersSidebar {
     let currentValues = attrs[key] || [];
 
     if (currentValues.includes(value)) {
-      currentValues = currentValues.filter(v => v !== value);
+      currentValues = currentValues.filter((v) => v !== value);
     } else {
       currentValues = [...currentValues, value];
     }
