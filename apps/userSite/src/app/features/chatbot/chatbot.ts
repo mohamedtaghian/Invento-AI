@@ -50,9 +50,9 @@ export class Chatbot implements OnInit {
   readonly isSending = signal<boolean>(false);
   readonly showWidget = signal<boolean>(false);
   readonly storeName = signal<string>('');
-  readonly chatHistory = signal<{sessionId: string, updatedAt: string}[]>([]);
+  readonly chatHistory = signal<{ sessionId: string; updatedAt: string }[]>([]);
   readonly isHistoryOpen = signal<boolean>(false);
-  
+
   private sessionId?: string;
   private initialGreeting = 'How can I help you today?';
   protected readonly storeSlug = 'layali';
@@ -241,7 +241,7 @@ export class Chatbot implements OnInit {
   }
 
   toggleHistory() {
-    this.isHistoryOpen.update(v => !v);
+    this.isHistoryOpen.update((v) => !v);
   }
 
   closeHistory() {
@@ -251,7 +251,7 @@ export class Chatbot implements OnInit {
   selectSession(sessionId: string) {
     this.isHistoryOpen.set(false);
     if (!sessionId) return;
-    
+
     this.sessionId = sessionId;
     localStorage.setItem('chatbot_session_id', sessionId);
     this.loadConversation(this.initialGreeting);
