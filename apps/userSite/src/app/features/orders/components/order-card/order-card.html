@@ -8,7 +8,7 @@
     <div class="flex flex-wrap items-center gap-4 min-w-0">
       <div>
         <div class="flex flex-wrap items-center gap-2">
-          <h3 class="font-bold text-foreground text-base sm:text-lg">
+          <h3 hlmH3 class="font-bold text-foreground text-base sm:text-lg">
             Order #{{ order().orderNumber }}
           </h3>
           <span
@@ -128,7 +128,7 @@
                       ></ng-icon>
                     </a>
                   } @else {
-                    <h4 class="font-bold text-foreground text-sm line-clamp-1">
+                    <h4 hlmH4 class="font-bold text-foreground text-sm line-clamp-1">
                       {{ item.productTitle }}
                     </h4>
                   }
@@ -261,7 +261,9 @@
         } @else if (orderDetails(); as details) {
           <!-- Section 1: Progress Timeline -->
           <div>
-            <h5 class="mb-4 font-bold text-muted-foreground text-xs uppercase tracking-wider">
+            <!-- Typography lib only ships H1-H4 directives; hlmMuted matches this label's
+                 actual visual intent (a small muted section heading). -->
+            <h5 hlmMuted class="mb-4 font-bold text-xs uppercase tracking-wider">
               Shipment Progress
             </h5>
             <div class="relative gap-3 grid grid-cols-2 sm:grid-cols-4">
@@ -347,11 +349,11 @@
                 {{ details.contactName || order().contactName }}
               </div>
               <div class="space-y-0.5 mt-1 text-muted-foreground text-xs leading-relaxed">
-                <p>{{ details.shippingAddress.line1 }}</p>
+                <p hlmMuted class="text-xs">{{ details.shippingAddress.line1 }}</p>
                 @if (details.shippingAddress.line2) {
-                  <p>{{ details.shippingAddress.line2 }}</p>
+                  <p hlmMuted class="text-xs">{{ details.shippingAddress.line2 }}</p>
                 }
-                <p>
+                <p hlmMuted class="text-xs">
                   {{ details.shippingAddress.city }}
                   @if (details.shippingAddress.governorate) {
                     , {{ details.shippingAddress.governorate }}
@@ -360,7 +362,9 @@
                     - {{ details.shippingAddress.postalCode }}
                   }
                 </p>
-                <p class="font-semibold text-foreground">{{ details.shippingAddress.country }}</p>
+                <p hlmSmall class="text-xs font-semibold text-foreground">
+                  {{ details.shippingAddress.country }}
+                </p>
               </div>
             </div>
 
@@ -414,8 +418,8 @@
                   <span class="text-muted-foreground">Payment Status:</span>
                   <span
                     class="font-bold uppercase"
-                    [class.text-emerald-600]="details.paymentStatus === 'paid'"
-                    [class.text-amber-600]="details.paymentStatus === 'unpaid'"
+                    [class.text-success]="details.paymentStatus === 'paid'"
+                    [class.text-warning]="details.paymentStatus === 'unpaid'"
                   >
                     {{ details.paymentStatus }}
                   </span>
@@ -470,7 +474,7 @@
             <h3 hlmDialogTitle class="text-foreground text-lg font-bold">
               Cancel Order #{{ order().orderNumber }}
             </h3>
-            <p class="text-xs text-muted-foreground mt-0.5">
+            <p hlmMuted class="text-xs mt-0.5">
               Are you sure you want to cancel this order? This action cannot be undone once
               confirmed.
             </p>
@@ -520,7 +524,9 @@
         </div>
 
         <!-- Modal Footer Actions -->
-        <hlm-dialog-footer class="border-border/50 flex items-center justify-end gap-3 border-t pt-2">
+        <hlm-dialog-footer
+          class="border-border/50 flex items-center justify-end gap-3 border-t pt-2"
+        >
           <button
             hlmBtn
             variant="outline"

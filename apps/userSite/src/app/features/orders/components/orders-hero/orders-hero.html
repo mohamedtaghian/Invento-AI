@@ -13,12 +13,13 @@
       </span>
 
       <h1
+        hlmH1
         class="mb-4 font-extrabold text-foreground text-3xl md:text-5xl leading-[1.1] tracking-tight"
       >
         {{ 'orders_hero.title' | translate }}
       </h1>
 
-      <p class="max-w-lg text-muted-foreground text-base leading-relaxed">
+      <p hlmMuted class="max-w-lg text-base leading-relaxed">
         {{ 'orders_hero.subtitle' | translate }}
       </p>
     </div>
@@ -58,7 +59,7 @@
         >
         <div class="flex justify-between items-center gap-1.5 sm:gap-3">
           <span
-            class="min-w-0 font-extrabold text-blue-500 text-base sm:text-xl md:text-2xl lg:text-3xl truncate tracking-tight"
+            class="min-w-0 font-extrabold text-primary text-base sm:text-xl md:text-2xl lg:text-3xl truncate tracking-tight"
             >{{
               ordersService.statusCounts().pending +
                 ordersService.statusCounts().confirmed +
@@ -66,7 +67,7 @@
             }}</span
           >
           <div
-            class="flex justify-center items-center bg-blue-500/10 rounded-xl w-8 sm:w-9 h-8 sm:h-9 text-blue-500 shrink-0"
+            class="flex justify-center items-center bg-primary/10 rounded-xl w-8 sm:w-9 h-8 sm:h-9 text-primary shrink-0"
           >
             <ng-icon name="lucideTruck" class="text-base sm:text-lg"></ng-icon>
           </div>
@@ -83,11 +84,11 @@
         >
         <div class="flex justify-between items-center gap-1.5 sm:gap-3">
           <span
-            class="min-w-0 font-extrabold text-emerald-500 text-base sm:text-xl md:text-2xl lg:text-3xl truncate tracking-tight"
+            class="min-w-0 font-extrabold text-success text-base sm:text-xl md:text-2xl lg:text-3xl truncate tracking-tight"
             >{{ ordersService.statusCounts().delivered }}</span
           >
           <div
-            class="flex justify-center items-center bg-emerald-500/10 rounded-xl w-8 sm:w-9 h-8 sm:h-9 text-emerald-500 shrink-0"
+            class="flex justify-center items-center bg-success/10 rounded-xl w-8 sm:w-9 h-8 sm:h-9 text-success shrink-0"
           >
             <ng-icon name="lucideCircleCheck" class="text-base sm:text-lg"></ng-icon>
           </div>

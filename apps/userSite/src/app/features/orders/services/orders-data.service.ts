@@ -1,8 +1,8 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, firstValueFrom, tap, throwError } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { extractErrorMessage } from '../../../core/utils/error.utils';
+import { environment } from '@invento/user-site/environments/environment';
+import { extractErrorMessage } from '@invento/user-site/app/core/utils/error.utils';
 import type {
   CancelOrderPayload,
   MyOrdersResponse,
@@ -11,7 +11,7 @@ import type {
   OrderStatus,
   OrderStatusConfig,
   OrderSummaryItem,
-} from '../types/orders';
+} from '@invento/user-site/app/features/orders';
 
 const RECIPIENT_OVERRIDES_KEY = 'invento_order_recipients';
 
