@@ -9,7 +9,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { CurrencyPipe, DatePipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -69,7 +69,6 @@ import {
   selector: 'app-orders',
   imports: [
     CurrencyPipe,
-    DatePipe,
     NgClass,
     FormsModule,
     NgIcon,

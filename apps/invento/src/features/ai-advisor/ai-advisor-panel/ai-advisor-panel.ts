@@ -1,8 +1,7 @@
 // ai-advisor-panel.ts
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { RouterLink } from '@angular/router';
 import { HlmButtonImports } from '@spartan/helm/button';
 import { HlmSheetImports } from '@spartan/helm/sheet';
 import { HlmBadgeImports } from '@spartan/helm/badge';
@@ -71,8 +70,6 @@ export type AdvisorPanelTab = 'today' | 'history' | 'settings';
   standalone: true,
   imports: [
     CommonModule,
-    RouterLink,
-    CurrencyPipe,
     DatePipe,
     HlmButtonImports,
     HlmSheetImports,
@@ -616,10 +613,7 @@ export class AiAdvisorPanel {
       item.kind === 'slow_mover'
     ) {
       const payload = item.payload as
-        | StockoutPayload
-        | RestockPayload
-        | TrendingPayload
-        | SlowMoverPayload;
+        StockoutPayload | RestockPayload | TrendingPayload | SlowMoverPayload;
       return payload.productId ? `/products/${payload.productId}` : null;
     }
     return null;

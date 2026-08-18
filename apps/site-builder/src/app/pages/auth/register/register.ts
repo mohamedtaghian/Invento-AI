@@ -5,7 +5,6 @@ import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
 import { HlmInput } from '@spartan/helm/input';
-import { HlmLabel } from '@spartan/helm/label';
 import { HlmButton } from '@spartan/helm/button';
 
 import { extractErrorMessage } from '../../../core/utils/error.utils';
@@ -13,13 +12,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    HlmInput,
-    HlmLabel,
-    HlmButton
-  ],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmButton],
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
@@ -27,17 +20,42 @@ export class Register implements OnInit {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
-  
 
   isLoading = signal(false);
 
-  registerForm = this.fb.group({
-    firstName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/)]],
-    lastName: ['', [Validators.required, Validators.minLength(2), Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/)]],
-    confirmPassword: ['', [Validators.required]]
-  }, { validators: this.passwordMatchValidator });
+  registerForm = this.fb.group(
+    {
+      firstName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/),
+        ],
+      ],
+      lastName: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.pattern(/^[a-zA-Z\u00C0-\u00FF\u0600-\u06FF\s'-]+$/),
+        ],
+      ],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).+$/,
+          ),
+        ],
+      ],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: this.passwordMatchValidator },
+  );
 
   ngOnInit() {
     const passwordControl = this.registerForm.get('password');
@@ -59,8 +77,7 @@ export class Register implements OnInit {
   }
 
   passwordMatchValidator(g: AbstractControl) {
-    return g.get('password')?.value === g.get('confirmPassword')?.value
-      ? null : { 'mismatch': true };
+    return g.get('password')?.value === g.get('confirmPassword')?.value ? null : { mismatch: true };
   }
 
   onSubmit() {
@@ -78,15 +95,15 @@ export class Register implements OnInit {
         this.isLoading.set(false);
         toast.success(res.message || 'Registration successful. Please verify your email.');
         // Redirect to verify email, passing the email as state
-        this.router.navigate(['/auth/verify-email'], { 
-          queryParams: { email: registerPayload.email } 
+        this.router.navigate(['/auth/verify-email'], {
+          queryParams: { email: registerPayload.email },
         });
       },
       error: (err) => {
         this.isLoading.set(false);
         const errorMsg = extractErrorMessage(err, 'Registration failed.');
         toast.error(errorMsg);
-      }
+      },
     });
   }
 }

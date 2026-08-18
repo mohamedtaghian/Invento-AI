@@ -8,6 +8,7 @@ import {
   numberAttribute,
   signal,
 } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { hlm } from '@spartan/helm/utils';
 import { cva } from 'class-variance-authority';
@@ -226,12 +227,24 @@ export class SpartanStepper extends CdkStepper {
   }
 
   override next(): void {
-    console.log(this.linear);
-    this.selected?.stepControl?.markAllAsTouched();
-    this.selected?.stepControl?.updateValueAndValidity();
+    const stepControl = this.selected?.stepControl;
+    if (stepControl) {
+      if (stepControl instanceof AbstractControl) {
+        stepControl.markAllAsTouched();
+        stepControl.updateValueAndValidity();
+        if (this.linear && stepControl.invalid) {
+          return;
+        }
+      } else if (typeof stepControl === 'function') {
+        const field = (stepControl as () => { markAsTouched?: () => void; invalid?: () => boolean })();
+        field?.markAsTouched?.();
+        if (this.linear && field?.invalid?.()) {
+          return;
+        }
+      }
+    }
 
-    if (this.linear && this.selected?.stepControl?.invalid) {
-      console.log(this.linear, '55');
+    if (this.linear && this.selected && !this.selected.completed) {
       return;
     }
 
