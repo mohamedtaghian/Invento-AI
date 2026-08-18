@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
 import { ProductStore } from '@invento/user-site/app/features/product';
 
@@ -12,7 +12,7 @@ import { TranslatePipe } from '@invento/core';
   templateUrl: './product-details-accordion.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [provideIcons({ lucideChevronDown })],
-  imports: [NgIcon, HlmAccordionImports, TranslatePipe],
+  imports: [HlmAccordionImports, TranslatePipe],
 })
 export class ProductDetailsAccordion {
   protected readonly store = inject(ProductStore);

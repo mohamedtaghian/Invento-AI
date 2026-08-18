@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, inject, signal } from '@angular/core';
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -11,16 +11,21 @@ import {
   HlmCardContent,
 } from '@spartan/helm/card';
 import { toast } from '@spartan/helm/sonner';
-import { TranslatePipe } from '@invento/core';
-import { flyToCart } from '@invento/user-site/app/features/product';
-import { CartService } from '@invento/user-site/core/service/cart.service';
+import { LocaleService, TranslatePipe } from '@invento/core';
+import { flyToCart, ProductApiService } from '@invento/user-site/app/features/product';
 
 import { HlmButton } from '@spartan/helm/button';
 import { HlmTypographyImports } from '@spartan/helm/typography';
 import { ProductListItem } from '@invento/user-site/app/features/product/types/product';
 import { PageBadge, ColorSwatch } from '@invento/shared';
-import { environment } from '@invento/user-site/environments/environment';
-
+import { CartService } from '@invento/user-site/app/core/service/cart.service';
+import { StoreService } from '@invento/user-site/app/core/service/store.service';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
+import {
+  ProductDetail,
+  ProductVariant,
+  ProductVariantOption,
+} from '@invento/user-site/app/features/product/types';
 @Component({
   selector: 'app-product-card',
   templateUrl: './product-card.html',
@@ -46,10 +51,24 @@ import { environment } from '@invento/user-site/environments/environment';
 })
 export class ProductCard {
   public readonly product = input.required<ProductListItem>();
-  protected readonly storeSlug = environment.storeSlug;
+
+  /** True for cards above the fold; lets the caller opt out of lazy-loading the image. */
+  public readonly eager = input<boolean>(false);
 
   private readonly cartService = inject(CartService);
   private readonly productApi = inject(ProductApiService);
+  private readonly storeService = inject(StoreService);
+  private readonly locale = inject(LocaleService);
+
+  /**
+   * Was `environment.storeSlug`, a build-time constant — so on every tenant except the
+   * fallback one, product links and the add-to-cart lookup pointed at the wrong store.
+   */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
+
+  /** The bare `| currency` pipe defaulted every store to USD; stores set their own. */
+  protected readonly storeCurrency = this.storeService.currency;
+
   protected readonly isAdding = signal<boolean>(false);
 
   protected onAddToCart(event: MouseEvent): void {
@@ -64,17 +83,18 @@ export class ProductCard {
 
     const p = this.product();
 
-    this.productApi.getProductBySlug(this.storeSlug, p.slug).subscribe({
-      next: (detail) => {
+    this.productApi.getProductBySlug(this.storeSlug(), p.slug).subscribe({
+      next: (detail: ProductDetail) => {
         this.isAdding.set(false);
-        const variant = detail.variants?.find((v) => v.inStock) || detail.variants?.[0];
+        const variant =
+          detail.variants?.find((v: ProductVariant) => v.inStock) || detail.variants?.[0];
         if (!variant) {
-          toast.warning('This product is currently out of stock.');
+          toast.warning(this.locale.translate('product.card.toast_out_of_stock'));
           return;
         }
 
         const variantOptionsMap: Record<string, string> = {};
-        variant.options?.forEach((opt) => {
+        variant.options?.forEach((opt: ProductVariantOption) => {
           variantOptionsMap[opt.attributeName || opt.attributeKey] = opt.value || opt.slug;
         });
 
@@ -90,12 +110,13 @@ export class ProductCard {
           quantity: 1,
         });
 
-        toast.success(`Added "${p.title}" to cart!`);
+        // Translated via the service, not the pipe: the pipe is template-only.
+        toast.success(this.locale.translate('product.card.toast_added', { title: p.title }));
         flyToCart(startRect);
       },
       error: () => {
         this.isAdding.set(false);
-        toast.error('Could not add product to cart.');
+        toast.error(this.locale.translate('product.card.toast_add_failed'));
       },
     });
   }

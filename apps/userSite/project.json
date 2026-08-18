@@ -4,7 +4,10 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/userSite/src",
-  "tags": [],
+  "tags": [
+    "type:app",
+    "scope:user-site"
+  ],
   "implicitDependencies": [
     "spartan-ui",
     "spartan-stepper",
@@ -15,7 +18,9 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/userSite",
@@ -27,7 +32,9 @@
             "input": "apps/userSite/public"
           }
         ],
-        "styles": ["apps/userSite/src/styles.css"],
+        "styles": [
+          "apps/userSite/src/styles.css"
+        ],
         "server": "apps/userSite/src/main.server.ts",
         "ssr": {
           "entry": "apps/userSite/src/server.ts"

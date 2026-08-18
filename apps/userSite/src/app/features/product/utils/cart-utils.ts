@@ -1,13 +1,22 @@
-export function flyToCart(event: MouseEvent, cartIconId = 'cart-icon'): Promise<void> {
+export function flyToCart(
+  eventOrRect: MouseEvent | DOMRect | null,
+  cartIconId = 'cart-icon',
+): Promise<void> {
   return new Promise((resolve) => {
     const cartIcon = document.getElementById(cartIconId);
-    if (!cartIcon) {
+    if (!cartIcon || !eventOrRect) {
       resolve();
       return;
     }
 
-    const btn = event.currentTarget as HTMLElement;
-    const startRect = btn.getBoundingClientRect();
+    let startRect: DOMRect;
+    if (eventOrRect instanceof MouseEvent || 'currentTarget' in eventOrRect) {
+      const btn = (eventOrRect as MouseEvent).currentTarget as HTMLElement;
+      startRect = btn.getBoundingClientRect();
+    } else {
+      startRect = eventOrRect as DOMRect;
+    }
+
     const endRect = cartIcon.getBoundingClientRect();
 
     const startX = startRect.left + startRect.width / 2;

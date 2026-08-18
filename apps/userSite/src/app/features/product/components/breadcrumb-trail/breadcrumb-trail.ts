@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ProductStore } from '@invento/user-site/app/features/product';
 import { HlmBreadcrumbImports } from '@spartan/helm/breadcrumb';
 import { hlmUl } from '@spartan/helm/typography';
-import { environment } from '../../../../../environments/environment';
 import { RouterModule } from '@angular/router';
 
 import { TranslatePipe } from '@invento/core';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
 
 @Component({
   selector: 'app-breadcrumb-trail',
@@ -16,5 +16,6 @@ import { TranslatePipe } from '@invento/core';
 export class BreadcrumbTrail {
   protected readonly hlmUl = hlmUl;
   protected readonly store = inject(ProductStore);
-  protected readonly storeSlug = environment.storeSlug;
+  /** Multi-tenant: the slug in the URL, not the build-time fallback constant. */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
 }

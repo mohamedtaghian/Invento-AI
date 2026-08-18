@@ -1,7 +1,10 @@
 {
   "card": {
     "add_to_cart": "أضف",
-    "out_of_stock": "نفدت الكمية"
+    "out_of_stock": "نفدت الكمية",
+    "toast_added": "تمت إضافة “{{title}}” إلى سلتك",
+    "toast_out_of_stock": "هذا المنتج غير متوفر حالياً.",
+    "toast_add_failed": "تعذرت إضافة المنتج إلى السلة."
   },
   "summary": {
     "save": "وفر {{percentage}}%"

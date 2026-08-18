@@ -9,7 +9,7 @@ import {
   Renderer2,
 } from '@angular/core';
 // import { DOCUMENT } from '@angular/common';
-import { Palette, ThemeApiResponse } from '@/app/core/interface/Preview';
+import type { Palette, ThemeApiResponse } from '@invento/core';
 
 export type HlmStyle = 'nova' | 'vega' | 'lyra' | 'maia' | 'mira' | 'luma';
 const HLM_STYLES: readonly HlmStyle[] = ['nova', 'vega', 'lyra', 'maia', 'mira', 'luma'];

@@ -1,7 +1,10 @@
 {
   "card": {
     "add_to_cart": "Add",
-    "out_of_stock": "Out of Stock"
+    "out_of_stock": "Out of Stock",
+    "toast_added": "Added “{{title}}” to your cart",
+    "toast_out_of_stock": "This product is currently out of stock.",
+    "toast_add_failed": "Could not add this product to your cart."
   },
   "summary": {
     "save": "Save {{percentage}}%"

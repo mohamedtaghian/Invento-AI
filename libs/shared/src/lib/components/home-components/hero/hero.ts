@@ -9,7 +9,7 @@ import {
   lucideTerminal,
 } from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
-import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '../../../directives/scroll-animate.directive';
 import { TypingText } from '../typing-text/typing-text';
 import { PageHeader } from '../../page-header/page-header';
 import { DoubleSlash } from '../../double-slash/double-slash';

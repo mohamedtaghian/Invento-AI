@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'search',
-  standalone: true
+  standalone: true,
 })
 export class SearchPipe implements PipeTransform {
   transform(items: any[], searchTerm: string, keys: string[] = []): any[] {
@@ -12,17 +12,20 @@ export class SearchPipe implements PipeTransform {
 
     const lowerCaseSearch = searchTerm.toLowerCase().trim();
 
-    return items.filter(item => {
+    return items.filter((item) => {
       if (keys.length > 0) {
-        return keys.some(key => {
+        return keys.some((key) => {
           const value = item[key];
           return value && value.toString().toLowerCase().includes(lowerCaseSearch);
         });
       }
-      
-      return Object.values(item).some(val => {
-        return val && (typeof val === 'string' || typeof val === 'number') && 
-               val.toString().toLowerCase().includes(lowerCaseSearch);
+
+      return Object.values(item).some((val) => {
+        return (
+          val &&
+          (typeof val === 'string' || typeof val === 'number') &&
+          val.toString().toLowerCase().includes(lowerCaseSearch)
+        );
       });
     });
   }

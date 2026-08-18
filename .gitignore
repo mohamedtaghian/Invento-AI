@@ -71,3 +71,6 @@ plans/
 update-imports.js
 commit-msg.txt
 screenshots/
+.claude/
+CLAUDE.md
+.removed-dead-config/

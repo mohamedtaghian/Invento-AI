@@ -36,13 +36,13 @@
           <div class="items-stretch gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             @for (i of [1, 2, 3, 4, 5, 6]; track i) {
               <div class="flex flex-col gap-3 h-full">
-                <div class="aspect-4/5 w-full rounded-xl bg-muted motion-safe:animate-pulse"></div>
+                <app-skeleton-block class="aspect-4/5 w-full rounded-xl" />
                 <div class="space-y-2 mt-2">
-                  <div class="h-4 w-3/4 bg-muted rounded motion-safe:animate-pulse"></div>
-                  <div class="h-4 w-1/2 bg-muted rounded motion-safe:animate-pulse"></div>
+                  <app-skeleton-block class="h-4 w-3/4" />
+                  <app-skeleton-block class="h-4 w-1/2" />
                   <div class="flex gap-2 mt-4">
-                    <div class="h-6 w-12 bg-muted rounded-full motion-safe:animate-pulse"></div>
-                    <div class="h-6 w-12 bg-muted rounded-full motion-safe:animate-pulse"></div>
+                    <app-skeleton-block class="h-6 w-12 rounded-full" />
+                    <app-skeleton-block class="h-6 w-12 rounded-full" />
                   </div>
                 </div>
               </div>
@@ -69,6 +69,8 @@
         <app-pagination
           [currentPage]="productsResponse()!.page"
           [totalPages]="productsResponse()!.totalPages"
+          [totalItems]="productsResponse()!.total"
+          [pageSize]="productsResponse()!.limit"
           (pageChange)="onPageChange($event)"
         />
       }

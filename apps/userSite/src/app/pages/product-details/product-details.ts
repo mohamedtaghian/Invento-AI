@@ -20,11 +20,11 @@ import {
   ProductDetailsAccordion,
   RecommendedProducts,
 } from '@invento/user-site/app/features/product';
-import { environment } from '@invento/user-site/environments/environment';
 import { HlmTypographyImports } from '@spartan/helm/typography';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAlertCircle } from '@ng-icons/lucide';
 import { TranslatePipe } from '@invento/core';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
 
 @Component({
   selector: 'app-product-details',
@@ -45,6 +45,9 @@ import { TranslatePipe } from '@invento/core';
   ],
 })
 export class ProductDetails implements OnInit, OnDestroy {
+  /** Multi-tenant: the slug in the URL, not the build-time fallback constant. */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
+
   private readonly route = inject(ActivatedRoute);
   private readonly apiService = inject(ProductApiService);
   protected readonly store = inject(ProductStore);
@@ -65,7 +68,7 @@ export class ProductDetails implements OnInit, OnDestroy {
           this.isLoading.set(true);
           this.notFound.set(false);
           return this.apiService
-            .getProductBySlug(environment.storeSlug, productSlug)
+            .getProductBySlug(this.storeSlug(), productSlug)
             .pipe(catchError(() => of(null)));
         }),
       )

@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import { ChangeDetectorRef, Pipe, PipeTransform, effect, inject } from '@angular/core';
 import { LocaleService } from './locale-service';
 
 @Pipe({
@@ -7,13 +7,22 @@ import { LocaleService } from './locale-service';
 })
 export class LocaleRoutePipe implements PipeTransform {
   private readonly _localeService = inject(LocaleService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    // Same zoneless/OnPush reason as TranslatePipe: mark the host view dirty when the locale
+    // changes, otherwise already-rendered routerLinks keep the previous locale prefix.
+    effect(() => {
+      this._localeService.locale();
+      this._cdr.markForCheck();
+    });
+  }
 
   transform(segments: string[]): string[] {
+    this._localeService.locale();
     return this._localeService.localePath(segments);
   }
 }
-
-
 
 // Mo'men Comment: 
 // LocaleRoutePipe -> do: [routerLink]="['products', '42'] | localeRoute"
