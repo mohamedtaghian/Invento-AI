@@ -297,26 +297,26 @@
 }
 
 @keyframes dashboard-in {
-  from { 
-    opacity: 0; 
+  from {
+    opacity: 0;
     transform: translateY(16px) scale(0.99);
     filter: blur(2px);
   }
-  to { 
-    opacity: 1; 
+  to {
+    opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
   }
 }
 
 @keyframes dashboard-out {
-  from { 
-    opacity: 1; 
+  from {
+    opacity: 1;
     transform: translateY(0) scale(1);
     filter: blur(0);
   }
-  to { 
-    opacity: 0; 
+  to {
+    opacity: 0;
     transform: translateY(-8px) scale(0.99);
     filter: blur(2px);
   }
@@ -327,4 +327,32 @@
 ::view-transition-old(account-tabs),
 ::view-transition-new(account-tabs) {
   animation: none;
+}
+
+/* Auth UI Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-1 {
+  animation: fadeIn 0.4s ease-out 0.05s both;
+}
+.stagger-2 {
+  animation: fadeIn 0.4s ease-out 0.1s both;
+}
+.stagger-3 {
+  animation: fadeIn 0.4s ease-out 0.15s both;
+}
+.stagger-4 {
+  animation: fadeIn 0.4s ease-out 0.2s both;
+}
+.stagger-5 {
+  animation: fadeIn 0.4s ease-out 0.25s both;
 }
