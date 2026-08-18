@@ -1,4 +1,11 @@
-import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  afterNextRender,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import gsap from 'gsap';
@@ -7,6 +14,7 @@ import gsap from 'gsap';
 import { HlmBadge } from '@spartan/helm/badge';
 import { HlmButton } from '@spartan/helm/button';
 import { HlmAccordionImports } from '@spartan/helm/accordion';
+import { HlmTypographyImports } from '@spartan/helm/typography';
 import { EmptyState, ErrorState, SearchInput, SkeletonBlock } from '@invento/shared';
 import { TranslatePipe } from '@invento/core';
 
@@ -29,19 +37,21 @@ import {
 } from '@ng-icons/lucide';
 
 // Feature
-import { FaqDataService } from './service/faq-data.service';
-import { environment } from '../../../environments/environment';
-import type { FaqCategory, FaqItem } from './types/faq';
+import { FaqDataService } from '@invento/user-site/app/features/faq';
+import type { FaqCategory, FaqItem } from '@invento/user-site/app/features/faq';
+import { environment } from '@invento/user-site/environments/environment';
 
 @Component({
   selector: 'app-faq',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     HlmBadge,
     HlmButton,
     NgIconComponent,
     HlmAccordionImports,
+    ...HlmTypographyImports,
     EmptyState,
     ErrorState,
     SearchInput,

@@ -1,9 +1,9 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap, catchError, throwError } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { extractErrorMessage } from '../../../core/utils/error.utils';
-import type { FaqItem } from '../types/faq';
+import { environment } from '@invento/user-site/environments/environment';
+import { extractErrorMessage } from '@invento/user-site/app/core/utils/error.utils';
+import type { FaqItem } from '@invento/user-site/app/features/faq/types';
 
 /**
  * Service that manages fetching FAQ entries for a store from the backend endpoint:

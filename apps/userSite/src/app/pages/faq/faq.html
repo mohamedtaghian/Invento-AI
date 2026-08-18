@@ -16,14 +16,13 @@
           </span>
 
           <h1
-            class="faq-hero-anim text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15] mb-4"
+            hlmH1
+            class="faq-hero-anim text-3xl sm:text-4xl md:text-5xl text-foreground leading-[1.15] mb-4"
           >
             {{ 'faq.title' | translate }}
           </h1>
 
-          <p
-            class="faq-hero-anim text-sm sm:text-base text-muted-foreground leading-relaxed mb-8 max-w-xl"
-          >
+          <p hlmMuted class="faq-hero-anim sm:text-base leading-relaxed mb-8 max-w-xl">
             {{ 'faq.subtitle' | translate }}
           </p>
 
@@ -53,7 +52,9 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none">
                 {{ totalQuestions() }}
               </span>
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.total_questions' | translate }}</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{
+                'faq.total_questions' | translate
+              }}</span>
             </div>
           </div>
 
@@ -69,7 +70,9 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none">
                 {{ categories().length }}
               </span>
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.categories' | translate }}</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{
+                'faq.categories' | translate
+              }}</span>
             </div>
           </div>
 
@@ -85,7 +88,9 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none"
                 >24/7</span
               >
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.support' | translate }}</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{
+                'faq.support' | translate
+              }}</span>
             </div>
           </div>
         </div>
@@ -172,7 +177,10 @@
         <div class="flex flex-col lg:flex-row gap-8 items-start">
           <!-- Category Sidebar (Ready for 1 or more categories) -->
           <aside class="w-full lg:w-72 shrink-0">
-            <h3 class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4 px-1">
+            <h3
+              hlmH3
+              class="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4 px-1"
+            >
               Categories
             </h3>
             <nav
@@ -208,7 +216,7 @@
                   </div>
                   <span class="flex-1">{{ category.title }}</span>
                   <span
-                    class="ml-auto text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-colors"
+                    class="ms-auto text-[11px] font-bold px-2.5 py-0.5 rounded-full transition-colors"
                     [ngClass]="
                       activeCategory() === category.id
                         ? 'bg-primary-foreground/20 text-primary-foreground'
@@ -235,10 +243,15 @@
                     <ng-icon [name]="activeCat.icon" size="20px"></ng-icon>
                   </div>
                   <div>
-                    <h2 class="text-xl font-bold text-foreground">{{ activeCat.title }}</h2>
-                    <p class="text-xs text-muted-foreground">
+                    <h2 hlmH2 class="text-xl font-bold text-foreground border-none pb-0">
+                      {{ activeCat.title }}
+                    </h2>
+                    <p hlmMuted class="text-xs">
                       {{ activeCat.items.length }}
-                      {{ (activeCat.items.length === 1 ? 'faq.question' : 'faq.questions') | translate }}
+                      {{
+                        (activeCat.items.length === 1 ? 'faq.question' : 'faq.questions')
+                          | translate
+                      }}
                     </p>
                   </div>
                 </div>
@@ -268,7 +281,10 @@
                         >
                           {{ i + 1 }}
                         </span>
-                        <h3 class="text-foreground text-start text-sm leading-snug font-bold sm:text-base">
+                        <h3
+                          hlmH3
+                          class="text-foreground text-start text-sm leading-snug font-bold sm:text-base"
+                        >
                           {{ item.question }}
                         </h3>
                       </div>
@@ -295,10 +311,10 @@
         class="rounded-3xl border border-border/80 bg-card p-8 sm:p-10 text-center shadow-sm relative overflow-hidden"
       >
         <div
-          class="absolute -top-16 -right-16 w-40 h-40 bg-primary/5 rounded-full blur-2xl pointer-events-none"
+          class="absolute -top-16 -end-16 w-40 h-40 bg-primary/5 rounded-full blur-2xl pointer-events-none"
         ></div>
         <div
-          class="absolute -bottom-16 -left-16 w-40 h-40 bg-primary/5 rounded-full blur-2xl pointer-events-none"
+          class="absolute -bottom-16 -start-16 w-40 h-40 bg-primary/5 rounded-full blur-2xl pointer-events-none"
         ></div>
 
         <div
@@ -306,10 +322,10 @@
         >
           <ng-icon name="lucideHeadphones" size="22px"></ng-icon>
         </div>
-        <h2 class="text-xl sm:text-2xl font-extrabold text-foreground mb-2">
+        <h2 hlmH2 class="text-xl sm:text-2xl font-extrabold text-foreground mb-2 border-none pb-0">
           {{ 'faq.cta_title' | translate }}
         </h2>
-        <p class="text-muted-foreground mb-6 max-w-md mx-auto text-sm leading-relaxed">
+        <p hlmMuted class="mb-6 max-w-md mx-auto leading-relaxed">
           {{ 'faq.cta_desc' | translate }}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
