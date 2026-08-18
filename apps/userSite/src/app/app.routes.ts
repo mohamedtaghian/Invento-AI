@@ -6,7 +6,7 @@ import { CheckoutComponent } from '@invento/user-site/app/features/checkout/chec
 import { NotFoundComponent } from '@invento/user-site/app/shared/components/not-found/not-found';
 import { OrderConfirmedComponent } from '@invento/user-site/app/pages/order-confirmed';
 import { HomeComponent } from '@invento/user-site/app/pages/home';
-import { FaqComponent } from '@invento/user-site/app/features/faq/faq';
+import { FaqComponent } from '@invento/user-site/app/pages/faq';
 import { OrdersComponent } from '@invento/user-site/app/pages/orders';
 
 import { AuthLayout } from '@invento/user-site/app/layouts/auth-layout/auth-layout';
