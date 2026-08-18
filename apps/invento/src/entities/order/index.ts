@@ -1,2 +1,4 @@
-export type { Order } from './order.interface';
-export { OrderStore } from './order-store';
+export * from './order.model';
+export * from './order.interface';
+export * from './order.service';
+export * from './order-store';
