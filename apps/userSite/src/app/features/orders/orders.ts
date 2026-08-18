@@ -58,6 +58,11 @@ export class OrdersComponent implements OnInit {
       this.route.parent?.snapshot.paramMap.get('storeSlug') ??
       environment.storeSlug;
 
+    const searchQuery = this.route.snapshot.queryParamMap.get('search');
+    if (searchQuery) {
+      this.ordersService.setSearchQuery(searchQuery);
+    }
+
     this.ordersService.loadOrders(this.storeSlug);
   }
 

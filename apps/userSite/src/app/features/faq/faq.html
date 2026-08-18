@@ -287,6 +287,8 @@
               <div class="space-y-3.5">
                 @for (item of activeFaqItems(); track item.question; let i = $index) {
                   <details
+                    [id]="item.id || 'faq-' + i"
+                    [open]="(item.id && item.id === openFaqIdentifier()) || item.question === openFaqIdentifier()"
                     class="faq-item group bg-card hover:bg-card/90 rounded-2xl border border-border/80 transition-all duration-200 shadow-sm overflow-hidden faq-details"
                   >
                     <summary

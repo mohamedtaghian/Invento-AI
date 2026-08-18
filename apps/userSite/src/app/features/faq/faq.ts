@@ -1,4 +1,4 @@
-import { Component, afterNextRender, computed, inject, signal } from '@angular/core';
+import { Component, afterNextRender, computed, inject, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import gsap from 'gsap';
@@ -60,6 +60,7 @@ export class FaqComponent {
 
   readonly activeCategory = signal<string>('general');
   readonly searchQuery = signal<string>('');
+  readonly openFaqIdentifier = signal<string | null>(null);
 
   readonly faqs = this.faqDataService.faqs;
   readonly isLoading = this.faqDataService.isLoading;
@@ -152,6 +153,28 @@ export class FaqComponent {
 
     this.faqDataService.loadFaqs(this.currentStoreSlug);
 
+    this.route.fragment.subscribe((fragment) => {
+      if (fragment) {
+        this.openFaqIdentifier.set(fragment);
+        this.expandFaqCategory(fragment);
+      }
+    });
+
+    this.route.queryParams.subscribe((params) => {
+      if (params['q']) {
+        this.openFaqIdentifier.set(params['q']);
+        this.expandFaqCategory(params['q']);
+      }
+    });
+
+    effect(() => {
+      const allFaqs = this.faqs();
+      const identifier = this.openFaqIdentifier();
+      if (allFaqs.length > 0 && identifier) {
+        this.expandFaqCategory(identifier);
+      }
+    });
+
     afterNextRender(() => {
       const heroAnim = document.querySelectorAll('.faq-hero-anim');
       if (heroAnim.length > 0) {
@@ -168,6 +191,25 @@ export class FaqComponent {
 
   setCategory(categoryId: string): void {
     this.activeCategory.set(categoryId);
+  }
+
+  private expandFaqCategory(identifier: string): void {
+    const allFaqs = this.faqs();
+    const item = allFaqs.find(f => f.id === identifier || f.question === identifier);
+    if (item) {
+      const catKey = item.category?.trim().toLowerCase() || 'general';
+      this.activeCategory.set(catKey);
+      
+      setTimeout(() => {
+        const activeItems = this.activeFaqItems();
+        const index = activeItems.findIndex(f => f.id === identifier || f.question === identifier);
+        const elId = item.id || 'faq-' + index;
+        const el = document.getElementById(elId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100);
+    }
   }
 
   onSearch(event: Event): void {
