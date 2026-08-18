@@ -9,6 +9,8 @@ import {
   lucideRefreshCw,
   lucideCheckCircle2,
   lucideXCircle,
+  lucidePackage,
+  lucideTruck,
 } from '@ng-icons/lucide';
 
 export type StatCardColorVariant = 'indigo' | 'amber' | 'sky' | 'emerald' | 'rose';
@@ -26,11 +28,13 @@ export type StatCardColorVariant = 'indigo' | 'amber' | 'sky' | 'emerald' | 'ros
       lucideRefreshCw,
       lucideCheckCircle2,
       lucideXCircle,
+      lucidePackage,
+      lucideTruck,
     }),
   ],
   template: `
     <div
-      class="group relative overflow-hidden rounded-2xl border border-border/80 bg-card p-4 sm:p-5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg h-full flex flex-col justify-between"
+      class="group relative overflow-hidden rounded-2xl border border-border/80 bg-card p-4 sm:p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md h-full flex flex-col justify-between"
       [class]="cardBorderClass()"
     >
       <!-- Ambient background glow -->
@@ -43,15 +47,15 @@ export type StatCardColorVariant = 'indigo' | 'amber' | 'sky' | 'emerald' | 'ros
         <!-- Top Row: Title & Icon -->
         <div class="flex items-center justify-between gap-2 sm:gap-3">
           <span
-            class="text-xs sm:text-sm font-semibold text-muted-foreground tracking-tight truncate"
+            class="text-xs sm:text-sm font-medium text-muted-foreground tracking-tight truncate"
           >
             {{ title() }}
           </span>
           <div
-            class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-110 shrink-0"
+            class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-105 shrink-0"
             [class]="iconBoxClass()"
           >
-            <ng-icon [name]="iconName()" size="18" />
+            <ng-icon [name]="iconName()" size="17" />
           </div>
         </div>
 
@@ -65,31 +69,33 @@ export type StatCardColorVariant = 'indigo' | 'amber' | 'sky' | 'emerald' | 'ros
         </div>
       </div>
 
-      <!-- Bottom Row: Trend badge & subtitle -->
-      <div
-        class="mt-2.5 sm:mt-3 flex flex-col md:flex-row items-start  md:items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs"
-      >
-        <span
-          class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full font-semibold transition-colors border shrink-0"
-          [class]="trendBadgeClass()"
-        >
-          @switch (trend()) {
-            @case ('up') {
-              <ng-icon name="lucideTrendingUp" size="13" />
-            }
-            @case ('down') {
-              <ng-icon name="lucideTrendingDown" size="13" />
-            }
-            @default {
-              <ng-icon name="lucideMinus" size="13" />
-            }
+      <!-- Optional Bottom Row (only rendered if subtitle or trend value provided) -->
+      @if (trendValue() || trendSubtitle()) {
+        <div class="mt-2.5 flex items-center gap-1.5 text-[11px] sm:text-xs">
+          @if (trendValue()) {
+            <span
+              class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full font-semibold border shrink-0"
+              [class]="trendBadgeClass()"
+            >
+              @switch (trend()) {
+                @case ('up') {
+                  <ng-icon name="lucideTrendingUp" size="12" />
+                }
+                @case ('down') {
+                  <ng-icon name="lucideTrendingDown" size="12" />
+                }
+                @default {
+                  <ng-icon name="lucideMinus" size="12" />
+                }
+              }
+              <span>{{ trendValue() }}</span>
+            </span>
           }
-          <span>{{ trendValue() }}</span>
-        </span>
-        @if (trendSubtitle(); as sub) {
-          <span class="text-muted-foreground font-medium truncate">{{ sub }}</span>
-        }
-      </div>
+          @if (trendSubtitle()) {
+            <span class="text-muted-foreground font-medium truncate">{{ trendSubtitle() }}</span>
+          }
+        </div>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,7 +106,7 @@ export class OrderStatCard {
   readonly iconName = input.required<string>();
   readonly trend = input<'up' | 'down' | 'neutral'>('neutral');
   readonly trendValue = input<string>('');
-  readonly trendSubtitle = input<string>('vs last month');
+  readonly trendSubtitle = input<string>('');
   readonly colorVariant = input<StatCardColorVariant>('indigo');
 
   readonly cardBorderClass = computed(() => {
