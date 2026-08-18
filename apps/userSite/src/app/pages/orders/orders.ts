@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HlmButtonImports } from '@spartan/helm/button';
+import { HlmTypographyImports } from '@spartan/helm/typography';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import {
   lucidePackage,
@@ -12,10 +13,12 @@ import {
   lucideChevronRight,
   lucideShoppingBag,
 } from '@ng-icons/lucide';
-import { OrdersDataService } from './service/orders-data.service';
-import { OrdersHeroComponent } from './components/orders-hero/orders-hero';
-import { OrdersFilterBarComponent } from './components/orders-filter-bar/orders-filter-bar';
-import { OrderCardComponent } from './components/order-card/order-card';
+import {
+  OrdersDataService,
+  OrdersHeroComponent,
+  OrdersFilterBarComponent,
+  OrderCardComponent,
+} from '@invento/user-site/app/features/orders';
 import { EmptyState, ErrorState, Pagination, SkeletonBlock } from '@invento/shared';
 import { TranslatePipe } from '@invento/core';
 import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
@@ -28,6 +31,7 @@ import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug
     CommonModule,
     RouterLink,
     HlmButtonImports,
+    ...HlmTypographyImports,
     NgIconComponent,
     OrdersHeroComponent,
     OrdersFilterBarComponent,

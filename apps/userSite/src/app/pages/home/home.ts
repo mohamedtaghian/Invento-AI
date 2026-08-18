@@ -2,8 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  Signal,
-  afterRenderEffect,
   computed,
   effect,
   inject,
@@ -34,6 +32,7 @@ import { EmptyState, ErrorState, SkeletonBlock } from '@invento/shared';
 import { ProductCard } from '@invento/user-site/app/features/product';
 import { StoreService } from '@invento/user-site/app/core/service/store.service';
 import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
+import { animateOnScroll } from '@invento/user-site/app/core/utils/animation.utils';
 
 /**
  * Registered once at module load rather than inside a render hook.
@@ -164,7 +163,7 @@ export class HomeComponent {
      * "wait for the DOM" is gone as well. They stay reactive, so each still re-runs when its
      * content arrives from the API.
      */
-    this.animateOnScroll(this.heroSection, this.heroItems, (items, section) =>
+    animateOnScroll(this.heroSection, this.heroItems, (items, section) =>
       gsap.from(items, {
         scrollTrigger: { trigger: section, start: 'top 80%' },
         y: 30,
@@ -175,7 +174,7 @@ export class HomeComponent {
       }),
     );
 
-    this.animateOnScroll(this.categorySection, this.categoryCards, (cards, section) =>
+    animateOnScroll(this.categorySection, this.categoryCards, (cards, section) =>
       gsap.fromTo(
         cards,
         { y: 40, opacity: 0, scale: 0.8 },
@@ -192,7 +191,7 @@ export class HomeComponent {
       ),
     );
 
-    this.animateOnScroll(this.productsSection, this.productCards, (cards, section) =>
+    animateOnScroll(this.productsSection, this.productCards, (cards, section) =>
       gsap.from(cards, {
         scrollTrigger: { trigger: section, start: 'top 85%' },
         y: 40,
@@ -205,32 +204,5 @@ export class HomeComponent {
 
   protected retry(): void {
     this.storeService.retry(this.storeSlug());
-  }
-
-  /**
-   * Shared scroll-entrance wiring for the three sections below.
-   *
-   * Each caller only differs in which element refs it watches and the gsap tween it builds;
-   * the `afterRenderEffect`/`onCleanup`/SSR-safety plumbing is identical, so it lives here once.
-   */
-  private animateOnScroll(
-    section: Signal<ElementRef<HTMLElement> | undefined>,
-    items: Signal<readonly ElementRef<HTMLElement>[]>,
-    build: (targets: HTMLElement[], trigger: HTMLElement) => gsap.core.Tween,
-  ): void {
-    afterRenderEffect((onCleanup) => {
-      const trigger = section()?.nativeElement;
-      const targets = items().map((ref) => ref.nativeElement);
-      if (!trigger || targets.length === 0) return;
-
-      const tween = build(targets, trigger);
-      onCleanup(() => this.disposeTween(tween));
-    });
-  }
-
-  /** A tween's ScrollTrigger outlives the tween, so both have to go. */
-  private disposeTween(tween: gsap.core.Tween): void {
-    tween.scrollTrigger?.kill();
-    tween.kill();
   }
 }

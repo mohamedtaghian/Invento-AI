@@ -4,10 +4,10 @@ import { Products } from '@invento/user-site/app/pages/products/product';
 import { ProductDetails } from '@invento/user-site/app/pages/product-details/product-details';
 import { CheckoutComponent } from '@invento/user-site/app/features/checkout/checkout';
 import { NotFoundComponent } from '@invento/user-site/app/shared/components/not-found/not-found';
-import { OrderConfirmedComponent } from '@invento/user-site/app/features/order-confirmed/order-confirmed';
+import { OrderConfirmedComponent } from '@invento/user-site/app/pages/order-confirmed';
 import { HomeComponent } from '@invento/user-site/app/pages/home';
 import { FaqComponent } from '@invento/user-site/app/features/faq/faq';
-import { OrdersComponent } from '@invento/user-site/app/features/orders/orders';
+import { OrdersComponent } from '@invento/user-site/app/pages/orders';
 
 import { AuthLayout } from '@invento/user-site/app/layouts/auth-layout/auth-layout';
 import { Login } from '@invento/user-site/app/pages/auth/login/login';

@@ -27,12 +27,14 @@
           class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-border rounded-3xl text-center"
         >
           <div
-            class="flex justify-center items-center bg-amber-500/10 mb-4 rounded-full w-16 h-16 text-amber-500"
+            class="flex justify-center items-center bg-warning/10 mb-4 rounded-full w-16 h-16 text-warning"
           >
             <ng-icon name="lucideLock" class="text-2xl"></ng-icon>
           </div>
-          <h3 class="text-foreground mb-2 text-xl font-bold">{{ 'orders.signin_title' | translate }}</h3>
-          <p class="mb-6 max-w-md text-muted-foreground text-sm">
+          <h3 hlmH3 class="text-foreground mb-2 text-xl font-bold">
+            {{ 'orders.signin_title' | translate }}
+          </h3>
+          <p hlmMuted class="mb-6 max-w-md text-sm">
             {{ 'orders.signin_desc' | translate }}
           </p>
           <button
@@ -52,7 +54,12 @@
             [title]="'orders.error_title' | translate"
             [message]="ordersService.error() ?? ''"
           >
-            <button hlmBtn variant="outline" (click)="reload()" class="cursor-pointer rounded-xl px-6">
+            <button
+              hlmBtn
+              variant="outline"
+              (click)="reload()"
+              class="cursor-pointer rounded-xl px-6"
+            >
               {{ 'orders.try_again' | translate }}
             </button>
           </app-error-state>
