@@ -1,6 +1,7 @@
 import { HlmTextareaImports } from '@spartan/helm/textarea';
 import { HlmDialogImports } from '@spartan/helm/dialog';
 import { BrnDialogContent } from '@spartan-ng/brain/dialog';
+import { HlmTypographyImports } from '@spartan/helm/typography';
 import { SkeletonBlock } from '@invento/shared';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -29,18 +30,21 @@ import {
   lucideShoppingCart,
 } from '@ng-icons/lucide';
 import { toast } from '@spartan/helm/sonner';
-import { OrdersDataService } from '../../service/orders-data.service';
-import { CartService } from '../../../../core/service/cart.service';
-import { FormatOrderDatePipe } from '../../../../core/pipes/format-date.pipe';
-import { formatOrderDate } from '../../../../core/utils/date.utils';
-import type { CartItem, PrefillCustomerInfo } from '../../../../core/interface/cart.interface';
+import { CartService } from '@invento/user-site/app/core/service/cart.service';
+import { FormatOrderDatePipe } from '@invento/user-site/app/core/pipes/format-date.pipe';
+import { formatOrderDate } from '@invento/user-site/app/core/utils/date.utils';
 import type {
-  OrderDetail,
-  OrderStatus,
-  OrderStatusConfig,
-  OrderSummaryItem,
-  OrderTimelineStep,
-} from '../../types/orders';
+  CartItem,
+  PrefillCustomerInfo,
+} from '@invento/user-site/app/core/interface/cart.interface';
+import {
+  OrdersDataService,
+  type OrderDetail,
+  type OrderStatus,
+  type OrderStatusConfig,
+  type OrderSummaryItem,
+  type OrderTimelineStep,
+} from '@invento/user-site/app/features/orders';
 
 @Component({
   selector: 'app-order-card',
@@ -50,6 +54,7 @@ import type {
     HlmTextareaImports,
     HlmDialogImports,
     BrnDialogContent,
+    ...HlmTypographyImports,
     SkeletonBlock,
     CommonModule,
     CurrencyPipe,
@@ -207,7 +212,6 @@ export class OrderCardComponent {
   protected onCancelDialogState(state: 'open' | 'closed'): void {
     if (state === 'closed') this.closeCancelModal();
   }
-
 
   protected closeCancelModal(): void {
     this.isCancelModalOpen.set(false);

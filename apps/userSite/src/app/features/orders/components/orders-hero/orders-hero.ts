@@ -3,16 +3,23 @@ import { ChangeDetectionStrategy, Component, afterNextRender, inject } from '@an
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import gsap from 'gsap';
 import { HlmBadgeImports } from '@spartan/helm/badge';
+import { HlmTypographyImports } from '@spartan/helm/typography';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import { lucidePackage, lucideTruck, lucideCircleCheck, lucideDollarSign } from '@ng-icons/lucide';
-import { OrdersDataService } from '../../service/orders-data.service';
+import { OrdersDataService } from '@invento/user-site/app/features/orders';
 
 @Component({
   selector: 'app-orders-hero',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    TranslatePipe,CommonModule, CurrencyPipe, HlmBadgeImports, NgIconComponent],
+    TranslatePipe,
+    CommonModule,
+    CurrencyPipe,
+    HlmBadgeImports,
+    ...HlmTypographyImports,
+    NgIconComponent,
+  ],
   providers: [
     provideIcons({
       lucidePackage,
