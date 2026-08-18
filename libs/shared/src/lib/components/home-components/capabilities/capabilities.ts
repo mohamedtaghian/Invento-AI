@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideTerminal, lucideLayers, lucideDatabase, lucideGlobe } from '@ng-icons/lucide';
 import { HlmCard, HlmCardContent, HlmCardTitle, HlmCardDescription } from '@spartan/helm/card';
-import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '../../../directives/scroll-animate.directive';
 import { hlmH3, hlmP } from '@spartan/helm/typography';
-import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { DoubleSlash } from '../../double-slash/double-slash';
 import { RouterLink } from '@angular/router';
 
 interface Capability {

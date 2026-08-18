@@ -1,3 +1,4 @@
+import { EmptyState } from '@invento/shared';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -56,7 +57,6 @@ import { HlmCardImports } from '@spartan/helm/card';
 import { HlmInputImports } from '@spartan/helm/input';
 import { HlmSelectImports } from '@spartan/helm/select';
 import { OrderStatCard } from './components/order-stat-card';
-import { EmptyState } from '@invento/invento/shared/ui/empty-state';
 import { TranslatePipe } from '@invento/core';
 import {
   OrderStore,

@@ -2,12 +2,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { 
-  ApiProductListItem, 
-  ApiProductDetail, 
+import {
+  ApiProductListItem,
+  ApiProductDetail,
   CreateProductDto,
   UpdateProductDto,
-  PaginatedResponse 
+  PaginatedResponse,
 } from './product.model';
 
 @Injectable({
@@ -20,13 +20,15 @@ export class ProductService {
   getProducts(params?: Record<string, any>): Observable<PaginatedResponse<ApiProductListItem>> {
     let httpParams = new HttpParams();
     if (params) {
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         if (params[key] !== undefined && params[key] !== null) {
           httpParams = httpParams.append(key, params[key]);
         }
       });
     }
-    return this.http.get<PaginatedResponse<ApiProductListItem>>(this.apiUrl, { params: httpParams });
+    return this.http.get<PaginatedResponse<ApiProductListItem>>(this.apiUrl, {
+      params: httpParams,
+    });
   }
 
   getProductById(id: string): Observable<ApiProductDetail> {
@@ -53,15 +55,22 @@ export class ProductService {
 
   uploadProductImages(id: string, files: File[]): Observable<ApiProductDetail> {
     const formData = new FormData();
-    files.forEach(file => formData.append('images', file));
+    files.forEach((file) => formData.append('images', file));
     return this.http.post<ApiProductDetail>(`${this.apiUrl}/${id}/images`, formData);
   }
 
-  reorderProductImages(id: string, items: { id: string; position: number }[]): Observable<ApiProductDetail> {
+  reorderProductImages(
+    id: string,
+    items: { id: string; position: number }[],
+  ): Observable<ApiProductDetail> {
     return this.http.patch<ApiProductDetail>(`${this.apiUrl}/${id}/images/reorder`, { items });
   }
 
-  updateProductImage(id: string, imageId: string, altText: string | null): Observable<ApiProductDetail> {
+  updateProductImage(
+    id: string,
+    imageId: string,
+    altText: string | null,
+  ): Observable<ApiProductDetail> {
     return this.http.patch<ApiProductDetail>(`${this.apiUrl}/${id}/images/${imageId}`, { altText });
   }
 
@@ -71,11 +80,28 @@ export class ProductService {
 
   // --- Product Variants ---
 
-  generateVariants(id: string, payload: { axes: { attributeId: string, valueIds: string[] }[], priceAmount: number, stockQuantity?: number }): Observable<ApiProductDetail> {
+  generateVariants(
+    id: string,
+    payload: {
+      axes: { attributeId: string; valueIds: string[] }[];
+      priceAmount: number;
+      stockQuantity?: number;
+    },
+  ): Observable<ApiProductDetail> {
     return this.http.post<ApiProductDetail>(`${this.apiUrl}/${id}/variants/generate`, payload);
   }
 
-  addVariant(id: string, payload: { sku?: string | null, priceAmount: number, compareAtAmount?: number | null, stockQuantity?: number, lowStockThreshold?: number, attributeValueIds?: string[] }): Observable<ApiProductDetail> {
+  addVariant(
+    id: string,
+    payload: {
+      sku?: string | null;
+      priceAmount: number;
+      compareAtAmount?: number | null;
+      stockQuantity?: number;
+      lowStockThreshold?: number;
+      attributeValueIds?: string[];
+    },
+  ): Observable<ApiProductDetail> {
     return this.http.post<ApiProductDetail>(`${this.apiUrl}/${id}/variants`, payload);
   }
 
@@ -87,7 +113,10 @@ export class ProductService {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}/variants/${variantId}`);
   }
 
-  reorderVariants(id: string, items: { id: string; position: number }[]): Observable<ApiProductDetail> {
+  reorderVariants(
+    id: string,
+    items: { id: string; position: number }[],
+  ): Observable<ApiProductDetail> {
     return this.http.patch<ApiProductDetail>(`${this.apiUrl}/${id}/variants/reorder`, { items });
   }
 }

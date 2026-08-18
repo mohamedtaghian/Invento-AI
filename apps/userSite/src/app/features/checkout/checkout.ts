@@ -8,7 +8,11 @@ import gsap from 'gsap';
 import { HlmLabel } from '@spartan/helm/label';
 import { HlmInput } from '@spartan/helm/input';
 import { HlmButton } from '@spartan/helm/button';
+import { HlmTextareaImports } from '@spartan/helm/textarea';
+import { EmptyState } from '@invento/shared';
 import { HlmCard } from '@spartan/helm/card';
+import { HlmDialogImports } from '@spartan/helm/dialog';
+import { BrnDialogContent } from '@spartan-ng/brain/dialog';
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
 import {
   lucideShoppingCart,
@@ -43,6 +47,10 @@ import type { OrderDetail } from '../orders/types/orders';
     HlmInput,
     HlmButton,
     HlmCard,
+    HlmTextareaImports,
+    HlmDialogImports,
+    BrnDialogContent,
+    EmptyState,
     NgIconComponent,
   ],
   providers: [
@@ -294,6 +302,10 @@ export class CheckoutComponent implements OnInit {
   openClearCartModal(): void {
     this.isClearCartModalOpen.set(true);
   }
+  protected onClearCartDialogState(state: 'open' | 'closed'): void {
+    if (state === 'closed') this.closeClearCartModal();
+  }
+
 
   closeClearCartModal(): void {
     this.isClearCartModalOpen.set(false);

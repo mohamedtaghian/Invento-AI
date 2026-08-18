@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
@@ -42,6 +42,16 @@ export class AuthService {
 
   // State for the current user
   currentUser = signal<User | null>(this.loadStoredUser());
+
+  /**
+   * Reactive form of `isAuthenticated()`.
+   *
+   * The navbar is OnPush in a zoneless app, so a plain method call is only re-evaluated when
+   * something else happens to mark that view dirty — signing in or out left the account menu
+   * showing the previous state. `setCurrentUser` is the single funnel for both, so deriving
+   * from it keeps the menu honest.
+   */
+  readonly isLoggedIn = computed(() => this.currentUser() !== null);
 
   private loadStoredUser(): User | null {
     if (typeof window === 'undefined' || typeof localStorage === 'undefined') {

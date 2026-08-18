@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
   private cookieService = inject(CookieService);

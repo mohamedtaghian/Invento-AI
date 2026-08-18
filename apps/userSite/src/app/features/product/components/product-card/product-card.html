@@ -1,44 +1,60 @@
 <div
   hlmCard
-  [routerLink]="['/', storeSlug, 'product-details', product().slug]"
   class="group relative flex flex-col hover:shadow-lg p-0 h-full overflow-hidden transition-shadow duration-300 cursor-pointer"
 >
-
+  <!--
+    Stretched link rather than [routerLink] on the card <div>: a div emits no href, so the
+    storefront was server-rendered but its product pages were unreachable to a crawler
+    following links from the home page, and the card could not be focused by keyboard.
+    The add-to-cart button stays a sibling above it, which also avoids nesting a <button>
+    inside an <a>.
+  -->
+  <a
+    [routerLink]="['/', storeSlug(), 'product-details', product().slug]"
+    [attr.aria-label]="product().title"
+    class="absolute inset-0 z-10 rounded-[inherit] focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none"
+  ></a>
   <!-- Image -->
-  <div class="flex justify-center items-center bg-muted h-48 overflow-hidden">
+  <div class="flex justify-center items-center bg-muted aspect-square w-full overflow-hidden">
     @if (product().imageUrl) {
       <img
         [src]="product().imageUrl"
         [alt]="product().imageAltText || product().title"
+        width="600"
+        height="600"
+        decoding="async"
+        [attr.loading]="eager() ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="eager() ? 'high' : null"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
     } @else {
-      <div class="w-full h-full flex items-center justify-center text-muted-foreground/50 bg-secondary group-hover:scale-105 transition-transform duration-500">
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+      <div
+        class="w-full h-full flex items-center justify-center text-muted-foreground/50 bg-secondary group-hover:scale-105 transition-transform duration-500"
+      >
+        <ng-icon name="lucideImage" size="48" />
       </div>
     }
   </div>
 
   <div hlmCardContent class="flex flex-col flex-1 gap-3 p-4">
     <div hlmCardHeader class="gap-1 p-0">
-      <h3 hlmCardTitle class="text-base line-clamp-2 leading-tight">{{ product().title }}</h3>
+      <h3 hlmCardTitle class="text-base line-clamp-1 leading-tight">{{ product().title }}</h3>
       @if (product().shortDescription) {
-        <p hlmCardDescription class="text-sm line-clamp-2">{{ product().shortDescription }}</p>
+        <p hlmCardDescription class="text-sm line-clamp-1">{{ product().shortDescription }}</p>
       }
     </div>
 
     <!-- Swatches preview (if any) -->
     @if (product().swatches.length > 0) {
       <div class="flex flex-wrap gap-1 mt-1">
-        @for (swatch of product().swatches | slice:0:5; track swatch.slug) {
-          <div 
-            [style.background]="swatch.swatchHex" 
-            class="w-4 h-4 rounded-full border border-border shadow-sm"
-            [title]="swatch.value"
-          ></div>
+        @for (swatch of product().swatches | slice: 0 : 5; track swatch.slug) {
+          <app-color-swatch [hex]="swatch.swatchHex" [name]="swatch.value" />
         }
         @if (product().swatches.length > 5) {
-          <span class="text-xs text-muted-foreground ml-1">+{{ product().swatches.length - 5 }}</span>
+          <span hlmSmall class="text-xs text-muted-foreground ms-1 flex items-center">
+            <ng-icon name="lucidePlus" size="12" class="me-0.5" />
+            {{ product().swatches.length - 5 }}
+          </span>
         }
       </div>
     }
@@ -46,10 +62,13 @@
     <div class="flex justify-between items-center mt-auto pt-2">
       <!-- Price -->
       <div class="flex flex-col">
-        <span class="font-semibold text-primary text-lg">{{ product().minPriceAmount / 100 | currency }}</span>
+        <span hlmH4 class="font-semibold text-primary m-0 text-lg">{{
+          product().minPriceAmount / 100 | currency: storeCurrency()
+        }}</span>
         @if (product().maxPriceAmount > product().minPriceAmount) {
-          <span class="text-muted-foreground text-xs">
-            - {{ product().maxPriceAmount / 100 | currency }}
+          <span hlmSmall class="text-muted-foreground text-xs flex items-center">
+            <ng-icon name="lucideMinus" size="12" class="mx-1" />
+            {{ product().maxPriceAmount / 100 | currency: storeCurrency() }}
           </span>
         }
       </div>
@@ -57,19 +76,18 @@
       <!-- Add / Out of Stock -->
       @if (product().inStock) {
         <button
+          hlmBtn
+          size="sm"
+          variant="outline"
           type="button"
           (click)="onAddToCart($event)"
-          class="flex items-center gap-1.5 bg-primary/10 hover:bg-primary px-3 py-1.5 rounded-lg font-semibold text-primary hover:text-primary-foreground text-sm transition-colors"
+          class="relative z-20 flex items-center gap-1.5 bg-primary/10 hover:bg-primary border-transparent text-primary hover:text-primary-foreground transition-colors"
         >
-          Add
-          <ng-icon name="lucideShoppingCart" class="text-base" />
+          {{ 'product.card.add_to_cart' | translate }}
+          <ng-icon name="lucideShoppingCart" size="16" />
         </button>
       } @else {
-        <span
-          class="bg-muted px-3 py-1.5 rounded-lg font-semibold text-muted-foreground text-sm cursor-not-allowed"
-        >
-          Out of Stock
-        </span>
+        <app-page-badge variant="simple" [badgeText]="'product.card.out_of_stock' | translate" />
       }
     </div>
   </div>

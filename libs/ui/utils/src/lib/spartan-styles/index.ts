@@ -1,6 +1,6 @@
 export { HlmStyleService, isHlmStyle, injectResolvedHlmStyle } from '../spartan-styles';
 export type { HlmStyle } from '../spartan-styles';
-export type { ThemeApiResponse } from '@/app/core/interface/Preview';
+export type { ThemeApiResponse } from '@invento/core';
 
 export { buttonVariantsByStyle } from './hlm-button.variants';
 export { badgeVariantsByStyle } from './hlm-badge.variants';

@@ -568,9 +568,9 @@
         icon="lucideShoppingCart"
         [title]="'orders.empty_title' | translate"
         [description]="'orders.empty_desc' | translate"
-        [actionLabel]="'orders.empty_action' | translate"
-        (actionClick)="resetFilters()"
-      />
+      >
+        <button hlmBtn (click)="resetFilters()">{{ 'orders.empty_action' | translate }}</button>
+      </app-empty-state>
     }
   </div>
 

@@ -1,50 +1,45 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { provideIcons, NgIconComponent } from '@ng-icons/core';
-import { lucideSearch, lucideCircleX } from '@ng-icons/lucide';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { FilterTabs, SearchInput, type FilterTab } from '@invento/shared';
+import { LocaleService, TranslatePipe } from '@invento/core';
 import { OrdersDataService } from '../../service/orders-data.service';
 import type { OrderFilter } from '../../types/orders';
+
+const ORDER_FILTER_IDS: readonly OrderFilter[] = [
+  'all',
+  'pending',
+  'confirmed',
+  'shipped',
+  'delivered',
+  'cancelled',
+];
 
 @Component({
   selector: 'app-orders-filter-bar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, NgIconComponent],
-  providers: [
-    provideIcons({
-      lucideSearch,
-      lucideCircleX,
-    }),
-  ],
+  imports: [FilterTabs, SearchInput, TranslatePipe],
   templateUrl: './orders-filter-bar.html',
-  styleUrl: './orders-filter-bar.css',
 })
 export class OrdersFilterBarComponent {
   protected readonly ordersService = inject(OrdersDataService);
+  // Tab labels are data, not template text, so they are translated here rather than by the pipe.
+  private readonly locale = inject(LocaleService);
 
-  protected readonly filterTabs: { id: OrderFilter; label: string }[] = [
-    { id: 'all', label: 'All Orders' },
-    { id: 'pending', label: 'Pending' },
-    { id: 'confirmed', label: 'Confirmed' },
-    { id: 'shipped', label: 'Shipped' },
-    { id: 'delivered', label: 'Delivered' },
-    { id: 'cancelled', label: 'Cancelled' },
-  ];
+  protected readonly tabs = computed<FilterTab<OrderFilter>[]>(() => {
+    const counts = this.ordersService.statusCounts();
+    this.locale.locale(); // re-compute labels when the language changes
+    return ORDER_FILTER_IDS.map((id) => ({
+      id,
+      label: this.locale.translate(`orders.filters.${id}`),
+      count: counts[id],
+    }));
+  });
 
   protected onFilterChange(filter: OrderFilter): void {
     this.ordersService.setFilter(filter);
   }
 
-  protected onSearchInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.ordersService.setSearchQuery(input.value);
-  }
-
-  protected clearSearch(): void {
-    this.ordersService.setSearchQuery('');
-  }
-
-  protected getCountForFilter(filter: OrderFilter): number {
-    return this.ordersService.statusCounts()[filter];
+  protected onSearchChange(query: string): void {
+    this.ordersService.setSearchQuery(query);
   }
 }

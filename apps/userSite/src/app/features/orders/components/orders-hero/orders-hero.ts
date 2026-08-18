@@ -1,3 +1,4 @@
+import { TranslatePipe } from '@invento/core';
 import { ChangeDetectionStrategy, Component, afterNextRender, inject } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import gsap from 'gsap';
@@ -10,7 +11,8 @@ import { OrdersDataService } from '../../service/orders-data.service';
   selector: 'app-orders-hero',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CurrencyPipe, HlmBadgeImports, NgIconComponent],
+  imports: [
+    TranslatePipe,CommonModule, CurrencyPipe, HlmBadgeImports, NgIconComponent],
   providers: [
     provideIcons({
       lucidePackage,

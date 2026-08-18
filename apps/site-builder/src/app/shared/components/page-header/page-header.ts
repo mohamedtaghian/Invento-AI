@@ -1,5 +1,5 @@
 import { Component, input, InputSignal } from '@angular/core';
-import { PageBadge } from '@/app/shared/components/page-badge/page-badge';
+import { PageBadge } from '@invento/shared';
 import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
 import { TranslatePipe } from '@invento/core';
 

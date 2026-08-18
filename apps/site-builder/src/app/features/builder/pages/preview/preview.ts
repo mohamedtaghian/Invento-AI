@@ -38,7 +38,7 @@ import { BuilderState } from '@/app/features/builder/services/builder-state';
 import { PublishApi } from '@/app/features/builder/services/publish-api';
 import { ContainerWidth } from '@/app/shared/components/container-width/container-width';
 import { hlmH2, hlmH3, hlmH4, hlmP } from '@spartan/helm/typography';
-import { DoubleSlash } from '@/app/shared/components/double-slash/double-slash';
+import { DoubleSlash } from '@invento/shared';
 import { LocaleService, TranslatePipe } from '@invento/core';
 import { toast } from '@spartan/helm/sonner';
 import { ApiConfig } from '@/app/core/config/api-config';

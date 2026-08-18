@@ -2,7 +2,7 @@ import { Component, inject, signal, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterLink, Router } from '@angular/router';
 import { HlmButton } from '@spartan/helm/button';
-import { LangSelector } from '../lang-selector/lang-selector';
+import { LangSwitcher, ThemeSwitcher } from '@invento/shared';
 import { AuthService } from '@/app/core/service/auth.service';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSun, lucideMoon, lucideLayoutDashboard, lucideLogOut } from '@ng-icons/lucide';
@@ -10,7 +10,7 @@ import { ApiConfig } from '@/app/core/config/api-config';
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, HlmButton, LangSelector, NgIcon],
+  imports: [RouterLink, HlmButton, LangSwitcher, ThemeSwitcher, NgIcon],
   providers: [provideIcons({ lucideSun, lucideMoon, lucideLayoutDashboard, lucideLogOut })],
   templateUrl: './navbar.html',
   styleUrl: './navbar.css',

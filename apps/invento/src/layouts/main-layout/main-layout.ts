@@ -11,5 +11,4 @@ import { Header } from '@invento/invento/shared/ui/header/header';
   styleUrl: './main-layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainLayout {
-}
+export class MainLayout {}
