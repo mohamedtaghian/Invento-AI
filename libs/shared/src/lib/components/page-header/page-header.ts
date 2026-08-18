@@ -1,6 +1,6 @@
 import { Component, input, InputSignal } from '@angular/core';
 import { PageBadge } from '../page-badge/page-badge';
-import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '../../directives/scroll-animate.directive';
 
 @Component({
   selector: 'app-page-header',

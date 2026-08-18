@@ -1,6 +1,25 @@
+/* ------------------------------------------------------------------------- *
+ * Shared Spartan theme — consumed by ALL apps (invento, userSite, site-builder).
+ *
+ * Each app's own styles.css keeps its Tailwind entry import and then imports
+ * this file. Do NOT move `@import 'tailwindcss'` in here: Tailwind v4 roots its
+ * automatic source detection at the file containing that import, so moving it
+ * under libs/ stops it scanning apps/ templates and purges the classes.
+ * ------------------------------------------------------------------------- */
+
 @import '@spartan-ng/brain/hlm-tailwind-preset.css';
 
+/* This tells Tailwind v4 how to resolve: <div class="dark:bg-black"> using .dark class */
+/* Native Brwosers control: inputs, date pickers, scrollbars, autofill -> and use color schema as hint  */
 @custom-variant dark (&:is(.dark *));
+
+@font-face {
+  font-family: 'BlackOpsOne';
+  src: url('/assets/fonts/BlackOpsOne-Regular.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   color-scheme: light;
@@ -26,6 +45,10 @@
   --accent-foreground: oklch(23.328% 0.05073 255.488);
   --destructive: oklch(55.798% 0.21367 19.385);
   --destructive-foreground: oklch(100% 0.00011 271.152);
+  --success: oklch(0.627 0.194 149.214);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.145 0 0);
   --border: oklch(58.758% 0.15328 252.79 / 0.14);
   --input: oklch(0.922 0 0);
   --input-background: oklch(100% 0.00011 271.152);
@@ -50,8 +73,13 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --scrollbar-thumb: oklch(58.758% 0.15328 252.79 / 0.35);
+  --scrollbar-thumb-hover: oklch(58.758% 0.15328 252.79 / 0.65);
+  --scrollbar-track: transparent;
 }
 
+/* Becuase using  @custom-variant dark (&:is(.dark *)) above now we can dirctly work throug .dark instead of :root.dark*/
 .dark {
   color-scheme: dark;
   --background: oklch(0.145 0 0);
@@ -70,8 +98,18 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.396 0.141 25.723);
   --destructive-foreground: oklch(0.637 0.237 25.331);
+  --success: oklch(0.627 0.194 149.214);
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.145 0 0);
   --border: oklch(0.269 0 0);
   --input: oklch(0.269 0 0);
+
+  /* Added here these two vars as they're found in light mode and not in dark mode
+    Commented waiting for the final review */
+  /* --input-background: oklch(20.5% 0 0);
+  --switch-background: oklch(45% 0.09 249.454); */
+
   --ring: oklch(0.439 0 0);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -90,6 +128,10 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
+
+  --scrollbar-thumb: oklch(68% 0.14 252.79 / 0.35);
+  --scrollbar-thumb-hover: oklch(68% 0.14 252.79 / 0.65);
+  --scrollbar-track: transparent;
 }
 
 @theme inline {
@@ -109,6 +151,10 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-input-background: var(--input-background);
@@ -136,6 +182,27 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
+  }
+
+  /* Sleek rounded WebKit/Blink scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-thumb-hover);
   }
 
   body {
@@ -149,6 +216,65 @@
   button:hover {
     cursor: pointer;
   }
+
+  @keyframes slideInFromRight {
+    from {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Commented section below untill review desicion */
+  /* h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+  } */
+  /* input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+  } */
 }
 
 @layer components {
@@ -192,5 +318,10 @@
   }
   .theme-color-btn {
     @apply flex! items-center! gap-3! bg-foreground/20! p-5! border-foreground/20! rounded-(--btn-radius)! w-full! text-left! transition-all!;
+  }
+
+  .custom-scrollbar {
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    scrollbar-width: thin;
   }
 }

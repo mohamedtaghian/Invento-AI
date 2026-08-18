@@ -12,7 +12,11 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-register',
   standalone: true,
+<<<<<<< HEAD
   imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmButton],
+=======
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
+>>>>>>> refactor/utilize--user-site
   templateUrl: './register.html',
   styleUrl: './register.css',
 })

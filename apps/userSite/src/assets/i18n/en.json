@@ -1,4 +1,92 @@
 {
   "lang_switch": "العربية",
-  "app_name": "My Store"
+  "app_name": "My Store",
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "orders": "Orders",
+    "faq": "FAQ",
+    "menu": "Menu",
+    "open_menu": "Open navigation menu",
+    "account_settings": "Account Settings",
+    "account_menu": "Account menu",
+    "log_in": "Log In",
+    "cart": "Shopping cart",
+    "home_aria": "Go to {{store}} home",
+    "sign_out": "Sign Out",
+    "sign_in": "Sign In"
+  },
+  "footer": {
+    "tagline": "Thoughtfully made products, delivered with care. Shop the collection and track every order in one place.",
+    "shop": "Shop",
+    "all_products": "All Products",
+    "my_orders": "My Orders",
+    "cart": "Cart",
+    "customer_service": "Customer Service",
+    "faq": "FAQ",
+    "shipping_info": "Shipping Info",
+    "returns": "Returns",
+    "contact_us": "Contact Us",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "rights": "All rights reserved."
+  },
+  "pagination": {
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "aria": "Product pages",
+    "go_to_page": "Go to page {{page}}"
+  },
+  "orders": {
+    "signin_title": "Sign in to view your orders",
+    "signin_desc": "Please log in to your account to view your past purchases, track active shipments, and manage your orders.",
+    "log_in": "Log In",
+    "error_title": "Unable to load orders",
+    "try_again": "Try Again",
+    "empty_title": "No orders found",
+    "empty_desc": "We couldn't find any orders matching your current filter or search criteria. Try clearing your search or switching filter categories.",
+    "reset_filters": "Reset Filters",
+    "browse_store": "Browse Store",
+    "filters": {
+      "all": "All Orders",
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "shipped": "Shipped",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    },
+    "search_placeholder": "Search order # or item...",
+    "search_aria": "Search orders",
+    "filter_aria": "Filter orders by status"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about our products, shipping, payments, and more.",
+    "search_placeholder": "Search questions or answers...",
+    "search_aria": "Search frequently asked questions",
+    "total_questions": "Total Questions",
+    "categories": "Categories",
+    "support": "Support",
+    "error_title": "Unable to Load FAQs",
+    "try_again": "Try Again",
+    "empty_title": "No FAQs Available Yet",
+    "empty_desc": "This store has not published any FAQ entries yet. If you have any questions, feel free to reach out to support.",
+    "no_match_title": "No matching questions found",
+    "no_match_prefix": "No questions match ",
+    "no_match_suffix": ". Try another search keyword or browse all categories.",
+    "clear_search": "Clear Search",
+    "question": "question",
+    "questions": "questions",
+    "cta_title": "Still Have Questions?",
+    "cta_desc": "Can't find the answer you're looking for? Reach out to our customer support team or use our AI assistant for immediate help.",
+    "contact_support": "Contact Support"
+  },
+  "orders_hero": {
+    "title": "My Orders",
+    "subtitle": "Track shipments, inspect order details, download receipts, and manage your purchase history in real time.",
+    "total_orders": "Total Orders",
+    "in_progress": "In Progress",
+    "delivered": "Delivered",
+    "total_spent": "Total Spent"
+  }
 }

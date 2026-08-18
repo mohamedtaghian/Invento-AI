@@ -1,3 +1,4 @@
+import { SkeletonBlock } from '@invento/shared';
 import { Component, afterNextRender, inject, computed, signal, OnInit } from '@angular/core';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule, CurrencyPipe } from '@angular/common';
@@ -26,6 +27,7 @@ import type { OrderDetail } from '../orders/types/orders';
   selector: 'app-order-confirmed',
   standalone: true,
   imports: [
+    SkeletonBlock,
     CommonModule,
     RouterLink,
     CurrencyPipe,

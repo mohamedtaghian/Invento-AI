@@ -1,6 +1,6 @@
-import { ThemeSuggestion } from '@/app/core/interface/Preview';
-import { ThemeApiResponse } from '@/app/core/interface/Preview';
-import { parseThemeCss } from '@/app/core/utils/Preview-css-parser';
+import type { ThemeSuggestion } from '../interface/Preview';
+import type { ThemeApiResponse } from '../interface/Preview';
+import { parseThemeCss } from './Preview-css-parser';
 
 /**
  * Converts the backend's CSS-string theme response into the flat

@@ -2,11 +2,11 @@ import { Injectable, inject } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
   private cookieService = inject(CookieService);
-  
+
   private readonly ACCESS_TOKEN_KEY = 'invento_access_token';
   private readonly REFRESH_TOKEN_KEY = 'invento_refresh_token';
 

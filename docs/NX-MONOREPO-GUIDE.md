@@ -73,16 +73,16 @@ invento-ai/
 
 ### Registered Nx Projects
 
-| Project | Type | Purpose |
-|---------|------|---------|
-| `site-builder` | app | Theme/brand generator |
-| `userSite` | app | Ecommerce storefront |
-| `invento` | app | Admin dashboard |
-| `core` | lib (`@invento/core`) | Interfaces, services, utils |
-| `shared` | lib (`@invento/shared`) | Directives, constants, reusable components |
-| `spartan-ui` | lib | Spartan UI Helm components (button, card, badge, etc.) |
-| `spartan-stepper` | lib | Spartan stepper wizard component |
-| `spartan-stepper-shared` | lib | Stepper shared blocks |
+| Project                  | Type                    | Purpose                                                |
+| ------------------------ | ----------------------- | ------------------------------------------------------ |
+| `site-builder`           | app                     | Theme/brand generator                                  |
+| `userSite`               | app                     | Ecommerce storefront                                   |
+| `invento`                | app                     | Admin dashboard                                        |
+| `core`                   | lib (`@invento/core`)   | Interfaces, services, utils                            |
+| `shared`                 | lib (`@invento/shared`) | Directives, constants, reusable components             |
+| `spartan-ui`             | lib                     | Spartan UI Helm components (button, card, badge, etc.) |
+| `spartan-stepper`        | lib                     | Spartan stepper wizard component                       |
+| `spartan-stepper-shared` | lib                     | Stepper shared blocks                                  |
 
 ### Project Dependency Graph
 
@@ -107,6 +107,7 @@ invento ────────┬── spartan-ui
 ```
 
 Visualize it anytime:
+
 ```bash
 npx nx graph
 ```
@@ -117,28 +118,28 @@ npx nx graph
 
 From any app or lib, you can import:
 
-| Import | Resolves to | Example |
-|--------|-------------|---------|
-| `@/*` | `apps/site-builder/src/*` | `import { BuilderState } from '@/app/features/builder/services/builder-state'` |
-| `@invento/core` | `libs/core/src/index.ts` | `import { PreviewDataClient } from '@invento/core'` |
-| `@invento/shared` | `libs/shared/src/index.ts` | `import { ScrollAnimate } from '@invento/shared'` |
-| `@spartan/helm/button` | `libs/ui/button/src/index.ts` | `import { HlmButtonDirective } from '@spartan/helm/button'` |
-| `@spartan/helm/card` | `libs/ui/card/src/index.ts` | `import { HlmCardDirective } from '@spartan/helm/card'` |
-| `@spartan/helm/dialog` | `libs/ui/dialog/src/index.ts` | |
-| `@spartan/helm/input` | `libs/ui/input/src/index.ts` | |
-| `@spartan/helm/label` | `libs/ui/label/src/index.ts` | |
-| `@spartan/helm/textarea` | `libs/ui/textarea/src/index.ts` | |
-| `@spartan/helm/badge` | `libs/ui/badge/src/index.ts` | |
-| `@spartan/helm/avatar` | `libs/ui/avatar/src/index.ts` | |
-| `@spartan/helm/separator` | `libs/ui/separator/src/index.ts` | |
-| `@spartan/helm/item` | `libs/ui/item/src/index.ts` | |
-| `@spartan/helm/progress` | `libs/ui/progress/src/index.ts` | |
-| `@spartan/helm/radio-group` | `libs/ui/radio-group/src/index.ts` | |
-| `@spartan/helm/navigation-menu` | `libs/ui/navigation-menu/src/index.ts` | |
-| `@spartan/helm/typography` | `libs/ui/typography/src/index.ts` | |
-| `@spartan/styles` | `libs/ui/utils/src/lib/spartan-styles/index.ts` | |
-| `@/spartan/stepper` | `libs/stepper/lib` | `import { SpartanStepper } from '@/spartan/stepper'` |
-| `@/spartan/styles` | `libs/ui/utils/src/lib/spartan-styles` | |
+| Import                          | Resolves to                                     | Example                                                                        |
+| ------------------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| `@/*`                           | `apps/site-builder/src/*`                       | `import { BuilderState } from '@/app/features/builder/services/builder-state'` |
+| `@invento/core`                 | `libs/core/src/index.ts`                        | `import { PreviewDataClient } from '@invento/core'`                            |
+| `@invento/shared`               | `libs/shared/src/index.ts`                      | `import { ScrollAnimate } from '@invento/shared'`                              |
+| `@spartan/helm/button`          | `libs/ui/button/src/index.ts`                   | `import { HlmButtonDirective } from '@spartan/helm/button'`                    |
+| `@spartan/helm/card`            | `libs/ui/card/src/index.ts`                     | `import { HlmCardDirective } from '@spartan/helm/card'`                        |
+| `@spartan/helm/dialog`          | `libs/ui/dialog/src/index.ts`                   |                                                                                |
+| `@spartan/helm/input`           | `libs/ui/input/src/index.ts`                    |                                                                                |
+| `@spartan/helm/label`           | `libs/ui/label/src/index.ts`                    |                                                                                |
+| `@spartan/helm/textarea`        | `libs/ui/textarea/src/index.ts`                 |                                                                                |
+| `@spartan/helm/badge`           | `libs/ui/badge/src/index.ts`                    |                                                                                |
+| `@spartan/helm/avatar`          | `libs/ui/avatar/src/index.ts`                   |                                                                                |
+| `@spartan/helm/separator`       | `libs/ui/separator/src/index.ts`                |                                                                                |
+| `@spartan/helm/item`            | `libs/ui/item/src/index.ts`                     |                                                                                |
+| `@spartan/helm/progress`        | `libs/ui/progress/src/index.ts`                 |                                                                                |
+| `@spartan/helm/radio-group`     | `libs/ui/radio-group/src/index.ts`              |                                                                                |
+| `@spartan/helm/navigation-menu` | `libs/ui/navigation-menu/src/index.ts`          |                                                                                |
+| `@spartan/helm/typography`      | `libs/ui/typography/src/index.ts`               |                                                                                |
+| `@spartan/styles`               | `libs/ui/utils/src/lib/spartan-styles/index.ts` |                                                                                |
+| `@/spartan/stepper`             | `libs/stepper/lib`                              | `import { SpartanStepper } from '@/spartan/stepper'`                           |
+| `@/spartan/styles`              | `libs/ui/utils/src/lib/spartan-styles`          |                                                                                |
 
 All paths are defined in `tsconfig.base.json`.
 
@@ -190,16 +191,16 @@ nx show projects --affected --base=main
 
 ### Daily Commands
 
-| What | Command |
-|------|---------|
+| What                          | Command                                |
+| ----------------------------- | -------------------------------------- |
 | Start site-builder dev server | `npm start` or `nx serve site-builder` |
-| Start userSite dev server | `npm run start:user` |
-| Start invento dev server | `npm run start:invento` |
-| Build site-builder | `npm run build` |
-| Build all 3 apps | `npm run build:all` |
-| Run site-builder tests | `npm test` |
-| Run all tests | `npm run test:all` |
-| Lint everything | `npm run lint` |
+| Start userSite dev server     | `npm run start:user`                   |
+| Start invento dev server      | `npm run start:invento`                |
+| Build site-builder            | `npm run build`                        |
+| Build all 3 apps              | `npm run build:all`                    |
+| Run site-builder tests        | `npm test`                             |
+| Run all tests                 | `npm run test:all`                     |
+| Lint everything               | `npm run lint`                         |
 
 ### Adding a New Feature to an App
 
@@ -234,6 +235,7 @@ libs/shared/src/index.ts
 All Spartan UI components (`hlm-button`, `hlm-card`, `hlm-badge`, etc.) and the stepper are available to every app via `@spartan/helm/*` and `@/spartan/stepper` imports.
 
 **Example:** Using a button in `apps/userSite/src/app/app.ts`:
+
 ```typescript
 import { HlmButtonDirective } from '@spartan/helm/button';
 
@@ -253,6 +255,7 @@ nx g @nx/angular:app apps/my-new-app \
 ```
 
 Then add shared lib dependencies in `apps/my-new-app/project.json`:
+
 ```json
 "implicitDependencies": ["spartan-ui", "spartan-stepper", "spartan-stepper-shared", "core", "shared"]
 ```
@@ -301,6 +304,7 @@ All 6 visual styles (`nova`, `vega`, `lyra`, `maia`, `mira`, `luma`) are availab
 ### Build fails with "Missing parameter name"
 
 Express catch-all routes in `server.ts` must use pathless `app.use()`:
+
 ```typescript
 // ✅ Correct
 app.use((req, res, next) => { ... });
@@ -313,6 +317,7 @@ app.use('*', (req, res, next) => { ... });
 ### Tests not found in TypeScript compilation
 
 The test target needs an explicit `tsConfig` option in `project.json`:
+
 ```json
 "test": {
   "executor": "@angular/build:unit-test",

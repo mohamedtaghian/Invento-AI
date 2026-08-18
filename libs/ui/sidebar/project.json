@@ -3,7 +3,10 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/sidebar/src",
   "prefix": "hlm",
-  "tags": [],
+  "tags": [
+    "type:ui",
+    "scope:shared"
+  ],
   "projectType": "library",
   "targets": {}
 }

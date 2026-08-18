@@ -59,3 +59,18 @@ AGENTS.md
 # Local secrets / environment
 .env
 apps/site-builder/src/environments/environment.ts
+
+
+# AI Agent files
+.agents/
+.sepcify/
+.codegraph/
+sepcs/
+AGENTS.md
+plans/
+update-imports.js
+commit-msg.txt
+screenshots/
+.claude/
+CLAUDE.md
+.removed-dead-config/

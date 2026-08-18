@@ -12,12 +12,52 @@
     <!-- Action Buttons -->
     <div class="flex items-center self-start sm:self-auto gap-2 sm:gap-3 flex-wrap">
       @if (selectedProductIds().length > 0) {
-        <div class="flex flex-wrap items-center gap-2 bg-muted/20 border border-border p-1 rounded-md mr-2">
-          <span class="text-xs font-semibold px-2 text-muted-foreground">{{ selectedProductIds().length }} selected</span>
-          <button hlmBtn variant="outline" size="sm" class="h-8 px-3 text-xs" (click)="bulkUpdateStatus('active')" [disabled]="isBulkActing()">Set Active</button>
-          <button hlmBtn variant="outline" size="sm" class="h-8 px-3 text-xs" (click)="bulkUpdateStatus('draft')" [disabled]="isBulkActing()">Set Draft</button>
-          <button hlmBtn variant="outline" size="sm" class="h-8 px-3 text-xs" (click)="bulkUpdateStatus('archived')" [disabled]="isBulkActing()">Set Archived</button>
-          <button hlmBtn variant="destructive" size="sm" class="h-8 px-3 text-xs text-white bg-rose-600 hover:bg-rose-700" (click)="openBulkDeleteModal()" [disabled]="isBulkActing()">Delete</button>
+        <div
+          class="flex flex-wrap items-center gap-2 bg-muted/20 border border-border p-1 rounded-md mr-2"
+        >
+          <span class="text-xs font-semibold px-2 text-muted-foreground"
+            >{{ selectedProductIds().length }} selected</span
+          >
+          <button
+            hlmBtn
+            variant="outline"
+            size="sm"
+            class="h-8 px-3 text-xs"
+            (click)="bulkUpdateStatus('active')"
+            [disabled]="isBulkActing()"
+          >
+            Set Active
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            size="sm"
+            class="h-8 px-3 text-xs"
+            (click)="bulkUpdateStatus('draft')"
+            [disabled]="isBulkActing()"
+          >
+            Set Draft
+          </button>
+          <button
+            hlmBtn
+            variant="outline"
+            size="sm"
+            class="h-8 px-3 text-xs"
+            (click)="bulkUpdateStatus('archived')"
+            [disabled]="isBulkActing()"
+          >
+            Set Archived
+          </button>
+          <button
+            hlmBtn
+            variant="destructive"
+            size="sm"
+            class="h-8 px-3 text-xs text-white bg-rose-600 hover:bg-rose-700"
+            (click)="openBulkDeleteModal()"
+            [disabled]="isBulkActing()"
+          >
+            Delete
+          </button>
         </div>
       } @else {
         <button hlmBtn variant="outline" class="bg-card hover:bg-accent shadow-sm" disabled>
@@ -64,16 +104,48 @@
                 class="border-border rounded focus:ring-primary/20 text-primary cursor-pointer"
               />
             </th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Product</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Variants</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Category</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap text-right">Price</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap text-right">Stock</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Status</th>
-            <th class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap">Date Added</th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap"
+            >
+              Product
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap"
+            >
+              Variants
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap"
+            >
+              Category
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap text-right"
+            >
+              Price
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap text-right"
+            >
+              Stock
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap"
+            >
+              Status
+            </th>
+            <th
+              class="px-2.5 sm:px-3 md:px-4 py-3 font-semibold text-muted-foreground whitespace-nowrap"
+            >
+              Date Added
+            </th>
           </tr>
         </thead>
-        <tbody cdkDropList (cdkDropListDropped)="drop($event)" class="divide-y divide-border/60 text-sm">
+        <tbody
+          cdkDropList
+          (cdkDropListDropped)="drop($event)"
+          class="divide-y divide-border/60 text-sm"
+        >
           <!-- Loading State -->
           @if (isLoading()) {
             <tr>
@@ -92,7 +164,10 @@
             </tr>
           } @else {
             <!-- Products Iteration -->
-            @for (product of products() | search:searchTerm():['title', 'sku']; track product.id) {
+            @for (
+              product of products() | search: searchTerm() : ['title', 'sku'];
+              track product.id
+            ) {
               <tr cdkDrag class="group hover:bg-muted/40 transition-colors cursor-move">
                 <td class="px-2 sm:px-3 md:px-4 py-3 text-center">
                   <input
@@ -105,18 +180,33 @@
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3 min-w-[200px]">
                   <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-md overflow-hidden shrink-0 border border-border/50">
+                    <div
+                      class="w-10 h-10 sm:w-12 sm:h-12 bg-muted rounded-md overflow-hidden shrink-0 border border-border/50"
+                    >
                       @if (product.imageUrl) {
-                        <img [src]="product.imageUrl" [alt]="product.title" class="w-full h-full object-cover" />
+                        <img
+                          [src]="product.imageUrl"
+                          [alt]="product.title"
+                          class="w-full h-full object-cover"
+                        />
                       } @else {
-                        <div class="w-full h-full flex items-center justify-center text-muted-foreground">
+                        <div
+                          class="w-full h-full flex items-center justify-center text-muted-foreground"
+                        >
                           <ng-icon name="lucideImage" size="20" />
                         </div>
                       }
                     </div>
                     <div>
-                      <button (click)="viewDetails(product.id)" class="font-semibold text-foreground line-clamp-1 text-left hover:underline hover:text-primary transition-colors">{{ product.title }}</button>
-                      <p class="text-xs text-muted-foreground mt-0.5">{{ product.sku || 'No SKU' }}</p>
+                      <button
+                        (click)="viewDetails(product.id)"
+                        class="font-semibold text-foreground line-clamp-1 text-left hover:underline hover:text-primary transition-colors"
+                      >
+                        {{ product.title }}
+                      </button>
+                      <p class="text-xs text-muted-foreground mt-0.5">
+                        {{ product.sku || 'No SKU' }}
+                      </p>
                     </div>
                   </div>
                 </td>
@@ -128,7 +218,9 @@
                 <td class="px-2.5 sm:px-3 md:px-4 py-3">
                   <div class="flex flex-wrap gap-1">
                     @for (cat of product.categories; track cat.id) {
-                      <span class="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground">
+                      <span
+                        class="inline-flex items-center rounded-md bg-secondary px-2 py-0.5 text-xs font-medium text-secondary-foreground"
+                      >
                         {{ cat.name }}
                       </span>
                     }
@@ -137,43 +229,62 @@
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3 text-right font-medium">
                   @if (product.minPriceAmount === product.maxPriceAmount) {
-                    {{ product.minPriceAmount / 100 | currency:'USD' }}
+                    {{ product.minPriceAmount / 100 | currency: 'USD' }}
                   } @else {
-                    {{ product.minPriceAmount / 100 | currency:'USD' }} - {{ product.maxPriceAmount / 100 | currency:'USD' }}
+                    {{ product.minPriceAmount / 100 | currency: 'USD' }} -
+                    {{ product.maxPriceAmount / 100 | currency: 'USD' }}
                   }
                   @if ($any(product).minCompareAtAmount || $any(product).compareAtAmount) {
-                    <span class="text-xs line-through text-muted-foreground block sm:inline sm:ml-1 font-normal">
-                      {{ ($any(product).minCompareAtAmount || $any(product).compareAtAmount) / 100 | currency:'USD' }}
+                    <span
+                      class="text-xs line-through text-muted-foreground block sm:inline sm:ml-1 font-normal"
+                    >
+                      {{
+                        ($any(product).minCompareAtAmount || $any(product).compareAtAmount) / 100
+                          | currency: 'USD'
+                      }}
                     </span>
                   }
                 </td>
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3 text-right">
-                  <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
-                        [ngClass]="product.totalStock > 0 ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400' : 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400'">
+                  <span
+                    class="inline-flex items-center rounded-full px-2 py-1 text-xs font-medium"
+                    [ngClass]="
+                      product.totalStock > 0
+                        ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400'
+                        : 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-400'
+                    "
+                  >
                     {{ product.totalStock }}
                   </span>
                 </td>
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3">
-                  <span class="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-medium capitalize"
-                        [ngClass]="{
-                          'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400': product.status === 'active',
-                          'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400': product.status === 'draft',
-                          'bg-stone-100 text-stone-700 dark:bg-stone-500/20 dark:text-stone-400': product.status === 'archived'
-                        }">
-                    <span class="h-1.5 w-1.5 rounded-full"
-                          [ngClass]="{
-                            'bg-emerald-500': product.status === 'active',
-                            'bg-amber-500': product.status === 'draft',
-                            'bg-stone-500': product.status === 'archived'
-                          }"></span>
+                  <span
+                    class="inline-flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-medium capitalize"
+                    [ngClass]="{
+                      'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-400':
+                        product.status === 'active',
+                      'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400':
+                        product.status === 'draft',
+                      'bg-stone-100 text-stone-700 dark:bg-stone-500/20 dark:text-stone-400':
+                        product.status === 'archived',
+                    }"
+                  >
+                    <span
+                      class="h-1.5 w-1.5 rounded-full"
+                      [ngClass]="{
+                        'bg-emerald-500': product.status === 'active',
+                        'bg-amber-500': product.status === 'draft',
+                        'bg-stone-500': product.status === 'archived',
+                      }"
+                    ></span>
                     {{ product.status }}
                   </span>
                 </td>
 
                 <td class="px-2.5 sm:px-3 md:px-4 py-3 text-muted-foreground whitespace-nowrap">
-                  {{ product.createdAt | date:'MMM d, y' }}
+                  {{ product.createdAt | date: 'MMM d, y' }}
                 </td>
               </tr>
             }
@@ -215,20 +326,38 @@
 
       <!-- Form Content -->
       <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-8">
-        
         <!-- SECTION: Basic Information -->
         <div class="space-y-4">
-          <h3 class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground border-b border-border pb-2">Basic Information</h3>
-          
+          <h3
+            class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground border-b border-border pb-2"
+          >
+            Basic Information
+          </h3>
+
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
-              <label for="product-name" class="text-sm font-semibold mb-2 block text-foreground">Product Title <span class="text-rose-500">*</span></label>
-              <input hlmInput id="product-name" type="text" [(ngModel)]="newProduct.title" class="w-full" placeholder="e.g. Scented Candle" />
+              <label for="product-name" class="text-sm font-semibold mb-2 block text-foreground"
+                >Product Title <span class="text-rose-500">*</span></label
+              >
+              <input
+                hlmInput
+                id="product-name"
+                type="text"
+                [(ngModel)]="newProduct.title"
+                class="w-full"
+                placeholder="e.g. Scented Candle"
+              />
             </div>
-            
+
             <div>
-              <label for="product-status" class="text-sm font-semibold mb-2 block text-foreground">Status</label>
-              <select id="product-status" [(ngModel)]="newProduct.status" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
+              <label for="product-status" class="text-sm font-semibold mb-2 block text-foreground"
+                >Status</label
+              >
+              <select
+                id="product-status"
+                [(ngModel)]="newProduct.status"
+                class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors"
+              >
                 <option value="" disabled hidden>Select Status</option>
                 <option value="draft">Draft</option>
                 <option value="active">Active</option>
@@ -237,12 +366,24 @@
             </div>
           </div>
         </div>
+        <<<<<<< HEAD
 
         <!-- SECTION: Variants -->
         <div class="space-y-4">
           <div class="flex items-center justify-between border-b border-border pb-2">
-            <h3 class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground">Variants <span class="text-rose-500">*</span></h3>
-            <button hlmBtn variant="outline" size="sm" (click)="addVariant()" type="button" class="h-8 px-3">
+            <h3
+              class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground"
+            >
+              Variants <span class="text-rose-500">*</span>
+            </h3>
+            <button
+              hlmBtn
+              variant="outline"
+              size="sm"
+              (click)="addVariant()"
+              type="button"
+              class="h-8 px-3"
+            >
               <ng-icon name="lucidePlus" size="14" class="mr-1.5" /> Add Variant
             </button>
           </div>
@@ -250,7 +391,12 @@
           @for (variant of newProduct.variants; track $index) {
             <div class="p-4 border border-border rounded-lg bg-muted/10 relative group space-y-4">
               @if (newProduct.variants.length > 1) {
-                <button type="button" (click)="removeVariant($index)" class="absolute -top-2 -right-2 bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/50 dark:text-rose-400 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity" title="Remove variant">
+                <button
+                  type="button"
+                  (click)="removeVariant($index)"
+                  class="absolute -top-2 -right-2 bg-rose-100 text-rose-600 hover:bg-rose-200 dark:bg-rose-900/50 dark:text-rose-400 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Remove variant"
+                >
                   <ng-icon name="lucideX" size="14" />
                 </button>
               }
@@ -260,8 +406,14 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   @for (attr of variantAttributes(); track attr.id) {
                     <div>
-                      <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{ attr.name }}</label>
-                      <select class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors" [(ngModel)]="variant.variantAttributeValues[attr.id]" [name]="'attr_' + attr.id + '_' + $index">
+                      <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{
+                        attr.name
+                      }}</label>
+                      <select
+                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors"
+                        [(ngModel)]="variant.variantAttributeValues[attr.id]"
+                        [name]="'attr_' + attr.id + '_' + $index"
+                      >
                         <option value="" disabled hidden>Select {{ attr.name }}</option>
                         @for (val of attr.values; track val.id) {
                           <option [value]="val.id">{{ val.value }}</option>
@@ -274,24 +426,69 @@
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 <div class="sm:col-span-2 lg:col-span-1">
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">SKU</label>
-                  <input hlmInput type="text" [(ngModel)]="variant.sku" [name]="'sku_' + $index" class="w-full h-8 text-sm" placeholder="SKU" />
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >SKU</label
+                  >
+                  <input
+                    hlmInput
+                    type="text"
+                    [(ngModel)]="variant.sku"
+                    [name]="'sku_' + $index"
+                    class="w-full h-8 text-sm"
+                    placeholder="SKU"
+                  />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Price <span class="text-rose-500">*</span></label>
-                  <input hlmInput type="number" [(ngModel)]="variant.price" [name]="'price_' + $index" class="w-full h-8 text-sm" placeholder="0.00" />
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Price <span class="text-rose-500">*</span></label
+                  >
+                  <input
+                    hlmInput
+                    type="number"
+                    [(ngModel)]="variant.price"
+                    [name]="'price_' + $index"
+                    class="w-full h-8 text-sm"
+                    placeholder="0.00"
+                  />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Compare At</label>
-                  <input hlmInput type="number" [(ngModel)]="variant.compareAtAmount" [name]="'compare_' + $index" class="w-full h-8 text-sm" placeholder="0.00" />
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Compare At</label
+                  >
+                  <input
+                    hlmInput
+                    type="number"
+                    [(ngModel)]="variant.compareAtAmount"
+                    [name]="'compare_' + $index"
+                    class="w-full h-8 text-sm"
+                    placeholder="0.00"
+                  />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Stock</label>
-                  <input hlmInput type="number" [(ngModel)]="variant.stock" [name]="'stock_' + $index" class="w-full h-8 text-sm" placeholder="0" />
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Stock</label
+                  >
+                  <input
+                    hlmInput
+                    type="number"
+                    [(ngModel)]="variant.stock"
+                    [name]="'stock_' + $index"
+                    class="w-full h-8 text-sm"
+                    placeholder="0"
+                  />
                 </div>
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">Low Stock</label>
-                  <input hlmInput type="number" [(ngModel)]="variant.lowStockThreshold" [name]="'lowStock_' + $index" class="w-full h-8 text-sm" placeholder="0" />
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground"
+                    >Low Stock</label
+                  >
+                  <input
+                    hlmInput
+                    type="number"
+                    [(ngModel)]="variant.lowStockThreshold"
+                    [name]="'lowStock_' + $index"
+                    class="w-full h-8 text-sm"
+                    placeholder="0"
+                  />
                 </div>
               </div>
             </div>
@@ -300,18 +497,32 @@
 
         <!-- SECTION: Optional Details -->
         <div class="space-y-4">
-          <h3 class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground border-b border-border pb-2">Optional Details</h3>
-          
+          <h3
+            class="text-xs font-bold text-foreground uppercase tracking-widest text-muted-foreground border-b border-border pb-2"
+          >
+            Optional Details
+          </h3>
+
           <!-- Descriptive Attributes (Product Level) -->
           @if (productAttributes().length > 0) {
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-card">
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 border border-border rounded-lg bg-card"
+            >
               <div class="sm:col-span-2">
-                <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">Descriptive Attributes</p>
+                <p class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                  Descriptive Attributes
+                </p>
               </div>
               @for (attr of productAttributes(); track attr.id) {
                 <div>
-                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{ attr.name }}</label>
-                  <select class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors" [(ngModel)]="newProduct.productAttributeValues[attr.id]" [name]="'prod_attr_' + attr.id">
+                  <label class="text-xs font-semibold mb-1.5 block text-muted-foreground">{{
+                    attr.name
+                  }}</label>
+                  <select
+                    class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors"
+                    [(ngModel)]="newProduct.productAttributeValues[attr.id]"
+                    [name]="'prod_attr_' + attr.id"
+                  >
                     <option value="" disabled hidden>Select {{ attr.name }}</option>
                     @for (val of attr.values; track val.id) {
                       <option [value]="val.id">{{ val.value }}</option>
@@ -324,47 +535,106 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
-              <label for="product-slug" class="text-sm font-semibold mb-2 block text-foreground">Slug</label>
-              <input hlmInput id="product-slug" type="text" [(ngModel)]="newProduct.slug" class="w-full" placeholder="Auto-generated if left empty" />
+              <label for="product-slug" class="text-sm font-semibold mb-2 block text-foreground"
+                >Slug</label
+              >
+              <input
+                hlmInput
+                id="product-slug"
+                type="text"
+                [(ngModel)]="newProduct.slug"
+                class="w-full"
+                placeholder="Auto-generated if left empty"
+              />
             </div>
 
             <div class="sm:col-span-2">
-              <label for="product-short-desc" class="text-sm font-semibold mb-2 block text-foreground">Short Description</label>
-              <input hlmInput id="product-short-desc" type="text" [(ngModel)]="newProduct.shortDescription" class="w-full" placeholder="Max 300 characters..." />
+              <label
+                for="product-short-desc"
+                class="text-sm font-semibold mb-2 block text-foreground"
+                >Short Description</label
+              >
+              <input
+                hlmInput
+                id="product-short-desc"
+                type="text"
+                [(ngModel)]="newProduct.shortDescription"
+                class="w-full"
+                placeholder="Max 300 characters..."
+              />
             </div>
 
             <div class="sm:col-span-2">
-              <label for="product-desc" class="text-sm font-semibold mb-2 block text-foreground">Full Description</label>
-              <textarea id="product-desc" [(ngModel)]="newProduct.description" rows="4" class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="Detailed description..."></textarea>
+              <label for="product-desc" class="text-sm font-semibold mb-2 block text-foreground"
+                >Full Description</label
+              >
+              <textarea
+                id="product-desc"
+                [(ngModel)]="newProduct.description"
+                rows="4"
+                class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                placeholder="Detailed description..."
+              ></textarea>
             </div>
 
             <div class="sm:col-span-2">
-              <label for="product-keywords" class="text-sm font-semibold mb-2 block text-foreground">Search Keywords</label>
-              <input hlmInput id="product-keywords" type="text" [(ngModel)]="newProduct.searchKeywords" class="w-full" placeholder="e.g. abaya, elegant, black" />
+              <label for="product-keywords" class="text-sm font-semibold mb-2 block text-foreground"
+                >Search Keywords</label
+              >
+              <input
+                hlmInput
+                id="product-keywords"
+                type="text"
+                [(ngModel)]="newProduct.searchKeywords"
+                class="w-full"
+                placeholder="e.g. abaya, elegant, black"
+              />
             </div>
 
             <div>
-              <label for="product-weight" class="text-sm font-semibold mb-2 block text-foreground">Weight (grams)</label>
-              <input hlmInput id="product-weight" type="number" [(ngModel)]="newProduct.weightGrams" class="w-full" placeholder="0" />
+              <label for="product-weight" class="text-sm font-semibold mb-2 block text-foreground"
+                >Weight (grams)</label
+              >
+              <input
+                hlmInput
+                id="product-weight"
+                type="number"
+                [(ngModel)]="newProduct.weightGrams"
+                class="w-full"
+                placeholder="0"
+              />
             </div>
 
             <div>
-              <label for="product-category" class="text-sm font-semibold mb-2 block text-foreground">Category</label>
-              <select id="product-category" [(ngModel)]="newProduct.categoryIds" multiple class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm min-h-[80px]">
+              <label for="product-category" class="text-sm font-semibold mb-2 block text-foreground"
+                >Category</label
+              >
+              <select
+                id="product-category"
+                [(ngModel)]="newProduct.categoryIds"
+                multiple
+                class="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm min-h-[80px]"
+              >
                 @for (cat of categories(); track cat.id) {
                   <option [value]="cat.id">{{ cat.name }}</option>
                 }
               </select>
               <p class="text-[10px] text-muted-foreground mt-1">Hold Ctrl/Cmd to select multiple</p>
             </div>
-            
+
             <div class="flex items-center gap-2 mt-4 sm:col-span-2">
-              <input type="checkbox" id="product-featured" [(ngModel)]="newProduct.isFeatured" class="h-4 w-4 rounded border-border text-primary focus:ring-primary" />
-              <label for="product-featured" class="text-sm font-medium text-foreground">Feature this product on storefront</label>
+              <input
+                type="checkbox"
+                id="product-featured"
+                [(ngModel)]="newProduct.isFeatured"
+                class="h-4 w-4 rounded border-border text-primary focus:ring-primary"
+              />
+              <label for="product-featured" class="text-sm font-medium text-foreground"
+                >Feature this product on storefront</label
+              >
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Footer -->

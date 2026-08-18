@@ -1,29 +1,72 @@
-<footer class="flex flex-col md:py-5 pb-5">
+<footer class="bg-muted/20 border-border/60 mt-16 border-t">
   <div
-    class="flex md:flex-row flex-col flex-wrap justify-center md:justify-between gap-y-3 px-4 sm:px-8 md:px-16 lg:px-24 pb-5"
+    class="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-4 py-12 sm:px-8 md:grid-cols-4 md:px-16 lg:px-24"
   >
-    <div class="flex flex-col gap-3 w-full md:w-1/2 lg:w-1/4">
-      <h3 class="font-bold text-xl">Invento</h3>
-      <p class="max-w-3xs text-muted-foreground text-sm">
-        Empowering modern professionals with cutting-edge tools and AI-driven solutions.
+    <!-- Brand -->
+    <div class="flex flex-col gap-3">
+      <a
+        [routerLink]="['/', activeStoreSlug()]"
+        class="flex w-fit items-center gap-2 text-xl font-bold"
+      >
+        @if (storeService.logoUrl(); as logo) {
+          <img [src]="logo" alt="" class="h-7 w-7 rounded-lg object-contain" aria-hidden="true" />
+        } @else if (storeService.monogram(); as initials) {
+          <span
+            class="bg-primary text-primary-foreground flex h-7 w-7 items-center justify-center rounded-lg text-[11px] font-extrabold"
+            aria-hidden="true"
+            >{{ initials }}</span
+          >
+        }
+        <span>{{ storeService.displayName() }}</span>
+      </a>
+      <p hlmMuted class="max-w-xs text-sm">
+        {{
+          storeService.store()?.description ||
+            ('footer.tagline' | translate)
+        }}
       </p>
+      <div class="mt-2 flex items-center gap-3">
+        <a href="#" class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Facebook">
+          <ng-icon name="lucideFacebook" size="18" />
+        </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Instagram">
+          <ng-icon name="lucideInstagram" size="18" />
+        </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Twitter">
+          <ng-icon name="lucideTwitter" size="18" />
+        </a>
+        <a href="#" class="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email us">
+          <ng-icon name="lucideMail" size="18" />
+        </a>
+      </div>
     </div>
-    <div class="flex flex-col gap-3 w-full md:w-1/2 lg:w-1/4">
-      <h3 class="font-bold text-sm">Legal</h3>
-      <a href="#" class="w-fit text-muted-foreground text-sm underline">Privacy Policy</a>
-      <a href="#" class="w-fit text-muted-foreground text-sm underline">Terms of Service</a>
-    </div>
-    <div class="flex flex-col gap-3 w-full md:w-1/2 lg:w-1/4">
-      <h3 class="font-bold text-sm">Customer Care</h3>
-      <a href="#" class="w-fit text-muted-foreground text-sm underline">Shipping Info</a>
-      <a href="#" class="w-fit text-muted-foreground text-sm underline">Returns</a>
-    </div>
-    <div class="flex flex-col gap-3 w-full md:w-1/2 lg:w-1/4">
-      <h3 class="font-bold text-sm">Partners</h3>
-      <a href="#" class="w-fit text-muted-foreground text-sm underline">Affiliate Program</a>
-    </div>
+
+    <!-- Quick links -->
+    <nav class="flex flex-col gap-3" aria-labelledby="footer-shop">
+      <h3 id="footer-shop" class="text-sm font-bold">{{ 'footer.shop' | translate }}</h3>
+      <a [routerLink]="['/', activeStoreSlug(), 'products']" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.all_products' | translate }}</a>
+      <a [routerLink]="['/', activeStoreSlug(), 'orders']" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.my_orders' | translate }}</a>
+      <a [routerLink]="['/', activeStoreSlug(), 'checkout']" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.cart' | translate }}</a>
+    </nav>
+
+    <!-- Customer service -->
+    <nav class="flex flex-col gap-3" aria-labelledby="footer-care">
+      <h3 id="footer-care" class="text-sm font-bold">{{ 'footer.customer_service' | translate }}</h3>
+      <a [routerLink]="['/', activeStoreSlug(), 'faq']" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.faq' | translate }}</a>
+      <a href="#" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.shipping_info' | translate }}</a>
+      <a href="#" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.returns' | translate }}</a>
+      <a href="#" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.contact_us' | translate }}</a>
+    </nav>
+
+    <!-- Legal -->
+    <nav class="flex flex-col gap-3" aria-labelledby="footer-legal">
+      <h3 id="footer-legal" class="text-sm font-bold">{{ 'footer.legal' | translate }}</h3>
+      <a href="#" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.privacy' | translate }}</a>
+      <a href="#" class="text-muted-foreground hover:text-foreground w-fit text-sm transition-colors">{{ 'footer.terms' | translate }}</a>
+    </nav>
   </div>
-  <p class="pt-5 border-border border-t text-muted-foreground text-center">
-    &copy; 2026 Invento. All rights reserved.
-  </p>
+
+  <div class="border-border/60 border-t px-4 py-5 sm:px-8 md:px-16 lg:px-24">
+    <p hlmMuted class="text-center text-xs">&copy; {{ year }} {{ storeService.displayName() }}. {{ 'footer.rights' | translate }}</p>
+  </div>
 </footer>

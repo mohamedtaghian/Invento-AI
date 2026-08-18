@@ -1,3 +1,7 @@
+import { HlmTextareaImports } from '@spartan/helm/textarea';
+import { HlmDialogImports } from '@spartan/helm/dialog';
+import { BrnDialogContent } from '@spartan-ng/brain/dialog';
+import { SkeletonBlock } from '@invento/shared';
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
@@ -43,6 +47,10 @@ import type {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    HlmTextareaImports,
+    HlmDialogImports,
+    BrnDialogContent,
+    SkeletonBlock,
     CommonModule,
     CurrencyPipe,
     RouterLink,
@@ -196,6 +204,10 @@ export class OrderCardComponent {
     this.cancelReason.set('');
     this.isCancelModalOpen.set(true);
   }
+  protected onCancelDialogState(state: 'open' | 'closed'): void {
+    if (state === 'closed') this.closeCancelModal();
+  }
+
 
   protected closeCancelModal(): void {
     this.isCancelModalOpen.set(false);

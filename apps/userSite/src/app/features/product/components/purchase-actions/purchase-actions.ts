@@ -1,19 +1,28 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleCheck, lucideShoppingCart } from '@ng-icons/lucide';
+import {
+  lucideCircleCheck,
+  lucideShoppingCart,
+  lucideTriangleAlert,
+  lucideBan,
+} from '@ng-icons/lucide';
 import { HlmButton } from '@spartan/helm/button';
 import { toast } from '@spartan/helm/sonner';
-import { ProductStore } from '../../service/product-store';
-import { QuantityStepper } from '../quantity-stepper/quantity-stepper';
-import { flyToCart } from '../../service/cart-utils';
-import { CartService } from '../../../../core/service/cart.service';
+import { flyToCart } from '@invento/user-site/app/features/product';
+
+import { TranslatePipe } from '@invento/core';
+import { QuantityStepper } from '@invento/user-site/app/features/product/components/quantity-stepper/quantity-stepper';
+import { CartService } from '@invento/user-site/app/core/service/cart.service';
+import { ProductStore } from '@invento/user-site/app/features/product';
 
 @Component({
   selector: 'app-purchase-actions',
   templateUrl: './purchase-actions.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIcon, HlmButton, QuantityStepper],
-  providers: [provideIcons({ lucideCircleCheck, lucideShoppingCart })],
+  imports: [NgIcon, HlmButton, QuantityStepper, TranslatePipe],
+  providers: [
+    provideIcons({ lucideCircleCheck, lucideShoppingCart, lucideTriangleAlert, lucideBan }),
+  ],
 })
 export class PurchaseActions {
   protected readonly store = inject(ProductStore);

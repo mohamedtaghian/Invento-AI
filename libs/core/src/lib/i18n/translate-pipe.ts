@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform, inject } from '@angular/core';
+import { ChangeDetectorRef, Pipe, PipeTransform, effect, inject } from '@angular/core';
 import { LocaleService } from './locale-service';
 
 @Pipe({
@@ -7,6 +7,20 @@ import { LocaleService } from './locale-service';
 })
 export class TranslatePipe implements PipeTransform {
   private readonly _localeService = inject(LocaleService);
+  private readonly _cdr = inject(ChangeDetectorRef);
+
+  constructor() {
+    // This app is ZONELESS (no zone.js). An impure pipe only re-runs when its host view is
+    // actually checked, and an OnPush view is only checked when something marks it dirty.
+    // Reading the locale signal inside transform() is not enough to mark the host dirty, so
+    // switching language used to leave already-rendered text stale until the next unrelated
+    // re-render. This effect reads the signal in a tracked context and explicitly marks the
+    // host view for check, which is what makes live language switching work.
+    effect(() => {
+      this._localeService.locale();
+      this._cdr.markForCheck();
+    });
+  }
 
   transform(key: string, params?: Record<string, string | number>): string {
     this._localeService.locale();
