@@ -29,7 +29,7 @@ import { toast } from '@spartan/helm/sonner';
 
 import { CartService } from '../../core/service/cart.service';
 import { AuthService } from '../../core/service/auth.service';
-import { OrdersDataService } from '../orders/service/orders-data.service';
+import { OrdersDataService } from '@invento/user-site/app/features/orders';
 import { extractErrorMessage } from '../../core/utils/error.utils';
 import { environment } from '../../../environments/environment';
 import type { CreateOrderPayload } from '../../core/interface/cart.interface';
@@ -305,7 +305,6 @@ export class CheckoutComponent implements OnInit {
   protected onClearCartDialogState(state: 'open' | 'closed'): void {
     if (state === 'closed') this.closeClearCartModal();
   }
-
 
   closeClearCartModal(): void {
     this.isClearCartModalOpen.set(false);

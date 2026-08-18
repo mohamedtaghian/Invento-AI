@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { FilterTabs, SearchInput, type FilterTab } from '@invento/shared';
 import { LocaleService, TranslatePipe } from '@invento/core';
-import { OrdersDataService } from '../../service/orders-data.service';
-import type { OrderFilter } from '../../types/orders';
+import { OrdersDataService, type OrderFilter } from '@invento/user-site/app/features/orders';
 
 const ORDER_FILTER_IDS: readonly OrderFilter[] = [
   'all',
