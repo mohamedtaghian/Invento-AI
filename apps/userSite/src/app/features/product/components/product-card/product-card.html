@@ -1,14 +1,30 @@
 <div
   hlmCard
-  [routerLink]="['/', storeSlug, 'product-details', product().slug]"
   class="group relative flex flex-col hover:shadow-lg p-0 h-full overflow-hidden transition-shadow duration-300 cursor-pointer"
 >
+  <!--
+    Stretched link rather than [routerLink] on the card <div>: a div emits no href, so the
+    storefront was server-rendered but its product pages were unreachable to a crawler
+    following links from the home page, and the card could not be focused by keyboard.
+    The add-to-cart button stays a sibling above it, which also avoids nesting a <button>
+    inside an <a>.
+  -->
+  <a
+    [routerLink]="['/', storeSlug(), 'product-details', product().slug]"
+    [attr.aria-label]="product().title"
+    class="absolute inset-0 z-10 rounded-[inherit] focus-visible:ring-ring focus-visible:ring-2 focus-visible:outline-none"
+  ></a>
   <!-- Image -->
   <div class="flex justify-center items-center bg-muted aspect-square w-full overflow-hidden">
     @if (product().imageUrl) {
       <img
         [src]="product().imageUrl"
         [alt]="product().imageAltText || product().title"
+        width="600"
+        height="600"
+        decoding="async"
+        [attr.loading]="eager() ? 'eager' : 'lazy'"
+        [attr.fetchpriority]="eager() ? 'high' : null"
         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
     } @else {
@@ -22,9 +38,9 @@
 
   <div hlmCardContent class="flex flex-col flex-1 gap-3 p-4">
     <div hlmCardHeader class="gap-1 p-0">
-      <h3 hlmCardTitle class="text-base line-clamp-2 leading-tight">{{ product().title }}</h3>
+      <h3 hlmCardTitle class="text-base line-clamp-1 leading-tight">{{ product().title }}</h3>
       @if (product().shortDescription) {
-        <p hlmCardDescription class="text-sm line-clamp-2">{{ product().shortDescription }}</p>
+        <p hlmCardDescription class="text-sm line-clamp-1">{{ product().shortDescription }}</p>
       }
     </div>
 
@@ -47,12 +63,12 @@
       <!-- Price -->
       <div class="flex flex-col">
         <span hlmH4 class="font-semibold text-primary m-0 text-lg">{{
-          product().minPriceAmount / 100 | currency
+          product().minPriceAmount / 100 | currency: storeCurrency()
         }}</span>
         @if (product().maxPriceAmount > product().minPriceAmount) {
           <span hlmSmall class="text-muted-foreground text-xs flex items-center">
             <ng-icon name="lucideMinus" size="12" class="mx-1" />
-            {{ product().maxPriceAmount / 100 | currency }}
+            {{ product().maxPriceAmount / 100 | currency: storeCurrency() }}
           </span>
         }
       </div>
@@ -65,7 +81,7 @@
           variant="outline"
           type="button"
           (click)="onAddToCart($event)"
-          class="flex items-center gap-1.5 bg-primary/10 hover:bg-primary border-transparent text-primary hover:text-primary-foreground transition-colors"
+          class="relative z-20 flex items-center gap-1.5 bg-primary/10 hover:bg-primary border-transparent text-primary hover:text-primary-foreground transition-colors"
         >
           {{ 'product.card.add_to_cart' | translate }}
           <ng-icon name="lucideShoppingCart" size="16" />

@@ -9,7 +9,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { ScrollAnimateDirective } from '@/app/shared/directives/scroll-animate.directive';
+import { ScrollAnimateDirective } from '../../../directives/scroll-animate.directive';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideInfinity, lucidePercent } from '@ng-icons/lucide';
 

@@ -12,11 +12,13 @@ import {
   lucideChevronRight,
   lucideShoppingBag,
 } from '@ng-icons/lucide';
-import { environment } from '../../../environments/environment';
 import { OrdersDataService } from './service/orders-data.service';
 import { OrdersHeroComponent } from './components/orders-hero/orders-hero';
 import { OrdersFilterBarComponent } from './components/orders-filter-bar/orders-filter-bar';
 import { OrderCardComponent } from './components/order-card/order-card';
+import { EmptyState, ErrorState, Pagination, SkeletonBlock } from '@invento/shared';
+import { TranslatePipe } from '@invento/core';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
 
 @Component({
   selector: 'app-orders',
@@ -30,6 +32,11 @@ import { OrderCardComponent } from './components/order-card/order-card';
     OrdersHeroComponent,
     OrdersFilterBarComponent,
     OrderCardComponent,
+    EmptyState,
+    ErrorState,
+    SkeletonBlock,
+    Pagination,
+    TranslatePipe,
   ],
   providers: [
     provideIcons({
@@ -50,15 +57,11 @@ export class OrdersComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  protected storeSlug = environment.storeSlug;
+  /** Multi-tenant: the slug in the URL, not the build-time fallback constant. */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
 
   ngOnInit(): void {
-    this.storeSlug =
-      this.route.snapshot.paramMap.get('storeSlug') ??
-      this.route.parent?.snapshot.paramMap.get('storeSlug') ??
-      environment.storeSlug;
-
-    this.ordersService.loadOrders(this.storeSlug);
+    this.ordersService.loadOrders(this.storeSlug());
   }
 
   protected resetFilters(): void {
@@ -67,7 +70,7 @@ export class OrdersComponent implements OnInit {
   }
 
   protected reload(): void {
-    this.ordersService.loadOrders(this.storeSlug);
+    this.ordersService.loadOrders(this.storeSlug());
   }
 
   protected onPageChange(page: number): void {
@@ -76,6 +79,6 @@ export class OrdersComponent implements OnInit {
   }
 
   protected goToLogin(): void {
-    this.router.navigate(['/', this.storeSlug, 'auth', 'login']);
+    this.router.navigate(['/', this.storeSlug(), 'auth', 'login']);
   }
 }

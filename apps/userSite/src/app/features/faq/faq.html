@@ -18,39 +18,24 @@
           <h1
             class="faq-hero-anim text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground leading-[1.15] mb-4"
           >
-            Frequently Asked<br />Questions
+            {{ 'faq.title' | translate }}
           </h1>
 
           <p
             class="faq-hero-anim text-sm sm:text-base text-muted-foreground leading-relaxed mb-8 max-w-xl"
           >
-            Find answers to common questions about our products, shipping, payments, and more.
+            {{ 'faq.subtitle' | translate }}
           </p>
 
           <!-- Search Bar -->
-          <div class="faq-hero-anim relative max-w-xl">
-            <div
-              class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-muted-foreground"
-            >
-              <ng-icon name="lucideSearch" size="18px"></ng-icon>
-            </div>
-            <input
-              type="text"
-              placeholder="Search questions or answers..."
-              class="w-full pl-11 pr-10 py-3.5 bg-card/90 backdrop-blur-sm border border-border/80 rounded-2xl text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all text-sm shadow-sm"
+          <div class="faq-hero-anim max-w-xl">
+            <app-search-input
               [value]="searchQuery()"
-              (input)="onSearch($event)"
+              (valueChange)="onSearchChange($event)"
+              (clearPressed)="clearSearch()"
+              [placeholder]="'faq.search_placeholder' | translate"
+              [ariaLabel]="'faq.search_aria' | translate"
             />
-            @if (searchQuery()) {
-              <button
-                type="button"
-                (click)="clearSearch()"
-                class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Clear search query"
-              >
-                <ng-icon name="lucideX" size="16px"></ng-icon>
-              </button>
-            }
           </div>
         </div>
 
@@ -68,7 +53,7 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none">
                 {{ totalQuestions() }}
               </span>
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">Total Questions</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.total_questions' | translate }}</span>
             </div>
           </div>
 
@@ -84,7 +69,7 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none">
                 {{ categories().length }}
               </span>
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">Categories</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.categories' | translate }}</span>
             </div>
           </div>
 
@@ -100,7 +85,7 @@
               <span class="text-xl sm:text-2xl font-extrabold text-foreground leading-none"
                 >24/7</span
               >
-              <span class="text-xs text-muted-foreground font-medium mt-0.5">Support</span>
+              <span class="text-xs text-muted-foreground font-medium mt-0.5">{{ 'faq.support' | translate }}</span>
             </div>
           </div>
         </div>
@@ -113,15 +98,13 @@
       @if (isLoading()) {
         <div class="space-y-4 max-w-4xl mx-auto" aria-busy="true" aria-label="Loading FAQs">
           @for (skeleton of [1, 2, 3, 4, 5]; track skeleton) {
-            <div
-              class="faq-skeleton-card p-5 rounded-2xl border border-border/60 bg-card/60 animate-pulse"
-            >
+            <div class="faq-skeleton-card border-border/60 bg-card/60 rounded-2xl border p-5">
               <div class="flex items-center justify-between gap-4">
-                <div class="flex items-center gap-4 flex-1">
-                  <div class="w-8 h-8 rounded-xl bg-muted/80 shrink-0"></div>
-                  <div class="h-4 bg-muted/80 rounded-md w-3/4"></div>
+                <div class="flex flex-1 items-center gap-4">
+                  <app-skeleton-block class="h-8 w-8 shrink-0 rounded-xl" />
+                  <app-skeleton-block class="h-4 w-3/4 rounded-md" />
                 </div>
-                <div class="w-5 h-5 rounded-md bg-muted/80 shrink-0"></div>
+                <app-skeleton-block class="h-5 w-5 shrink-0 rounded-md" />
               </div>
             </div>
           }
@@ -130,71 +113,57 @@
 
       <!-- Error State -->
       @else if (error()) {
-        <div
-          class="max-w-2xl mx-auto rounded-2xl border border-destructive/30 bg-destructive/5 p-8 text-center my-6"
-        >
-          <div
-            class="w-14 h-14 rounded-2xl bg-destructive/10 text-destructive mx-auto mb-4 flex items-center justify-center"
+        <div class="mx-auto my-6 max-w-2xl">
+          <app-error-state
+            icon="lucideAlertCircle"
+            [title]="'faq.error_title' | translate"
+            [message]="error() ?? ''"
           >
-            <ng-icon name="lucideAlertCircle" size="28px"></ng-icon>
-          </div>
-          <h3 class="text-lg font-bold text-foreground mb-2">Unable to Load FAQs</h3>
-          <p class="text-sm text-muted-foreground max-w-md mx-auto mb-6 leading-relaxed">
-            {{ error() }}
-          </p>
-          <button
-            hlmBtn
-            variant="outline"
-            (click)="onRetry()"
-            class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border-border hover:bg-muted font-semibold text-sm transition-all"
-          >
-            <ng-icon name="lucideRefreshCw" size="16px"></ng-icon>
-            Try Again
-          </button>
+            <button
+              hlmBtn
+              variant="outline"
+              (click)="onRetry()"
+              class="border-border hover:bg-muted inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold transition-all"
+            >
+              <ng-icon name="lucideRefreshCw" size="16" />
+              {{ 'faq.try_again' | translate }}
+            </button>
+          </app-error-state>
         </div>
       }
 
       <!-- Empty Store State (0 FAQs in total) -->
       @else if (faqs().length === 0) {
-        <div
-          class="max-w-2xl mx-auto rounded-2xl border border-border bg-card p-12 text-center my-6"
-        >
-          <div
-            class="w-16 h-16 rounded-3xl bg-primary/10 text-primary mx-auto mb-4 flex items-center justify-center"
-          >
-            <ng-icon name="lucideMessageCircleQuestion" size="32px"></ng-icon>
-          </div>
-          <h3 class="text-xl font-bold text-foreground mb-2">No FAQs Available Yet</h3>
-          <p class="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-            This store has not published any FAQ entries yet. If you have any questions, feel free
-            to reach out to support.
-          </p>
+        <div class="border-border bg-card mx-auto my-6 max-w-2xl rounded-2xl border">
+          <app-empty-state
+            icon="lucideMessageCircleQuestion"
+            [title]="'faq.empty_title' | translate"
+            [description]="'faq.empty_desc' | translate"
+          />
         </div>
       }
 
       <!-- Filtered Empty State (Search gave 0 results across all categories) -->
       @else if (filteredCategories().length === 0) {
-        <div
-          class="max-w-2xl mx-auto rounded-2xl border border-border bg-card p-12 text-center my-6"
-        >
-          <div
-            class="w-16 h-16 rounded-3xl bg-muted mx-auto mb-4 flex items-center justify-center text-muted-foreground"
+        <div class="border-border bg-card mx-auto my-6 max-w-2xl rounded-2xl border">
+          <app-empty-state
+            icon="lucideSearch"
+            [title]="'faq.no_match_title' | translate"
+            [description]="
+              ('faq.no_match_prefix' | translate) +
+              searchQuery() +
+              ('faq.no_match_suffix' | translate)
+            "
           >
-            <ng-icon name="lucideSearch" size="28px"></ng-icon>
-          </div>
-          <h3 class="text-lg font-bold text-foreground mb-2">No matching questions found</h3>
-          <p class="text-sm text-muted-foreground max-w-md mx-auto mb-6 leading-relaxed">
-            No questions match "<span class="font-medium text-foreground">{{ searchQuery() }}</span
-            >". Try another search keyword or browse all categories.
-          </p>
-          <button
-            hlmBtn
-            variant="secondary"
-            (click)="clearSearch()"
-            class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-sm font-semibold"
-          >
-            Clear Search
-          </button>
+            <button
+              hlmBtn
+              variant="secondary"
+              (click)="clearSearch()"
+              class="inline-flex items-center gap-2 rounded-xl px-5 py-2 text-sm font-semibold"
+            >
+              {{ 'faq.clear_search' | translate }}
+            </button>
+          </app-empty-state>
         </div>
       }
 
@@ -269,7 +238,7 @@
                     <h2 class="text-xl font-bold text-foreground">{{ activeCat.title }}</h2>
                     <p class="text-xs text-muted-foreground">
                       {{ activeCat.items.length }}
-                      {{ activeCat.items.length === 1 ? 'question' : 'questions' }}
+                      {{ (activeCat.items.length === 1 ? 'faq.question' : 'faq.questions') | translate }}
                     </p>
                   </div>
                 </div>
@@ -284,40 +253,36 @@
                 }
               </div>
 
-              <div class="space-y-3.5">
+              <hlm-accordion class="space-y-3.5">
                 @for (item of activeFaqItems(); track item.question; let i = $index) {
-                  <details
-                    class="faq-item group bg-card hover:bg-card/90 rounded-2xl border border-border/80 transition-all duration-200 shadow-sm overflow-hidden faq-details"
+                  <div
+                    hlmAccordionItem
+                    class="faq-item bg-card hover:bg-card/90 border-border/80 overflow-hidden rounded-2xl border shadow-sm transition-all duration-200 not-last:border-b"
                   >
-                    <summary
-                      class="flex justify-between items-center cursor-pointer list-none p-5 sm:p-6 hover:bg-muted/40 transition-colors select-none"
+                    <hlm-accordion-trigger
+                      triggerClass="hover:bg-muted/40 w-full p-5 sm:p-6 hover:no-underline"
                     >
-                      <div class="flex items-start sm:items-center gap-3.5 sm:gap-4 pr-3">
+                      <div class="flex items-start gap-3.5 pe-3 sm:items-center sm:gap-4">
                         <span
-                          class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-primary/10 text-primary text-xs sm:text-sm font-extrabold flex items-center justify-center shrink-0 mt-0.5 sm:mt-0"
+                          class="bg-primary/10 text-primary mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-xs font-extrabold sm:mt-0 sm:h-8 sm:w-8 sm:text-sm"
                         >
                           {{ i + 1 }}
                         </span>
-                        <h3 class="font-bold text-foreground text-sm sm:text-base leading-snug">
+                        <h3 class="text-foreground text-start text-sm leading-snug font-bold sm:text-base">
                           {{ item.question }}
                         </h3>
                       </div>
+                    </hlm-accordion-trigger>
+                    <hlm-accordion-content>
                       <div
-                        class="w-8 h-8 rounded-lg flex items-center justify-center bg-muted/60 text-muted-foreground group-hover:text-foreground shrink-0 transition-transform duration-300 group-open:rotate-180 group-open:bg-primary/10 group-open:text-primary"
+                        class="faq-answer text-muted-foreground border-border/40 border-t px-5 pt-4 pb-6 text-sm leading-relaxed sm:px-6"
                       >
-                        <ng-icon name="lucideChevronDown" size="18px"></ng-icon>
+                        <div class="faq-answer-text whitespace-pre-line">{{ item.answer }}</div>
                       </div>
-                    </summary>
-                    <div
-                      class="faq-answer text-muted-foreground text-sm leading-relaxed px-5 sm:px-6 pb-6 pt-0 border-t border-border/40"
-                    >
-                      <div class="pt-4 whitespace-pre-line faq-answer-text">
-                        {{ item.answer }}
-                      </div>
-                    </div>
-                  </details>
+                    </hlm-accordion-content>
+                  </div>
                 }
-              </div>
+              </hlm-accordion>
             }
           </section>
         </div>
@@ -342,18 +307,17 @@
           <ng-icon name="lucideHeadphones" size="22px"></ng-icon>
         </div>
         <h2 class="text-xl sm:text-2xl font-extrabold text-foreground mb-2">
-          Still Have Questions?
+          {{ 'faq.cta_title' | translate }}
         </h2>
         <p class="text-muted-foreground mb-6 max-w-md mx-auto text-sm leading-relaxed">
-          Can't find the answer you're looking for? Reach out to our customer support team or use
-          our AI assistant for immediate help.
+          {{ 'faq.cta_desc' | translate }}
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
           <a
             href="mailto:support@store.com"
             class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-colors shadow-sm"
           >
-            Contact Support
+            {{ 'faq.contact_support' | translate }}
           </a>
         </div>
       </div>

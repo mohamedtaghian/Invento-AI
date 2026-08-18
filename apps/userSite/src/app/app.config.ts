@@ -12,9 +12,11 @@ import globalAr from '@invento/user-site/assets/i18n/ar.json';
 
 import productEn from '../locales/product/en.json';
 import productAr from '../locales/product/ar.json';
+import homeEn from '../locales/home/en.json';
+import homeAr from '../locales/home/ar.json';
 
-const en = { ...globalEn, product: productEn };
-const ar = { ...globalAr, product: productAr };
+const en = { ...globalEn, product: productEn, home: homeEn };
+const ar = { ...globalAr, product: productAr, home: homeAr };
 
 export const appConfig: ApplicationConfig = {
   providers: [

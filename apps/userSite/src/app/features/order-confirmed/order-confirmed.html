@@ -61,19 +61,19 @@
 
         @if (isLoading() && !order()) {
           <!-- Skeleton while loading -->
-          <div class="space-y-4 animate-pulse">
+          <div class="space-y-4">
             <div class="flex items-center gap-4">
-              <div class="w-16 h-16 bg-muted rounded-xl"></div>
+              <app-skeleton-block class="w-16 h-16 rounded-xl" />
               <div class="flex-1 space-y-2">
-                <div class="w-48 h-4 bg-muted rounded"></div>
-                <div class="w-24 h-3 bg-muted/60 rounded"></div>
+                <app-skeleton-block class="w-48 h-4" />
+                <app-skeleton-block class="w-24 h-3" />
               </div>
             </div>
             <div class="flex items-center gap-4">
-              <div class="w-16 h-16 bg-muted rounded-xl"></div>
+              <app-skeleton-block class="w-16 h-16 rounded-xl" />
               <div class="flex-1 space-y-2">
-                <div class="w-36 h-4 bg-muted rounded"></div>
-                <div class="w-20 h-3 bg-muted/60 rounded"></div>
+                <app-skeleton-block class="w-36 h-4" />
+                <app-skeleton-block class="w-20 h-3" />
               </div>
             </div>
           </div>

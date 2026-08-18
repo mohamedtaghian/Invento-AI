@@ -6,6 +6,9 @@ import gsap from 'gsap';
 // Spartan UI Imports
 import { HlmBadge } from '@spartan/helm/badge';
 import { HlmButton } from '@spartan/helm/button';
+import { HlmAccordionImports } from '@spartan/helm/accordion';
+import { EmptyState, ErrorState, SearchInput, SkeletonBlock } from '@invento/shared';
+import { TranslatePipe } from '@invento/core';
 
 // Icons
 import { provideIcons, NgIconComponent } from '@ng-icons/core';
@@ -33,7 +36,18 @@ import type { FaqCategory, FaqItem } from './types/faq';
 @Component({
   selector: 'app-faq',
   standalone: true,
-  imports: [CommonModule, HlmBadge, HlmButton, NgIconComponent],
+  imports: [
+    CommonModule,
+    HlmBadge,
+    HlmButton,
+    NgIconComponent,
+    HlmAccordionImports,
+    EmptyState,
+    ErrorState,
+    SearchInput,
+    SkeletonBlock,
+    TranslatePipe,
+  ],
   providers: [
     provideIcons({
       lucideChevronDown,
@@ -170,8 +184,7 @@ export class FaqComponent {
     this.activeCategory.set(categoryId);
   }
 
-  onSearch(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
+  onSearchChange(value: string): void {
     this.searchQuery.set(value);
 
     // If current category has no matches, auto-switch to first matching category

@@ -1,36 +1,54 @@
-import { Injectable, PLATFORM_ID, computed, effect, inject, signal, type Signal, type WritableSignal } from '@angular/core';
+import {
+  Injectable,
+  PLATFORM_ID,
+  DOCUMENT,
+  REQUEST,
+  computed,
+  effect,
+  inject,
+  signal,
+  type Signal,
+  type WritableSignal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import type { Locale } from './locale';
 import { TRANSLATION_LOADER, type TranslationLoader } from './translation-loader';
+import { buildCookie, readCookie } from '../ssr/cookie';
 
 const LOCALE_STORAGE_KEY = 'invento_locale';
+
+function isLocale(value: string | null): value is Locale {
+  return value === 'en' || value === 'ar';
+}
 
 @Injectable({ providedIn: 'root' })
 export class LocaleService {
   private readonly _locale: WritableSignal<Locale> = signal<Locale>('en');
   private readonly _translations: WritableSignal<Record<string, any>> = signal({});
-  private readonly _loader: TranslationLoader | null = inject(TRANSLATION_LOADER, { optional: true });
+  private readonly _loader: TranslationLoader | null = inject(TRANSLATION_LOADER, {
+    optional: true,
+  });
   private readonly _platformId = inject(PLATFORM_ID);
+  private readonly _document = inject(DOCUMENT);
+  private readonly _request = inject(REQUEST, { optional: true });
 
   readonly locale: Signal<Locale> = this._locale.asReadonly();
   readonly isRtl: Signal<boolean> = computed(() => this._locale() === 'ar');
   readonly translations: Signal<Record<string, any>> = this._translations.asReadonly();
 
   constructor() {
-    const saved = isPlatformBrowser(this._platformId)
-      ? localStorage.getItem(LOCALE_STORAGE_KEY)
-      : null;
-    const valid: Locale = saved === 'en' || saved === 'ar' ? saved : 'en';
-    this.switchLocale(valid);
+    // Resolve and apply synchronously so the SERVER-rendered HTML already carries the
+    // correct lang/dir. The browser then hydrates onto identical markup - no mismatch,
+    // no left-to-right flash before the switch.
+    const initial = this.resolvePersistedLocale();
+    this._locale.set(initial);
+    this._translations.set(this._loader?.(initial) ?? {});
+    this.applyToDocument(initial);
 
     effect(() => {
       const current = this._locale();
-      const rtl = this.isRtl();
-      if (isPlatformBrowser(this._platformId)) {
-        document.documentElement.lang = current;
-        document.documentElement.dir = rtl ? 'rtl' : 'ltr';
-        localStorage.setItem(LOCALE_STORAGE_KEY, current);
-      }
+      this.applyToDocument(current);
+      this.persist(current);
     });
   }
 
@@ -42,7 +60,7 @@ export class LocaleService {
   translate(key: string, params?: Record<string, string | number>): string {
     let resolvedValue: any = this._translations();
     const parts = key.split('.');
-    
+
     for (const part of parts) {
       if (resolvedValue && typeof resolvedValue === 'object') {
         resolvedValue = resolvedValue[part];
@@ -56,7 +74,7 @@ export class LocaleService {
 
     if (params) {
       for (const [k, v] of Object.entries(params)) {
-        value = value.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), String(v));
+        value = value.replace(new RegExp(`\{\{${k}\}\}`, 'g'), String(v));
       }
     }
     return value;
@@ -65,9 +83,44 @@ export class LocaleService {
   localePath(segments: string[]): string[] {
     return ['/', this._locale(), ...segments];
   }
+
+  /** Cookie on both sides; localStorage only as a migration fallback for existing visitors. */
+  private resolvePersistedLocale(): Locale {
+    if (isPlatformBrowser(this._platformId)) {
+      const fromCookie = readCookie(this._document.cookie, LOCALE_STORAGE_KEY);
+      if (isLocale(fromCookie)) return fromCookie;
+      try {
+        const legacy = localStorage.getItem(LOCALE_STORAGE_KEY);
+        if (isLocale(legacy)) return legacy;
+      } catch {
+        /* storage can be blocked; fall through to default */
+      }
+      return 'en';
+    }
+
+    const header = this._request?.headers?.get('cookie');
+    const fromRequest = readCookie(header, LOCALE_STORAGE_KEY);
+    return isLocale(fromRequest) ? fromRequest : 'en';
+  }
+
+  /** Runs on server and browser: DOCUMENT is available in both. */
+  private applyToDocument(locale: Locale): void {
+    const el = this._document.documentElement;
+    if (!el) return;
+    el.lang = locale;
+    el.dir = locale === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  private persist(locale: Locale): void {
+    if (!isPlatformBrowser(this._platformId)) return;
+    this._document.cookie = buildCookie(LOCALE_STORAGE_KEY, locale);
+    try {
+      localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+    } catch {
+      /* non-fatal */
+    }
+  }
 }
-
-
 
 // Mo'men Comment:
 // This file is -> the core state manager -> Injected to root as one singleton instance for the whole app
@@ -120,3 +173,13 @@ export class LocaleService {
 // localePath(segments: string[]): string[]
 //    -> Given path segments like ['products', '42'], and current locale 'en' -> producing a URL like /en/products/42
 // .
+
+// SSR update (2026-08-18):
+// The locale is now persisted in a COOKIE rather than localStorage alone. The server cannot read
+// localStorage, so the previous version always rendered 'en'/'ltr' server-side and then corrected
+// itself on the client - a hydration mismatch plus a visible LTR->RTL flash for Arabic visitors.
+// A cookie travels with the request, so resolvePersistedLocale() returns the same answer on both
+// sides, and applyToDocument() (using the DOCUMENT token, which exists during server rendering)
+// stamps lang/dir into the server-rendered HTML itself.
+// localStorage is still read once as a fallback so visitors who stored a locale under the old
+// implementation keep it, and still written so nothing regresses where cookies are unavailable.

@@ -19,18 +19,17 @@ import {
   FiltersSidebar,
   ProductsToolbar,
   ProductsGrid,
-  Pagination,
 } from '@invento/user-site/app/features/product';
 import { HlmTypographyImports } from '@spartan/helm/typography';
 import { HlmButtonImports } from '@spartan/helm/button';
-import { EmptyState } from '@invento/shared';
+import { EmptyState, Pagination, SkeletonBlock } from '@invento/shared';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearchX, lucideInfo } from '@ng-icons/lucide';
 import { parseAttributes, stringifyAttributes } from '@invento/user-site/app/features/product';
-import { environment } from '@invento/user-site/environments/environment';
 import { switchMap, catchError, combineLatest, tap } from 'rxjs';
 import { of, Subscription } from 'rxjs';
 import { TranslatePipe } from '@invento/core';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
 
 @Component({
   selector: 'app-products',
@@ -38,6 +37,7 @@ import { TranslatePipe } from '@invento/core';
   styleUrls: ['./product.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SkeletonBlock,
     FiltersSidebar,
     ProductsToolbar,
     ProductsGrid,
@@ -51,6 +51,9 @@ import { TranslatePipe } from '@invento/core';
   providers: [provideIcons({ lucideSearchX, lucideInfo })],
 })
 export class Products implements OnInit, OnDestroy {
+  /** Multi-tenant: the slug in the URL, not the build-time fallback constant. */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
+
   private readonly apiService = inject(ProductApiService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -89,10 +92,10 @@ export class Products implements OnInit, OnDestroy {
 
           return combineLatest([
             this.apiService
-              .getProducts(environment.storeSlug, queryParams)
+              .getProducts(this.storeSlug(), queryParams)
               .pipe(catchError(() => of(null))),
             this.apiService
-              .getFilters(environment.storeSlug, queryParams)
+              .getFilters(this.storeSlug(), queryParams)
               .pipe(catchError(() => of(null))),
           ]);
         }),

@@ -1,5 +1,5 @@
-import { PreviewProduct } from '@/app/core/interface/Preview';
-import { ThemeSuggestion } from '@/app/core/interface/Preview';
+import type { PreviewProduct } from '@invento/core';
+import type { ThemeSuggestion } from '@invento/core';
 
 export const MOCK_PREVIEW_TABS: string[] = ['Shop', 'Lookbook', 'About', 'Contact'];
 

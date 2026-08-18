@@ -5,7 +5,7 @@ import { ProductDetails } from '@invento/user-site/app/pages/product-details/pro
 import { CheckoutComponent } from '@invento/user-site/app/features/checkout/checkout';
 import { NotFoundComponent } from '@invento/user-site/app/shared/components/not-found/not-found';
 import { OrderConfirmedComponent } from '@invento/user-site/app/features/order-confirmed/order-confirmed';
-import { HomeComponent } from '@invento/user-site/app/features/home/home';
+import { HomeComponent } from '@invento/user-site/app/pages/home';
 import { FaqComponent } from '@invento/user-site/app/features/faq/faq';
 import { OrdersComponent } from '@invento/user-site/app/features/orders/orders';
 

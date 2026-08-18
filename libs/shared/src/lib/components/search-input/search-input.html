@@ -1,29 +1,45 @@
-<div class="relative w-full h-full flex items-center">
+<div class="relative flex h-full w-full items-center">
   <ng-icon
     name="lucideSearch"
-    class="absolute left-3 text-muted-foreground z-10 w-4 h-4 pointer-events-none"
+    class="text-muted-foreground pointer-events-none absolute start-3 z-10 h-4 w-4"
   />
-  <input
-    hlmInput
-    type="text"
-    [placeholder]="placeholder()"
-    [formControl]="control()"
-    (keyup.enter)="enterPressed.emit()"
-    class="w-full pl-9 pr-9"
-    [class.border-destructive]="isInvalid()"
-  />
-  
-  @if (control().value) {
+
+  @if (control(); as ctrl) {
+    <input
+      hlmInput
+      type="text"
+      [placeholder]="placeholder()"
+      [attr.aria-label]="ariaLabel()"
+      [formControl]="ctrl"
+      (keyup.enter)="enterPressed.emit()"
+      class="w-full ps-9 pe-9"
+      [class.border-destructive]="isInvalid()"
+    />
+  } @else {
+    <input
+      hlmInput
+      type="text"
+      [placeholder]="placeholder()"
+      [attr.aria-label]="ariaLabel()"
+      [value]="value()"
+      (input)="onInput($event)"
+      (keyup.enter)="enterPressed.emit()"
+      class="w-full ps-9 pe-9"
+      [class.border-destructive]="isInvalid()"
+    />
+  }
+
+  @if (hasValue()) {
     <button
       hlmBtn
       variant="ghost"
       size="icon"
       type="button"
-      class="absolute right-1 h-7 w-7 text-destructive hover:bg-destructive/10 hover:text-destructive focus:outline-none transition-colors"
+      class="text-destructive hover:bg-destructive/10 hover:text-destructive absolute end-1 h-7 w-7 transition-colors focus:outline-none"
       (click)="clearSearch()"
     >
       <span class="sr-only">Clear search</span>
-      <ng-icon name="lucideX" class="w-4 h-4" />
+      <ng-icon name="lucideX" class="h-4 w-4" />
     </button>
   }
 </div>

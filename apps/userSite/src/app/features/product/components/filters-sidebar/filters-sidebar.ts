@@ -5,7 +5,7 @@ import { FilterResponse } from '@invento/user-site/app/features/product/types/pr
 import { ActivatedRoute } from '@angular/router';
 import { parseAttributes } from '@invento/user-site/app/features/product/utils/filter-parser';
 import { HlmTypographyImports } from '@spartan/helm/typography';
-import { GenericSelectImports, GenericSelectOption } from '@invento/shared';
+import { GenericSelectImports, GenericSelectOption, SkeletonBlock } from '@invento/shared';
 import { HlmCheckboxImports } from '@spartan/helm/checkbox';
 import { HlmSwitchImports } from '@spartan/helm/switch';
 import { FilterAttribute } from '@invento/user-site/app/features/product/types/product';
@@ -23,6 +23,7 @@ import { TranslatePipe, LocaleService } from '@invento/core';
   templateUrl: './filters-sidebar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SkeletonBlock,
     CurrencyPipe,
     HlmButton,
     HlmTypographyImports,

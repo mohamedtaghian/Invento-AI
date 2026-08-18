@@ -1,6 +1,5 @@
 export * from './breadcrumb-trail/breadcrumb-trail';
 export * from './filters-sidebar/filters-sidebar';
-export * from './pagination/pagination';
 export * from './product-card/product-card';
 export * from './product-details-accordion/product-details-accordion';
 export * from './product-gallery/product-gallery';

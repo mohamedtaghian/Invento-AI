@@ -12,12 +12,12 @@
         <!-- Backend Loading Skeleton -->
         <div class="space-y-4">
           @for (i of [1, 2, 3]; track i) {
-            <div class="space-y-4 bg-card/50 p-6 border border-border/80 rounded-2xl animate-pulse">
+            <div class="space-y-4 bg-card/50 p-6 border border-border/80 rounded-2xl">
               <div class="flex justify-between items-center">
-                <div class="bg-muted rounded-lg w-48 h-5"></div>
-                <div class="bg-muted rounded-lg w-24 h-5"></div>
+                <app-skeleton-block class="rounded-lg w-48 h-5" />
+                <app-skeleton-block class="rounded-lg w-24 h-5" />
               </div>
-              <div class="bg-muted/60 rounded-xl w-full h-16"></div>
+              <app-skeleton-block class="rounded-xl w-full h-16" />
             </div>
           }
         </div>
@@ -31,10 +31,9 @@
           >
             <ng-icon name="lucideLock" class="text-2xl"></ng-icon>
           </div>
-          <h3 class="mb-2 font-bold text-foreground text-xl">Sign in to view your orders</h3>
+          <h3 class="text-foreground mb-2 text-xl font-bold">{{ 'orders.signin_title' | translate }}</h3>
           <p class="mb-6 max-w-md text-muted-foreground text-sm">
-            Please log in to your account to view your past purchases, track active shipments, and
-            manage your orders.
+            {{ 'orders.signin_desc' | translate }}
           </p>
           <button
             hlmBtn
@@ -42,65 +41,51 @@
             class="px-8 rounded-xl font-bold inline-flex items-center gap-2 cursor-pointer shadow-sm"
           >
             <ng-icon name="lucideLogIn" class="text-base"></ng-icon>
-            <span>Log In</span>
+            <span>{{ 'orders.log_in' | translate }}</span>
           </button>
         </div>
       } @else if (ordersService.error()) {
         <!-- Backend Error State -->
-        <div
-          class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-rose-500/30 rounded-3xl text-center"
-        >
-          <div
-            class="flex justify-center items-center bg-rose-500/10 mb-4 rounded-full w-16 h-16 text-rose-500"
+        <div class="bg-card border-border rounded-3xl border p-6 shadow-sm">
+          <app-error-state
+            icon="lucideCircleX"
+            [title]="'orders.error_title' | translate"
+            [message]="ordersService.error() ?? ''"
           >
-            <ng-icon name="lucideCircleX" class="text-2xl"></ng-icon>
-          </div>
-          <h3 class="mb-2 font-bold text-foreground text-xl">Unable to load orders</h3>
-          <p class="mb-6 max-w-md text-muted-foreground text-sm">{{ ordersService.error() }}</p>
-          <button
-            hlmBtn
-            variant="outline"
-            (click)="reload()"
-            class="px-6 rounded-xl cursor-pointer"
-          >
-            Try Again
-          </button>
+            <button hlmBtn variant="outline" (click)="reload()" class="cursor-pointer rounded-xl px-6">
+              {{ 'orders.try_again' | translate }}
+            </button>
+          </app-error-state>
         </div>
       } @else if (ordersService.filteredOrders().length === 0) {
         <!-- Empty State -->
-        <div
-          class="flex flex-col justify-center items-center bg-card shadow-sm p-12 border border-border rounded-3xl text-center"
-        >
-          <div
-            class="flex justify-center items-center bg-muted mb-4 rounded-full w-16 h-16 text-muted-foreground"
+        <div class="bg-card border-border rounded-3xl border p-6 shadow-sm">
+          <app-empty-state
+            icon="lucidePackage"
+            [title]="'orders.empty_title' | translate"
+            [description]="'orders.empty_desc' | translate"
           >
-            <ng-icon name="lucidePackage" class="text-2xl"></ng-icon>
-          </div>
-          <h3 class="mb-2 font-bold text-foreground text-xl">No orders found</h3>
-          <p class="mb-6 max-w-md text-muted-foreground text-sm">
-            We couldn't find any orders matching your current filter or search criteria. Try
-            clearing your search or switching filter categories.
-          </p>
-          <div class="flex items-center gap-3">
-            @if (ordersService.searchQuery() || ordersService.selectedFilter() !== 'all') {
-              <button
+            <div class="flex items-center gap-3">
+              @if (ordersService.searchQuery() || ordersService.selectedFilter() !== 'all') {
+                <button
+                  hlmBtn
+                  variant="outline"
+                  (click)="resetFilters()"
+                  class="cursor-pointer rounded-xl px-5"
+                >
+                  {{ 'orders.reset_filters' | translate }}
+                </button>
+              }
+              <a
                 hlmBtn
-                variant="outline"
-                (click)="resetFilters()"
-                class="px-5 rounded-xl cursor-pointer"
+                [routerLink]="['/', storeSlug(), 'products']"
+                class="inline-flex cursor-pointer items-center gap-2 rounded-xl px-6"
               >
-                Reset Filters
-              </button>
-            }
-            <a
-              hlmBtn
-              [routerLink]="['/', storeSlug, 'products']"
-              class="px-6 rounded-xl inline-flex items-center gap-2 cursor-pointer"
-            >
-              <ng-icon name="lucideShoppingBag" class="text-base"></ng-icon>
-              <span>Browse Store</span>
-            </a>
-          </div>
+                <ng-icon name="lucideShoppingBag" class="text-base"></ng-icon>
+                <span>{{ 'orders.browse_store' | translate }}</span>
+              </a>
+            </div>
+          </app-empty-state>
         </div>
       } @else {
         <!-- Order Cards List -->
@@ -111,44 +96,13 @@
         </div>
 
         <!-- Pagination Bar (if multiple pages) -->
-        @if (ordersService.totalPages() > 1) {
-          <div
-            class="flex justify-between items-center bg-card p-4 border border-border rounded-2xl"
-          >
-            <div class="text-muted-foreground text-xs font-medium">
-              Showing page {{ ordersService.currentPage() }} of {{ ordersService.totalPages() }} ({{
-                ordersService.totalCount()
-              }}
-              orders)
-            </div>
-
-            <div class="flex items-center gap-2">
-              <button
-                hlmBtn
-                variant="outline"
-                size="sm"
-                [disabled]="ordersService.currentPage() <= 1"
-                (click)="onPageChange(ordersService.currentPage() - 1)"
-                class="rounded-xl px-3 text-xs inline-flex items-center gap-1 cursor-pointer"
-              >
-                <ng-icon name="lucideChevronLeft" class="text-sm"></ng-icon>
-                <span>Previous</span>
-              </button>
-
-              <button
-                hlmBtn
-                variant="outline"
-                size="sm"
-                [disabled]="ordersService.currentPage() >= ordersService.totalPages()"
-                (click)="onPageChange(ordersService.currentPage() + 1)"
-                class="rounded-xl px-3 text-xs inline-flex items-center gap-1 cursor-pointer"
-              >
-                <span>Next</span>
-                <ng-icon name="lucideChevronRight" class="text-sm"></ng-icon>
-              </button>
-            </div>
-          </div>
-        }
+        <app-pagination
+          [currentPage]="ordersService.currentPage()"
+          [totalPages]="ordersService.totalPages()"
+          [totalItems]="ordersService.totalCount()"
+          [pageSize]="ordersService.limit()"
+          (pageChange)="onPageChange($event)"
+        />
       }
     </section>
   </div>

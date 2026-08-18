@@ -18,22 +18,23 @@ import { Subscription } from 'rxjs';
 import { debounceTime, filter, switchMap, tap, distinctUntilChanged, delay } from 'rxjs/operators';
 import { ProductApiService } from '@invento/user-site/app/features/product';
 import { Router } from '@angular/router';
-import { environment } from '@invento/user-site/environments/environment';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HlmInputImports } from '@spartan/helm/input';
-import { GenericSelectImports, GenericSelectOption, SearchInput } from '@invento/shared';
+import { GenericSelectImports, GenericSelectOption, SearchInput, SkeletonBlock } from '@invento/shared';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo, lucideSearchX } from '@ng-icons/lucide';
 import { HlmTypographyImports } from '@spartan/helm/typography';
 import { HlmButton } from '@spartan/helm/button';
 
 import { TranslatePipe, LocaleService } from '@invento/core';
+import { StoreSlugService } from '@invento/user-site/app/core/service/store-slug.service';
 
 @Component({
   selector: 'app-products-toolbar',
   templateUrl: './products-toolbar.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    SkeletonBlock,
     HlmBadge,
     CurrencyPipe,
     ReactiveFormsModule,
@@ -48,6 +49,9 @@ import { TranslatePipe, LocaleService } from '@invento/core';
   providers: [provideIcons({ lucideInfo, lucideSearchX })],
 })
 export class ProductsToolbar implements OnInit, OnDestroy {
+  /** Multi-tenant: the slug in the URL, not the build-time fallback constant. */
+  protected readonly storeSlug = inject(StoreSlugService).slug;
+
   public readonly title = input<string>('Products');
   public readonly count = input<number>(0);
   public readonly sort = input<SortOption>('relevance');
@@ -104,7 +108,7 @@ export class ProductsToolbar implements OnInit, OnDestroy {
         debounceTime(500),
         tap(() => this.isLoadingSuggestions.set(true)),
         switchMap((term) =>
-          this.apiService.getProductSuggestions(environment.storeSlug, term!).pipe(delay(1000)),
+          this.apiService.getProductSuggestions(this.storeSlug(), term!).pipe(delay(1000)),
         ),
       )
       .subscribe({
@@ -141,7 +145,7 @@ export class ProductsToolbar implements OnInit, OnDestroy {
 
   protected onSuggestionClick(suggestion: ProductSuggestion): void {
     this.showSuggestions.set(false);
-    this.router.navigate(['/', environment.storeSlug, 'product-details', suggestion.slug]);
+    this.router.navigate(['/', this.storeSlug(), 'product-details', suggestion.slug]);
   }
 
   ngOnDestroy(): void {
