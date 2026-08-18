@@ -62,7 +62,7 @@
         />
       </div>
       @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
-        <div class="text-xs text-destructive pl-2">Please enter a valid email address.</div>
+        <div class="text-xs text-destructive pl-2 mt-1">Please enter a valid email address.</div>
       }
 
       <!-- Password Input -->
@@ -77,7 +77,7 @@
         />
       </div>
       @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-        <div class="text-xs text-destructive pl-2">Password is required.</div>
+        <div class="text-xs text-destructive pl-2 mt-1">Password is required.</div>
       }
     </div>
 
