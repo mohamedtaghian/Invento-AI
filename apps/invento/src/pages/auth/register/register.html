@@ -61,7 +61,17 @@
             class="w-full px-4 !py-4 text-base"
           />
           @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid) {
-            <div class="text-xs text-destructive pl-2 mt-1">Required</div>
+            <div class="text-xs text-destructive pl-2 mt-1 space-y-0.5">
+              @if (registerForm.get('firstName')?.errors?.['required']) {
+                <div>First name is required.</div>
+              }
+              @if (registerForm.get('firstName')?.errors?.['minlength']) {
+                <div>Must be at least 2 characters.</div>
+              }
+              @if (registerForm.get('firstName')?.errors?.['pattern']) {
+                <div>Only letters, spaces, hyphens and apostrophes are allowed.</div>
+              }
+            </div>
           }
         </div>
         <div>
@@ -74,7 +84,17 @@
             class="w-full px-4 !py-4 text-base"
           />
           @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid) {
-            <div class="text-xs text-destructive pl-2 mt-1">Required</div>
+            <div class="text-xs text-destructive pl-2 mt-1 space-y-0.5">
+              @if (registerForm.get('lastName')?.errors?.['required']) {
+                <div>Last name is required.</div>
+              }
+              @if (registerForm.get('lastName')?.errors?.['minlength']) {
+                <div>Must be at least 2 characters.</div>
+              }
+              @if (registerForm.get('lastName')?.errors?.['pattern']) {
+                <div>Only letters, spaces, hyphens and apostrophes are allowed.</div>
+              }
+            </div>
           }
         </div>
       </div>
@@ -91,7 +111,7 @@
           class="w-full px-4 !py-4 text-base"
         />
         @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
-          <div class="text-xs text-destructive pl-2 mt-1">Please enter a valid email.</div>
+          <div class="text-xs text-destructive pl-2 mt-1">Please enter a valid email address.</div>
         }
       </div>
 
@@ -108,7 +128,19 @@
             class="w-full px-4 !py-4 text-base"
           />
           @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-            <div class="text-xs text-destructive pl-2 mt-1">Too weak</div>
+            <div class="text-xs text-destructive pl-2 mt-1 space-y-0.5">
+              @if (registerForm.get('password')?.errors?.['required']) {
+                <div>Password is required.</div>
+              }
+              @if (registerForm.get('password')?.errors?.['minlength']) {
+                <div>Password must be at least 8 characters.</div>
+              }
+              @if (registerForm.get('password')?.errors?.['pattern']) {
+                <div>
+                  Password must include uppercase, lowercase, number, and special character.
+                </div>
+              }
+            </div>
           }
         </div>
         <div>
