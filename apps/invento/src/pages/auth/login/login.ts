@@ -6,7 +6,6 @@ import { toast } from '@spartan/helm/sonner';
 import { AuthService } from '../../../core/service/auth.service';
 
 import { HlmInput } from '@spartan/helm/input';
-import { HlmLabel } from '@spartan/helm/label';
 import { HlmButton } from '@spartan/helm/button';
 
 import { extractErrorMessage } from '../../../core/utils/error.utils';
@@ -14,7 +13,7 @@ import { extractErrorMessage } from '../../../core/utils/error.utils';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmLabel, HlmButton],
+  imports: [ReactiveFormsModule, RouterLink, HlmInput, HlmButton],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
