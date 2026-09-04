@@ -5,17 +5,17 @@
     "changeOrigin": true
   },
   "/site-builder": {
-    "target": "http://localhost:3000",
+    "target": "https://invento-api-ashy.vercel.app",
     "secure": false,
     "changeOrigin": true
   },
   "/users": {
-    "target": "http://localhost:3000",
+    "target": "https://invento-api-ashy.vercel.app",
     "secure": false,
     "changeOrigin": true
   },
   "/stores": {
-    "target": "http://localhost:3000",
+    "target": "https://invento-api-ashy.vercel.app",
     "secure": false,
     "changeOrigin": true
   }

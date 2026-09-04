@@ -7,7 +7,7 @@
  */
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000',
+  apiUrl: 'https://invento-api-ashy.vercel.app',
   apiKey: '',
   googleClientId: '774402300388-8enjhnd4qm40jremiu216eb6cn5jeqe6.apps.googleusercontent.com',
   inventoDashboardUrl: 'http://localhost:4400/home',

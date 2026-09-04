@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   /**
    * Empty on purpose: every request stays relative to the dev server's own
    * origin (localhost:4400) and reaches the API through the proxy in
@@ -7,7 +7,7 @@ export const environment = {
    * every call cross-origin, and login died on a CORS preflight because the
    * API's CORS_ORIGINS does not list port 4400.
    */
-  apiUrl: '',
+  apiUrl: 'https://invento-api-ashy.vercel.app',
   googleClientId: '774402300388-8enjhnd4qm40jremiu216eb6cn5jeqe6.apps.googleusercontent.com',
-  siteBuilderUrl: 'http://localhost:4200',
+  siteBuilderUrl: 'https://invento-api-ashy.vercel.app',
 };
